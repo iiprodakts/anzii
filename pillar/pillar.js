@@ -27,7 +27,7 @@ module.exports = {
        
        b_o_freeze: function(o){ 
 
-            if(!(o instanceOf Object)) return null 
+            if(!(o instanceof Object)) return null 
              
              return Object.freeze(o)
 					
@@ -36,7 +36,7 @@ module.exports = {
 			},
 			b_clone: function(o){ 
 
-            if(!(o instanceOf Object)) return null 
+            if(!(o instanceof Object)) return null 
              
              return JSON.parse(JSON.stringify(o))
 					
@@ -54,7 +54,7 @@ module.exports = {
  * @param {Object} to
  * @return {Object}
  */
-b_deepMerge = function(from, to) {
+b_deepMerge : function(from, to) {
     return extend(true, to, from);
 },
 
@@ -65,7 +65,7 @@ b_deepMerge = function(from, to) {
  * @method ane
  * @param {Object} obj The object to check
  */
-b_ane = function(obj){
+b_ane : function(obj){
 	if (util.isError(obj)) {
 		throw obj;
 	}
@@ -84,7 +84,7 @@ b_ane = function(obj){
  * the array
  * @return {Array} The initialized array
  */
-b_initArray = function(cnt, val) {
+b_initArray : function(cnt, val) {
     var v = [];
     var isFunc = b_isFunction(val);
     for(var i = 0; i < cnt; i++) {
@@ -101,7 +101,7 @@ b_initArray = function(cnt, val) {
  * @param {String} The expression to escape
  * @return {String} Escaped regular expression.
  */
-b_escapeRegExp = function(str) {
+b_escapeRegExp : function(str) {
 	return RegExpUtils.escape(str);
 },
 
@@ -114,7 +114,7 @@ b_escapeRegExp = function(str) {
  * @param {Object} to
  * @return {Object} The 'to' variable
  */
-b_merge = function(from, to) {
+b_merge : function(from, to) {
     b_forEach(from, function(val, propName) {
         to[propName] = val;
     });
@@ -128,8 +128,8 @@ b_merge = function(from, to) {
  * @method union
  * @return {Object} The union of properties from both a and b.
  */
-b_union = function(a, b) {
-	var union = {},
+b_union : function(a, b) {
+	var union = {}
 	b_merge(a, union);
 	b_merge(b, union);
 	return union;
@@ -154,7 +154,7 @@ b_union = function(a, b) {
  * async.series(tasks, util.cb);
  * <code>
  */
-b_getTasks = function (iterable, getTaskFunction) {
+b_getTasks : function (iterable, getTaskFunction) {
 	var tasks = [];
 	for (var i = 0; i < iterable.length; i++) {
 		tasks.push(getTaskFunction(iterable, i));
@@ -175,14 +175,14 @@ b_getTasks = function (iterable, getTaskFunction) {
  * when executed.
  * @return {Function}
  */
-b_wrapTask = function(context, func, argArray) {
+b_wrapTask : function(context, func, argArray) {
     if (!util.isArray(argArray)) {
         argArray = [];
     }
     return function(callback) {
         argArray.push(callback);
         func.apply(context, argArray);
-    },
+    }
 },
 
 /**
@@ -198,7 +198,7 @@ b_wrapTask = function(context, func, argArray) {
  * when executed.
  * @return {Function}
  */
-b_wrapTimedTask = function(context, func, name, argArray) {
+b_wrapTimedTask : function(context, func, name, argArray) {
     if (b_isString(argArray)) {
         name = argArray;
         argArray = [];
@@ -214,7 +214,7 @@ b_wrapTimedTask = function(context, func, name, argArray) {
                 name: name
             });
         });
-    },
+    }
 },
 
 /**
@@ -226,7 +226,7 @@ b_wrapTimedTask = function(context, func, name, argArray) {
  * of the current property or index.  The current index (property name if object).  The iterable.
  * Finally, the numerical index if the iterable is an object.
  */
-b_forEach = function(iterable, handler) {
+b_forEach : function(iterable, handler) {
 
     var internalHandler;
     var internalIterable;
@@ -239,7 +239,7 @@ b_forEach = function(iterable, handler) {
         internalIterable = Object.getOwnPropertyNames(iterable);
         internalHandler = function(propName, i) {
             handler(iterable[propName], propName, iterable, i);
-        },
+        }
     }
     else {
         return false;
@@ -254,10 +254,10 @@ b_forEach = function(iterable, handler) {
  * @static
  * @method arrayToHash
  * @param {Array} array      The array to hash
- * @param {*} [defaultVal=true] Default value if the hashing fails
+ * @param {*} [defaultVal:true] Default value if the hashing fails
  * @return {Object} Hash
  */
-b_arrayToHash = function(array, defaultVal) {
+b_arrayToHash : function(array, defaultVal) {
 	if (!util.isArray(array)) {
 		return null;
 	}
@@ -300,7 +300,7 @@ b_arrayToHash = function(array, defaultVal) {
  * representing the value of the derived property for that item.
  * @return {Object} The converted array.
  */
-b_arrayToObj = function(array, keyFieldOrTransform, valFieldOrTransform) {
+b_arrayToObj : function(array, keyFieldOrTransform, valFieldOrTransform) {
     if (!util.isArray(array)) {
 		return null;
 	}
@@ -347,7 +347,7 @@ b_arrayToObj = function(array, keyFieldOrTransform, valFieldOrTransform) {
  * for each object in the array.
  * @return {Object} A hash of the values in the array
  */
-b_objArrayToHash = function(array, hashProp) {
+b_objArrayToHash : function(array, hashProp) {
     if (!util.isArray(array)) {
 		return null;
 	}
@@ -368,7 +368,7 @@ b_objArrayToHash = function(array, hashProp) {
  * @param {String} [hashKeyProp] The property name that will hold the hash key.
  * @return {Array} An array of each property value in the hash.
  */
-b_hashToArray = function(obj, hashKeyProp) {
+b_hashToArray : function(obj, hashKeyProp) {
 	if (!b_isObject(obj)) {
 		return null;
 	}
@@ -390,7 +390,7 @@ b_hashToArray = function(obj, hashKeyProp) {
  * @param {Object} obj Hash object
  * @return {Object} Inverted hash
  */
-b_invertHash = function(obj) {
+b_invertHash : function(obj) {
 	if (!b_isObject(obj)) {
 		return null;
 	}
@@ -411,7 +411,7 @@ b_invertHash = function(obj) {
  * @param {Array} array
  * @return {Array} Cloned array
  */
-b_copyArray = function(array) {
+b_copyArray : function(array) {
 	if (!util.isArray(array)) {
 		return null;
 	}
@@ -423,7 +423,7 @@ b_copyArray = function(array) {
 	return clone;
 },
 
-b_dedupeArray = function(array) {
+b_dedupeArray : function(array) {
     var hash = b_arrayToHash(array);
     return Object.keys(hash);
 },
@@ -436,7 +436,7 @@ b_dedupeArray = function(array) {
  * @param {Array} to
  * @return {Boolean} FALSE when the parameters are not Arrays
  */
-b_arrayPushAll = function(from, to) {
+b_arrayPushAll : function(from, to) {
 	if (!util.isArray(from) || !util.isArray(to)) {
 		return false;
 	}
@@ -452,7 +452,7 @@ b_arrayPushAll = function(from, to) {
  * @static
  * @method cb
  */
-b_cb = function(/*err, result*/){
+b_cb : function(/*err, result*/){
 	//do nothing
 },
 
@@ -462,7 +462,7 @@ b_cb = function(/*err, result*/){
  * @method uniqueId
  * @return {String} Unique Id Object
  */
-b_uniqueId = function(){
+b_uniqueId : function(){
 	return uuid.v4();
 },
 
@@ -473,7 +473,7 @@ b_uniqueId = function(){
  * @param {*} value
  * @return {Boolean}
  */
-b_isObject = function(value) {
+b_isObject : function(value) {
 	return !b_isNullOrUndefined(value) && typeof value === 'object';
 },
 
@@ -484,7 +484,7 @@ b_isObject = function(value) {
  * @param {*} value
  * @return {Boolean}
  */
-b_isString = function(value) {
+b_isString : function(value) {
 	return !b_isNullOrUndefined(value) && typeof value === 'string';
 },
 
@@ -495,7 +495,7 @@ b_isString = function(value) {
  * @param {*} value
  * @return {Boolean}
  */
-b_isFunction = function(value) {
+b_isFunction : function(value) {
 	return !b_isNullOrUndefined(value) && typeof value === 'function';
 },
 
@@ -506,7 +506,7 @@ b_isFunction = function(value) {
  * @param {*} value
  * @return {Boolean}
  */
-b_isNullOrUndefined = function(value) {
+b_isNullOrUndefined : function(value) {
     return value === null || typeof value === 'undefined';
 },
 
@@ -517,7 +517,7 @@ b_isNullOrUndefined = function(value) {
  * @param {*} value
  * @return {Boolean}
  */
-b_isBoolean = function(value) {
+b_isBoolean : function(value) {
     return value === true || value === false;
 },
 
@@ -528,7 +528,7 @@ b_isBoolean = function(value) {
  * @param {String}   dirPath The starting path
  * @param {Function} cb      Callback function
  */
-b_getDirectories = function(dirPath, cb) {
+b_getDirectories : function(dirPath, cb) {
 
 	var dirs = [];
 	fs.readdir(dirPath, function(err, files) {
@@ -552,7 +552,7 @@ b_getDirectories = function(dirPath, cb) {
 					}
 					callback(err);
 				});
-			},
+			}
 		});
 		async.parallel(tasks, function(err/*, results*/) {
 			cb(err, dirs);
@@ -577,13 +577,13 @@ b_getDirectories = function(dirPath, cb) {
  * absolute paths for files that met the criteria specified by the filter
  * function.
  */
-b_getFiles = function(dirPath, options, cb) {
+b_getFiles : function(dirPath, options, cb) {
     if (b_isFunction(options)) {
         cb      = options;
         options = {
             recursive: false,
             filter: function(/*fullPath, stat*/) { return true; }
-        },
+        }
     }
 
     //read files from dir
@@ -655,7 +655,7 @@ b_getFiles = function(dirPath, options, cb) {
  * will not be created.
  * @param {Function} cb A callback that provides an error, if occurred
  */
-b_mkdirs = function(absoluteDirPath, isFileName, cb) {
+b_mkdirs : function(absoluteDirPath, isFileName, cb) {
     if (b_isFunction(isFileName)) {
         cb = isFileName;
         isFileName = false;
@@ -687,7 +687,7 @@ b_mkdirs = function(absoluteDirPath, isFileName, cb) {
                 }
                 fs.mkdir(curr, callback);
             });
-        },
+        }
     });
     async.series(tasks, function(err/*, results*/){
         cb(err);
@@ -704,7 +704,7 @@ b_mkdirs = function(absoluteDirPath, isFileName, cb) {
  * separator is treated as a file.  This means that a directory with that value
  * will not be created.
  */
-b_mkdirsSync = function(absoluteDirPath, isFileName) {
+b_mkdirsSync : function(absoluteDirPath, isFileName) {
     if (!b_isString(absoluteDirPath)) {
         throw new Error('absoluteDirPath must be a valid file path');
     }
@@ -739,12 +739,12 @@ b_mkdirsSync = function(absoluteDirPath, isFileName) {
  * @param {String} [options.sep] The file path separator used in the path.  Defaults to the OS default.
  * @return {String} The value after the last '.' character
  */
-b_getExtension = function(filePath, options) {
+b_getExtension : function(filePath, options) {
     if (!b_isString(filePath) || filePath.length <= 0) {
         return null;
     }
     if (!b_isObject(options)) {
-        options = {},
+        options = {}
     }
 
     //do to the end of the path
@@ -773,16 +773,15 @@ b_getExtension = function(filePath, options) {
  * @param extension
  * @return {Function}
  */
-b_getFileExtensionFilter = function(extension) {
+b_getFileExtensionFilter : function(extension) {
     var ext = '.' + extension;
     return function(fullPath) {
         return fullPath.lastIndexOf(ext) === (fullPath.length - ext.length);
-    },
+    }
 },
 
 //inherit from node's version of 'util'.  We can't use node's "util.inherits"
 //function because util is an object and not a prototype.
-b_merge(util, Util);
 
 /**
  * Overrides the basic inherit functionality to include static functions and
@@ -792,14 +791,18 @@ b_merge(util, Util);
  * @param {Function} Type1
  * @param {Function} Type2
  */
-b_inherits = function(Type1, Type2) {
+b_inherits : function(Type1, Type2) {
     if (b_isNullOrUndefined(Type1) || b_isNullOrUndefined(Type2)) {
         throw new Error('The type parameters must be objects or prototypes');
     }
 
     util.inherits(Type1, Type2);
     b_merge(Type2, Type1);
-},
+}
+
+
+// b_merge(util, Util);
+
 
 
 
