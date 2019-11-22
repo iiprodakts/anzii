@@ -1,6 +1,7 @@
-import Server from '../modules/server'
 
-export default [
+import Test from '../modules/test'
 
-    Server
-]
+export default {
+
+    Test
+}

@@ -1,12 +1,12 @@
 
-import Andziiy from '../lib/andziiy'
+import Anzii from '../lib/anzii'
 import Modules from '../init/modules'
 // import Server from '../shared/modules/server/index'
 
-let server  = function(){
+export default function(){
 
 
-    // console.log('THE SERVER IS RUNNNING')
+    console.log('THE SERVER IS RUNNNING')
 
     // console.log(Components)
     // console.log('The typeof Components')
@@ -16,9 +16,9 @@ let server  = function(){
     // Components.unshift({Server})
     // let html = true
    
-    Andziiy.Activate(Modules)
+    Anzii.Activate([Modules])
   
 }
 
 
-export default server
+// export default server

@@ -15,9 +15,9 @@ bodyParser = require('body-parser');
 class Server{
   
   
-  constructor(sandbox){
+  constructor(pao){
 
-    this.sb = sandbox 
+    this.pao = pao
     this.xpress = express
     this.http = this.xpress() 
     this.path = path
@@ -51,7 +51,12 @@ class Server{
 
      this.init = methods.init
      this.listens = methods.listens
-     this.emit = methods.emit
+     this.emit = methods.emit 
+     this.handleRenderHtml = methods.handleRenderHtml
+     this.handleSSRComponentCount = methods.handleSSRComponentCount
+     this.handleSSRComponentId = methods.handleSSRComponentId 
+     this.handleSaveComponentData = methods.handleSaveComponentData 
+     this.handleTest = methods.handleTest
      this.startServer = methods.startServer
      this.startPreRoutes = methods.startPreRoutes
      this.startRouting = methods.startRouting
