@@ -16,8 +16,6 @@ class Test{
 
     
      this.init = methods.init
-     this.listens = methods.listens
-     this.emit = methods.emit 
      this.handleTesty = methods.handleTesty
     
   }

@@ -10391,7 +10391,8 @@ function CORE(lib) {
 
 
 CORE.prototype.createModule = function (module, moduleId, modInstId) {
-  var modules = this.modules; // console.log('THe modules Object')
+  var modules = this.modules;
+  this.sanna().runForModules(module); // console.log('THe modules Object')
   // console.log(modules)
 
   if (Object.keys(modules).length > 0) {
@@ -10414,7 +10415,7 @@ CORE.prototype.createModule = function (module, moduleId, modInstId) {
 
 
 CORE.prototype.events = function () {
-  var SUKU = this.PILLAR; //  const parent = this.parent
+  var PILLAR = this.PILLAR; //  const parent = this.parent
 
   return {
     addEventHandler: function addEventHandler(el, ev, handler) {
@@ -10590,6 +10591,65 @@ CORE.prototype.converts = function () {
     },
     objectToArray: function objectToArray(o) {
       return PILLAR.object_to_array(o);
+    }
+  };
+};
+
+CORE.prototype.sanna = function () {
+  var self = this;
+  return {
+    modules: {
+      validators: {
+        emit: function emit(comp) {
+          if (!comp.hasOwnProperty('emit')) {
+            console.log(self.sanna().modules);
+            comp.emit = self.sanna().modules.addiks.emit.bind(comp);
+          } else if (typeof comp.emit !== 'function') {
+            throw new Error('Emit is a reserved Akii method');
+          }
+        },
+        listens: function listens(comp) {
+          console.log('THE COMPONENT RUNS');
+
+          if (!comp.hasOwnProperty('listens')) {
+            console.log('THE LISTENS COMP PROP');
+            comp.listens = self.sanna().modules.addiks.listens.bind(comp);
+            console.log(comp);
+          } else if (typeof comp.listens !== 'function') {
+            throw new Error('Listens is a reserved ANZii method');
+          }
+        }
+      },
+      addiks: {
+        emit: function emit(data) {
+          var self = this;
+          var pao = this.pao;
+          console.log(self.constructor.name, 'is emitting event:', data.type, 'with data: ', data.data);
+          pao.sb_notifyEvent({
+            type: data.type,
+            data: data.data
+          });
+        },
+        listens: function listens(evehandles) {
+          var self = this;
+          var pao = this.pao;
+          console.log('MODULE', self.constructor.name, 'listens to events:', evehandles);
+          var mId = self.constructor.name.toLowerCase();
+          var mInsId = self.constructor.name.toLowerCase();
+          pao.sb_notifyListen(evehandles, mId, mInsId);
+        }
+      }
+    },
+    runForModules: function runForModules(comp) {
+      console.log('RUN MODULES.THIS'); // console.log(Array.from(this.modules.validators))
+
+      var validators = this.modules.validators;
+
+      for (var v in validators) {
+        console.log('THE RUN MODULES V');
+        console.log(v);
+        validators[v](comp);
+      }
     }
   };
 };
@@ -18194,10 +18254,8 @@ var Test = function Test(pao) {
   _classCallCheck(this, Test);
 
   this.pao = pao;
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
-  this.listens = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* listens */];
-  this.emit = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* emit */];
-  this.handleTesty = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleTesty */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* init */];
+  this.handleTesty = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* handleTesty */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Test);
@@ -18207,13 +18265,13 @@ var Test = function Test(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return listens; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return emit; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleTesty; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleTesty; });
 var init = function init() {
   console.log('Test has been initialised');
-  this.listens(); //   console.log(this.pao)
+  this.listens({
+    'handle-testy': this.handleTesty.bind(this)
+  }); //   console.log(this.pao)
   //   console.log(this) 
 
   this.emit({
@@ -18227,21 +18285,6 @@ var init = function init() {
     }
   });
   console.log('AFTER HANDLE-TEST HAS BEEN EMITTED');
-};
-var listens = function listens() {
-  var pao = this.pao;
-  console.log('Test listens');
-  pao.pa_notifyListen({
-    'handle-testy': this.handleTesty.bind(this) //  'action-dispatch': this.handleActionDispatch.bind(this)
-
-  }, pao.moduleMeta.moduleId, pao.moduleMeta.modInstId);
-};
-var emit = function emit(eNotifs) {
-  var pao = this.pao;
-  pao.pa_notifyEvent({
-    type: eNotifs.type,
-    data: eNotifs.data
-  });
 };
 var handleTesty = function handleTesty(data) {
   console.log('HANDLE TEST EVENT HAS BEEN EMITTED'); // this.html = data.html
@@ -18273,14 +18316,11 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Midleware = function Midleware(pao) {
   _classCallCheck(this, Midleware);
 
-  this.pao = pao;
-  this.sticky = null; // console.log('THE STORE')
+  this.pao = pao; // console.log('THE STORE')
   // console.log(this.supubu
 
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* init */];
-  this.listens = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* listens */];
-  this.emit = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* emit */];
-  this.handleAddMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleAddMiddleware */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
+  this.handleAddMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleAddMiddleware */];
   this.addMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* addMiddleware */];
 };
 
@@ -18291,31 +18331,15 @@ var Midleware = function Midleware(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return listens; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return emit; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleAddMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleAddMiddleware; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return addMiddleware; });
 var init = function init() {
   console.log('Middleware has been initialised'); //   console.log(this.pao)
   //   console.log(this)
 
-  this.listens();
-};
-var listens = function listens() {
-  var pao = this.pao;
-  pao.pa_notifyListen({
-    'add-middleware': this.handleAddMiddleware.bind(this) //  'action-dispatch': this.handleActionDispatch.bind(this)
-
-  }, pao.moduleMeta.moduleId, pao.moduleMeta.modInstId);
-};
-var emit = function emit(eNotifs) {
-  var pao = this.pao;
-  console.log('tHE EVENT EMITTED BY SERVEER');
-  console.log(eNotifs);
-  pao.pa_notifyEvent({
-    type: eNotifs.type,
-    data: eNotifs.data
+  this.listens({
+    'add-middleware': this.handleAddMiddleware.bind(this)
   });
 };
 var handleAddMiddleware = function handleAddMiddleware(data) {
@@ -18376,15 +18400,13 @@ var Server = function Server(pao) {
     bodyParser: bodyParser // // methods
 
   };
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
-  this.listens = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* listens */];
-  this.emit = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* emit */];
-  this.handleSendResponse = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleSendResponse */];
-  this.startServer = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* startServer */];
-  this.startPreRoutes = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* startPreRoutes */];
-  this.startRouting = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* startRouting */];
-  this.runServer = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* runServer */];
-  this.renderHtml = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* renderHtml */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* init */];
+  this.handleSendResponse = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* handleSendResponse */];
+  this.startServer = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* startServer */];
+  this.startPreRoutes = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* startPreRoutes */];
+  this.startRouting = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* startRouting */];
+  this.runServer = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* runServer */];
+  this.renderHtml = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* renderHtml */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Server);
@@ -18394,37 +18416,21 @@ var Server = function Server(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return listens; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return emit; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return startServer; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return startPreRoutes; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return startRouting; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return runServer; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return renderHtml; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleSendResponse; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return startServer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return startPreRoutes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return startRouting; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return runServer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return renderHtml; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleSendResponse; });
 var init = function init() {
   console.log('Server has been initialised'); //   console.log(this.pao)
   //   console.log(this)
 
-  this.listens();
-  this.startServer();
-};
-var listens = function listens() {
-  var pao = this.pao;
-  pao.pa_notifyListen({
-    'send-response': this.handleSendResponse.bind(this) //  'action-dispatch': this.handleActionDispatch.bind(this)
-
-  }, pao.moduleMeta.moduleId, pao.moduleMeta.modInstId);
-};
-var emit = function emit(eNotifs) {
-  var pao = this.pao;
-  console.log('tHE EVENT EMITTED BY SERVEER');
-  console.log(eNotifs);
-  pao.pa_notifyEvent({
-    type: eNotifs.type,
-    data: eNotifs.data
+  this.listens({
+    'send-response': this.handleSendResponse.bind(this)
   });
+  this.startServer();
 };
 var startServer = function startServer(data) {
   var self = this;
@@ -18521,10 +18527,8 @@ var Parsers = function Parsers(pao) {
     jsonfile: jsonfile,
     bodyParser: bodyParser
   };
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* init */];
-  this.listens = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* listens */];
-  this.emit = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* emit */];
-  this.handleAddParsers = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleAddParsers */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
+  this.handleAddParsers = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleAddParsers */];
   this.addParsers = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* addParsers */];
 };
 
@@ -18535,28 +18539,13 @@ var Parsers = function Parsers(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return listens; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return emit; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleAddParsers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleAddParsers; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return addParsers; });
 var init = function init() {
   console.log('Parsers has been initialised');
-  this.listens();
-};
-var listens = function listens() {
-  var pao = this.pao;
-  pao.pa_notifyListen({
+  this.listens({
     'add-parsers': this.handleAddParsers.bind(this)
-  }, pao.moduleMeta.moduleId, pao.moduleMeta.modInstId);
-};
-var emit = function emit(eNotifs) {
-  var pao = this.pao;
-  console.log('tHE EVENT EMITTED BY SERVEER');
-  console.log(eNotifs);
-  pao.pa_notifyEvent({
-    type: eNotifs.type,
-    data: eNotifs.data
   });
 };
 var handleAddParsers = function handleAddParsers(data) {
@@ -18591,10 +18580,8 @@ var Router = function Router(pao) {
   _classCallCheck(this, Router);
 
   this.pao = pao;
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* init */];
-  this.listens = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* listens */];
-  this.emit = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* emit */];
-  this.handleAddRoutes = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleAddRoutes */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
+  this.handleAddRoutes = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleAddRoutes */];
   this.addRoutes = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* addRoutes */];
 };
 
@@ -18605,28 +18592,13 @@ var Router = function Router(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return listens; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return emit; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleAddRoutes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleAddRoutes; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return addRoutes; });
 var init = function init() {
   console.log('Router has been initialised');
-  this.listens();
-};
-var listens = function listens() {
-  var pao = this.pao;
-  pao.pa_notifyListen({
+  this.listens({
     'add-routes': this.handleAddRoutes.bind(this)
-  }, pao.moduleMeta.moduleId, pao.moduleMeta.modInstId);
-};
-var emit = function emit(eNotifs) {
-  var pao = this.pao;
-  console.log('tHE EVENT EMITTED BY SERVEER');
-  console.log(eNotifs);
-  pao.pa_notifyEvent({
-    type: eNotifs.type,
-    data: eNotifs.data
   });
 };
 var handleAddRoutes = function handleAddRoutes(data) {
