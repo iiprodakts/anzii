@@ -17,6 +17,8 @@ class Test{
     
      this.init = methods.init
      this.handleTesty = methods.handleTesty
+     this.handleAddTestMiddleware = methods.handleAddTestMiddleware
+     this.test = methods.test
     
   }
 

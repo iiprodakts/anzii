@@ -971,8 +971,330 @@ module.exports = {
 
     util.inherits(Type1, Type2);
     p_merge(Type2, Type1);
-  } // p_merge(util, Util);
+  },
+  js_to_json: function js_to_json(jsObject, filter, indent) {
+    var jsonString = JSON.stringify(jsObject);
+    return jsonString;
+  },
+  json_to_js: function json_to_js(jsonString, options) {
+    var jsObject = JSON.parse(jsonString);
+    return jsObject;
+  },
+  clone: function clone(o) {
+    var _this = this;
 
+    if (o instanceof Array) {
+      var newA = [];
+      o.forEach(function (e) {
+        if (e instanceof Array) {
+          newA.push(_this.clone(e));
+        } else if (e instanceof Object) {
+          newA.push(_this.clone(e));
+        } else {
+          newA.push(e);
+        }
+      });
+      return newA;
+    } else if (o instanceof Object && typeof o !== 'function') {
+      var n = {};
+
+      for (var p in o) {
+        if (o[p] instanceof Array) {
+          n[p] = this.clone(o[p]);
+        } else if (o[p] instanceof Object && typeof o[p] !== 'function') {
+          n[p] = this.clone(o[p]);
+        } else {
+          if (p === 'callback') {
+            console.log('The current property is callback');
+          }
+
+          n[p] = o[p];
+        }
+      }
+
+      return n;
+    }
+  },
+
+  /*********************************** OBJECT AND ARRAY CASTING ************************************************************/
+  object_to_array: function object_to_array(castObj) {
+    if (castObj instanceof Object) {
+      if (!(castObj instanceof Array)) {
+        var arr = [];
+        var count = 0;
+
+        for (var key in castObj) {
+          arr[count] = castObj[key];
+          ++count;
+        }
+
+        return arr;
+      } else {
+        return castObj;
+      }
+    } else {
+      this.throwErrors('Argument 1 of object_to_array() must be an object');
+    }
+  },
+  array_to_object: function array_to_object(castArr) {
+    if (castArr instanceof Array) {
+      var obj = {};
+
+      for (var i = 0; i < castArr.length; i++) {
+        var property = 'property_' + (i + 1);
+        obj[property] = castArr[i];
+      }
+
+      return obj;
+    } else {
+      this.throwErrors('Argument 1 of array_to_object() must be an array');
+    }
+  },
+  string_to_array: function string_to_array(string, sep) {
+    if (string instanceof String) {
+      return string.split(sep);
+    }
+  },
+  set_deeply: function set_deeply(path, deep) {
+    var value = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    var type = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+
+    //  console.log('TYPEOF AC')
+    //  console.log(ac)
+    // if(!(ac)){
+    // 	console.log('AC IS NULL')
+    // 	var a = deep 
+    // }
+    // console.log('THE VALUE OF A')
+    // console.log(a)
+    if (path.length === 1) {
+      console.log('ABOUT TO SET DEEPLY NESTED PROP');
+      console.log('THE DEEP');
+      console.log(deep);
+
+      if (!value) {
+        console.log('THIS DEEP ARRAY');
+        console.log(this.js_to_json(deep));
+        console.log('THE DEEP I,i');
+        deep.splice(path[0], 1);
+        console.log(deep);
+      } else {
+        deep[path[0]] = value;
+      }
+
+      console.log(path);
+      console.log(path[0]);
+      console.log(deep[path]);
+      return true;
+    }
+
+    if (!deep[path[0]]) {
+      console.log('THE PROPERTY BELOW DOES NOT EXIST');
+      console.log(path);
+      console.log(path[0]); //  console.log(deep[path[0]])
+
+      return false;
+    }
+
+    return this.set_deeply(path.slice(1), deep[path[0]], value, type);
+  },
+  get_deeply: function get_deeply(path) {},
+  is_function: function is_function(x) {
+    return Object.prototype.toString.call(x) === '[object Function]';
+  },
+  is_array: function is_array(x) {
+    return Object.prototype.toString.call(x) === '[object Array]';
+  },
+  is_date: function is_date(x) {
+    return Object.prototype.toString.call(x) === '[object Date]';
+  },
+  is_object: function is_object(x) {
+    return Object.prototype.toString.call(x) === '[object Object]';
+  },
+  is_string: function is_string(x) {
+    return Object.prototype.toString.call(x) === '[object String]';
+  },
+  is_value: function is_value(x) {
+    return !this.isObject(x) && !this.isArray(x);
+  },
+  is_not_falsey: function is_not_falsey(x) {
+    if (this.trim_spaces(x)) {
+      return true;
+    } else {
+      return false;
+    }
+  },
+  trim_spaces: function trim_spaces(x) {
+    if (x instanceof String) {
+      return x.trim();
+    } else {
+      return x;
+    }
+  },
+  compare_values: function compare_values(value1, value2) {
+    if (value1 === value2) {
+      return;
+    }
+
+    if (this.is_date(value1) && this.is_date(value2) && value1.getTime() === value2.getTime()) {
+      return;
+    }
+
+    if (value1 !== value2) {
+      value1 = value2;
+      return;
+    }
+  },
+  is_equal_ab: function is_equal_ab(a, b) {
+    var flag = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : 'values';
+
+    if (!(this.is_object(a) && this.is_object(b))) {
+      return false;
+    }
+
+    if (Object.keys(a).length !== Object.keys(b).length) {
+      return false;
+    }
+
+    if (flag.trim() === 'keys') {
+      var akeys = Object.keys(a).sort();
+      var bKeys = Object.keys(b).sort();
+      return JSON.stringify(aKeys) === JSON.stringify(bKeys); // var akeys = Object.keys(a)
+      // for (let k of akeys) {
+      // 	if (a[k] !== b[k]) {
+      // 	return false;
+      // 	}
+      // }
+      // return true
+    } else {
+      if (!(this.js_to_json(a) === this.js_to_json(b))) {
+        return false;
+      } else {
+        return true;
+      }
+    }
+  },
+  is_same_value: function is_same_value(x, y) {
+    if (this.isBrowserSupported('Object', 'is')) {
+      return Object.is(x, y);
+    } else {
+      return this.polyFills().objectIs(x, y);
+    }
+  },
+  unlike_props: function unlike_props(a, b) {
+    var akeys = Object.keys(a);
+    var bkeys = Object.keys(b);
+
+    if (a.length > b.length) {
+      var _unlike = null;
+
+      for (var _i = 0, _akeys = akeys; _i < _akeys.length; _i++) {
+        var k = _akeys[_i];
+
+        if (a[k] !== b[k]) {
+          if (_unlike) {
+            _unlike.a.push(k);
+          } else {
+            _unlike = {
+              a: [k]
+            };
+          }
+        }
+      }
+
+      return _unlike;
+    } else {
+      for (var _i2 = 0, _bkeys = bkeys; _i2 < _bkeys.length; _i2++) {
+        var _k = _bkeys[_i2];
+
+        if (b[_k] !== a[_k]) {
+          if (unlike) {
+            unlike.b.push(_k);
+          } else {
+            unlike = {
+              b: [_k]
+            };
+          }
+        }
+      }
+
+      return unlike;
+    }
+  },
+  contains: function contains(o, v) {
+    if (this.is_array(o)) {
+      return o.indexOf(v) > -1 ? true : false;
+    } else if (this.is_object(o)) {
+      return o.hasOwnProperty(v) ? true : false;
+    } else {
+      this.throwErrors('Contains() requires either an array pure js object');
+    }
+  },
+  for_of: function for_of(x, action) {
+    var y = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+    x = this.clone(x);
+
+    if (this.is_array(x)) {
+      x.forEach(action);
+    } else if (this.is_object(x)) {
+      if (!y) {
+        console.log('THE FOROF Y IS NULL');
+        console.log(x);
+        var newX = {};
+
+        for (var p in x) {
+          var prop = action(p, x[p]);
+          newX[prop.p] = prop.v;
+        }
+
+        console.log('THE NEWX');
+        console.log(newX);
+        return newX;
+      } else {
+        for (var _p in x) {
+          action(_p, x[_p]);
+        }
+      }
+    } else {
+      this.throwErrors('Object of for_of() must be an Array or pure object');
+    }
+  },
+  add_values_to: function add_values_to(x, keys, values) {
+    if (this.is_array(x)) {
+      x.forEach(action);
+    } else if (this.is_object(x)) {
+      keys.forEach(function (k, i) {
+        var vItemKeys = Object.keys(values[k]);
+
+        if (x[k]) {
+          vItemKeys.forEach(function (v) {
+            x[k][v] = values[v];
+          });
+        } else {
+          x[k] = {};
+          vItemKeys.forEach(function (v) {
+            x[k][v] = values[v];
+          });
+        }
+      });
+      return x;
+    } else {
+      this.throwErrors('Object of for_of() must be an Array or pure object');
+    }
+  },
+  find_in: function find_in(x, id, f) {
+    if (this.is_array(x)) {
+      if (this.is_value(x[0])) {
+        return x.indexOf(f) > -1 ? x[f] : false;
+      } else if (this.is_object(x[0])) {
+        for (var i = 0; i < x.length; i++) {
+          if (sb.sb_contains(x[i], id) && x[i][id] === f) {
+            return x[i];
+          }
+        }
+      }
+    }
+  }
 };
 
 /***/ }),
@@ -1017,8 +1339,9 @@ module.exports = require("uuid");
 
 "use strict";
 function CORE(lib) {
-  this.Pillar = lib;
-  this.modules = {}; // this.parent = this
+  this.PILLAR = lib;
+  this.modules = {};
+  this.globalModules = []; // this.parent = this
 } // End of the CORE class
 
 
@@ -1031,8 +1354,10 @@ CORE.prototype.createModule = function (module, moduleId, modInstId) {
     for (var _mod in modules) {
       //console.log(modules[mod]);
       if (_mod === moduleId) {
+        this.globalModules.push(module);
         this.modules[moduleId][modInstId] = module;
       } else {
+        this.globalModules.push(module);
         this.modules[moduleId] = {};
         this.modules[moduleId][modInstId] = module;
       }
@@ -1083,7 +1408,7 @@ CORE.prototype.events = function () {
 
 
 CORE.prototype.ajax = function () {
-  var SUKU = this.PILLAR;
+  var PILLAR = this.PILLAR;
   return {
     get: function get(url, data, success, failure, type) {
       PILLAR.ajax_get(url, data, success, failure, type);
@@ -1096,6 +1421,58 @@ CORE.prototype.ajax = function () {
   };
 }; // End of CORE AJAX manipulation object
 
+
+CORE.prototype.validators = function () {
+  var PILLAR = this.PILLAR;
+  return {
+    isFunction: function isFunction(x) {
+      return PILLAR.is_function(x);
+    },
+    isArray: function isArray(x) {
+      return PILLAR.is_array(x);
+    },
+    isDate: function isDate(x) {
+      return PILLAR.is_date(x);
+    },
+    isObject: function isObject(x) {
+      return PILLAR.is_object(x);
+    },
+    isString: function isString(x) {
+      return PILLAR.is_string(x);
+    },
+    isValue: function isValue(x) {
+      return PILLAR.is_value(x);
+    },
+    isNotFalsey: function isNotFalsey(x) {
+      return PILLAR.is_not_falsey(x);
+    },
+    trimSpaces: function trimSpaces(x) {
+      return PILLAR.trim_spaces(x);
+    },
+    isEqualab: function isEqualab(a, b) {
+      var f = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+      return PILLAR.is_equal_ab(a, b, f);
+    },
+    isSameValue: function isSameValue(x, y) {
+      return PILLAR.is_same_value(x, y);
+    },
+    unlikeProps: function unlikeProps(a, b) {
+      return PILLAR.unlike_props(a, b);
+    },
+    contains: function contains(o, v) {
+      return PILLAR.contains(o, v);
+    },
+    forOf: function forOf(o, action) {
+      return PILLAR.for_of(o, action);
+    },
+    addValuesTo: function addValuesTo(o, k, v) {
+      return PILLAR.add_values_to(o, k, v);
+    },
+    findIn: function findIn(x, i, f) {
+      return PILLAR.find_in(x, i, f);
+    }
+  };
+};
 
 CORE.prototype.util = function () {
   var PILLAR = this.PILLAR;
@@ -1157,12 +1534,9 @@ CORE.prototype.startModule = function (moduleId, modInstId) {
   if (this.modules[moduleID][modInstId]) {
     this.modules[moduleID][modInstId].init();
 
-    if (this.modules[moduleID][modInstId].hasOwnProperty("yimo")) {
-      console.log("Yimo is defined,module");
-
-      if (typeof this.modules[moduleID][modInstId].yimo === "function") {
-        this.modules[moduleID][modInstId].yimo();
-      }
+    if (moduleID === 'global') {
+      console.log('THE GLOBAL MODULES IS ABOUT TO RECEIVE MODULES');
+      this.modules[moduleID][modInstId].globals = this.globalModules;
     }
   }
 }; // End of startModule() core method
@@ -1256,8 +1630,8 @@ CORE.prototype.sanna = function () {
         emit: function emit(data) {
           var self = this;
           var pao = this.pao;
-          console.log(self.constructor.name, 'is emitting event:', data.type, 'with data: ', data.data);
-          pao.sb_notifyEvent({
+          console.log(self.constructor.name, 'is emitting event:', data.type, 'with data: ');
+          pao.pa_notifyEvent({
             type: data.type,
             data: data.data
           });
@@ -1265,21 +1639,17 @@ CORE.prototype.sanna = function () {
         listens: function listens(evehandles) {
           var self = this;
           var pao = this.pao;
-          console.log('MODULE', self.constructor.name, 'listens to events:', evehandles);
+          console.log('MODULE', self.constructor.name, 'listens to event(s):', evehandles);
           var mId = self.constructor.name.toLowerCase();
           var mInsId = self.constructor.name.toLowerCase();
-          pao.sb_notifyListen(evehandles, mId, mInsId);
+          pao.pa_notifyListen(evehandles, mId, mInsId);
         }
       }
     },
     runForModules: function runForModules(comp) {
-      console.log('RUN MODULES.THIS'); // console.log(Array.from(this.modules.validators))
-
       var validators = this.modules.validators;
 
       for (var v in validators) {
-        console.log('THE RUN MODULES V');
-        console.log(v);
         validators[v](comp);
       }
     }
@@ -1293,16 +1663,42 @@ CORE.prototype.sanna = function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function PAO(appPillar) {
   this.core = appPillar;
 } // End of PAO
 
 
 PAO.prototype.create = function (moduleID, modInstId) {
-  var pa_core = this.core;
-  var util = pa_core.util; // var events = pa_core.events()
+  var pa_core = this.core; // const util = pa_core.util
+  // var events = pa_core.events()
   // var ajax = pa_core.ajax()
-  // var converts = pa_core.converts()
+  // const validators = pa_core.validators()
+
+  var util = pa_core.validators().forOf(pa_core.util(), function (p, a) {
+    return {
+      p: ["pa_".concat(p)],
+      v: a
+    };
+  });
+  var converts = pa_core.validators().forOf(pa_core.converts(), function (p, a) {
+    return {
+      p: ["pa_".concat(p)],
+      v: a
+    };
+  });
+  var validators = pa_core.validators().forOf(pa_core.validators(), function (p, a) {
+    return {
+      p: ["pa_".concat(p)],
+      v: a
+    };
+  }); // console.log('THE VALIDATORS')
+  // console.log(validators)
   // console.log('The value of Instance Id')
   // console.log(modInstId)
 
@@ -1321,13 +1717,11 @@ PAO.prototype.create = function (moduleID, modInstId) {
     };
   }
 
-  return {
+  return _objectSpread({
     // DOM manipulations
     // view: CONTAINER,
-    moduleMeta: meta,
-    mkDirs: function mkDirs(p, isFileName, callback) {
-      return util.makeDirs(p, isFileName, callback);
-    },
+    moduleMeta: meta
+  }, util, {}, validators, {}, converts, {
     // 	pa_getChildByClass: function(selector){
     // 		if(CONTAINER){
     // 			return CONTAINER.queryChildByClass(selector);
@@ -1478,7 +1872,7 @@ PAO.prototype.create = function (moduleID, modInstId) {
     // 	}
     // End OF return
 
-  };
+  });
 }; // End of PAO create() method
 
 
@@ -1492,8 +1886,14 @@ PAO.prototype.create = function (moduleID, modInstId) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middleware_index__ = __webpack_require__(29);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__parsers_index__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router_index__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__server_index__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__request_index__ = __webpack_require__(45);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__server_index__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_index__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__global_index__ = __webpack_require__(55);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
 
 
 
@@ -1507,7 +1907,10 @@ var Esm = function Esm() {
     Middleware: __WEBPACK_IMPORTED_MODULE_0__middleware_index__["a" /* default */],
     Parsers: __WEBPACK_IMPORTED_MODULE_1__parsers_index__["a" /* default */],
     Router: __WEBPACK_IMPORTED_MODULE_2__router_index__["a" /* default */],
-    Server: __WEBPACK_IMPORTED_MODULE_3__server_index__["a" /* default */]
+    Request: __WEBPACK_IMPORTED_MODULE_3__request_index__["a" /* default */],
+    Server: __WEBPACK_IMPORTED_MODULE_4__server_index__["a" /* default */],
+    Config: __WEBPACK_IMPORTED_MODULE_5__config_index__["a" /* default */],
+    Global: __WEBPACK_IMPORTED_MODULE_6__global_index__["a" /* default */]
   };
 };
 
@@ -1535,7 +1938,11 @@ var Activate = function Activate(libs) {
   console.log(libs.length);
   console.log('The ESM MODULES SHOULD BE IN PLACE RIGHT NOw');
   console.log(this.ESM);
-  libs.unshift(this.ESM.Esm);
+  console.log(pao); // let global = pao.pa_clone(this.ESM.Esm.Global) 
+  // delete this.ESM.Esm.Global
+
+  libs.push(this.ESM.Esm); // libs.push(global) 
+
   libs.forEach(function (lib) {
     for (var moco in lib) {
       console.log('Inside activate');
@@ -1561,9 +1968,12 @@ var Activate = function Activate(libs) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_test__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_list__ = __webpack_require__(52);
+
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-  Test: __WEBPACK_IMPORTED_MODULE_0__modules_test__["a" /* default */]
+  Test: __WEBPACK_IMPORTED_MODULE_0__modules_test__["a" /* default */],
+  List: __WEBPACK_IMPORTED_MODULE_1__modules_list__["a" /* default */]
 });
 
 /***/ }),
@@ -1610,8 +2020,10 @@ var Test = function Test(pao) {
   _classCallCheck(this, Test);
 
   this.pao = pao;
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* init */];
-  this.handleTesty = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* handleTesty */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
+  this.handleTesty = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleTesty */];
+  this.handleAddTestMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* handleAddTestMiddleware */];
+  this.test = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* test */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Test);
@@ -1621,26 +2033,30 @@ var Test = function Test(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleTesty; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleTesty; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleAddTestMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return test; });
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 var init = function init() {
   console.log('Test has been initialised');
   this.listens({
-    'handle-testy': this.handleTesty.bind(this)
+    'handle-testy': this.handleTesty.bind(this),
+    'add-test-middleware': this.handleAddTestMiddleware.bind(this)
   }); //   console.log(this.pao)
   //   console.log(this) 
-
-  this.emit({
-    type: "handle-test",
-    data: {
-      callback: function callback(e, res) {
-        console.dir('The e value is: ', e);
-        console.log('The res value is: ', res);
-      },
-      value: "Test value"
-    }
-  });
-  console.log('AFTER HANDLE-TEST HAS BEEN EMITTED');
+  //   this.emit({
+  // 	  type: "handle-test",
+  // 	  data: {
+  // 		  callback: async function(e,res){
+  // 			console.dir('The e value is: ',e)
+  // 			console.log('The res value is: ',res)
+  // 		  },
+  // 		  value: "Test value"
+  // 	  }
+  // 	})
+  // 	console.log('AFTER HANDLE-TEST HAS BEEN EMITTED')
 };
 var handleTesty = function handleTesty(data) {
   console.log('HANDLE TEST EVENT HAS BEEN EMITTED'); // this.html = data.html
@@ -1648,6 +2064,18 @@ var handleTesty = function handleTesty(data) {
   var self = this;
   console.dir('This module contains the following resources: ', self);
   console.log(self);
+};
+var handleAddTestMiddleware = function handleAddTestMiddleware(data) {
+  console.log('HandleAddTestMiddleware has occured');
+  console.log(data); // this.html = data.html
+
+  var self = this;
+  data.filterCallback(data.type, self.test.bind(self));
+};
+var test = function test(req, res, next) {
+  console.log('HI THERE, I AM A TEST MIDDLEWARE AND I LOVE IT');
+  console.log(_typeof(res.send));
+  next();
 };
 
 /***/ }),
@@ -1669,40 +2097,138 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
-var Midleware = function Midleware(pao) {
-  _classCallCheck(this, Midleware);
+var bodyParser = __webpack_require__(25);
 
-  this.pao = pao; // console.log('THE STORE')
-  // console.log(this.supubu
+var Middleware = function Middleware(pao) {
+  _classCallCheck(this, Middleware);
 
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
-  this.handleAddMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleAddMiddleware */];
-  this.addMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* addMiddleware */];
+  this.pao = pao;
+  this.body = bodyParser;
+  this.middlewares = {
+    all: [{
+      type: 'function',
+      value: function value(req, res, next) {
+        console.log('I am the zeenith ware'), next();
+      }
+    }, {
+      type: 'module',
+      value: 'test'
+    }] // console.log('THE STORE')
+    // console.log(this.supubu
+
+  };
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* init */];
+  this.handleAttachMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleAttachMiddleware */];
+  this.attachMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* attachMiddleware */];
+  this.handleConfigMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleConfigMiddleware */];
 };
 
-/* harmony default export */ __webpack_exports__["a"] = (Midleware);
+/* harmony default export */ __webpack_exports__["a"] = (Middleware);
 
 /***/ }),
 /* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleAddMiddleware; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return addMiddleware; });
-var init = function init() {
-  console.log('Middleware has been initialised'); //   console.log(this.pao)
-  //   console.log(this)
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleAttachMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleConfigMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return attachMiddleware; });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var init = function init() {
+  console.log('Middleware has been initialised');
   this.listens({
-    'add-middleware': this.handleAddMiddleware.bind(this)
+    'config-middleware': this.handleConfigMiddleware.bind(this),
+    'attach-middleware': this.handleAttachMiddleware.bind(this)
   });
 };
-var handleAddMiddleware = function handleAddMiddleware(data) {
-  this.addMiddleware(data);
+var handleAttachMiddleware = function handleAttachMiddleware(data) {
+  this.attachMiddleware(data);
 };
-var addMiddleware = function addMiddleware(data) {
-  console.log('aDD MIDDLWARE DATA');
+var handleConfigMiddleware = function handleConfigMiddleware(data) {
+  var self = this;
+  console.log('THE HANDLE CONFIG MIDDLEWARE');
+  console.log(data);
+  console.log(data);
+  var middlewares = data;
+  console.log(middlewares);
+
+  var _loop = function _loop(p) {
+    console.log('THE P');
+    console.log(p);
+
+    if (self.middlewares[p]) {
+      if (middlewares[p].addMiddleware) {
+        console.log('INSIDE EXISTENT MIDDLEWARE ITEM');
+        console.log(middlewares[p]);
+        middlewares[p].addMiddleware.forEach(function (m, i) {
+          self.middlewares[p].push(m);
+        });
+      } else if (p === 'removeMiddleware') {}
+    } else {
+      if (middlewares[p].addMiddleware) {
+        self.middlewares[p] = _objectSpread({}, middlewares[p].addMiddleware);
+      }
+    }
+  };
+
+  for (var p in middlewares) {
+    _loop(p);
+  }
+};
+var attachMiddleware = function attachMiddleware(data) {
+  var self = this;
+
+  if (data.app) {
+    console.log('SELF.MIDDLEWARES');
+    console.log(self.middlewares);
+
+    if (self.middlewares.pprivate && self.middlewares.ppublic) {
+      self.emit({
+        type: 'router-middleware',
+        data: {
+          middleware: {
+            "public": self.middlewares.ppublic,
+            "private": self.middlewares.pprivate
+          }
+        }
+      });
+    } else if (self.middlewares["private"]) {
+      self.emit({
+        type: 'router-middleware',
+        data: {
+          middleware: {
+            "private": self.middlewares.pprivate
+          }
+        }
+      });
+    } else if (self.middlewares["public"]) {
+      self.emit({
+        type: 'router-middleware',
+        data: {
+          middleware: {
+            "public": self.middlewares.ppublic
+          }
+        }
+      });
+    }
+
+    if (self.middlewares.all) {
+      console.log('FOR EVERY REQUEST MIDDLEWARES');
+      console.log(self.middlewares.all);
+      self.middlewares.all.forEach(function (m, i) {
+        if (m.type === 'function') {
+          data.app.use(m.value);
+        } else if (m.type === 'module') {// self.emit({type: `add-${m.value}-middleware`,data: data.app})
+        }
+      });
+    }
+  }
 };
 
 /***/ }),
@@ -1739,6 +2265,7 @@ var Server = function Server(pao) {
   this.pao = pao;
   this.xpress = express;
   this.http = this.xpress();
+  this.router = this.xpress.Router();
   this.path = path;
   this.html = [];
   this.request = null;
@@ -1756,13 +2283,14 @@ var Server = function Server(pao) {
     bodyParser: bodyParser // // methods
 
   };
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* init */];
-  this.handleSendResponse = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* handleSendResponse */];
-  this.startServer = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* startServer */];
-  this.startPreRoutes = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* startPreRoutes */];
-  this.startRouting = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* startRouting */];
-  this.runServer = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* runServer */];
-  this.renderHtml = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* renderHtml */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
+  this.handleConfigServer = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* handleConfigServer */];
+  this.handleWriteServerRequestResponse = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleWriteServerRequestResponse */];
+  this.startServer = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* startServer */];
+  this.startPreRoutes = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* startPreRoutes */];
+  this.startRouting = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* startRouting */];
+  this.runServer = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* runServer */];
+  this.renderHtml = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* renderHtml */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Server);
@@ -1772,26 +2300,44 @@ var Server = function Server(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return startServer; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return startPreRoutes; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return startRouting; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return runServer; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return renderHtml; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleSendResponse; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleConfigServer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return startServer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return startPreRoutes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return startRouting; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return runServer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return renderHtml; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleWriteServerRequestResponse; });
 var init = function init() {
   console.log('Server has been initialised'); //   console.log(this.pao)
   //   console.log(this)
 
   this.listens({
-    'send-response': this.handleSendResponse.bind(this)
+    'config-server': this.handleConfigServer.bind(this),
+    'write-server-request-response': this.handleWriteServerRequestResponse.bind(this)
   });
-  this.startServer();
+};
+var handleConfigServer = function handleConfigServer(data) {
+  var self = this;
+  self.emit({
+    type: 'attach-middleware',
+    data: {
+      app: self.http
+    }
+  });
+  self.emit({
+    type: 'attach-routes',
+    data: {
+      app: self.http,
+      router: self.router
+    }
+  });
+  self.startServer();
 };
 var startServer = function startServer(data) {
-  var self = this;
-  this.startPreRoutes();
-  this.startRouting();
+  var self = this; // this.startPreRoutes()
+  // this.startRouting()
+
   this.runServer();
 };
 var startPreRoutes = function startPreRoutes() {
@@ -1847,8 +2393,13 @@ var renderHtml = function renderHtml(req, res) {
     }
   }); //    console.log(this)
 };
-var handleSendResponse = function handleSendResponse(data) {
-  self.request.res.status(200).send(data);
+var handleWriteServerRequestResponse = function handleWriteServerRequestResponse(data) {
+  var self = this;
+  console.log('SERVER IS ABOUT TO SEND RESPONSE BACK TO CLIENT');
+  data.res.set('Connection', 'close');
+  data.res.status(200).send(data.data);
+  console.log('SERVER HAS SENT A RESPONSE BACK TO THE CLIENT');
+  return;
 };
 
 /***/ }),
@@ -1936,9 +2487,20 @@ var Router = function Router(pao) {
   _classCallCheck(this, Router);
 
   this.pao = pao;
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
-  this.handleAddRoutes = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleAddRoutes */];
-  this.addRoutes = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* addRoutes */];
+  this.routes = null;
+  this.routerMiddleware = null;
+  this.filteredpublicMiddlewares = [];
+  this.filteredprivateMiddlewares = [];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* init */];
+  this.handleConfigRouter = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* handleConfigRouter */];
+  this.handleAttachRoutes = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* handleAttachRoutes */];
+  this.handleRouterMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* handleRouterMiddleware */];
+  this.attachRoutes = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* attachRoutes */];
+  this.renderRoute = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* renderRoute */];
+  this.appendRouter = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* appendRouter */];
+  this.middlewareType = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* middlewareType */];
+  this.handOver = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* handOver */];
+  this.filterCallback = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* filterCallback */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Router);
@@ -1948,22 +2510,655 @@ var Router = function Router(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleAddRoutes; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return addRoutes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return handleConfigRouter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return handleRouterMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return handleAttachRoutes; });
+/* unused harmony export addRoutes */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return attachRoutes; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return renderRoute; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return appendRouter; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return middlewareType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return handOver; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return filterCallback; });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 var init = function init() {
   console.log('Router has been initialised');
   this.listens({
-    'add-routes': this.handleAddRoutes.bind(this)
+    'config-router': this.handleConfigRouter.bind(this),
+    'router-middleware': this.handleRouterMiddleware.bind(this),
+    'attach-routes': this.handleAttachRoutes.bind(this)
   });
 };
-var handleAddRoutes = function handleAddRoutes(data) {
-  this.addRoutes(data);
+var handleConfigRouter = function handleConfigRouter(data) {
+  console.log('THE HANDLE CONFIG ROUTER MODULE');
+  var self = this;
+  self.routes = data;
 };
-var addRoutes = function addRoutes(data) {
+var handleRouterMiddleware = function handleRouterMiddleware(data) {
+  var self = this;
+  console.log('THE ROUTER MIDDLEWARE');
+  console.log(data);
+  self.routerMiddleware = data.middleware;
+};
+var handleAttachRoutes = function handleAttachRoutes(data) {
+  this.attachRoutes(data);
+};
+var addRoutes = function addRoutes(data) {};
+var attachRoutes = function attachRoutes(data) {
+  var self = this;
+
+  if (data.app) {
+    data.app.use('/', data.router);
+    self.routes.forEach(function (r, i) {
+      r['router'] = data.router;
+      self.renderRoute(r);
+    });
+  }
+};
+var renderRoute = function renderRoute(r) {
+  var self = this;
+  var pao = this.pao;
+  var routy = {
+    router: r.router,
+    method: r.method,
+    path: r.path,
+    handOver: self.handOver
+  };
+  console.log('THE ROUTE MIDDLEWARE');
+  console.log(self.routerMiddleware["public"]);
+
+  if (r.middlewares) {
+    if (self.routerMiddleware && self.routerMiddleware[r.type]) {
+      self.middlewareType(r.type, r.middlewares);
+      self.middlewareType(r.type, pao.pa_objectToArray(self.routerMiddleware[r.type]));
+      self.appendRouter(_objectSpread({
+        middleware: self["filtered".concat(r.type, "Middlewares")]
+      }, routy));
+    } else {
+      self.middlewareType(r.type, r.middlewares);
+      self.appendRouter(_objectSpread({
+        middleware: self["filtered".concat(r.type, "Middlewares")]
+      }, routy));
+    }
+  } else if (self.routerMiddleware && self.routerMiddleware[r.type]) {
+    self.middlewareType(r.type, pao.pa_objectToArray(self.routerMiddleware[r.type]));
+    self.appendRouter(_objectSpread({
+      middleware: self["filtered".concat(r.type, "Middlewares")]
+    }, routy));
+  } else {
+    self.appendRouter(routy);
+  }
+};
+var appendRouter = function appendRouter(r) {
+  console.log('THE APPENDROUTER');
+
+  if (r.middleware) {
+    r.router[r.method.toLowerCase()](r.path, r.middleware, r.handOver.bind(this));
+  } else {
+    r.router[r.method.toLowerCase()](r.path, r.handOver.bind(this));
+  }
+};
+var middlewareType = function middlewareType(type, middlewares) {
+  var self = this;
+  console.log('THE MIDDLEWARETYP MIDDLEWARES');
+  console.log(middlewares);
+  middlewares.forEach(function (m, i) {
+    if (m.type === 'function') {
+      self["filtered".concat(type, "Middlewares")].push(m.value);
+    } else if (m.type === 'module') {
+      self.emit({
+        type: "add-".concat(m.value, "-middleware"),
+        data: {
+          type: type,
+          filterCallback: self.filterCallback.bind(self)
+        }
+      });
+    }
+  });
+};
+var handOver = function handOver(req, res) {
+  console.log('THE CAUGHT REQUEST INSIDE ROUTER');
+  var self = this;
+  self.emit({
+    type: 'request-handover',
+    data: {
+      req: req,
+      res: res
+    }
+  }); // return res.json({todo:{list:{items:['I ate food','I wrote code','I read a book','I watched a movie']}}})
+};
+var filterCallback = function filterCallback(filterType, moduleMiddleware) {
+  var self = this;
+
+  if (filterType === 'public') {
+    self.filteredpublicMiddlewares.push(moduleMiddleware);
+  } else {
+    self.filteredprivateMiddlewares.push(moduleMiddleware);
+  }
+};
+
+/***/ }),
+/* 41 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(42);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */]);
+
+/***/ }),
+/* 42 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__confy__ = __webpack_require__(44);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+
+var Config = function Config(pao) {
+  _classCallCheck(this, Config);
+
+  this.pao = pao;
+  this.config = __WEBPACK_IMPORTED_MODULE_1__confy__["a" /* default */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* init */];
+  this.configure = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* configure */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Config);
+
+/***/ }),
+/* 43 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return configure; });
+var init = function init() {
+  console.log('Config has been initialised');
+  this.configure();
+};
+var configure = function configure() {
+  var self = this;
+  var config = self.config;
+  console.log('THE VALUE OF CONFIG SELF.CONFIG');
+  console.log(self.config);
+
+  if (self.config) {
+    for (var c in config) {
+      console.log(c);
+      self.emit({
+        type: "config-".concat(c),
+        data: config[c]
+      });
+    }
+  }
+};
+
+/***/ }),
+/* 44 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__includes_routes__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__includes_globals__ = __webpack_require__(51);
+
+
+/* harmony default export */ __webpack_exports__["a"] = ({
+  middleware: {
+    ppublic: {
+      addMiddleware: __WEBPACK_IMPORTED_MODULE_1__includes_globals__["c" /* ppublic */]
+    },
+    pprivate: {
+      addMiddleware: __WEBPACK_IMPORTED_MODULE_1__includes_globals__["b" /* pprivate */]
+    },
+    all: {
+      addMiddleware: __WEBPACK_IMPORTED_MODULE_1__includes_globals__["a" /* all */]
+    }
+  },
+  router: __WEBPACK_IMPORTED_MODULE_0__includes_routes__["a" /* default */],
+  server: 'server'
+});
+
+/***/ }),
+/* 45 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__request__ = __webpack_require__(46);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__request__["a" /* default */]);
+
+/***/ }),
+/* 46 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(47);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Request = function Request(pao) {
+  _classCallCheck(this, Request);
+
+  this.pao = pao;
+  this.request = {};
+  this.requestData = null;
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* init */];
+  this.handleRequestHandOver = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* handleRequestHandOver */];
+  this.parseRequest = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* parseRequest */];
+  this.handleRequestGlobalError = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* handleRequestGlobalError */];
+  this.handleRequestGlobalResponse = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* handleRequestGlobalResponse */];
+  this.handleBadRequestError = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleBadRequestError */];
+  this.handleHandlerNotFound = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* handleHandlerNotFound */];
+  this.handleByHandlerError = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleByHandlerError */];
+  this.handleHandlerError = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* handleHandlerError */];
+  this.handlePathError = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* handlePathError */];
+  this.writeResponse = __WEBPACK_IMPORTED_MODULE_0__methods__["m" /* writeResponse */];
+  this.successfullHandle = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* successfullHandle */];
+  this.failureHandle = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* failureHandle */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Request);
+
+/***/ }),
+/* 47 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return handleRequestHandOver; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return parseRequest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return handleRequestGlobalError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return handlePathError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return handleRequestGlobalResponse; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleBadRequestError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return handleHandlerNotFound; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleByHandlerError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return handleHandlerError; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return writeResponse; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return successfullHandle; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return failureHandle; });
+var init = function init() {
+  console.log('Request has been initialised');
+  this.listens({
+    'request-handover': this.handleRequestHandOver.bind(this),
+    'request-global-request-response': this.handleRequestGlobalResponse.bind(this),
+    'request-global-request-error': this.handleRequestGlobalError.bind(this),
+    'request-handler-error': this.handleHandlerError.bind(this)
+  });
+};
+var handleRequestHandOver = function handleRequestHandOver(data) {
+  var self = this;
+  self.request.res = data.res;
+  var parsed = self.parseRequest(data.req);
+  console.log('parsed');
+  console.log(parsed.url.trim().split('/'));
+  var handler = parsed.url.split('/')[1];
+
+  if (handler) {
+    self.requestData = {
+      parsed: parsed,
+      handler: handler
+    };
+    self.emit({
+      type: 'request-global-request',
+      data: handler
+    });
+  } else {
+    self.handlePathError();
+  }
+};
+var parseRequest = function parseRequest(req) {
+  console.log('The req');
+  var requiredData = {
+    url: req.originalUrl
+  };
+
+  if (req.query && Object.keys(req.query).length > 0) {
+    console.log('THE QUERY');
+    console.log(req.query);
+    requiredData.qry = req.query;
+  } else if (req.params) {
+    console.log('THE PARAMS');
+    console.log(req.params);
+    requiredData.params = req.params;
+  }
+
+  console.log('REQUEST DATA', requiredData);
+  return requiredData;
+};
+var handleRequestGlobalError = function handleRequestGlobalError(data) {
+  var self = this;
+  self.writeResponse({
+    error: true,
+    type: 'serverError',
+    code: 502,
+    message: 'The server error'
+  });
+};
+var handlePathError = function handlePathError(data) {
+  var self = this;
+  self.writeResponse({
+    error: true,
+    type: 'ServerError',
+    code: 502,
+    message: 'The requested task[handler] could not be completed'
+  });
+};
+var handleRequestGlobalResponse = function handleRequestGlobalResponse(data) {
+  var self = this;
+  self.emit({
+    type: "".concat(self.requestData.handler, "-handle-task"),
+    data: {
+      data: self.requestData,
+      callbacks: {
+        successfullHandle: self.successfullHandle.bind(self),
+        failureHandle: self.failureHandle.bind(self)
+      }
+    }
+  });
+};
+var handleBadRequestError = function handleBadRequestError() {
+  var self = this;
+  self.writeResponse({
+    error: true,
+    type: 'BadRequest',
+    code: 400,
+    message: 'Bad Request'
+  });
+};
+var handleHandlerNotFound = function handleHandlerNotFound() {
+  var self = this;
+  self.writeResponse({
+    error: true,
+    type: 'NotFound',
+    code: 404,
+    message: 'The requested task could not be completed'
+  });
+};
+var handleByHandlerError = function handleByHandlerError() {
+  var self = this;
+  self.writeResponse({
+    error: true,
+    type: 'notFound',
+    code: 404,
+    message: 'The requested task could not be completed'
+  });
+};
+var handleHandlerError = function handleHandlerError() {
+  var self = this;
+  self.handleHandlerError();
+};
+var writeResponse = function writeResponse(data) {
+  var self = this;
+  self.emit({
+    type: 'write-server-request-response',
+    data: {
+      data: data,
+      res: self.request.res
+    }
+  });
+};
+var successfullHandle = function successfullHandle(data) {
+  var self = this;
+  self.writeResponse(data);
+};
+var failureHandle = function failureHandle(data) {
+  var self = this;
+  self.writeResponse(data);
+};
+
+/***/ }),
+/* 48 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middlewares__ = __webpack_require__(50);
+
+/* harmony default export */ __webpack_exports__["a"] = ([{
+  path: '/register/:username/:pass',
+  method: 'POST',
+  type: 'public'
+}, {
+  path: '/login/:username/:pass',
+  method: 'post',
+  type: 'public'
+}, {
+  path: '/user',
+  method: 'GET',
+  type: 'private'
+}, {
+  path: 'view/:profile',
+  method: 'GET',
+  type: 'public'
+}, {
+  path: '/list/:name',
+  method: 'GET',
+  middlewares: __WEBPACK_IMPORTED_MODULE_0__middlewares__["a" /* list */],
+  type: 'private'
+}, {
+  path: '/pirlo/:name/:pass',
+  method: 'GET',
+  type: 'public'
+}, {
+  path: '/fetch',
+  method: 'GET',
+  type: 'public'
+}]);
+
+/***/ }),
+/* 49 */,
+/* 50 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return list; });
+var list = [{
+  type: 'function',
+  value: function value(req, res, next) {
+    console.log("This is the list middleware");
+    next();
+  }
+}, {
+  type: 'function',
+  value: function value(req, res, next) {
+    console.log('THE originalUrl:');
+    console.log(req.originalUrl);
+    next();
+  }
+}, {
+  type: 'module',
+  value: 'test'
+}];
+
+/***/ }),
+/* 51 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return ppublic; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return pprivate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return all; });
+var ppublic = [{
+  type: 'function',
+  value: function value(req, res, next) {
+    console.log("This is the public middleware");
+    next();
+  }
+}, {
+  type: 'function',
+  value: function value(req, res, next) {
+    console.log('THE originalUrl: public 2');
+    console.log(req.originalUrl);
+    next();
+  }
+}];
+var pprivate = [{
+  type: 'function',
+  value: function value(req, res, next) {
+    console.log("This is the PRIVATE middleware");
+    next();
+  }
+}, {
+  type: 'function',
+  value: function value(req, res, next) {
+    console.log('THE originalUrl: ANOTHER PRIVATE');
+    console.log(req.originalUrl);
+    next();
+  }
+}];
+var all = [{
+  type: 'function',
+  value: function value(req, res, next) {
+    console.log('I AM THE MIDDLEWARE THAT RUNS ON EVERY REQUEST'); // console.log(req)
+
+    next();
+  }
+}];
+
+/***/ }),
+/* 52 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__list__ = __webpack_require__(53);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__list__["a" /* default */]);
+
+/***/ }),
+/* 53 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(54);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var List = function List(pao) {
+  _classCallCheck(this, List);
+
+  this.pao = pao;
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* init */];
+  this.handleListTask = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* handleListTask */];
+  this.list = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* list */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (List);
+
+/***/ }),
+/* 54 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleListTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return list; });
+var init = function init() {
+  console.log('List has been initialised');
+  this.listens({
+    'list-handle-task': this.handleListTask.bind(this)
+  });
+};
+var handleListTask = function handleListTask(data) {
+  var self = this;
+  self.list(data);
+};
+var list = function list(data) {
+  console.log('LIST DATA');
+  console.log(data);
   var self = this;
   var pao = self.pao;
-  console.log('ABOUT TO ADD PARSERS');
+
+  if (data.hasOwnProperty('callbacks')) {
+    if (pao.pa_isObject(data.callbacks)) {
+      if (data.callbacks.successfullHandle) {
+        data.callbacks.successfullHandle({
+          todo: {
+            list: {
+              items: ['I ate food', 'I wrote code', 'I read a book', 'I watched a movie']
+            }
+          }
+        });
+      }
+    }
+  } else {}
+};
+
+/***/ }),
+/* 55 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__global__ = __webpack_require__(56);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__global__["a" /* default */]);
+
+/***/ }),
+/* 56 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(57);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Global = function Global(pao) {
+  _classCallCheck(this, Global);
+
+  this.pao = pao;
+  this.globals = [];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* init */];
+  this.handleRequestGlobalRequest = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* handleRequestGlobalRequest */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Global);
+
+/***/ }),
+/* 57 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleRequestGlobalRequest; });
+var init = function init() {
+  console.log('Global has been initialised');
+  this.listens({
+    'request-global-request': this.handleRequestGlobalRequest.bind(this)
+  });
+};
+var handleRequestGlobalRequest = function handleRequestGlobalRequest(data) {
+  var self = this;
+
+  if (self.globals && self.globals.length > 0) {
+    if (self.globals.hasOwnProperty(data.module)) {
+      self.emit({
+        type: 'request-global-request-response',
+        data: true
+      });
+    } else {
+      self.emit({
+        type: 'request-global-request-response',
+        data: false
+      });
+    }
+  } else {
+    self.emit({
+      type: 'request-global-request-error',
+      data: false
+    });
+  }
 };
 
 /***/ })
