@@ -10992,6 +10992,9 @@ CORE.prototype.sanna = function () {
           } else if (typeof comp.listens !== 'function') {
             throw new Error('Listens is a reserved ANZii method');
           }
+        },
+        log: function log(comp) {
+          comp.log = self.sanna().modules.addiks.log.bind(comp);
         }
       },
       addiks: {
@@ -11011,6 +11014,21 @@ CORE.prototype.sanna = function () {
           var mId = self.constructor.name.toLowerCase();
           var mInsId = self.constructor.name.toLowerCase();
           pao.pa_notifyListen(evehandles, mId, mInsId);
+        },
+        log: function log() {
+          var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'No message provided';
+          var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'console';
+          var self = this;
+          var pao = this.pao;
+          var data = {
+            message: message,
+            type: type
+          };
+          data.source = self.constructor.name;
+          self.emit({
+            type: 'anziiloger-log',
+            data: data
+          });
         }
       }
     },
@@ -11257,8 +11275,10 @@ PAO.prototype.create = function (moduleID, modInstId) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__request_index__ = __webpack_require__(129);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__server_index__ = __webpack_require__(116);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_index__ = __webpack_require__(125);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__global_index__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__anziiloger_index__ = __webpack_require__(142);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__global_index__ = __webpack_require__(139);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
 
 
 
@@ -11272,13 +11292,14 @@ var Esm = function Esm() {
   _classCallCheck(this, Esm);
 
   this.Esm = {
+    Anziiloger: __WEBPACK_IMPORTED_MODULE_6__anziiloger_index__["a" /* default */],
     Middleware: __WEBPACK_IMPORTED_MODULE_0__middleware_index__["a" /* default */],
     Parsers: __WEBPACK_IMPORTED_MODULE_1__parsers_index__["a" /* default */],
     Router: __WEBPACK_IMPORTED_MODULE_2__router_index__["a" /* default */],
     Request: __WEBPACK_IMPORTED_MODULE_3__request_index__["a" /* default */],
     Server: __WEBPACK_IMPORTED_MODULE_4__server_index__["a" /* default */],
     Config: __WEBPACK_IMPORTED_MODULE_5__config_index__["a" /* default */],
-    Global: __WEBPACK_IMPORTED_MODULE_6__global_index__["a" /* default */]
+    Global: __WEBPACK_IMPORTED_MODULE_7__global_index__["a" /* default */]
   };
 };
 
@@ -18803,13 +18824,13 @@ var handleConfigMiddleware = function handleConfigMiddleware(data) {
   console.log(middlewares);
 
   var _loop = function _loop(p) {
-    console.log('THE P');
-    console.log(p);
+    self.log('THE P');
+    self.log(p);
 
     if (self.middlewares[p]) {
       if (middlewares[p].addMiddleware) {
-        console.log('INSIDE EXISTENT MIDDLEWARE ITEM');
-        console.log(middlewares[p]);
+        self.log('INSIDE EXISTENT MIDDLEWARE ITEM');
+        self.log(middlewares[p]);
         middlewares[p].addMiddleware.forEach(function (m, i) {
           self.middlewares[p].push(m);
         });
@@ -19140,9 +19161,10 @@ var Router = function Router(pao) {
   this.handleAttachRoutes = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* handleAttachRoutes */];
   this.handleRouterMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* handleRouterMiddleware */];
   this.attachRoutes = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* attachRoutes */];
-  this.renderRoute = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* renderRoute */];
+  this.renderRoute = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* renderRoute */];
   this.appendRouter = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* appendRouter */];
   this.middlewareType = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* middlewareType */];
+  this.outOfRouterContext = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* outOfRouterContext */];
   this.handOver = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* handOver */];
   this.filterCallback = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* filterCallback */];
 };
@@ -19160,9 +19182,10 @@ var Router = function Router(pao) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return handleAttachRoutes; });
 /* unused harmony export addRoutes */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return attachRoutes; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return renderRoute; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return renderRoute; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return appendRouter; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return middlewareType; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return outOfRouterContext; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return handOver; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return filterCallback; });
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
@@ -19203,6 +19226,7 @@ var attachRoutes = function attachRoutes(data) {
       r['router'] = data.router;
       self.renderRoute(r);
     });
+    data.router.use(self.outOfRouterContext.bind(this));
   }
 };
 var renderRoute = function renderRoute(r) {
@@ -19263,6 +19287,22 @@ var middlewareType = function middlewareType(type, middlewares) {
           filterCallback: self.filterCallback.bind(self)
         }
       });
+    }
+  });
+};
+var outOfRouterContext = function outOfRouterContext(req, res) {
+  var self = this;
+  var data = {
+    error: true,
+    type: "NotFound",
+    code: 404,
+    message: 'Resource was not found'
+  };
+  self.emit({
+    type: 'write-server-request-response',
+    data: {
+      data: data,
+      res: res
     }
   });
 };
@@ -19339,10 +19379,18 @@ var configure = function configure() {
   if (self.config) {
     for (var c in config) {
       console.log(c);
-      self.emit({
-        type: "config-".concat(c),
-        data: config[c]
-      });
+
+      if (c === 'logger') {
+        self.emit({
+          type: "config-anziiloger",
+          data: config[c]
+        });
+      } else {
+        self.emit({
+          type: "config-".concat(c),
+          data: config[c]
+        });
+      }
     }
   }
 };
@@ -19369,6 +19417,12 @@ var configure = function configure() {
     }
   },
   router: __WEBPACK_IMPORTED_MODULE_0__includes_routes__["a" /* default */],
+  logger: {
+    level: 'info',
+    transports: ['file', {
+      path: 'http://www.iiprodakts/logger'
+    }]
+  },
   server: 'server'
 });
 
@@ -19803,6 +19857,59 @@ var handleRequestGlobalRequest = function handleRequestGlobalRequest(data) {
       data: false
     });
   }
+};
+
+/***/ }),
+/* 142 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__anziiloger__ = __webpack_require__(143);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__anziiloger__["a" /* default */]);
+
+/***/ }),
+/* 143 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(144);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Anziiloger = function Anziiloger(pao) {
+  _classCallCheck(this, Anziiloger);
+
+  this.pao = pao;
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
+  this.handleLogRequest = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleLogRequest */];
+  this.handleListTask = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* handleListTask */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Anziiloger);
+
+/***/ }),
+/* 144 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleLogRequest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleListTask; });
+var init = function init() {
+  console.log('List has been initialised');
+  this.listens({
+    'anziiloger-log': this.handleLogRequest.bind(this)
+  });
+};
+var handleLogRequest = function handleLogRequest(data) {
+  var self = this;
+  console.log(data.source, 'logged message: ', data.message, ' of type ', data.type);
+};
+var handleListTask = function handleListTask(data) {
+  var self = this;
+  self.list(data);
 };
 
 /***/ })
