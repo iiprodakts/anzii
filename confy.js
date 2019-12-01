@@ -21,7 +21,8 @@ export default  {
         
     },
     router: routes,
-    logger: {level: 'info',transports:['file',{path: 'http://www.iiprodakts/logger'}]},
+    logger: {level: 'info',trans:['file',{path: 'http://www.iiprodakts/logger'}]},
+   
     server: 'server'
 
 

@@ -9,7 +9,7 @@ const NodemonPlugin = require('nodemon-webpack-plugin')
 
 var server = {
 
-  entry: './sev',
+  entry: ["@babel/polyfill",'./sev'],
   target: 'node',
   externals: [
     { express: 'commonjs express' },
