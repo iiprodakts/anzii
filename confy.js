@@ -22,7 +22,7 @@ export default  {
     },
     router: routes,
     logger: {level: 'info',trans:['file',{path: 'http://www.iiprodakts/logger'}]},
-   
+    cluster:{workers: 3,spawn: true,} ,
     server: 'server'
 
 

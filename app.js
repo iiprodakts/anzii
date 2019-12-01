@@ -2738,9 +2738,14 @@ var startRouting = function startRouting() {
 };
 var runServer = function runServer() {
   var self = this;
-  self.http.listen(process.env.PORT || 3000, function () {
-    self.log("The Server is listening", 'info');
-  });
+  self.emit({
+    type: 'attach-workers-to-server',
+    data: {
+      app: self.http
+    }
+  }); // self.http.listen(process.env.PORT || 3000,()=>{
+  //   self.log("The Server is listening",'info')
+  // })
 };
 var renderHtml = function renderHtml(req, res) {
   var self = this;
@@ -2831,6 +2836,11 @@ var configure = function configure() {
       });
     }
 
+    self.config.hasOwnProperty('cluster') ? self.emit({
+      type: 'config-system',
+      data: self.config.cluster
+    }) : '';
+
     for (var c in config) {
       console.log(c);
 
@@ -2871,6 +2881,10 @@ var configure = function configure() {
     trans: ['file', {
       path: 'http://www.iiprodakts/logger'
     }]
+  },
+  cluster: {
+    workers: 3,
+    spawn: true
   },
   server: 'server'
 });
@@ -3181,12 +3195,18 @@ var System = function System(pao) {
   this.cluster = cluster;
   this.os = os;
   this.shutDownServices = [];
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* init */];
+  this.numOfDBSD = 3;
+  this.allowedDBSTR = 10000;
+  this.systemIsShuttingDown = false;
+  this.shutDownOrder = [];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* init */];
   this.handleConfigureSystem = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleConfigureSystem */];
-  this.masterWorker = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* masterWorker */];
+  this.handleRegisterShutDownCandidate = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleRegisterShutDownCandidate */];
+  this.handleServerAttachWorkers = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* handleServerAttachWorkers */];
+  this.masterWorker = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* masterWorker */];
   this.folkSlaveWorkers = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* folkSlaveWorkers */];
-  this.handleShutDowns = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleShutDowns */];
-  this.shutDown = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* shutDown */];
+  this.handleShutDowns = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* handleShutDowns */];
+  this.shutDown = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* shutDown */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (System);
@@ -3196,31 +3216,125 @@ var System = function System(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return init; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleConfigureSystem; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return shutDown; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return masterWorker; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return shutDown; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return masterWorker; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return folkSlaveWorkers; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleShutDowns; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return handleShutDowns; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return handleServerAttachWorkers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleRegisterShutDownCandidate; });
 var init = function init() {
   this.log('System has been initialised');
   this.listens({
-    'configure-system': this.handleConfigureSystem.bind(this)
+    'config-system': this.handleConfigureSystem.bind(this),
+    'register-shutdown-candidate': this.handleRegisterShutDownCandidate.bind(this),
+    'attach-workers-to-server': this.handleServerAttachWorkers.bind(this)
   });
   this.log(this.env);
 };
-var handleConfigureSystem = function handleConfigureSystem() {
+var handleConfigureSystem = function handleConfigureSystem(data) {
   var self = this;
+  self.log("System ENVIROMENT IS: ".concat(self.env));
   self.handleShutDowns();
+  self.clusterCustomConfig = data; // self.masterWorker(data)
 };
-var shutDown = function shutDown() {};
-var masterWorker = function masterWorker() {};
+var shutDown = function shutDown(type, code) {
+  var self = this;
+  self.log("SHUTDOWN TYPE: ".concat(type, ",code: ").concat(code));
+  self.systemIsShuttingDown = true;
+
+  if (self.shutDownServices.length > 0) {
+    self.shutDownServices.forEach(function (sd, i) {
+      if (typeof sd !== 'function') {
+        self.log("Service: ".concat(self.shutDownOrder[i], " must be a function,shutdown attempt failed"), 'warn');
+      } else {
+        self.log("Service: ".concat(self.shutDownOrder[i], " is shutting down"), 'info');
+      }
+    });
+  }
+
+  self.log("System is shutting down through: ".concat(type, ",with code: ").concat(code));
+  type === 'uncaughtException' ? self.context.kill(1) : self.context[type]();
+};
+var masterWorker = function masterWorker(app) {
+  var self = this;
+  self.log("THE STATUS OF isMaster: ".concat(self.cluster.isMaster));
+
+  if (self.cluster.isMaster) {
+    self.log("Master ".concat(self.context.pid, " is running"));
+
+    if (self.clusterCustomConfig.spawn) {
+      var slaves = self.clusterCustomConfig.workers ? self.clusterCustomConfig.workers : 'auto';
+
+      if (slaves === 'auto') {
+        slaves = self.os.cpus().length;
+
+        for (var s = 0; slaves < slaves; s++) {
+          self.cluster.fork();
+        }
+      } else {
+        if (typeof slaves === 'number') {
+          for (var _s = 0; _s < slaves; _s++) {
+            self.log("Forking slave number: ".concat(_s));
+            self.cluster.fork();
+          }
+        }
+      }
+    } else {
+      self.log('System is running on a single thread/core');
+    } // self.cluster.on('exit', (worker, code, signal) => {
+    // 	console.log(`worker ${worker.process.pid} died`);
+    //   });
+
+  } else {
+    console.log('IT IS NOT THE MASTER PROCESS');
+    console.log("Worker ".concat(process.pid, " started"));
+    app.listen(self.context.env.PORT || 3000, function () {
+      self.log("The Server is listening via workers", 'info');
+    });
+  }
+};
 var folkSlaveWorkers = function folkSlaveWorkers(mainWorker) {};
 var handleShutDowns = function handleShutDowns() {
   var self = this;
-  self.context.on('INT', function () {});
-  self.context.on('SIGTEM', function () {});
-  self.context.on('uncaughtException', function () {});
+  self.context.on('INT', function (code) {
+    if (!self.systemIsShuttingDown) {
+      self.shutDown('kill', code);
+    } else {
+      self.log('System is already ShuttingDown');
+    }
+  });
+  self.context.on('SIGTEM', function (code) {
+    if (!self.systemIsShuttingDown) {
+      self.shutDown('exit', code);
+    } else {
+      self.log('System is already ShuttingDown');
+    }
+  });
+  self.context.on('uncaughtException', function (code) {
+    if (!self.systemIsShuttingDown) {
+      self.shutDown('uncaughtException', code);
+    } else {
+      self.log('System is already ShuttingDown');
+    }
+  });
+};
+var handleServerAttachWorkers = function handleServerAttachWorkers(data) {
+  var self = this;
+  self.masterWorker(data.app);
+};
+var handleRegisterShutDownCandidate = function handleRegisterShutDownCandidate(data) {
+  var self = this;
+
+  if (data.hasOwnProperty('candidate') && pao.pa_isFunction(data.candidate) && data.hasOwnProperty('name') && pao.pa_isString(name)) {
+    if (!(self.shutDownServices.indexOf(data.name) > -1)) {
+      self.shutDownServices.push(data.candidate);
+      self.shutDownOrder.push(data.name);
+    }
+  } else {
+    self.log('Candidate could not be registered for shutdown', 'warn');
+  }
 };
 
 /***/ }),
