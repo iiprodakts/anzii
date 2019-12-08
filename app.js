@@ -67,19 +67,19 @@
 /* 0 */
 /***/ (function(module, exports) {
 
-module.exports = require("path");
+module.exports = require("os");
 
 /***/ }),
 /* 1 */
 /***/ (function(module, exports) {
 
-module.exports = require("body-parser");
+module.exports = require("path");
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports) {
 
-module.exports = require("os");
+module.exports = require("body-parser");
 
 /***/ }),
 /* 3 */
@@ -117,7 +117,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_anzii__ = __webpack_require__(8);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__init_modules__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__init_modules__ = __webpack_require__(56);
 
  // import Server from '../shared/modules/server/index'
 
@@ -140,7 +140,7 @@ Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__esm_esm__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_activate__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_activate__ = __webpack_require__(55);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -191,7 +191,7 @@ var Base = function Base() {
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 // DEPENDECIES 
-var os = __webpack_require__(2);
+var os = __webpack_require__(0);
 
 var util = __webpack_require__(11);
 
@@ -201,7 +201,7 @@ var extend = __webpack_require__(13);
 
 var fs = __webpack_require__(14);
 
-var path = __webpack_require__(0);
+var path = __webpack_require__(1);
 
 var uuid = __webpack_require__(15);
 /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -1934,9 +1934,9 @@ PAO.prototype.create = function (moduleID, modInstId) {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__request_index__ = __webpack_require__(28);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__server_index__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_index__ = __webpack_require__(35);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__anziiloger_index__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__system_index__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__global_index__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__anziiloger_index__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__system_index__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__global_index__ = __webpack_require__(52);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -1986,7 +1986,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
-var bodyParser = __webpack_require__(1);
+var bodyParser = __webpack_require__(2);
 
 var Middleware = function Middleware(pao) {
   _classCallCheck(this, Middleware);
@@ -2137,8 +2137,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 var jsonfile = __webpack_require__(3),
-    path = __webpack_require__(0),
-    bodyParser = __webpack_require__(1);
+    path = __webpack_require__(1),
+    bodyParser = __webpack_require__(2);
 
 var Parsers = function Parsers(pao) {
   _classCallCheck(this, Parsers);
@@ -2620,8 +2620,8 @@ var express = __webpack_require__(34),
     // fs = require('fs'),
 // randomstring = require("randomstring"),
 jsonfile = __webpack_require__(3),
-    path = __webpack_require__(0),
-    bodyParser = __webpack_require__(1); // const app = express()
+    path = __webpack_require__(1),
+    bodyParser = __webpack_require__(2); // const app = express()
 // import notifier from './notifier'
 
 
@@ -2798,13 +2798,16 @@ module.exports = require("express");
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
+ // Dependecies 
 
+var envObserver = __webpack_require__(42);
 
 var Config = function Config(pao) {
   _classCallCheck(this, Config);
 
   this.pao = pao;
   this.config = __WEBPACK_IMPORTED_MODULE_1__confy__["a" /* default */];
+  this.envObserver = envObserver;
   this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* init */];
   this.configure = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* configure */];
 };
@@ -2824,7 +2827,11 @@ var init = function init() {
 };
 var configure = function configure() {
   var self = this;
-  var config = self.config; // console.log('THE VALUE OF CONFIG SELF.CONFIG')
+  var config = self.config;
+  console.log('THE CURRENT ENVIROMENT');
+  var db = self.envObserver.get('dev');
+  console.log(db);
+  console.log(db.database.mysql.connect.user); // console.log('THE VALUE OF CONFIG SELF.CONFIG')
   // console.log(self.config)
 
   if (self.config) {
@@ -2998,24 +3005,30 @@ var all = [{
 
 /***/ }),
 /* 42 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__anziiloger__ = __webpack_require__(43);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__anziiloger__["a" /* default */]);
+module.exports = require("config");
 
 /***/ }),
 /* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__anziiloger__ = __webpack_require__(44);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__anziiloger__["a" /* default */]);
+
+/***/ }),
+/* 44 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(45);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
  // Dependecies 
 
-var winston = __webpack_require__(45);
+var winston = __webpack_require__(46);
 
 var Anziiloger = function Anziiloger(pao) {
   _classCallCheck(this, Anziiloger);
@@ -3053,7 +3066,7 @@ var Anziiloger = function Anziiloger(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Anziiloger);
 
 /***/ }),
-/* 44 */
+/* 45 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3156,42 +3169,42 @@ var error = function error(log) {
 };
 
 /***/ }),
-/* 45 */
+/* 46 */
 /***/ (function(module, exports) {
 
 module.exports = require("winston");
-
-/***/ }),
-/* 46 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__system__ = __webpack_require__(47);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__system__["a" /* default */]);
 
 /***/ }),
 /* 47 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__system__ = __webpack_require__(48);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__system__["a" /* default */]);
+
+/***/ }),
+/* 48 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(49);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
  // Dependecies
 
-var cluster = __webpack_require__(63);
+var cluster = __webpack_require__(50);
 
-var http = __webpack_require__(64);
+var http = __webpack_require__(51);
 
-var os = __webpack_require__(2);
+var os = __webpack_require__(0);
 
 var System = function System(pao) {
   _classCallCheck(this, System);
 
   this.pao = pao;
   this.context = process;
-  this.env = this.context.env.NODE_ENV;
+  this.env = this.context.env;
   this.cluster = cluster;
   this.os = os;
   this.shutDownServices = [];
@@ -3212,7 +3225,7 @@ var System = function System(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (System);
 
 /***/ }),
-/* 48 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3231,7 +3244,7 @@ var init = function init() {
     'register-shutdown-candidate': this.handleRegisterShutDownCandidate.bind(this),
     'attach-workers-to-server': this.handleServerAttachWorkers.bind(this)
   });
-  this.log(this.env);
+  console.log(this.env);
 };
 var handleConfigureSystem = function handleConfigureSystem(data) {
   var self = this;
@@ -3338,20 +3351,32 @@ var handleRegisterShutDownCandidate = function handleRegisterShutDownCandidate(d
 };
 
 /***/ }),
-/* 49 */
+/* 50 */
+/***/ (function(module, exports) {
+
+module.exports = require("cluster");
+
+/***/ }),
+/* 51 */
+/***/ (function(module, exports) {
+
+module.exports = require("http");
+
+/***/ }),
+/* 52 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__global__ = __webpack_require__(50);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__global__ = __webpack_require__(53);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__global__["a" /* default */]);
 
 /***/ }),
-/* 50 */
+/* 53 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(51);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(54);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -3368,7 +3393,7 @@ var Global = function Global(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Global);
 
 /***/ }),
-/* 51 */
+/* 54 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3405,7 +3430,7 @@ var handleRequestGlobalRequest = function handleRequestGlobalRequest(data) {
 };
 
 /***/ }),
-/* 52 */
+/* 55 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3449,13 +3474,13 @@ var Activate = function Activate() {
 };
 
 /***/ }),
-/* 53 */
+/* 56 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_test__ = __webpack_require__(54);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_list__ = __webpack_require__(57);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_fetch__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_test__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_list__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_fetch__ = __webpack_require__(63);
 
 
 
@@ -3466,20 +3491,20 @@ var Activate = function Activate() {
 });
 
 /***/ }),
-/* 54 */
+/* 57 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__test__ = __webpack_require__(55);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__test__ = __webpack_require__(58);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__test__["a" /* default */]);
 
 /***/ }),
-/* 55 */
+/* 58 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(56);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(59);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -3497,7 +3522,7 @@ var Test = function Test(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Test);
 
 /***/ }),
-/* 56 */
+/* 59 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3547,20 +3572,20 @@ var test = function test(req, res, next) {
 };
 
 /***/ }),
-/* 57 */
+/* 60 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__list__ = __webpack_require__(58);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__list__ = __webpack_require__(61);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__list__["a" /* default */]);
 
 /***/ }),
-/* 58 */
+/* 61 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(62);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -3577,7 +3602,7 @@ var List = function List(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (List);
 
 /***/ }),
-/* 59 */
+/* 62 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3616,20 +3641,20 @@ var list = function list(data) {
 };
 
 /***/ }),
-/* 60 */
+/* 63 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fetch__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fetch__ = __webpack_require__(64);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__fetch__["a" /* default */]);
 
 /***/ }),
-/* 61 */
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(65);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -3646,14 +3671,14 @@ var Fetch = function Fetch(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Fetch);
 
 /***/ }),
-/* 62 */
+/* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return init; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleListTask; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return list; });
-var os = __webpack_require__(2);
+var os = __webpack_require__(0);
 
 var init = function init() {
   this.log('Fetch has been initialised');
@@ -3680,18 +3705,6 @@ var list = function list(data) {
     }
   } else {}
 };
-
-/***/ }),
-/* 63 */
-/***/ (function(module, exports) {
-
-module.exports = require("cluster");
-
-/***/ }),
-/* 64 */
-/***/ (function(module, exports) {
-
-module.exports = require("http");
 
 /***/ })
 /******/ ]);

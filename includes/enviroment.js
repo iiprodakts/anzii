@@ -1,19 +1,26 @@
 
 
 
-export default = {
+export default  {
 
     development: {
 
-        database: {
+        database: [
 
-            mysql: {
+            {
 
-                host: "localhost",
-                dbname: "kokapix"
+                name: 'mysql',
+                connect: {
+
+                    host: "localhost",
+                    user: "fledjaa",
+                    name: "fledja",
+                    pass: "19900323rose@59"
+
+                }
 
             }
-        }
+        ]
 
     },
     staging: {
@@ -23,17 +30,23 @@ export default = {
             mysql: {
 
                 host: 'mysql://user:pass@us-cdbr-east.cleardb.com',
-                dbname: 'heroku_4a1dc3673c4114d '
+                name: 'heroku_4a1dc3673c4114d '
             } 
         }
 
     },
     production:{
 
-        mysql: {
+        database: {
 
-            host: 'mysql://user:pass@us-cdbr-east.cleardb.com',
-            dbname: 'heroku_4a1dc3673c4114d '
+            mysql: {
+
+                host: 'mysql://user:pass@us-cdbr-east.cleardb.com',
+                name: 'heroku_4a1dc3673c4114d '
+
+            }
         }
+
+        
     }
 }

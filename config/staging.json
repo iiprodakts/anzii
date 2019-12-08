@@ -1,0 +1,24 @@
+{
+
+
+	"stage": {
+
+		"database": {
+
+			"mysql": {
+
+				 "connect": {
+
+					 "user": "FLA_DB_USER_DEV",
+					 "pass": "FLA_DB_PASS_DEV"
+
+				 }
+
+			 }
+	 }
+	 
+
+    }
+
+
+}

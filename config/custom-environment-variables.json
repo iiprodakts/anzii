@@ -1,0 +1,63 @@
+{
+
+
+
+	
+	"enviroment": "NODE_ENV",
+	"dev": {
+
+        "database": {
+
+               "mysql": {
+
+                    "connect": {
+
+                        "user": "FLA_DB_USER_DEV",
+                        "pass": "FLA_DB_PASS_DEV"
+
+                    }
+
+                }
+        }
+        
+
+	},
+	"prod": {
+
+        "database": {
+
+            "mysql": {
+
+                 "connect": {
+
+                     "user": "FLA_DB_USER_DEV",
+                     "pass": "FLA_DB_PASS_DEV"
+
+                 }
+
+             }
+     }
+     
+
+	},
+	"stage": {
+
+        "database": {
+
+            "mysql": {
+
+                 "connect": {
+
+                     "user": "FLA_DB_USER_DEV",
+                     "pass": "FLA_DB_PASS_DEV"
+
+                 }
+
+             }
+     }
+     
+
+    }
+
+
+}
