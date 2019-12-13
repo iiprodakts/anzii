@@ -1630,6 +1630,9 @@ CORE.prototype.converts = function () {
     },
     objectToArray: function objectToArray(o) {
       return PILLAR.object_to_array(o);
+    },
+    stringToArray: function stringToArray(str, sep) {
+      return PILLAR.string_to_array(str, sep);
     }
   };
 };
@@ -1658,6 +1661,9 @@ CORE.prototype.sanna = function () {
         },
         log: function log(comp) {
           comp.log = self.sanna().modules.addiks.log.bind(comp);
+        },
+        query: function query(comp) {
+          comp.query = self.sanna().modules.addiks.query.bind(comp);
         }
       },
       addiks: {
@@ -1692,6 +1698,37 @@ CORE.prototype.sanna = function () {
             type: 'anziiloger-log',
             data: data
           });
+        },
+        query: function query() {
+          var model = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+          var document = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+          var handler = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+          var self = this;
+          var pao = self.pao;
+
+          if (!model || !document) {
+            throw new Error('Query method missing required parameters');
+          } else {
+            var modelFrags = pao.pa_isString(model) ? pao.pa_stringToArray(model) : model;
+
+            if (modelFrags.legnth === 3) {
+              var mo = {
+                vendor: modelFrags[0],
+                table: modelFrags[1],
+                operation: modelFrags[2]
+              };
+              self.emit({
+                type: 'data-hive-request',
+                data: {
+                  model: mo,
+                  document: document,
+                  handler: handler
+                }
+              });
+            } else {
+              throw new Error('Query method requires database vendor,table and operation');
+            }
+          }
         }
       }
     },
@@ -2002,7 +2039,10 @@ var Middleware = function Middleware(pao) {
   _classCallCheck(this, Middleware);
 
   this.pao = pao;
-  this.body = bodyParser;
+  this.all = [{
+    call: 'static',
+    use: 'public'
+  }, 'json'];
   this.middlewares = {
     all: [{
       type: 'function',
@@ -2016,10 +2056,12 @@ var Middleware = function Middleware(pao) {
     // console.log(this.supubu
 
   };
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* init */];
-  this.handleAttachMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleAttachMiddleware */];
-  this.attachMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* attachMiddleware */];
-  this.handleConfigMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleConfigMiddleware */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* init */];
+  this.handleAttachMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* handleAttachMiddleware */];
+  this.attachMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* attachMiddleware */];
+  this.handleConfigMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* handleConfigMiddleware */];
+  this.handleAddExternalMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleAddExternalMiddleware */];
+  this.allWares = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* allWares */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Middleware);
@@ -2029,20 +2071,25 @@ var Middleware = function Middleware(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleAttachMiddleware; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleConfigMiddleware; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return attachMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return handleAttachMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return handleConfigMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleAddExternalMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return attachMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return allWares; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base_pao__ = __webpack_require__(17);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
+
 var init = function init() {
   this.log('Middleware has been initialised');
   this.listens({
     'config-middleware': this.handleConfigMiddleware.bind(this),
+    'add-ext-middleware': this.handleAddExternalMiddleware.bind(this),
     'attach-middleware': this.handleAttachMiddleware.bind(this)
   });
 };
@@ -2078,12 +2125,57 @@ var handleConfigMiddleware = function handleConfigMiddleware(data) {
     _loop(p);
   }
 };
+var handleAddExternalMiddleware = function handleAddExternalMiddleware(data) {
+  var self = this;
+  var pao = self.pao;
+  self.log('ADD EXTERNAL MIDDLEWARE EVENT HAS OCCURED');
+
+  if (data.type) {
+    if (data.type === 'private') {
+      if (data.level === 'top') {
+        if (pao.pa_isArray(data.middleware.funk)) {
+          data.middleware.forEach(function (m, i) {
+            self.middleware.unshift({
+              type: 'function',
+              value: m.funk,
+              ext: true
+            });
+          });
+        } else {
+          self.log('THE MIDDLEWARES BEFORE');
+          self.log(self.middlewares);
+
+          if (self.middlewares.pprivate) {
+            var len = Object.keys(self.middlewares.pprivate).length;
+            self.middlewares.pprivate[len] = {
+              type: 'function',
+              value: data.middleware.funk,
+              ext: true
+            };
+            self.log('Middlewares');
+            self.log(self.middlewares);
+          }
+        }
+      } else {}
+    } else if (data.type === 'public') {} else if (data.type === 'all') {
+      if (data.level === 'top') {}
+    }
+  }
+};
 var attachMiddleware = function attachMiddleware(data) {
   var self = this;
 
   if (data.app) {
     // console.log('SELF.MIDDLEWARES')
     // console.log(self.middlewares)
+    if (self.all.length > 0) {
+      console.log('THE Allwares is greater than zero');
+
+      if (data.xpress) {
+        self.allWares(data.app, data.xpress);
+      }
+    }
+
     if (self.middlewares.pprivate && self.middlewares.ppublic) {
       self.emit({
         type: 'router-middleware',
@@ -2126,6 +2218,26 @@ var attachMiddleware = function attachMiddleware(data) {
     }
   }
 };
+var allWares = function allWares(app, xpress) {
+  var self = this;
+  var pao = self.pao;
+  self.all.forEach(function (w, i) {
+    if (pao.pa_isObject(w)) {
+      console.log('Executing allwares');
+
+      if (w.use) {
+        console.log('The public:', w.call);
+        app.use(xpress[w.call]('public'));
+      } else {
+        console.log('The none-public:', w.call);
+        app.use(xpress[w.call]());
+      }
+    } else {
+      self.log('middleware is string');
+      app.use(xpress[w]());
+    }
+  });
+};
 
 /***/ }),
 /* 22 */
@@ -2159,9 +2271,8 @@ var Parsers = function Parsers(pao) {
     jsonfile: jsonfile,
     bodyParser: bodyParser
   };
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
-  this.handleAddParsers = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleAddParsers */];
-  this.addParsers = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* addParsers */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* init */];
+  this.handleShareMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* handleShareMiddleware */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Parsers);
@@ -2171,22 +2282,30 @@ var Parsers = function Parsers(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleAddParsers; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return addParsers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleShareMiddleware; });
 var init = function init() {
-  console.log('Parsers has been initialised');
+  this.log('Parsers has been initialised');
   this.listens({
-    'add-parsers': this.handleAddParsers.bind(this)
+    'share-middleware': this.handleShareMiddleware.bind(this)
   });
 };
-var handleAddParsers = function handleAddParsers(data) {
-  this.addParsers(data);
-};
-var addParsers = function addParsers(data) {
+var handleShareMiddleware = function handleShareMiddleware() {
   var self = this;
-  var pao = self.pao;
-  console.log('ABOUT TO ADD PARSERS');
+  console.log('HANLDE SHARE MIDDLEWARE EVENT HAS OCCURED');
+  self.emit({
+    type: "add-ext-middleware",
+    data: {
+      type: 'all',
+      level: 'top',
+      middleware: {
+        funk: [{
+          body: self.dependiks.bodyParser,
+          call: 'json'
+        }]
+      }
+    }
+  });
 };
 
 /***/ }),
@@ -2696,9 +2815,14 @@ var init = function init() {
 var handleConfigServer = function handleConfigServer(data) {
   var self = this;
   self.emit({
+    type: 'share-middleware',
+    data: ''
+  });
+  self.emit({
     type: 'attach-middleware',
     data: {
-      app: self.http
+      app: self.http,
+      xpress: self.xpress
     }
   });
   self.emit({
@@ -3488,6 +3612,7 @@ var Dao = function Dao(pao) {
   _classCallCheck(this, Dao);
 
   this.pao = pao;
+  this.DBS = null;
   this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
   this.handleDataHiveRequest = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleDataHiveRequest */];
   this.handleDaoTakeDbs = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* handleDaoTakeDbs */];
@@ -3512,15 +3637,35 @@ var init = function init() {
 };
 var handleDataHiveRequest = function handleDataHiveRequest(data) {
   var self = this;
-  self.list(data);
+  var pao = self.pao;
 
-  if (self.DBS[data.v]) {}
+  if (!pao.pa_contains(self.DBS, data.model.vendor)) {
+    throw new Error('Specified database client is unknown');
+  } else {
+    var model = data.model;
+    self.emit({
+      type: "".concat(model.vendor, "-data-request"),
+      data: {
+        conn: self.DBS[model.vendor],
+        table: model.table,
+        opi: model.operation,
+        query: data.document,
+        outComehandler: data.handler
+      }
+    });
+  }
 };
 var handleDaoTakeDbs = function handleDaoTakeDbs(data) {
   var self = this;
-  self.DBS = data.dbs;
-  self.log('The dbs inside self.DBS');
-  console.log(self.DBS);
+
+  if (self.DBS === null) {
+    self.DBS = {};
+    self.DBS[data.vendor] = data.conn;
+  } else {
+    self.DBS[data.vendor] = data.conn;
+  } // self.log('The dbs inside self.DBS')
+  // console.log(self.DBS)
+
 };
 
 /***/ }),
@@ -3644,27 +3789,31 @@ var getClientDriver = function getClientDriver(client) {
   console.log(client.name === 'mysql');
 
   try {
-    switch (client.name) {
-      case 'mysql':
-        self.supportedClients[client.name].driver = __webpack_require__(60);
-        break;
+    var name = client.name;
 
-      case 'pg':
-        self.supportedClients[client.name].driver = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"pg\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-        break;
+    if (name === 'mysql') {
+      self.supportedClients[client.name].driver = __webpack_require__(60);
+    } else if (name === 'pg') {
+      self.supportedClients[client.name].driver = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"pg\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+    } else if (name === 'redis') {
+      self.supportedClients[client.name].driver = __webpack_require__(61);
+    } else if (name === 'mongo') {
+      self.supportedClients[client.name].driver = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"mongo\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+    } else {
+      self.supportedClients[client.name].driver = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"sqlite\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+    } // switch(client.name){
+    // 	case 'mysql': self.supportedClients[client.name].driver = require('mysql') 
+    // 	break;
+    // 	case 'pg': self.supportedClients[client.name].driver = require('pg') 
+    // 	break;
+    // 	case 'redis': self.supportedClients[client.name].driver = require('redis') 
+    // 	break;
+    // 	case 'mongo': self.supportedClients[client.name].driver = require('mongo') 
+    // 	break;
+    // 	default: self.supportedClients[client.name].driver = require('sqlite') 
+    // 	break;
+    // }
 
-      case 'redis':
-        self.supportedClients[client.name].driver = __webpack_require__(61);
-        break;
-
-      case 'mongo':
-        self.supportedClients[client.name].driver = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"mongo\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-        break;
-
-      default:
-        self.supportedClients[client.name].driver = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"sqlite\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
-        break;
-    }
 
     if (!self.supportedClients[client.name].driver) {
       console.log('THE DRIVER REQUIREMENT FAILED');
@@ -3706,6 +3855,14 @@ var connect = function connect(client) {
       } else {
         self.DBS[client.name] = res;
         self.log("System has successfully connected to client");
+        self.log("System is handing client connection");
+        self.emit({
+          type: 'dao-take-dbs',
+          data: {
+            vendor: client.name,
+            conn: res
+          }
+        });
         self.log("Client ready to serve queries");
       }
     }); //   console.log('THE RESULTS')
@@ -3859,13 +4016,16 @@ var Activate = function Activate() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_test__ = __webpack_require__(67);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_list__ = __webpack_require__(70);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_fetch__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_authentication__ = __webpack_require__(76);
+
 
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   Test: __WEBPACK_IMPORTED_MODULE_0__modules_test__["a" /* default */],
   List: __WEBPACK_IMPORTED_MODULE_1__modules_list__["a" /* default */],
-  Fetch: __WEBPACK_IMPORTED_MODULE_2__modules_fetch__["a" /* default */]
+  Fetch: __WEBPACK_IMPORTED_MODULE_2__modules_fetch__["a" /* default */],
+  Authentication: __WEBPACK_IMPORTED_MODULE_3__modules_authentication__["a" /* default */]
 });
 
 /***/ }),
@@ -4082,6 +4242,124 @@ var list = function list(data) {
       }
     }
   } else {}
+};
+
+/***/ }),
+/* 76 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__authentication__ = __webpack_require__(77);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__authentication__["a" /* default */]);
+
+/***/ }),
+/* 77 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(78);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Authentication = function Authentication(pao) {
+  _classCallCheck(this, Authentication);
+
+  this.pao = pao; // methods
+
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
+  this.handleShareMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleShareMiddleware */];
+  this.auth = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* auth */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Authentication);
+
+/***/ }),
+/* 78 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleShareMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return auth; });
+/* unused harmony export token */
+var init = function init() {
+  this.log('Authentication has been initialised');
+  this.listens({
+    'share-middleware': this.handleShareMiddleware.bind(this)
+  });
+};
+var handleShareMiddleware = function handleShareMiddleware() {
+  var self = this;
+  console.log('HANLDE SHARE MIDDLEWARE EVENT HAS OCCURED');
+  self.emit({
+    type: "add-ext-middleware",
+    data: {
+      type: 'private',
+      level: 'top',
+      middleware: {
+        funk: self.auth.bind(self)
+      }
+    }
+  });
+};
+var auth = function auth(req, res, next) {
+  var self = this;
+  self.log('THE REQUEST HEADERS');
+  self.log(req.headers);
+
+  if (req.headers['x-auth-token']) {
+    var _token = req.headers('x-auth-token');
+
+    self.emit({
+      type: 'verify-jwt-token',
+      data: {
+        token: {
+          token: _token,
+          re: {
+            req: req,
+            res: res,
+            next: next
+          },
+          callback: self.token.bind(this)
+        }
+      }
+    });
+  } else {
+    console.log('THE X-AUTH DOES NOT EXIST');
+    self.emit({
+      type: 'write-server-request-response',
+      data: {
+        data: {
+          error: true,
+          message: 'Required token header required'
+        },
+        res: res
+      }
+    });
+  }
+};
+var token = function token(e, r, re) {
+  var self = this;
+  self.log('Authentication Middleare executed');
+
+  if (e) {
+    var data = {
+      error: true,
+      message: "Invalid token"
+    };
+    self.emit({
+      type: 'write-request-response',
+      data: {
+        data: data,
+        res: re.res
+      }
+    });
+  } else {
+    re.req.user = r;
+    re.next();
+  }
 };
 
 /***/ })
