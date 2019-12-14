@@ -4,7 +4,12 @@ import * as middlewares from './middlewares'
 export default  [
 
     {
-        path: '/register/:username/:pass',
+        path: '/register',
+        method: 'POST',
+        type: 'public'
+    },
+    {
+        path: '/login',
         method: 'POST',
         type: 'public'
     },

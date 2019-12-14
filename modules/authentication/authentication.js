@@ -16,6 +16,7 @@ class Authentication{
      this.init = methods.init
      this.handleShareMiddleware = methods.handleShareMiddleware
      this.auth = methods.auth 
+     this.token = methods.token
     
     
 

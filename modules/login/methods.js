@@ -1,440 +1,215 @@
 
 
-
 export const init = function(){
   
   
-  console.log('Server has been initialised') 
-//   console.log(this.pao)
-//   console.log(this)
-	this.listens()
-	this.startServer()
+  console.log('Login has been initialised')
+	this.listens({
+		
+		'handle-login-task': this.handleLoginTask.bind(this),
+		
+		
+	})
+	
 	
 	
 }
 
-export const listens = function(){
-	
-  var pao = this.pao 
-  
-  
-	pao.pa_notifyListen({
-		
-		  'render-html': this.handleRenderHtml.bind(this),
-		  'ssr-components-count': this.handleSSRComponentCount.bind(this),
-		  'ssr-component-id': this.handleSSRComponentId.bind(this),
-		  'save-component-data,': this.handleSaveComponentData.bind(this),
-		  'handle-test': this.handleTest.bind(this),
 
-		//  'action-dispatch': this.handleActionDispatch.bind(this)
-		
-	},pao.moduleMeta.moduleId,pao.moduleMeta.modInstId)
-}
 
-export const emit = function(eNotifs){
-	
-	var pao = this.pao 
-	console.log('tHE EVENT EMITTED BY SERVEER')
-	console.log(eNotifs)
+export const handleLoginTask= function(data){
 
-	pao.pa_notifyEvent({
-	
-		type: eNotifs.type,
-		data: eNotifs.data
-
-		})
-	
+ 
+	const self = this 
+	self.log("Handling Login task")
+	self.log(data)
+	self.loginStrategy(data)
 
 } 
 
 
+export const loginStrategy = function(data){
 
-
-
-
-export const handleRenderHtml = function(data){
-
-	console.log('HANDLE renderhtml has occured')
+ 
+	const self = this 
+	const pao = self.pao 
+	let user = data.user.parsed.user
 	
-	// this.html = data.html
-	const self = this
-	// self.html.push(data.html)
-	// self.componentCount++
-	// self.trackCount() 
-	
-	if(data.hasOwnProperty("fixedComp")){
+	if(!pao.pa_contains(user,'strategy')){
 		
-			if(data.fixedComp === "before"){
-					
-						if(self.fixedCompS.before.length > 0){
-					
-							console.log('BF')
-						
-							let bf = self.fixedCompS.before 
-							console.log(bf.length)
-							for(let c =0; c < bf.length; c++){
-								
-								console.log('INSIDE FOR LOOP')
-								if(bf[c].compID === data.id){
-									
-									  console.log('About to call the opend func')
-										bf[c].html =  self.opend(bf[c].html,data.html)
-									
-									
-								}else if(c === (bf.length - 1)){
-									
-									console.log('DIFFERENT ID PUSH TO ID')
-									self.fixedCompS.before.push({
-										
-										html: data.html,
-										compID : data.id
-										
-									})
-									
-									
-								}
-							}
-								
-								
-						}else{
-								
-							   console.log('THE before Arrray has nothing at this point')
-									self.fixedCompS.before.push({
-										
-										html: data.html,
-										compID : data.id
-										
-									})
-								
-						}
-							
-						
-						
-					
-			}else{
-					
-						if(self.fixedCompS.after.length > 0){
-					
-							console.log('INSIDE AFTER STUFF')
-							console.log(self.fixedCompS)
-							console.log(self.fixedCompS.after)
-							console.log(self.fixedCompS.after.length)
-							let bf = self.fixedCompS.after 
-							console.log('THE BEFORE')
-							console.log(bf)
-							for(let c =0; c < bf.length; c++){
-								
-								if(bf[c].compID === data.id){
-									
-										bf[c].html =  self.opend(bf[c].html,data.html)
-									
-									
-								}else if(c === bf.length - 1){
-									
-									
-										self.fixedCompS.after.push({
-											
-											html: data.html,
-											compID : data.id
-											
-										})
-										
-									
-									}
-							}
-								
-								
-						}else{
-								
-							self.fixedCompS.after.push({
-								
-								html: data.html,
-								compID : data.id
-								
-							})
-						
-							
-							
-						}
-						
-			}
-						
+		data.callback('Missing required Strategy',null)
+		
 	}else{
 		
-		  self.html.push(data.html)
-			self.componentCount++
-			self.trackCount() 
-	
+		if(!pao.pa_contains(self.strategies,user.strategy)){
+			
+			  data.callback('Specified strategy not supported')
+		
+		}else{
+			
+			console.log('STRATEGY: CURRENT')
+			console.log(user.strategy)
+			self.tmpd = data
+			self[user.strategy](data)
+		}
 		
 	}
-	// console.log('HANDLE renderhtml:self.html')
-	// console.log(self.html)
-	// console.log('HANDLE renderhtml:self.comonentCount')
-	// console.log(self.componentCount)
-	// console.log('HANDLE renderhtml:self.componentID')
-	// console.log(self.componentId)
 	
-} 
+	
 
-export const handleSSRComponentCount = function(data){
-
-	// console.log('HANDLE Server start event has occured')
-	
-	// this.html = data.html
-	const self = this
-	const pao = self.pao
-
-	console.log('Component count')
-	console.log(data)
-
-	data instanceof Array
-		? self.ssrComponentLen = pao.pao_clone(data)
-		: self.ssrComponentLen = data
-		
-	
-	
-	if(data instanceof Array){
-		self.componentRefLen = []
-   }
-
-   console.log('SSR COMPONENT LEN:')
-   console.log(self.ssrComponentLen)
-
-	
-	
-	
-} 
-
-
-export const handleSSRComponentId = function(data){
-
-	// console.log('HANDLE Server start event has occured')
-	
-	// this.html = data.html
-	const self = this
-
-	console.log('ComponentId has occured') 
-
-		
-	//   self.componentId.push(data)
-	
-	
-	
-	
 
 } 
 
+export const anzii = function(data){
 
-
-export const handleSaveComponentData = function(data){
-
-	
-	const self = this
-	const pao = self.pao 
-	
-	// self.compData.push(data)
-
-	// console.log('Component count')
-	// console.log(data)
-
-	
-	
-	
-} 
-
-export const handleTest = function(data){
-
-	
-	const self = this
-	const pao = self.pao 
-
-	console.dir('The data: ',data)
-
-	 if(data.hasOwnProperty('callback')){
-
-		console.log("THE SENT VALUE")
-		console.log(data.value)
-		data.callback(null,"The server response succeded")
-	 }else{
-
-		data.callback(new Error('The error occured'))
-	 } 
-
-	 self.emit({
-
-		type: "handle-testy",
-		data: "test"
-
-	 })
-	
-	// self.compData.push(data)
-
-	// console.log('Component count')
-	// console.log(data)
-
-	
-	
-	
-}
-
-
-
-export const startServer  = function(data){
-
-	  const self = this 
-
-	    this.startPreRoutes()
-		this.startRouting()
-		this.runServer()
-
-	  
-
-} 
-
-
-export const startPreRoutes  = function(){
-
-	  const self = this 
-
-	   
-	  	self.http.use(self.dependiks.bodyParser.json())
-
-		// self.http.use(function(req, res, next) {
-
-		// 	// console.log(req.body)
-		// 	// console.log('Your mobile has reached this code Surprise')
-		// 	res.header("Access-Control-Allow-Origin", "*");
-		// 	res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-		
-		// 	return next();
-		// });
-
-		self.http.use('*.js',function(req, res, next) {
-
-			// console.log(req.body)
-			// console.log('Your mobile has reached this code Surprise')
-			res.set("content-type", "text/javascript");
-			
-		
-			return next();
-		})
-
-		self.http.use(self.xpress.static("public"))
-
-	
-	 
-	 
-
-}
-
-
-export const startRouting  = function(){
-
-	  const self = this 
-
-	//   self.http.get('/smarfo/menu',function(req,res){
-
-	// 	console.log('Request for menu has just been received')
-	// 	let categories = require('./jsondb/foodcategories.json');
-	// 	return res.send(categories.menu);
-	
-	// })
-
-	self.http.get('/todo',self.renderHtml.bind(self))
-	self.http.get('/ibr',self.renderHtml.bind(self))
-	self.http.get('/home',self.renderHtml.bind(self))
-	self.http.use('/',self.renderHtml.bind(self))
-		
-	
-	
-	  
-	  
-
-}
-
-export const runServer  = function(){
-
-	const self = this 
-	
-	self.http.listen(process.env.PORT || 3000,()=>{
-	
-	  console.log("The Server is listening")
-	
-	})
-   
-
-} 
-
-
-
-export const renderHtml = function(req,res){
-
-	   const self = this 
-	   console.log('A request has been made to one of the routes')
-	   console.log('The html')
-	   console.log('The request URL')
-	   console.log(req.url)
-	   self.request = {
-
-		 req: req,
-		 res: res
-
-	   }
-
-	   self.emit({
-		   type: "address-changed",
-		   data: {
-			   url: req.url
-		   }
-	   })
-	//    console.log(this)
-	
-	 
-}
-
-export const sendHtml = function(data){
-
-	const self = this 
-	console.log('The sendHtml method')
-	console.log('The html')
-	console.log(data) 
-	this.fixedCompS.before = []
-	this.fixedCompS.after = []
-	 
  
- //    console.log(this)
-   self.request.res.status(200).send(
-	`
-	<!DOCTYPE html>
-	   <html lang="en"> 
-		 <head> 
+	const self = this
+	const pao = self.pao 
+	self.log("Executing Anzii registration strategy")
 
-			 <meta http-equiv="X-UA-Compatible" content="IE=edge">
-			 <meta http-equiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval'">
-			 <meta name="viewport" content="width=device-width, initial-scale=1">
-			 <meta name="description" content="">
-			 <meta name="author" content="">
-			 <title>SSR with SANA</title>
-			 <link href="css/style.css" rel="stylesheet"> 
-			 
-
-
-		 </head>
-		 <body data-hydrate="hydrate" data-dom="component"> 
-			 <div data-component="component">
+  if(!pao.pa_contains(data,'user')){
+	  
+	
+  }else{
+  	let user =  data.user.parsed.user
+  	if(!(pao.pa_contains(user,['email','password']))){
+		  
+		data.callback({message: 'missing required keys for registration'})
+  		
+  	}else{
+  		
+  		 if(!pao.pa_isValidEmail(user.email) || !pao.pa_isValidPassword(user.password)){ 
+  		 
+  		  data.callback({message: 'either password or email is invalid'})
+  		 	
+  		 }else{
 			   
-			   
-				 ${data}
-			 </div> 
-			
-			 <script src="/sana.bundle.js" defer></script>
-		 </body> 
+			self.isUserExist(data)
+  		 	
+  		 }
+  		
+  	}
+  	
+  }
 
-		</html> 
-		
-	   `
-	)  
 
-  
+
+ 
+
+} 
+
+
+export const social = function(data){
+
+	  const self = this 
+	  self.log('Executing Social registration strategy')
+	  
+	  
+
+} 
+
+
+export const isUserExist  = function(data){
+
+	  const self = this 
+	  let user =  data.user.parsed.user
+	  self.log('Checking if user is taken') 
+	  self.callback = data.callback
+	  self.query(
+	      'mysql.f_users.findOne',
+			{user: user.email},
+			self.findHandler.bind(this)
+	  )
+	  
+	 
+	  
 }
+
+
+export const setTokenHeader = function(e=null,token=null){
+
+	const self = this 
+	const pao = self.pao 
+
+	if(e){
+
+		console.log('TOKEN CREATION FAILED')
+		console.log(e)
+		self.callback(e)
+
+	}else{
+
+		console.log('TOKEN CREATION SUCCESSFULL')
+		console.log('SETTING TOKEN HEADER')
+		console.log(self.tmpd)
+		self.tmpd.user.request.res.set('X-AUTH-TOKEN',token.token) 
+		self.callback(null,{user: token.user})
+
+	}
+	
+}
+
+export const findHandler = async function(e =null,r = null){
+
+	const self = this 
+	const pao = self.pao 
+
+
+	if(e){
+
+		self.callback({message: 'An error occured attempting to find user'},null)
+
+	}else{
+
+		if(!r || (pao.pa_isArray(r) && r.length > 0)){
+
+			self.callback({message: 'User does not exist'},null)
+
+		}else{
+
+			self.log('Login User exist')
+			self.log(r)
+			self.log(self.tmpd)
+            let password = self.tmpd.user.parsed.user.password
+			self.emit({type: 'compare-payload',data:{payload: {plainpass: password,hash: r.password },callback: self.compare.bind(this)}})
+			
+			
+		}
+	}
+	// token.res.set('X-AUTH-TOKEN',token.tk)
+}
+
+export const compare = function(e=null,c=null){
+
+	const self = this 
+	if(e){
+
+		console.log(e)
+		self.callback({message: 'Login failed due to server error:hash'})
+		
+	}else{
+
+		
+
+		if(c){
+			
+			self.log('Login User is valid')
+		    self.log(c)
+			let user = {email: self.tmpd.user.parsed.user.email,username: 'sample'}
+			self.emit({type:'create-jwt-token',data:{payload: user,callback: self.setTokenHeader.bind(self)}})
+
+		}else{
+
+			self.callback({message: 'Invalid login'},null)
+		}
+
+	}
+	
+
+}
+
+
+
+
+
 

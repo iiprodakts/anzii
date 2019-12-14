@@ -2,9 +2,13 @@
 import Test from '../modules/test'
 import List from '../modules/list'
 import Fetch from '../modules/fetch'
+import Jwt from '../modules/jwt'
+import Hash from '../modules/hash'
+import Register from '../modules/register'
+import Login from '../modules/login'
 import Authentication from '../modules/authentication'
 
 export default {
 
-    Test,List,Fetch,Authentication
+    Test,List,Fetch,Jwt,Hash,Register,Login,Authentication
 }

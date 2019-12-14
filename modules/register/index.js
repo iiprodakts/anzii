@@ -1,4 +1,4 @@
 
-import Server from "./server";
+import Register from "./register";
 
-export default Server
+export default Register

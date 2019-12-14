@@ -42,20 +42,20 @@ export const auth = function(req,res,next){
 	
 	  const self = this 
 	  self.log('THE REQUEST HEADERS')
+	  self.request = {req,res,next}
 	  self.log(req.headers)
 	 
 	  if(req.headers['x-auth-token']){
 	  	
-	  	let token = req.headers('x-auth-token') 
+	  	let token = req.headers['x-auth-token']
 	  	self.emit({
 	  		type: 'verify-jwt-token',
 	  		data: {
 	  			
-	  			token: {
-	  				token: token,
-	  				 re: {req,res,next},
-	  				callback: self.token.bind(this)
-	  			}
+	  			
+	  			token: token,
+	  			callback: self.token.bind(this)
+	  			
 	  		}
 	  	})
 	  	
@@ -79,25 +79,24 @@ export const auth = function(req,res,next){
 } 
 
 
-export const token = function(e,r,re){
+export const token = function(e=null,r=null){
 	
 	const self = this 
-	self.log('Authentication Middleare executed')
-	
-	
+	self.log('Authentication Middleware executed')
 	
 	if(e){
 		
+		 console.log(e)
 		 let data = {
 		  error: true,
 		  message: "Invalid token"
 		  
 		  }
 		self.emit({
-			type: 'write-request-response',
+			type: 'write-server-request-response',
 			data:{ 
 			 data: data,
-			 res: re.res
+			 res: self.request.res
 			
 			}
 			
@@ -105,8 +104,10 @@ export const token = function(e,r,re){
 		
 	}else{
 		
-		re.req.user = r
-		re.next()
+		// re.req.user = r 
+		console.log('THE SUCCESSFULLY VERIFIED TOKEN')
+		console.log(r)
+		self.request.next()
 		
 	}
 	

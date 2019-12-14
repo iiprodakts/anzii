@@ -1,13 +1,13 @@
 
 
-const os = require('os')
+
 export const init = function(){
   
   
   this.log('Fetch has been initialised') 
   this.listens({
 		
-	'fetch-handle-task': this.handleListTask.bind(this)
+	'handle-fetch-task': this.handleListTask.bind(this)
   
   })
 
@@ -29,18 +29,15 @@ export const list = function(data){
 	
 	const self = this 
 	let pao = self.pao
-	let cpus = os.cpus().length
-	if(data.hasOwnProperty('callbacks')){
+	let cpus = 4
 
+	console.log(data)
+	if(data.hasOwnProperty('callback')){
 
-		if(pao.pa_isObject(data.callbacks)){
+		data.callback(null,{fetch: ['Fetch','the','data',cpus]})
 
-			if(data.callbacks.successfullHandle){
-				
-				data.callbacks.successfullHandle({fetch: ['Fetch','the','data',cpus]})
-
-			}
-		}
+			
+		
 	}else{
 
 	}

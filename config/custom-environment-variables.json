@@ -3,7 +3,13 @@
 
 
 	
-	"enviroment": "NODE_ENV",
+    "enviroment": "NODE_ENV",
+    "appOrphic": {
+        
+        "flaDev":"FLA_ORHIPC_DEV",
+        "flaProd": "FLA_ORPHIC_PROD",
+        "flaStage": "FLA_ORPHIC_STAGE"
+    }, 
 	"dev": {
 
         "database": {

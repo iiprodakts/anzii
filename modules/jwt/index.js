@@ -1,4 +1,4 @@
 
-import Server from "./server";
+import Jwt from "./jwt";
 
-export default Server
+export default Jwt
