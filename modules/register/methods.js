@@ -32,10 +32,13 @@ export const registerStrategy = function(data){
 	const self = this 
 	const pao = self.pao 
 	let user = data.user.parsed.user
+	console.log('THE DATA INSIDE STRATEGY')
+	console.log(user)
 	
 	if(!pao.pa_contains(user,'strategy')){
 		
 		data.callback('Missing required Strategy',null)
+		
 		
 	}else{
 		
@@ -115,8 +118,8 @@ export const isUserExist  = function(data){
 	  self.log('Checking if user is taken') 
 	  self.callback = data.callback
 	  self.query(
-	      'mysql.f_users.findOne',
-			{user: user.email},
+	      'mysql.jo_user.findOne',
+			{user: { email: user.email}},
 			self.findHandler.bind(this)
 	  )
 	  
@@ -219,15 +222,25 @@ export const findHandler = async function(e =null,r = null){
 	}else{
         console.log('THE VALUE R')
 		console.log(pao.pa_isArray(r))
+		console.log(r.length)
+		console.log(r.length > 0)
+		console.log('after r has been re-assigned a new value')
+		console.log(r)
+		console.log(!r)
 
-		if(!r || (pao.pa_isArray(r) && r.length > 0)){
 
+		if((pao.pa_isArray(r) && r.length === 0)){
+
+			console.log('ANZII USER DOES NOT EXIST, CREATE USER')
 			let user = self.tmpd.user.parsed.user
 			self.emit({type:"hash-payload",data: {payload: user.password,callback: self.hash.bind(self)}})
-			
 
 		}else{
 
+			
+
+			console.log('THE TAKEN USER')
+			console.log(r)
 			self.callback({message: 'User is already taken'},null)
 			
 		}
@@ -246,19 +259,48 @@ export const hash = async function(e=null,h=null){
 		
 	}else{
 
-		console.log('hased')
+		console.log('hashed')
 		console.log(h)
 		let user = self.tmpd.user.parsed.user
 		let password = h 
 		let hash = await self.crypto.randomBytes(35).toString('hex')
+		user.password = password
+		user.hash =  hash
+
 		self.query(
-			'mysql.f_users.insertOne',
-			  {user: {user_id: null,email_address: user.email,user_name: user.username,password: password,hash: hash}},
+			'mysql.PROCEDURE',
+			  self.procedureDoc(user),
 			  self.insertHandler.bind(this)
 		)
+
+		// self.query(
+		// 	'mysql.jo_user.insertOne',
+		// 	  {user: {id: null,email: user.email,first_name: user.firstname,last_name: user.lastname,password: password,hash: hash}},
+		// 	  self.insertHandler.bind(this)
+		// )
 
 	}
 	
 
+}
+
+export const procedureDoc = function(data){
+
+	let fields = {
+	
+		jo_user: { id: 'NULL',u_type: data.usertype,first_name: data.firstname,last_name: data.lastname,email: data.email },
+		jo_account: {own:{id:'NULL'},tables: [{name:'jo_user',values:['u_type.account_name']}]},
+		jo_user_account_join: {own:{id:'NULL'},tables: [{name:'jo_user',values:['id.u_id','email.account_email']},{name:'jo_account',values:['id.account_id']}]},
+		jo_login: {own:{id:'NULL',password:data.password},tables: [{name:'jo_user',values:['id.u_id','email.username']}]}
+	}
+
+	return [
+	
+		{name: 'jo_user',fields: fields.jo_user},
+		{name: 'jo_account',fields: fields.jo_account},
+		{name: 'jo_user_account_join',lastInsert: ['jo_user','jo_account'],fields: fields.jo_user_account_join},
+		{name: 'jo_login',lastInsert: ['jo_user'],fields: fields.jo_login}
+		
+	   ]
 }
 

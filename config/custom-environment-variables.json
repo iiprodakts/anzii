@@ -6,7 +6,7 @@
     "enviroment": "NODE_ENV",
     "appOrphic": {
         
-        "flaDev":"FLA_ORHIPC_DEV",
+        "flaDev":"FLA_ORPHIC_DEV",
         "flaProd": "FLA_ORPHIC_PROD",
         "flaStage": "FLA_ORPHIC_STAGE"
     }, 

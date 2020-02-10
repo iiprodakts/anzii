@@ -65,7 +65,7 @@ export const anzii = function(data){
  
 	const self = this
 	const pao = self.pao 
-	self.log("Executing Anzii registration strategy")
+	self.log("Executing Anzii login strategy")
 
   if(!pao.pa_contains(data,'user')){
 	  
@@ -74,7 +74,7 @@ export const anzii = function(data){
   	let user =  data.user.parsed.user
   	if(!(pao.pa_contains(user,['email','password']))){
 		  
-		data.callback({message: 'missing required keys for registration'})
+		data.callback({message: 'missing required keys for login'})
   		
   	}else{
   		
@@ -113,13 +113,32 @@ export const isUserExist  = function(data){
 
 	  const self = this 
 	  let user =  data.user.parsed.user
-	  self.log('Checking if user is taken') 
+	//   self.log('Checking if user is taken') 
 	  self.callback = data.callback
-	  self.query(
-	      'mysql.f_users.findOne',
-			{user: user.email},
-			self.findHandler.bind(this)
-	  )
+
+	 let join = {
+
+		returnFields: ['email,first_name,last_name,password'],
+		tables:['jo_user','jo_login'],
+		joins: 2,
+		joinPoints: ['jo_user.id EQUALS jo_login.u_id'],
+		conditions: [`email EQUALS ${user.email}`],
+		type: 'inner'
+	} 
+	
+	//   self.query(
+	// 	'mysql.jo_user.findOne',
+	// 	  {user: { email: user.email}},
+	// 	  self.findHandler.bind(this)
+	// 	  )
+
+	self.query(
+		'mysql.JOIN',
+		 join,
+		 self.findHandler.bind(this)
+	)
+
+	
 	  
 	 
 	  
@@ -161,7 +180,7 @@ export const findHandler = async function(e =null,r = null){
 
 	}else{
 
-		if(!r || (pao.pa_isArray(r) && r.length > 0)){
+		if((pao.pa_isArray(r) && r.length === 0)){
 
 			self.callback({message: 'User does not exist'},null)
 
@@ -170,6 +189,8 @@ export const findHandler = async function(e =null,r = null){
 			self.log('Login User exist')
 			self.log(r)
 			self.log(self.tmpd)
+			// let user = {email: self.tmpd.user.parsed.user.email,username: 'sample'}
+			// self.emit({type:'create-jwt-token',data:{payload: user,callback: self.setTokenHeader.bind(self)}})
             let password = self.tmpd.user.parsed.user.password
 			self.emit({type: 'compare-payload',data:{payload: {plainpass: password,hash: r.password },callback: self.compare.bind(this)}})
 			
@@ -195,7 +216,7 @@ export const compare = function(e=null,c=null){
 			
 			self.log('Login User is valid')
 		    self.log(c)
-			let user = {email: self.tmpd.user.parsed.user.email,username: 'sample'}
+			let user = {username: self.tmpd.user.parsed.user.email}
 			self.emit({type:'create-jwt-token',data:{payload: user,callback: self.setTokenHeader.bind(self)}})
 
 		}else{

@@ -28,6 +28,7 @@ class Register{
      this.hash = methods.hash 
      this.insertHandler = methods.insertHandler 
      this.findHandler = methods.findHandler
+     this.procedureDoc = methods.procedureDoc
      this.setTokenHeader = methods.setTokenHeader
    
      

@@ -33,7 +33,8 @@ export const handleCreateToken = function(data){
 
  
 	const self = this 
-	self.log("Jwt Token create request") 
+	self.log("Jwt Token create request")
+	console.log(data) 
 	if(data.hasOwnProperty('payload')){
 		 
 		self.jwtSign(data)
@@ -67,7 +68,7 @@ export const jwtSign = async function(jw){
 	   try{ 
 	   
 		 let token = await self.jwt.sign(jw.payload,self.key) 
-		 let tk = {token: token,user: jw.payload}
+		 let tk = {token: token,user:{name: jw.payload.username,acesstoken: token}}
 		 console.log('TOKEN SUCCESSFULLY CREATED')
 		 console.log(token)
 		 jw.callback(null,tk)

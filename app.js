@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -83,260 +83,40 @@ module.exports = require("os");
 
 /***/ }),
 /* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
-function PAO(appPillar) {
-  this.core = appPillar;
-} // End of PAO
-
-
-PAO.prototype.create = function (moduleID, modInstId) {
-  var pa_core = this.core; // const util = pa_core.util
-  // var events = pa_core.events()
-  // var ajax = pa_core.ajax()
-  // const validators = pa_core.validators()
-
-  var util = pa_core.validators().forOf(pa_core.util(), function (p, a) {
-    return {
-      p: ["pa_".concat(p)],
-      v: a
-    };
-  });
-  var converts = pa_core.validators().forOf(pa_core.converts(), function (p, a) {
-    return {
-      p: ["pa_".concat(p)],
-      v: a
-    };
-  });
-  var validators = pa_core.validators().forOf(pa_core.validators(), function (p, a) {
-    return {
-      p: ["pa_".concat(p)],
-      v: a
-    };
-  }); // console.log('THE VALIDATORS')
-  // console.log(validators)
-  // console.log('The value of Instance Id')
-  // console.log(modInstId)
-
-  if (modInstId) {
-    // console.log('The module has a view')
-    // var CONTAINER = dom.queryCont('data-'+moduleID, modInstId);
-    var meta = {
-      moduleId: moduleID,
-      modInstId: modInstId
-    };
-  } else {
-    // console.log('The module has no view')
-    var meta = {
-      moduleId: moduleID,
-      modInstId: moduleID
-    };
-  }
-
-  return _objectSpread({
-    // DOM manipulations
-    // view: CONTAINER,
-    moduleMeta: meta
-  }, util, {}, validators, {}, converts, {
-    // 	pa_getChildByClass: function(selector){
-    // 		if(CONTAINER){
-    // 			return CONTAINER.queryChildByClass(selector);
-    // 		}
-    // 	},
-    // 	pa_getAllChildByClass: function(selector){
-    // 			if(CONTAINER){
-    // 				return CONTAINER.queryAllChildByClass(selector);
-    // 			}
-    // 	},
-    // 	pa_getById: function(selector){
-    // 			return dom.queryById(selector);
-    // 	},
-    // 	pa_getByTag: function(parent,selector){
-    // 		return dom.queryByTag(parent,selector);
-    // },
-    // 	pa_getByAttribute: function(attrib){
-    // 		return dom.queryByAttribute(attrib);
-    // 	},
-    // 	pa_getAllChildByAttribute: function(attrib){
-    // 			return CONTAINER.queryAllChildByAttribute(attrib);
-    // 	},
-    // 	pa_getChildByAttribute: function(attrib){
-    // 			return CONTAINER.queryChildByAttribute(attrib);
-    // 	},
-    // 	pa_getNodeType: function(node){
-    // 		return dom.queryNodeType(node);
-    // 	},
-    // 	pa_createElement: function(selector){
-    // 		var el = dom.createElement(selector);
-    // 		return el;
-    // 	},
-    // 	pa_isEqualNode: function(node1,node2){
-    // 		return dom.isEqualNode(node1,node2);
-    // 		// return el;
-    // 	},
-    // 	pa_copyDeep: function(el){
-    // 		var el = dom.copyDeep(el);
-    // 		return el;
-    // 	},
-    // 	pa_copyShallow: function(el){
-    // 		var el = dom.copyShallow(el);
-    // 		return el;
-    // 	},
-    // 	pa_addProperty: function(el,attrib,attribValue){
-    // 		if(typeof window === "undefined"){
-    // 			return dom.addProperty(el,attrib,attribValue);
-    // 		}else{
-    // 			 dom.addProperty(el,attrib,attribValue);
-    // 		}
-    // 	},
-    // 	pa_removeProperty: function(el,attrib){
-    // 		dom.removeProperty(el,attrib);
-    // 	},
-    // 	pa_insertInner: function(el,content){
-    // 		if(typeof window === "undefined"){
-    // 			return dom.insertInner(el,content);
-    // 		}else{
-    // 			dom.insertInner(el,content);
-    // 		}
-    // 	},
-    // 	pa_addChild: function(parent,child){
-    // 		if(typeof window === "undefined"){
-    // 			return dom.addChild(parent,child);
-    // 		}else{
-    // 			 dom.addChild(parent,child);
-    // 		}
-    // 	},
-    // 	pa_getClasses: function(element){
-    // 		return dom.getClasses(element);
-    // 	},
-    // 	pa_addClass: function(classlist,classname){
-    //  		dom.addClass(classlist,classname);
-    // 	},
-    // 	pa_removeClass: function(classlist,classname){
-    // 		 dom.removeClass(classlist,classname);
-    // 	},
-    // 	pa_toggleClass: function(classlist,classname){
-    // 		 dom.toggleClass(classlist,classname);
-    // 	},
-    // 	pa_hasClass: function(classlist,classname){
-    // 		 return dom.hasClass(classlist,classname);
-    // 	},
-    // 	pa_getStyles: function(element){
-    // 		 return dom.getStyles(element);
-    // 	},
-    // 	pa_getAttributes: function(element){
-    // 		 return dom.getAttributes(element);
-    // 	},
-    // 	pa_getParent: function(child){
-    // 		return dom.getParent(child);
-    //    },
-    // 	// EVENTS manipulations
-    // 	pa_addEvent: function(el,ev,handler){
-    // 	    if(typeof window === "undefined"){
-    // 			return	events.addEventHandler(el,ev,handler);
-    // 		}else{
-    // 			events.addEventHandler(el,ev,handler);
-    // 		}
-    // 	},
-    // 	pa_removeEvent: function(el,ev,handler){
-    // 			events.addEventHandler(el,ev,handler);
-    // 	},
-    // 	pa_getEvent: function(ev){
-    // 		return events.getEvent(ev);
-    // 	},// End of addEventHandler() method
-    // 	pa_getTarget: function(ev){
-    // 		return events.getTarget(ev);
-    // 	},// End of addEventHandler() method
-    // 	pa_preventNormal: function(ev){
-    // 			events.preventNormal(ev);
-    // 	},
-    // 	pa_stopEventBubble: function(ev){
-    // 		events.stopEventBubble(ev);
-    // },
-    // 	// AJAX communications
-    // 	pa_ajaxGet: function(url,data,success,failure,type){
-    // 		ajax.get(url,data,success,failure,type);
-    // 	},
-    // 	pa_ajaxPost: function(url,data,success,failure,type){
-    // 		ajax.post(url,data,success,failure,type);
-    // 	},
-    // 	// MODULE communications
-    pa_notifyListen: function pa_notifyListen(evts, moduleID, modInstId) {
-      // console.log('The notifyListen event has been successfuly invoked')
-      pa_core.registerEvents(evts, moduleID, modInstId);
-    },
-    // End of notifyListen() for events to listen to
-    pa_notifyEvent: function pa_notifyEvent(evt) {
-      // console.log('The notify event has been successfuly invoked')
-      pa_core.triggerEvent(evt);
-    } // end of notifyEvent() occurence
-    // 	pa_validate: function(data){
-    // 		var validateResult = pa_core.validator.validate(data);
-    // 		return validateResult;
-    // 	},
-    // 	pa_jsToJson: function(jsObject){
-    // 		return converts.jsToJson(jsObject);
-    // 	},
-    // 	pa_jsonToJs: function(json){
-    // 		return converts.jsonToJs(json);
-    // 	},
-    // 	pa_clone: function(c){
-    // 		return converts.clone(c);
-    // 	},
-    // 	pa_objectToArray: function(o){
-    // 		return converts.objectToArray(o)
-    // 	}
-    // End OF return
-
-  });
-}; // End of PAO create() method
-
-
-/* harmony default export */ __webpack_exports__["a"] = (PAO);
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports) {
 
 module.exports = require("jsonfile");
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(6);
-module.exports = __webpack_require__(7);
+__webpack_require__(5);
+module.exports = __webpack_require__(6);
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports) {
 
 module.exports = require("@babel/polyfill");
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server_serverdev__ = __webpack_require__(7);
+
+Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
 
 /***/ }),
 /* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server_serverdev__ = __webpack_require__(8);
-
-Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_anzii__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_anzii__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__init_modules__ = __webpack_require__(69);
 
  // import Server from '../shared/modules/server/index'
@@ -354,11 +134,11 @@ Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
 }); // export default server
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__esm_esm__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_activate__ = __webpack_require__(68);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -382,14 +162,14 @@ var Anzii = function Anzii() {
 /* harmony default export */ __webpack_exports__["a"] = (new Anzii());
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pillar_pillar__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pillar_pillar__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pillar_pillar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__pillar_pillar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__base_core__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_pao__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__base_core__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_pao__ = __webpack_require__(17);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -405,7 +185,7 @@ var Base = function Base() {
 /* harmony default export */ __webpack_exports__["a"] = (new Base());
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -413,17 +193,17 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 // DEPENDECIES 
 var os = __webpack_require__(2);
 
-var util = __webpack_require__(12);
+var util = __webpack_require__(11);
 
-var async = __webpack_require__(13);
+var async = __webpack_require__(12);
 
-var extend = __webpack_require__(14);
+var extend = __webpack_require__(13);
 
-var fs = __webpack_require__(15);
+var fs = __webpack_require__(14);
 
 var path = __webpack_require__(0);
 
-var uuid = __webpack_require__(16);
+var uuid = __webpack_require__(15);
 /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
@@ -1497,6 +1277,7 @@ module.exports = {
     } else if (this.is_object(o)) {
       if (this.is_array(v)) {
         console.log('THE SPECIFED VALUE TO CHECK IS AN ARRAY');
+        console.log(v);
         var outcome = '';
 
         for (var i = 0; i < v.length; i++) {
@@ -1508,6 +1289,8 @@ module.exports = {
           }
         }
 
+        console.log('THE OUTCOME');
+        console.log(outcome);
         return outcome;
       } else {
         return o.hasOwnProperty(v) ? true : false;
@@ -1584,37 +1367,37 @@ module.exports = {
 };
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = require("util");
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = require("async");
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = require("node.extend");
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = require("fs");
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = require("uuid");
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1986,7 +1769,23 @@ CORE.prototype.sanna = function () {
                   handler: handler
                 }
               });
+            } else if (model[1].trim() === 'PROCEDURE' || 'JOIN' || 'SEARCH' || 'TRANSACTION') {
+              var _mo = {
+                vendor: modelFrags[0],
+                table: modelFrags[1].toLowerCase(),
+                operation: modelFrags[1].toLowerCase()
+              };
+              self.emit({
+                type: 'data-hive-request',
+                data: {
+                  model: _mo,
+                  document: document,
+                  handler: handler
+                }
+              });
             } else {
+              console.log('THE ARRAY');
+              console.log(modelFrags);
               throw new Error('Query method requires database vendor,table and operation');
             }
           }
@@ -2004,6 +1803,226 @@ CORE.prototype.sanna = function () {
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (CORE);
+
+/***/ }),
+/* 17 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function PAO(appPillar) {
+  this.core = appPillar;
+} // End of PAO
+
+
+PAO.prototype.create = function (moduleID, modInstId) {
+  var pa_core = this.core; // const util = pa_core.util
+  // var events = pa_core.events()
+  // var ajax = pa_core.ajax()
+  // const validators = pa_core.validators()
+
+  var util = pa_core.validators().forOf(pa_core.util(), function (p, a) {
+    return {
+      p: ["pa_".concat(p)],
+      v: a
+    };
+  });
+  var converts = pa_core.validators().forOf(pa_core.converts(), function (p, a) {
+    return {
+      p: ["pa_".concat(p)],
+      v: a
+    };
+  });
+  var validators = pa_core.validators().forOf(pa_core.validators(), function (p, a) {
+    return {
+      p: ["pa_".concat(p)],
+      v: a
+    };
+  }); // console.log('THE VALIDATORS')
+  // console.log(validators)
+  // console.log('The value of Instance Id')
+  // console.log(modInstId)
+
+  if (modInstId) {
+    // console.log('The module has a view')
+    // var CONTAINER = dom.queryCont('data-'+moduleID, modInstId);
+    var meta = {
+      moduleId: moduleID,
+      modInstId: modInstId
+    };
+  } else {
+    // console.log('The module has no view')
+    var meta = {
+      moduleId: moduleID,
+      modInstId: moduleID
+    };
+  }
+
+  return _objectSpread({
+    // DOM manipulations
+    // view: CONTAINER,
+    moduleMeta: meta
+  }, util, {}, validators, {}, converts, {
+    // 	pa_getChildByClass: function(selector){
+    // 		if(CONTAINER){
+    // 			return CONTAINER.queryChildByClass(selector);
+    // 		}
+    // 	},
+    // 	pa_getAllChildByClass: function(selector){
+    // 			if(CONTAINER){
+    // 				return CONTAINER.queryAllChildByClass(selector);
+    // 			}
+    // 	},
+    // 	pa_getById: function(selector){
+    // 			return dom.queryById(selector);
+    // 	},
+    // 	pa_getByTag: function(parent,selector){
+    // 		return dom.queryByTag(parent,selector);
+    // },
+    // 	pa_getByAttribute: function(attrib){
+    // 		return dom.queryByAttribute(attrib);
+    // 	},
+    // 	pa_getAllChildByAttribute: function(attrib){
+    // 			return CONTAINER.queryAllChildByAttribute(attrib);
+    // 	},
+    // 	pa_getChildByAttribute: function(attrib){
+    // 			return CONTAINER.queryChildByAttribute(attrib);
+    // 	},
+    // 	pa_getNodeType: function(node){
+    // 		return dom.queryNodeType(node);
+    // 	},
+    // 	pa_createElement: function(selector){
+    // 		var el = dom.createElement(selector);
+    // 		return el;
+    // 	},
+    // 	pa_isEqualNode: function(node1,node2){
+    // 		return dom.isEqualNode(node1,node2);
+    // 		// return el;
+    // 	},
+    // 	pa_copyDeep: function(el){
+    // 		var el = dom.copyDeep(el);
+    // 		return el;
+    // 	},
+    // 	pa_copyShallow: function(el){
+    // 		var el = dom.copyShallow(el);
+    // 		return el;
+    // 	},
+    // 	pa_addProperty: function(el,attrib,attribValue){
+    // 		if(typeof window === "undefined"){
+    // 			return dom.addProperty(el,attrib,attribValue);
+    // 		}else{
+    // 			 dom.addProperty(el,attrib,attribValue);
+    // 		}
+    // 	},
+    // 	pa_removeProperty: function(el,attrib){
+    // 		dom.removeProperty(el,attrib);
+    // 	},
+    // 	pa_insertInner: function(el,content){
+    // 		if(typeof window === "undefined"){
+    // 			return dom.insertInner(el,content);
+    // 		}else{
+    // 			dom.insertInner(el,content);
+    // 		}
+    // 	},
+    // 	pa_addChild: function(parent,child){
+    // 		if(typeof window === "undefined"){
+    // 			return dom.addChild(parent,child);
+    // 		}else{
+    // 			 dom.addChild(parent,child);
+    // 		}
+    // 	},
+    // 	pa_getClasses: function(element){
+    // 		return dom.getClasses(element);
+    // 	},
+    // 	pa_addClass: function(classlist,classname){
+    //  		dom.addClass(classlist,classname);
+    // 	},
+    // 	pa_removeClass: function(classlist,classname){
+    // 		 dom.removeClass(classlist,classname);
+    // 	},
+    // 	pa_toggleClass: function(classlist,classname){
+    // 		 dom.toggleClass(classlist,classname);
+    // 	},
+    // 	pa_hasClass: function(classlist,classname){
+    // 		 return dom.hasClass(classlist,classname);
+    // 	},
+    // 	pa_getStyles: function(element){
+    // 		 return dom.getStyles(element);
+    // 	},
+    // 	pa_getAttributes: function(element){
+    // 		 return dom.getAttributes(element);
+    // 	},
+    // 	pa_getParent: function(child){
+    // 		return dom.getParent(child);
+    //    },
+    // 	// EVENTS manipulations
+    // 	pa_addEvent: function(el,ev,handler){
+    // 	    if(typeof window === "undefined"){
+    // 			return	events.addEventHandler(el,ev,handler);
+    // 		}else{
+    // 			events.addEventHandler(el,ev,handler);
+    // 		}
+    // 	},
+    // 	pa_removeEvent: function(el,ev,handler){
+    // 			events.addEventHandler(el,ev,handler);
+    // 	},
+    // 	pa_getEvent: function(ev){
+    // 		return events.getEvent(ev);
+    // 	},// End of addEventHandler() method
+    // 	pa_getTarget: function(ev){
+    // 		return events.getTarget(ev);
+    // 	},// End of addEventHandler() method
+    // 	pa_preventNormal: function(ev){
+    // 			events.preventNormal(ev);
+    // 	},
+    // 	pa_stopEventBubble: function(ev){
+    // 		events.stopEventBubble(ev);
+    // },
+    // 	// AJAX communications
+    // 	pa_ajaxGet: function(url,data,success,failure,type){
+    // 		ajax.get(url,data,success,failure,type);
+    // 	},
+    // 	pa_ajaxPost: function(url,data,success,failure,type){
+    // 		ajax.post(url,data,success,failure,type);
+    // 	},
+    // 	// MODULE communications
+    pa_notifyListen: function pa_notifyListen(evts, moduleID, modInstId) {
+      // console.log('The notifyListen event has been successfuly invoked')
+      pa_core.registerEvents(evts, moduleID, modInstId);
+    },
+    // End of notifyListen() for events to listen to
+    pa_notifyEvent: function pa_notifyEvent(evt) {
+      // console.log('The notify event has been successfuly invoked')
+      pa_core.triggerEvent(evt);
+    } // end of notifyEvent() occurence
+    // 	pa_validate: function(data){
+    // 		var validateResult = pa_core.validator.validate(data);
+    // 		return validateResult;
+    // 	},
+    // 	pa_jsToJson: function(jsObject){
+    // 		return converts.jsToJson(jsObject);
+    // 	},
+    // 	pa_jsonToJs: function(json){
+    // 		return converts.jsonToJs(json);
+    // 	},
+    // 	pa_clone: function(c){
+    // 		return converts.clone(c);
+    // 	},
+    // 	pa_objectToArray: function(o){
+    // 		return converts.objectToArray(o)
+    // 	}
+    // End OF return
+
+  });
+}; // End of PAO create() method
+
+
+/* harmony default export */ __webpack_exports__["a"] = (PAO);
 
 /***/ }),
 /* 18 */
@@ -2088,15 +2107,15 @@ var Middleware = function Middleware(pao) {
     use: 'public'
   }, 'json'];
   this.middlewares = {
-    all: [{
-      type: 'function',
-      value: function value(req, res, next) {
-        console.log('I am the zeenith ware'), next();
-      }
-    }, {
-      type: 'module',
-      value: 'test'
-    }] // console.log('THE STORE')
+    all: [// {type: 'function',value: (req,res,next)=>{
+      //    console.log('I am the zeenith ware'),
+      //    res.header("Access-Control-Allow-Origin", "*");
+      //    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+      //    next()
+      //   }
+      //   },
+      // {type: 'module',value: 'test'}
+    ] // console.log('THE STORE')
     // console.log(this.supubu
 
   };
@@ -2121,13 +2140,11 @@ var Middleware = function Middleware(pao) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleAddExternalMiddleware; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return attachMiddleware; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return allWares; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base_pao__ = __webpack_require__(3);
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
 
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
-
 
 var init = function init() {
   this.log('Middleware has been initialised');
@@ -2302,7 +2319,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
-var jsonfile = __webpack_require__(4),
+var jsonfile = __webpack_require__(3),
     path = __webpack_require__(0),
     bodyParser = __webpack_require__(1);
 
@@ -2781,6 +2798,12 @@ var handleHandlerError = function handleHandlerError() {
 };
 var writeResponse = function writeResponse(data) {
   var self = this;
+  var pao = self.pao;
+  console.log('THE DATA IN WRITERESPONSE');
+  console.log(data);
+  pao.pa_isString() ? data = pao.pa_jsToJson({
+    text: data
+  }) : data = pao.pa_jsToJson(data);
   self.emit({
     type: 'write-server-request-response',
     data: {
@@ -2794,9 +2817,14 @@ var taskerHandler = function taskerHandler() {
   var success = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
   var self = this;
   var pao = self.pao;
+  console.log('THE TASKER HANDLER');
+  console.log(fail);
 
   if (fail) {
-    self.failureHandle(fail);
+    self.failureHandle({
+      error: true,
+      message: fail
+    });
   } else if (success) {
     self.successfullHandle(success);
   }
@@ -2832,7 +2860,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var express = __webpack_require__(34),
     // fs = require('fs'),
 // randomstring = require("randomstring"),
-jsonfile = __webpack_require__(4),
+jsonfile = __webpack_require__(3),
     path = __webpack_require__(0),
     bodyParser = __webpack_require__(1); // const app = express()
 // import notifier from './notifier'
@@ -2987,6 +3015,7 @@ var handleWriteServerRequestResponse = function handleWriteServerRequestResponse
   self.log('SERVER IS ABOUT TO SEND RESPONSE BACK TO CLIENT');
   data.res.set('Connection', 'close');
   data.res.status(200).send(data.data);
+  console.log(data.data);
   self.log('SERVER HAS SENT A RESPONSE BACK TO THE CLIENT');
   return;
 };
@@ -3134,10 +3163,14 @@ var enviroment = function enviroment() {
       }
 
       if (envObserver.has('appOrphic')) {
+        console.log('THE JWT appOrphic');
+        console.log(envObserver);
+        console.log(envObserver.appOrphic);
+        console.log(envObserver.appOrphic.flaDev);
         self.emit({
           type: 'save-jwt-key',
           data: {
-            keys: envObserver.appOrphic['flaDev']
+            key: envObserver.appOrphic['flaDev']
           }
         });
       } else {
@@ -3297,7 +3330,9 @@ var pprivate = [{
 var all = [{
   type: 'function',
   value: function value(req, res, next) {
-    console.log('I AM THE MIDDLEWARE THAT RUNS ON EVERY REQUEST'); // console.log(req)
+    console.log('I AM THE MIDDLEWARE THAT RUNS ON EVERY REQUEST');
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept"); // console.log(req)
 
     next();
   }
@@ -3600,7 +3635,7 @@ var shutDown = function shutDown(type, code) {
     });
   }
 
-  self.log("System is shutting down through: ".concat(type, ",with code: ").concat(code));
+  self.log("System is shutting down through: ".concat(type, ",with code: ").concat(code.stack));
   type === 'uncaughtException' ? self.context.kill(1) : self.context[type]();
 };
 var masterWorker = function masterWorker(app) {
@@ -3608,39 +3643,46 @@ var masterWorker = function masterWorker(app) {
   self.log("THE STATUS OF isMaster: ".concat(self.cluster.isMaster));
 
   if (self.cluster.isMaster) {
-    self.log("Master ".concat(self.context.pid, " is running")); // if(self.clusterCustomConfig.spawn){
-    // 	let slaves = self.clusterCustomConfig.workers ? self.clusterCustomConfig.workers : 'auto'
-    // 	if(slaves === 'auto'){
-    // 	   slaves = self.os.cpus().length 
-    // 	   for(let s = 0; slaves < slaves; s++){
-    // 		   self.cluster.fork()
-    // 	   }
-    // 	}else{
-    // 	   if(typeof slaves === 'number'){
-    // 		   for(let s = 0; s < slaves; s++){
-    // 			   self.log(`Forking slave number: ${s}`)
-    // 			   self.cluster.fork()
-    // 		   }
-    // 	   }
-    // 	}
-    // }else{
-    //    self.log('System is running on a single thread/core')
-    // } 
+    self.log("Master ".concat(self.context.pid, " is running"));
 
+    if (self.clusterCustomConfig.spawn) {
+      var slaves = self.clusterCustomConfig.workers ? self.clusterCustomConfig.workers : 'auto';
+
+      if (slaves === 'auto') {
+        slaves = self.os.cpus().length;
+
+        for (var s = 0; slaves < slaves; s++) {
+          self.cluster.fork();
+        }
+      } else {
+        if (typeof slaves === 'number') {
+          for (var _s = 0; _s < slaves; _s++) {
+            self.log("Forking slave number: ".concat(_s));
+            self.cluster.fork();
+          }
+        }
+      }
+    } else {
+      self.log('System is running on a single thread/core');
+    } // app.listen(self.context.env.PORT || 3000,()=>{
+    // 	self.log("The Server is listening via workers",'info')
+    //   })
+
+
+    self.cluster.on('exit', function (worker, code, signal) {
+      console.log("worker ".concat(worker.process.pid, " died"));
+    });
+  } else {
+    console.log('IT IS NOT THE MASTER PROCESS');
+    console.log("Worker ".concat(process.pid, " started"));
     app.listen(self.context.env.PORT || 3000, function () {
       self.log("The Server is listening via workers", 'info');
-    }); // self.cluster.on('exit', (worker, code, signal) => {
-    // 	console.log(`worker ${worker.process.pid} died`);
-    //   });
-  } else {// console.log('IT IS NOT THE MASTER PROCESS')
-      // console.log(`Worker ${process.pid} started`)
-      // app.listen(self.context.env.PORT || 3000,()=>{
-      // 	self.log("The Server is listening via workers",'info')
-      //   })
-    }
+    });
+  }
 };
 var folkSlaveWorkers = function folkSlaveWorkers(mainWorker) {};
 var handleShutDowns = function handleShutDowns() {
+  console.log('Shutdowns are being handled');
   var self = this;
   self.context.on('INT', function (code) {
     if (!self.systemIsShuttingDown) {
@@ -3657,6 +3699,15 @@ var handleShutDowns = function handleShutDowns() {
     }
   });
   self.context.on('uncaughtException', function (code) {
+    if (!self.systemIsShuttingDown) {
+      self.shutDown('uncaughtException', code);
+    } else {
+      self.log('System is already ShuttingDown');
+    }
+  });
+  self.context.on('unhandledRejection', function (code) {
+    console.log('uncaughtException occured from unhandlerejected');
+
     if (!self.systemIsShuttingDown) {
       self.shutDown('uncaughtException', code);
     } else {
@@ -3717,13 +3768,25 @@ var Mysql = function Mysql(pao) {
 
   this.pao = pao; // // methods
 
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* init */];
-  this.handleMysqlDataRequest = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleMysqlDataRequest */];
-  this.insertOne = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* insertOne */];
-  this.insertMany = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* insertMany */];
-  this.findOne = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* findOne */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* init */];
+  this.handleMysqlDataRequest = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* handleMysqlDataRequest */];
+  this.insertOne = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* insertOne */];
+  this.insertMany = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* insertMany */];
+  this.findOne = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* findOne */];
   this.updateOne = __WEBPACK_IMPORTED_MODULE_0__methods__["updateOne"];
-  this.deleteOne = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* deleteOne */];
+  this.TRANSACTION = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* TRANSACTION */];
+  this.PROCEDURE = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* PROCEDURE */];
+  this.JOIN = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* JOIN */];
+  this.procedure = __WEBPACK_IMPORTED_MODULE_0__methods__["p" /* procedure */];
+  this.transaction = __WEBPACK_IMPORTED_MODULE_0__methods__["r" /* transaction */];
+  this.join = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* join */];
+  this.joinExek = __WEBPACK_IMPORTED_MODULE_0__methods__["n" /* joinExek */];
+  this.joinStatement = __WEBPACK_IMPORTED_MODULE_0__methods__["o" /* joinStatement */];
+  this.joinConditionsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["m" /* joinConditionsFormat */];
+  this.combineFields = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* combineFields */];
+  this.insert = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* insert */];
+  this.rollback = __WEBPACK_IMPORTED_MODULE_0__methods__["q" /* rollback */];
+  this.deleteOne = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* deleteOne */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Mysql);
@@ -3733,13 +3796,31 @@ var Mysql = function Mysql(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleMysqlDataRequest; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return insertOne; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return insertMany; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return findOne; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return handleMysqlDataRequest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return insertOne; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return insertMany; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return findOne; });
 /* unused harmony export UpdateOne */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return deleteOne; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return deleteOne; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return transaction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return procedure; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return join; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return TRANSACTION; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return PROCEDURE; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return insert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JOIN; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return combineFields; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return rollback; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return joinExek; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return joinConditionsFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return joinStatement; });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 var init = function init() {
   console.log('Mysql has been initialised');
   this.listens({
@@ -3752,7 +3833,7 @@ var handleMysqlDataRequest = function handleMysqlDataRequest(data) {
   self.log("Handling Mysql Data Request");
   self.log(data.table);
   self.log(data.outComehandler);
-  self.log(data.opi);
+  self.log(data.opi); // self.log(data)
 
   if (!pao.pa_contains(data, ['conn', 'table', 'opi', 'query', 'outComehandler'])) {
     self.log('Data request operations failed');
@@ -3760,9 +3841,17 @@ var handleMysqlDataRequest = function handleMysqlDataRequest(data) {
       message: 'Database operation failed'
     });
   } else {
-    if (!pao.pa_isObject(data.conn)) {} else {
-      if (!pao.pa_isString(data.table)) {} else {
-        if (!self[data.opi]) {} else {
+    if (!pao.pa_isObject(data.conn)) {
+      self.log('THE connection is not object');
+    } else {
+      if (!pao.pa_isString(data.table)) {
+        self.log('THE TABLE NAME IS NOT A STRING');
+      } else {
+        if (!self[data.opi]) {
+          self.log('DATA.OPI IS NOT CONTAINED AS FUNCTION');
+        } else {
+          console.log('THE CODE GOES THIS FAR');
+
           if (data.opi === 'insert') {
             data.opi = 'insertOne';
             self[data.opi](data);
@@ -3772,6 +3861,18 @@ var handleMysqlDataRequest = function handleMysqlDataRequest(data) {
             self[data.opi](data);
           } else if (data.opi === 'updateOne') {
             data.opi = 'UpdateOne';
+            self[data.opi](data);
+          } else if (data.opi === 'transaction') {
+            data.opi = 'transaction';
+            self[data.opi](data);
+          } else if (data.opi === 'procedure') {
+            data.opi = 'procedure';
+            self[data.opi](data);
+          } else if (data.opi === 'join') {
+            data.opi = 'join';
+            self[data.opi](data);
+          } else if (data.opi === 'search') {
+            data.opi = 'search';
             self[data.opi](data);
           } else {
             self[data.opi](data);
@@ -3789,8 +3890,8 @@ var insertOne = function insertOne(data) {
     try {
       var q = data.query.user;
       var fields = Object.keys(q);
-      var sql = "INSERT INTO ?? (".concat(fields[0], ",").concat(fields[1], ",").concat(fields[2], ",").concat(fields[3], ",").concat(fields[4], ") VALUES(?)");
-      var queryAttributes = ['f_users', ["NULL", q.email_address, q.user_name, q.password, q.hash]];
+      var sql = "INSERT INTO ?? (".concat(fields[0], ",").concat(fields[1], ",").concat(fields[2], ",").concat(fields[3], ") VALUES(?)");
+      var queryAttributes = [data.table, ["NULL", q.email, q.first_name, q.last_name]];
       sql = data.conn.format(sql, queryAttributes); //  let sql = `INSERT INTO ${data.table} SET ?`
 
       data.conn.query(sql, function (e, r, f) {
@@ -3799,8 +3900,8 @@ var insertOne = function insertOne(data) {
         console.log(e);
         if (e) data.outComehandler(e, null);
         r.user = {
-          email: q.email_address,
-          username: q.user_name
+          email: q.email,
+          username: q.first_name
         };
         data.outComehandler(null, r);
       });
@@ -3835,20 +3936,28 @@ var insertMany = function insertMany(data) {
 var findOne = function findOne(data) {
   var self = this;
   var pao = self.pao;
-  console.log('FIND ONE GOT A CALL');
+  console.log('THE DATA IN FINDONE');
+  console.log(data);
 
   if (!pao.pa_isObject(data)) {} else {
     try {
+      var keys = Object.keys(data.query.user);
       var sql = "SELECT * FROM ?? WHERE ?? = ? LIMIT 1";
-      var queryAttributes = ['f_users', 'email_address', data.query.user];
+      var queryAttributes = [data.table, keys[0], data.query.user[keys[0]]];
       sql = data.conn.format(sql, queryAttributes);
+      console.log('THE SQL');
+      console.log(sql);
       data.conn.query(sql, [data.query], function (e, r, f) {
         console.log('THE QUERY IS COMPLETED WITH RESULTS');
         console.log(e);
         console.log(r);
-        if (e) data.outComehandler(e, null);
+        console.log(_typeof(r));
+        console.log(f);
+        console.log(r instanceof Array);
+        console.log('After R evaluation');
+        if (e) data.outComehandler(e, null, data);
         if (pao.pa_isArray(r) && r.length > 0) r = r[0];
-        data.outComehandler(null, r);
+        data.outComehandler(null, r, data);
       });
     } catch (e) {
       // console.log('AN ERROR OCCURED IN FIND ONE ')
@@ -3881,6 +3990,440 @@ var deleteOne = function deleteOne(data) {
     } catch (e) {
       data.outComeHandler(e, null);
     }
+  }
+};
+var transaction = function transaction(data) {
+  var self = this;
+
+  if (typeof data.query === 'function') {
+    data.query();
+  } else {
+    self.TRANSACTION(data.query, data.conn, data.outComehandler);
+  }
+
+  h;
+};
+var procedure = function procedure(data) {
+  console.log('THE procedure got a call');
+  var self = this;
+
+  if (typeof data.query === 'function') {
+    data.query();
+  } else {
+    console.log('INSIDE PROCEDURE'); //  console.log(data.outComehandler)
+    //  console.log(data)
+
+    self.PROCEDURE(data.query, data.conn, data.outComehandler);
+  }
+};
+var join = function join(data) {
+  console.log('THE procedure got a call');
+  var self = this;
+
+  if (typeof data.query === 'function') {
+    data.query();
+  } else {
+    console.log('INSIDE JOIN'); //  console.log(data.outComehandler)
+    //  console.log(data)
+
+    self.JOIN(data.query, data.conn, data.outComehandler);
+  }
+};
+var TRANSACTION = function TRANSACTION(collections, conn) {
+  var handler = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var self = this;
+  var pao = self.pao;
+  var collectionsIds = [];
+  var breakOut = false;
+
+  for (var c = 0; c < collections.length; c++) {
+    var i = collections[c];
+    var fields = null;
+    var sources = null;
+    var own = null;
+
+    if (!pao.pa_contains(i, 'fields')) {
+      handler('Required collection/table field missing');
+      break;
+    } else {
+      if (pao.pa_contains(i.fields, 'tables')) {
+        sources = i.fields.tables;
+        own = i.fields.own;
+      }
+    }
+
+    sources ? fields = self.combineFields(sources, own, collectionsIds) : '';
+    fields ? i.fields = fields : '';
+    self.insert(i, conn).then(function (insert) {
+      collectionsIds.push(insert);
+    })["catch"](function (failedInsert) {
+      self.rollback(collectionsIds);
+      handler(failedInsert, null);
+      breakOut = true;
+    });
+    if (breakOut) break;
+
+    if (c === collections.length - 1) {
+      console.log('Operation completed successfully');
+      handler('Transaction Operation sucessful');
+    }
+  }
+};
+var PROCEDURE =
+/*#__PURE__*/
+function () {
+  var _ref = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee(collections, conn) {
+    var handler,
+        self,
+        pao,
+        collectionsIds,
+        breakOut,
+        c,
+        i,
+        fields,
+        sources,
+        own,
+        _args = arguments;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            handler = _args.length > 2 && _args[2] !== undefined ? _args[2] : null;
+            self = this;
+            pao = self.pao;
+            self.log('THE PROCEDURE METHOD');
+            self.log(collections);
+            self.log(handler);
+            self.log(conn);
+            collectionsIds = [];
+            breakOut = false;
+            c = 0;
+
+          case 10:
+            if (!(c < collections.length)) {
+              _context.next = 31;
+              break;
+            }
+
+            i = collections[c];
+            fields = null;
+            sources = null;
+            own = null;
+
+            if (pao.pa_contains(i, 'fields')) {
+              _context.next = 20;
+              break;
+            }
+
+            handler('Required collection/table field missing');
+            return _context.abrupt("break", 31);
+
+          case 20:
+            if (pao.pa_contains(i.fields, 'tables')) {
+              console.log('sources will be assigned A VALUE');
+              sources = i.fields.tables;
+              own = i.fields.own;
+            }
+
+          case 21:
+            sources ? fields = self.combineFields(sources, own, collectionsIds) : '';
+            fields ? i.fields = fields : '';
+            _context.next = 25;
+            return self.insert(i, conn).then(function (insert) {
+              collectionsIds.push(insert);
+            })["catch"](function (failedInsert) {
+              handler(failedInsert, null);
+              breakOut = true;
+            });
+
+          case 25:
+            if (!breakOut) {
+              _context.next = 27;
+              break;
+            }
+
+            return _context.abrupt("break", 31);
+
+          case 27:
+            if (c === collections.length - 1) {
+              console.log('Operation completed successfully');
+              console.log(collectionsIds);
+
+              if (collectionsIds.length > 0) {
+                console.log('PROCEDURE IS COMPLETED');
+                console.log(collectionsIds);
+                handler(null, {
+                  user: {
+                    username: collectionsIds[0].fields.email
+                  }
+                });
+              } else {
+                handler('An insert has went wrong');
+              }
+            }
+
+          case 28:
+            c++;
+            _context.next = 10;
+            break;
+
+          case 31:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function PROCEDURE(_x, _x2) {
+    return _ref.apply(this, arguments);
+  };
+}();
+var insert = function insert(inset, conn) {
+  var self = this;
+  var pao = pao;
+  return new Promise(function (resolve, reject) {
+    // do a thing, possibly async, then… 
+    console.log('Executing the insert promise');
+    var sql = "INSERT INTO ?? SET ?";
+    var queryAttributes = [inset.name, inset.fields];
+    sql = conn.format(sql, queryAttributes); //  let sql = `INSERT INTO ${data.table} SET ?`
+
+    conn.query(sql, function (e, r, f) {
+      if (e) {
+        console.log('Promise is rejecting');
+        reject(e);
+      } else {
+        self.findOne({
+          conn: conn,
+          table: inset.name,
+          query: {
+            user: {
+              id: r.insertId
+            }
+          },
+          outComehandler: function outComehandler() {
+            var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+            var r = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+            var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+            var insert = {};
+
+            if (e) {
+              console.log('the errorINSERT');
+              console.log(e);
+              console.log(data);
+              insert.error = e;
+              insert.lastInsert = data.query.user.id;
+              insert.fields = null;
+              insert.collection = data.table;
+              console.log('Promise is Resolving with findOne error');
+              console.log(insert);
+              resolve(insert);
+            } else {
+              insert.lastInsert = data.query.user.id;
+              insert.fields = r;
+              insert.collection = data.table;
+              console.log('Promise is Resolving with FindOne SUCCESS');
+              console.log(insert);
+              resolve(insert);
+            }
+          }
+        });
+      }
+    });
+  });
+};
+var JOIN =
+/*#__PURE__*/
+function () {
+  var _ref2 = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee2(join, conn) {
+    var handler,
+        self,
+        pao,
+        _args2 = arguments;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            handler = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : null;
+            self = this;
+            pao = self.pao;
+            self.joinExek(join, conn).then(function (result) {
+              console.log('jOIN is successful, sending results to the requester');
+              console.log(result);
+              handler(null, result);
+            })["catch"](function (failedRequest) {
+              console.log('JOIN FAILED');
+              console.log(failedRequest);
+              handler(failedRequest, null);
+            });
+
+          case 4:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this);
+  }));
+
+  return function JOIN(_x3, _x4) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+var combineFields = function combineFields(tables, own, ids) {
+  var fields = {};
+  console.log('COMBINE FIELDS GETS A CALL');
+  tables.forEach(function (v, i) {
+    var _loop = function _loop(co) {
+      if (ids[co].collection === v.name) {
+        v.values.forEach(function (vv, ii) {
+          console.log('THE VV');
+          console.log(vv);
+          var fieldValuePair = vv.split('.');
+          console.log('FIELD VALUE PAIR');
+          console.log(fieldValuePair);
+          fields[fieldValuePair[1]] = ids[co].fields[fieldValuePair[0]];
+        });
+        return "break";
+      }
+    };
+
+    for (var co = 0; co < ids.length; co++) {
+      var _ret = _loop(co);
+
+      if (_ret === "break") break;
+    }
+  });
+  var keys = Object.keys(own);
+  console.log('THE KEYS OF OWN');
+  console.log(keys);
+  keys.forEach(function (k, i) {
+    fields[k] = own[k];
+  });
+  console.log('THE FIELDS');
+  console.log(fields);
+  return fields;
+};
+var rollback = function rollback(rolbacks) {
+  var self = this;
+  rolbacks.forEach(function (roll, i) {
+    self.deleteOne({
+      id: roll.lastInsert
+    }, conn);
+  });
+};
+var joinExek = function joinExek(join, conn) {
+  var self = this;
+  return new Promise(function (resolve, reject) {
+    // do a thing, possibly async, then… 
+    console.log('Executing the JOIN promise');
+    var options = {
+      fields: join.returnFields,
+      from: {
+        table: join.tables[0],
+        condition: self.joinConditionsFormat(join.conditions)
+      },
+      joinPoints: self.joinConditionsFormat(join.joinPoints, 'ON'),
+      tables: join.tables.splice(1, join.tables.length),
+      type: join.type.toUpperCase(),
+      length: join.joins
+    };
+    var sql = self.joinStatement(options);
+    var queryAttributes = [options.from.table, options.tables[0]];
+    console.log('THE SQL BEFORE FORMAT');
+    console.log(sql);
+    sql = conn.format(sql, queryAttributes);
+    console.log(sql);
+    conn.query(sql, function (e, r, f) {
+      if (e) {
+        console.log('Promise is rejecting JOIN');
+        console.log(e);
+        reject(e);
+      } else {
+        console.log('Promise is Resolving JOIN');
+        console.log(r);
+        console.log(r[0]);
+        resolve(r[0]);
+      }
+    });
+  });
+};
+var joinConditionsFormat = function joinConditionsFormat(conditions) {
+  var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  console.log('CONDITIONS');
+  console.log(conditions);
+
+  if (type) {
+    var cons = conditions;
+    var condition = [];
+    cons.forEach(function (con, i) {
+      var conList = con.trim().split(' ');
+      var operand = '=';
+      condition.push("".concat(conList[0], " ").concat(operand, " ").concat(conList[2]));
+    });
+    console.log('THE JOIN ON CONDITION');
+    console.log(condition);
+    return condition;
+  } else {
+    var _cons = conditions;
+    var _condition = '';
+
+    _cons.forEach(function (con, i) {
+      console.log('THE con ITEM');
+      console.log(con);
+      var conList = con.trim().split(' ');
+      console.log('THE CONLIST');
+      console.log(conList);
+      var operand = '';
+
+      switch (conList[1]) {
+        case 'EQUALS':
+          operand = '=';
+          break;
+
+        case 'ISGREATEROREQUALS':
+          operand = '>=';
+          break;
+
+        case 'ISLESSOREQUALS':
+          operand = '<=';
+          break;
+
+        default:
+          operand = '=';
+      }
+
+      _condition += "".concat(conList[0], " ").concat(operand, " '").concat(conList[2], "'");
+    });
+
+    console.log('THE JOIN FROM CONDITION');
+    console.log(_condition);
+    return _condition.trim();
+  }
+};
+var joinStatement = function joinStatement(options) {
+  console.log('THE JOIN OPTIONS');
+  console.log(options);
+
+  switch (options.length) {
+    case 3:
+      return "SELECT ".concat(options.fields, "\n               FROM ").concat(options.from.table, "\n               JOIN ").concat(options.tables[0], "\n                  ON ").concat(options.conditons[0], "\n               JOIN options.tables[1]\n                  ON ").concat(options.conditions[1], "\n               WHERE ").concat(options.from.condition, "\n               \n               ");
+      break;
+
+    case 4:
+      return "SELECT ".concat(options.fields, "\n               FROM ").concat(options.from.table, "\n               JOIN ").concat(options.tables[0], "\n                  ON ").concat(options.conditons[0], "\n               JOIN options.tables[1]\n                  ON ").concat(options.conditions[1], "\n               JOIN options.tables[2]\n                  ON ").concat(options.conditions[2], "\n               WHERE ").concat(options.from.condition, "\n               \n               ");
+      break;
+
+    case 5:
+      return "SELECT ".concat(options.fields, "\n               FROM ").concat(options.from.table, "\n               JOIN ").concat(options.tables[0], "\n                  ON ").concat(options.conditons[0], "\n               JOIN options.tables[1]\n                  ON ").concat(options.conditions[1], "\n               JOIN options.tables[2]\n                  ON ").concat(options.conditions[2], " \n               JOIN options.tables[3]\n                  ON ").concat(options.conditions[3], "\n               WHERE ").concat(options.from.condition, "\n               \n               ");
+      break;
+
+    default:
+      return "SELECT ".concat(options.fields, "\n               FROM  ??\n               JOIN  ??\n                  ON ").concat(options.joinPoints[0], "\n               WHERE ").concat(options.from.condition, "\n               ");
   }
 };
 
@@ -4261,6 +4804,8 @@ var handleRequestGlobalRequest = function handleRequestGlobalRequest(data) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return Activate; });
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 var Activate = function Activate() {
   var libs = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : [];
   // let pao = ''
@@ -4282,15 +4827,18 @@ var Activate = function Activate() {
   // let global = pao.pa_clone(this.ESM.Esm.Global) 
   // delete this.ESM.Esm.Global
 
-  libs.unshift(anziiloger); // console.log('THE CORE')
-  // 	console.log(libs)
-
+  libs.unshift(anziiloger);
+  console.log('THE CORE');
+  console.log(libs);
   libs.push(this.ESM.Esm); // libs.push(global) 
 
   libs.forEach(function (lib) {
     for (var moco in lib) {
       // console.log('Inside activate')
       // console.log(moco)
+      console.log('THE LIB MOCO');
+      console.log(_typeof(lib[moco]));
+      console.log(lib[moco]);
       var moduId = moco.toLowerCase(); // console.log('THE V')
       // console.log(v)
       // console.log(`Currently executing module: ${moco}`)
@@ -4315,10 +4863,10 @@ var Activate = function Activate() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_list__ = __webpack_require__(73);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_fetch__ = __webpack_require__(76);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_jwt__ = __webpack_require__(79);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_hash__ = __webpack_require__(94);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_register__ = __webpack_require__(83);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_login__ = __webpack_require__(88);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modules_authentication__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_hash__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_register__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_login__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modules_authentication__ = __webpack_require__(94);
 
 
 
@@ -4614,6 +5162,7 @@ var handleSaveJwtKey = function handleSaveJwtKey(data) {
 var handleCreateToken = function handleCreateToken(data) {
   var self = this;
   self.log("Jwt Token create request");
+  console.log(data);
 
   if (data.hasOwnProperty('payload')) {
     self.jwtSign(data);
@@ -4647,7 +5196,10 @@ function () {
             token = _context.sent;
             tk = {
               token: token,
-              user: jw.payload
+              user: {
+                name: jw.payload.username,
+                acesstoken: token
+              }
             };
             console.log('TOKEN SUCCESSFULLY CREATED');
             console.log(token);
@@ -4728,9 +5280,9 @@ module.exports = require("jsonwebtoken");
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__register__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__hash__ = __webpack_require__(84);
 
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__register__["a" /* default */]);
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__hash__["a" /* default */]);
 
 /***/ }),
 /* 84 */
@@ -4740,704 +5292,9 @@ module.exports = require("jsonwebtoken");
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(85);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
- //Dependecies
 
-var crypto = __webpack_require__(86);
 
-var Register = function Register(pao) {
-  _classCallCheck(this, Register);
-
-  this.pao = pao;
-  this.crypto = crypto;
-  this.tmpd = null;
-  this.strategies = {
-    anzii: true,
-    social: true // methods
-
-  };
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* init */];
-  this.handleRegisterTask = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleRegisterTask */];
-  this.registerStrategy = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* registerStrategy */];
-  this.anzii = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* anzii */];
-  this.social = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* social */];
-  this.isUserExist = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* isUserExist */];
-  this.isCallback = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* isCallback */];
-  this.hash = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* hash */];
-  this.insertHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* insertHandler */];
-  this.findHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* findHandler */];
-  this.setTokenHeader = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* setTokenHeader */];
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (Register);
-
-/***/ }),
-/* 85 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleRegisterTask; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return registerStrategy; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return anzii; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return social; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return isUserExist; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return isCallback; });
-/* unused harmony export processResults */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return setTokenHeader; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return insertHandler; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return findHandler; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return hash; });
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-var init = function init() {
-  console.log('Register has been initialised');
-  this.listens({
-    'handle-register-task': this.handleRegisterTask.bind(this)
-  });
-};
-var handleRegisterTask = function handleRegisterTask(data) {
-  var self = this;
-  self.log("Handling Registration task");
-  self.log(data);
-  self.registerStrategy(data);
-};
-var registerStrategy = function registerStrategy(data) {
-  var self = this;
-  var pao = self.pao;
-  var user = data.user.parsed.user;
-
-  if (!pao.pa_contains(user, 'strategy')) {
-    data.callback('Missing required Strategy', null);
-  } else {
-    if (!pao.pa_contains(self.strategies, user.strategy)) {
-      data.callback('Specified strategy not supported');
-    } else {
-      console.log('STRATEGY: CURRENT');
-      console.log(user.strategy);
-      self.tmpd = data;
-      self[user.strategy](data);
-    }
-  }
-};
-var anzii = function anzii(data) {
-  var self = this;
-  var pao = self.pao;
-  self.log("Executing Anzii registration strategy");
-
-  if (!pao.pa_contains(data, 'user')) {} else {
-    var user = data.user.parsed.user;
-
-    if (!pao.pa_contains(user, ['email', 'password'])) {
-      data.callback({
-        message: 'missing required keys for registration'
-      });
-    } else {
-      if (!pao.pa_isValidEmail(user.email) || !pao.pa_isValidPassword(user.password)) {
-        data.callback({
-          message: 'either password or email is invalid'
-        });
-      } else {
-        self.isUserExist(data);
-      }
-    }
-  }
-};
-var social = function social(data) {
-  var self = this;
-  self.log('Executing Social registration strategy');
-};
-var isUserExist = function isUserExist(data) {
-  var self = this;
-  var user = data.user.parsed.user;
-  self.log('Checking if user is taken');
-  self.callback = data.callback;
-  self.query('mysql.f_users.findOne', {
-    user: user.email
-  }, self.findHandler.bind(this));
-};
-var isCallback = function isCallback(data) {
-  var over = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-  if (!data.hasOwnProperty('callback')) {
-    self.log('Task handle request me failed', 'warn');
-    self.emit({
-      type: 'request-task-handle-failed',
-      data: {
-        message: 'failed'
-      }
-    });
-  } else {
-    if (over) {
-      data.callback(over);
-    } else {
-      data.callback();
-    }
-  }
-};
-var processResults = function processResults(e, r) {};
-var setTokenHeader = function setTokenHeader() {
-  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  var token = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  var self = this;
-  var pao = self.pao;
-
-  if (e) {
-    console.log('TOKEN CREATION FAILED');
-    console.log(e);
-    self.callback(e);
-  } else {
-    console.log('TOKEN CREATION SUCCESSFULL');
-    console.log('SETTING TOKEN HEADER');
-    console.log(self.tmpd);
-    self.tmpd.user.request.res.set('X-AUTH-TOKEN', token.token);
-    self.callback(null, {
-      user: token.user
-    });
-  }
-};
-var insertHandler = function insertHandler() {
-  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  var r = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  var self = this;
-  var pao = self.pao;
-
-  if (e) {
-    self.callback(e, null);
-  } else {
-    if (!r) {
-      self.callback({
-        message: 'Insert operation failed'
-      }, null);
-    } else {
-      self.emit({
-        type: 'create-jwt-token',
-        data: {
-          payload: r.user,
-          callback: self.setTokenHeader.bind(self)
-        }
-      });
-    }
-  }
-};
-var findHandler =
-/*#__PURE__*/
-function () {
-  var _ref = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee() {
-    var e,
-        r,
-        self,
-        pao,
-        user,
-        _args = arguments;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            e = _args.length > 0 && _args[0] !== undefined ? _args[0] : null;
-            r = _args.length > 1 && _args[1] !== undefined ? _args[1] : null;
-            self = this;
-            pao = self.pao;
-
-            if (e) {
-              self.callback({
-                message: 'An error occured attempting to find user'
-              }, null);
-            } else {
-              console.log('THE VALUE R');
-              console.log(pao.pa_isArray(r));
-
-              if (!r || pao.pa_isArray(r) && r.length > 0) {
-                user = self.tmpd.user.parsed.user;
-                self.emit({
-                  type: "hash-payload",
-                  data: {
-                    payload: user.password,
-                    callback: self.hash.bind(self)
-                  }
-                });
-              } else {
-                self.callback({
-                  message: 'User is already taken'
-                }, null);
-              }
-            } // token.res.set('X-AUTH-TOKEN',token.tk)
-
-
-          case 5:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, this);
-  }));
-
-  return function findHandler() {
-    return _ref.apply(this, arguments);
-  };
-}();
-var hash =
-/*#__PURE__*/
-function () {
-  var _ref2 = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee2() {
-    var e,
-        h,
-        self,
-        user,
-        password,
-        _hash,
-        _args2 = arguments;
-
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            e = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : null;
-            h = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : null;
-            self = this;
-
-            if (!e) {
-              _context2.next = 8;
-              break;
-            }
-
-            console.log(e);
-            self.callback({
-              message: 'registration failed due to server error:hash'
-            });
-            _context2.next = 16;
-            break;
-
-          case 8:
-            console.log('hased');
-            console.log(h);
-            user = self.tmpd.user.parsed.user;
-            password = h;
-            _context2.next = 14;
-            return self.crypto.randomBytes(35).toString('hex');
-
-          case 14:
-            _hash = _context2.sent;
-            self.query('mysql.f_users.insertOne', {
-              user: {
-                user_id: null,
-                email_address: user.email,
-                user_name: user.username,
-                password: password,
-                hash: _hash
-              }
-            }, self.insertHandler.bind(this));
-
-          case 16:
-          case "end":
-            return _context2.stop();
-        }
-      }
-    }, _callee2, this);
-  }));
-
-  return function hash() {
-    return _ref2.apply(this, arguments);
-  };
-}();
-
-/***/ }),
-/* 86 */
-/***/ (function(module, exports) {
-
-module.exports = require("crypto");
-
-/***/ }),
-/* 87 */
-/***/ (function(module, exports) {
-
-module.exports = require("bcrypt");
-
-/***/ }),
-/* 88 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__login__ = __webpack_require__(89);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__login__["a" /* default */]);
-
-/***/ }),
-/* 89 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(90);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-var Login = function Login(pao) {
-  _classCallCheck(this, Login);
-
-  this.pao = pao;
-  this.strategies = {
-    anzii: true,
-    social: true // // methods
-
-  };
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* init */];
-  this.handleLoginTask = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* handleLoginTask */];
-  this.loginStrategy = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* loginStrategy */];
-  this.anzii = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* anzii */];
-  this.social = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* social */];
-  this.isUserExist = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* isUserExist */];
-  this.compare = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* compare */];
-  this.findHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* findHandler */];
-  this.setTokenHeader = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* setTokenHeader */];
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (Login);
-
-/***/ }),
-/* 90 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return handleLoginTask; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return loginStrategy; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return anzii; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return social; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return isUserExist; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return setTokenHeader; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return findHandler; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return compare; });
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-var init = function init() {
-  console.log('Login has been initialised');
-  this.listens({
-    'handle-login-task': this.handleLoginTask.bind(this)
-  });
-};
-var handleLoginTask = function handleLoginTask(data) {
-  var self = this;
-  self.log("Handling Login task");
-  self.log(data);
-  self.loginStrategy(data);
-};
-var loginStrategy = function loginStrategy(data) {
-  var self = this;
-  var pao = self.pao;
-  var user = data.user.parsed.user;
-
-  if (!pao.pa_contains(user, 'strategy')) {
-    data.callback('Missing required Strategy', null);
-  } else {
-    if (!pao.pa_contains(self.strategies, user.strategy)) {
-      data.callback('Specified strategy not supported');
-    } else {
-      console.log('STRATEGY: CURRENT');
-      console.log(user.strategy);
-      self.tmpd = data;
-      self[user.strategy](data);
-    }
-  }
-};
-var anzii = function anzii(data) {
-  var self = this;
-  var pao = self.pao;
-  self.log("Executing Anzii registration strategy");
-
-  if (!pao.pa_contains(data, 'user')) {} else {
-    var user = data.user.parsed.user;
-
-    if (!pao.pa_contains(user, ['email', 'password'])) {
-      data.callback({
-        message: 'missing required keys for registration'
-      });
-    } else {
-      if (!pao.pa_isValidEmail(user.email) || !pao.pa_isValidPassword(user.password)) {
-        data.callback({
-          message: 'either password or email is invalid'
-        });
-      } else {
-        self.isUserExist(data);
-      }
-    }
-  }
-};
-var social = function social(data) {
-  var self = this;
-  self.log('Executing Social registration strategy');
-};
-var isUserExist = function isUserExist(data) {
-  var self = this;
-  var user = data.user.parsed.user;
-  self.log('Checking if user is taken');
-  self.callback = data.callback;
-  self.query('mysql.f_users.findOne', {
-    user: user.email
-  }, self.findHandler.bind(this));
-};
-var setTokenHeader = function setTokenHeader() {
-  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  var token = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  var self = this;
-  var pao = self.pao;
-
-  if (e) {
-    console.log('TOKEN CREATION FAILED');
-    console.log(e);
-    self.callback(e);
-  } else {
-    console.log('TOKEN CREATION SUCCESSFULL');
-    console.log('SETTING TOKEN HEADER');
-    console.log(self.tmpd);
-    self.tmpd.user.request.res.set('X-AUTH-TOKEN', token.token);
-    self.callback(null, {
-      user: token.user
-    });
-  }
-};
-var findHandler =
-/*#__PURE__*/
-function () {
-  var _ref = _asyncToGenerator(
-  /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee() {
-    var e,
-        r,
-        self,
-        pao,
-        password,
-        _args = arguments;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            e = _args.length > 0 && _args[0] !== undefined ? _args[0] : null;
-            r = _args.length > 1 && _args[1] !== undefined ? _args[1] : null;
-            self = this;
-            pao = self.pao;
-
-            if (e) {
-              self.callback({
-                message: 'An error occured attempting to find user'
-              }, null);
-            } else {
-              if (!r || pao.pa_isArray(r) && r.length > 0) {
-                self.callback({
-                  message: 'User does not exist'
-                }, null);
-              } else {
-                self.log('Login User exist');
-                self.log(r);
-                self.log(self.tmpd);
-                password = self.tmpd.user.parsed.user.password;
-                self.emit({
-                  type: 'compare-payload',
-                  data: {
-                    payload: {
-                      plainpass: password,
-                      hash: r.password
-                    },
-                    callback: self.compare.bind(this)
-                  }
-                });
-              }
-            } // token.res.set('X-AUTH-TOKEN',token.tk)
-
-
-          case 5:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, this);
-  }));
-
-  return function findHandler() {
-    return _ref.apply(this, arguments);
-  };
-}();
-var compare = function compare() {
-  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  var c = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  var self = this;
-
-  if (e) {
-    console.log(e);
-    self.callback({
-      message: 'Login failed due to server error:hash'
-    });
-  } else {
-    if (c) {
-      self.log('Login User is valid');
-      self.log(c);
-      var user = {
-        email: self.tmpd.user.parsed.user.email,
-        username: 'sample'
-      };
-      self.emit({
-        type: 'create-jwt-token',
-        data: {
-          payload: user,
-          callback: self.setTokenHeader.bind(self)
-        }
-      });
-    } else {
-      self.callback({
-        message: 'Invalid login'
-      }, null);
-    }
-  }
-};
-
-/***/ }),
-/* 91 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__authentication__ = __webpack_require__(92);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__authentication__["a" /* default */]);
-
-/***/ }),
-/* 92 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(93);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-var Authentication = function Authentication(pao) {
-  _classCallCheck(this, Authentication);
-
-  this.pao = pao; // methods
-
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
-  this.handleShareMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleShareMiddleware */];
-  this.auth = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* auth */];
-  this.token = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* token */];
-};
-
-/* harmony default export */ __webpack_exports__["a"] = (Authentication);
-
-/***/ }),
-/* 93 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleShareMiddleware; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return auth; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return token; });
-var init = function init() {
-  this.log('Authentication has been initialised');
-  this.listens({
-    'share-middleware': this.handleShareMiddleware.bind(this)
-  });
-};
-var handleShareMiddleware = function handleShareMiddleware() {
-  var self = this;
-  console.log('HANLDE SHARE MIDDLEWARE EVENT HAS OCCURED');
-  self.emit({
-    type: "add-ext-middleware",
-    data: {
-      type: 'private',
-      level: 'top',
-      middleware: {
-        funk: self.auth.bind(self)
-      }
-    }
-  });
-};
-var auth = function auth(req, res, next) {
-  var self = this;
-  self.log('THE REQUEST HEADERS');
-  self.request = {
-    req: req,
-    res: res,
-    next: next
-  };
-  self.log(req.headers);
-
-  if (req.headers['x-auth-token']) {
-    var _token = req.headers['x-auth-token'];
-    self.emit({
-      type: 'verify-jwt-token',
-      data: {
-        token: _token,
-        callback: self.token.bind(this)
-      }
-    });
-  } else {
-    console.log('THE X-AUTH DOES NOT EXIST');
-    self.emit({
-      type: 'write-server-request-response',
-      data: {
-        data: {
-          error: true,
-          message: 'Required token header required'
-        },
-        res: res
-      }
-    });
-  }
-};
-var token = function token() {
-  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  var r = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  var self = this;
-  self.log('Authentication Middleware executed');
-
-  if (e) {
-    console.log(e);
-    var data = {
-      error: true,
-      message: "Invalid token"
-    };
-    self.emit({
-      type: 'write-server-request-response',
-      data: {
-        data: data,
-        res: self.request.res
-      }
-    });
-  } else {
-    // re.req.user = r 
-    console.log('THE SUCCESSFULLY VERIFIED TOKEN');
-    console.log(r);
-    self.request.next();
-  }
-};
-
-/***/ }),
-/* 94 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__hash__ = __webpack_require__(95);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__hash__["a" /* default */]);
-
-/***/ }),
-/* 95 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(96);
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-
-
-var bcrypt = __webpack_require__(87);
+var bcrypt = __webpack_require__(86);
 
 var Hash = function Hash(pao) {
   _classCallCheck(this, Hash);
@@ -5454,7 +5311,7 @@ var Hash = function Hash(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Hash);
 
 /***/ }),
-/* 96 */
+/* 85 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5605,6 +5462,782 @@ var compare = function compare(data) {
       }
     });
   });
+};
+
+/***/ }),
+/* 86 */
+/***/ (function(module, exports) {
+
+module.exports = require("bcrypt");
+
+/***/ }),
+/* 87 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__register__ = __webpack_require__(88);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__register__["a" /* default */]);
+
+/***/ }),
+/* 88 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(89);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+ //Dependecies
+
+var crypto = __webpack_require__(90);
+
+var Register = function Register(pao) {
+  _classCallCheck(this, Register);
+
+  this.pao = pao;
+  this.crypto = crypto;
+  this.tmpd = null;
+  this.strategies = {
+    anzii: true,
+    social: true // methods
+
+  };
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* init */];
+  this.handleRegisterTask = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleRegisterTask */];
+  this.registerStrategy = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* registerStrategy */];
+  this.anzii = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* anzii */];
+  this.social = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* social */];
+  this.isUserExist = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* isUserExist */];
+  this.isCallback = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* isCallback */];
+  this.hash = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* hash */];
+  this.insertHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* insertHandler */];
+  this.findHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* findHandler */];
+  this.procedureDoc = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* procedureDoc */];
+  this.setTokenHeader = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* setTokenHeader */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Register);
+
+/***/ }),
+/* 89 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleRegisterTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return registerStrategy; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return anzii; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return social; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return isUserExist; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return isCallback; });
+/* unused harmony export processResults */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return setTokenHeader; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return insertHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return findHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return hash; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return procedureDoc; });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var init = function init() {
+  console.log('Register has been initialised');
+  this.listens({
+    'handle-register-task': this.handleRegisterTask.bind(this)
+  });
+};
+var handleRegisterTask = function handleRegisterTask(data) {
+  var self = this;
+  self.log("Handling Registration task");
+  self.log(data);
+  self.registerStrategy(data);
+};
+var registerStrategy = function registerStrategy(data) {
+  var self = this;
+  var pao = self.pao;
+  var user = data.user.parsed.user;
+  console.log('THE DATA INSIDE STRATEGY');
+  console.log(user);
+
+  if (!pao.pa_contains(user, 'strategy')) {
+    data.callback('Missing required Strategy', null);
+  } else {
+    if (!pao.pa_contains(self.strategies, user.strategy)) {
+      data.callback('Specified strategy not supported');
+    } else {
+      console.log('STRATEGY: CURRENT');
+      console.log(user.strategy);
+      self.tmpd = data;
+      self[user.strategy](data);
+    }
+  }
+};
+var anzii = function anzii(data) {
+  var self = this;
+  var pao = self.pao;
+  self.log("Executing Anzii registration strategy");
+
+  if (!pao.pa_contains(data, 'user')) {} else {
+    var user = data.user.parsed.user;
+
+    if (!pao.pa_contains(user, ['email', 'password'])) {
+      data.callback({
+        message: 'missing required keys for registration'
+      });
+    } else {
+      if (!pao.pa_isValidEmail(user.email) || !pao.pa_isValidPassword(user.password)) {
+        data.callback({
+          message: 'either password or email is invalid'
+        });
+      } else {
+        self.isUserExist(data);
+      }
+    }
+  }
+};
+var social = function social(data) {
+  var self = this;
+  self.log('Executing Social registration strategy');
+};
+var isUserExist = function isUserExist(data) {
+  var self = this;
+  var user = data.user.parsed.user;
+  self.log('Checking if user is taken');
+  self.callback = data.callback;
+  self.query('mysql.jo_user.findOne', {
+    user: {
+      email: user.email
+    }
+  }, self.findHandler.bind(this));
+};
+var isCallback = function isCallback(data) {
+  var over = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+  if (!data.hasOwnProperty('callback')) {
+    self.log('Task handle request me failed', 'warn');
+    self.emit({
+      type: 'request-task-handle-failed',
+      data: {
+        message: 'failed'
+      }
+    });
+  } else {
+    if (over) {
+      data.callback(over);
+    } else {
+      data.callback();
+    }
+  }
+};
+var processResults = function processResults(e, r) {};
+var setTokenHeader = function setTokenHeader() {
+  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var token = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var self = this;
+  var pao = self.pao;
+
+  if (e) {
+    console.log('TOKEN CREATION FAILED');
+    console.log(e);
+    self.callback(e);
+  } else {
+    console.log('TOKEN CREATION SUCCESSFULL');
+    console.log('SETTING TOKEN HEADER');
+    console.log(self.tmpd);
+    self.tmpd.user.request.res.set('X-AUTH-TOKEN', token.token);
+    self.callback(null, {
+      user: token.user
+    });
+  }
+};
+var insertHandler = function insertHandler() {
+  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var r = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var self = this;
+  var pao = self.pao;
+
+  if (e) {
+    self.callback(e, null);
+  } else {
+    if (!r) {
+      self.callback({
+        message: 'Insert operation failed'
+      }, null);
+    } else {
+      self.emit({
+        type: 'create-jwt-token',
+        data: {
+          payload: r.user,
+          callback: self.setTokenHeader.bind(self)
+        }
+      });
+    }
+  }
+};
+var findHandler =
+/*#__PURE__*/
+function () {
+  var _ref = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee() {
+    var e,
+        r,
+        self,
+        pao,
+        user,
+        _args = arguments;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            e = _args.length > 0 && _args[0] !== undefined ? _args[0] : null;
+            r = _args.length > 1 && _args[1] !== undefined ? _args[1] : null;
+            self = this;
+            pao = self.pao;
+
+            if (e) {
+              self.callback({
+                message: 'An error occured attempting to find user'
+              }, null);
+            } else {
+              console.log('THE VALUE R');
+              console.log(pao.pa_isArray(r));
+              console.log(r.length);
+              console.log(r.length > 0);
+              console.log('after r has been re-assigned a new value');
+              console.log(r);
+              console.log(!r);
+
+              if (pao.pa_isArray(r) && r.length === 0) {
+                console.log('ANZII USER DOES NOT EXIST, CREATE USER');
+                user = self.tmpd.user.parsed.user;
+                self.emit({
+                  type: "hash-payload",
+                  data: {
+                    payload: user.password,
+                    callback: self.hash.bind(self)
+                  }
+                });
+              } else {
+                console.log('THE TAKEN USER');
+                console.log(r);
+                self.callback({
+                  message: 'User is already taken'
+                }, null);
+              }
+            } // token.res.set('X-AUTH-TOKEN',token.tk)
+
+
+          case 5:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function findHandler() {
+    return _ref.apply(this, arguments);
+  };
+}();
+var hash =
+/*#__PURE__*/
+function () {
+  var _ref2 = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee2() {
+    var e,
+        h,
+        self,
+        user,
+        password,
+        _hash,
+        _args2 = arguments;
+
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            e = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : null;
+            h = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : null;
+            self = this;
+
+            if (!e) {
+              _context2.next = 8;
+              break;
+            }
+
+            console.log(e);
+            self.callback({
+              message: 'registration failed due to server error:hash'
+            });
+            _context2.next = 18;
+            break;
+
+          case 8:
+            console.log('hashed');
+            console.log(h);
+            user = self.tmpd.user.parsed.user;
+            password = h;
+            _context2.next = 14;
+            return self.crypto.randomBytes(35).toString('hex');
+
+          case 14:
+            _hash = _context2.sent;
+            user.password = password;
+            user.hash = _hash;
+            self.query('mysql.PROCEDURE', self.procedureDoc(user), self.insertHandler.bind(this)); // self.query(
+            // 	'mysql.jo_user.insertOne',
+            // 	  {user: {id: null,email: user.email,first_name: user.firstname,last_name: user.lastname,password: password,hash: hash}},
+            // 	  self.insertHandler.bind(this)
+            // )
+
+          case 18:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this);
+  }));
+
+  return function hash() {
+    return _ref2.apply(this, arguments);
+  };
+}();
+var procedureDoc = function procedureDoc(data) {
+  var fields = {
+    jo_user: {
+      id: 'NULL',
+      u_type: data.usertype,
+      first_name: data.firstname,
+      last_name: data.lastname,
+      email: data.email
+    },
+    jo_account: {
+      own: {
+        id: 'NULL'
+      },
+      tables: [{
+        name: 'jo_user',
+        values: ['u_type.account_name']
+      }]
+    },
+    jo_user_account_join: {
+      own: {
+        id: 'NULL'
+      },
+      tables: [{
+        name: 'jo_user',
+        values: ['id.u_id', 'email.account_email']
+      }, {
+        name: 'jo_account',
+        values: ['id.account_id']
+      }]
+    },
+    jo_login: {
+      own: {
+        id: 'NULL',
+        password: data.password
+      },
+      tables: [{
+        name: 'jo_user',
+        values: ['id.u_id', 'email.username']
+      }]
+    }
+  };
+  return [{
+    name: 'jo_user',
+    fields: fields.jo_user
+  }, {
+    name: 'jo_account',
+    fields: fields.jo_account
+  }, {
+    name: 'jo_user_account_join',
+    lastInsert: ['jo_user', 'jo_account'],
+    fields: fields.jo_user_account_join
+  }, {
+    name: 'jo_login',
+    lastInsert: ['jo_user'],
+    fields: fields.jo_login
+  }];
+};
+
+/***/ }),
+/* 90 */
+/***/ (function(module, exports) {
+
+module.exports = require("crypto");
+
+/***/ }),
+/* 91 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__login__ = __webpack_require__(92);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__login__["a" /* default */]);
+
+/***/ }),
+/* 92 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(93);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Login = function Login(pao) {
+  _classCallCheck(this, Login);
+
+  this.pao = pao;
+  this.strategies = {
+    anzii: true,
+    social: true // // methods
+
+  };
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* init */];
+  this.handleLoginTask = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* handleLoginTask */];
+  this.loginStrategy = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* loginStrategy */];
+  this.anzii = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* anzii */];
+  this.social = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* social */];
+  this.isUserExist = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* isUserExist */];
+  this.compare = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* compare */];
+  this.findHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* findHandler */];
+  this.setTokenHeader = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* setTokenHeader */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Login);
+
+/***/ }),
+/* 93 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return handleLoginTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return loginStrategy; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return anzii; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return social; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return isUserExist; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return setTokenHeader; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return findHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return compare; });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var init = function init() {
+  console.log('Login has been initialised');
+  this.listens({
+    'handle-login-task': this.handleLoginTask.bind(this)
+  });
+};
+var handleLoginTask = function handleLoginTask(data) {
+  var self = this;
+  self.log("Handling Login task");
+  self.log(data);
+  self.loginStrategy(data);
+};
+var loginStrategy = function loginStrategy(data) {
+  var self = this;
+  var pao = self.pao;
+  var user = data.user.parsed.user;
+
+  if (!pao.pa_contains(user, 'strategy')) {
+    data.callback('Missing required Strategy', null);
+  } else {
+    if (!pao.pa_contains(self.strategies, user.strategy)) {
+      data.callback('Specified strategy not supported');
+    } else {
+      console.log('STRATEGY: CURRENT');
+      console.log(user.strategy);
+      self.tmpd = data;
+      self[user.strategy](data);
+    }
+  }
+};
+var anzii = function anzii(data) {
+  var self = this;
+  var pao = self.pao;
+  self.log("Executing Anzii login strategy");
+
+  if (!pao.pa_contains(data, 'user')) {} else {
+    var user = data.user.parsed.user;
+
+    if (!pao.pa_contains(user, ['email', 'password'])) {
+      data.callback({
+        message: 'missing required keys for login'
+      });
+    } else {
+      if (!pao.pa_isValidEmail(user.email) || !pao.pa_isValidPassword(user.password)) {
+        data.callback({
+          message: 'either password or email is invalid'
+        });
+      } else {
+        self.isUserExist(data);
+      }
+    }
+  }
+};
+var social = function social(data) {
+  var self = this;
+  self.log('Executing Social registration strategy');
+};
+var isUserExist = function isUserExist(data) {
+  var self = this;
+  var user = data.user.parsed.user; //   self.log('Checking if user is taken') 
+
+  self.callback = data.callback;
+  var join = {
+    returnFields: ['email,first_name,last_name,password'],
+    tables: ['jo_user', 'jo_login'],
+    joins: 2,
+    joinPoints: ['jo_user.id EQUALS jo_login.u_id'],
+    conditions: ["email EQUALS ".concat(user.email)],
+    type: 'inner' //   self.query(
+    // 	'mysql.jo_user.findOne',
+    // 	  {user: { email: user.email}},
+    // 	  self.findHandler.bind(this)
+    // 	  )
+
+  };
+  self.query('mysql.JOIN', join, self.findHandler.bind(this));
+};
+var setTokenHeader = function setTokenHeader() {
+  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var token = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var self = this;
+  var pao = self.pao;
+
+  if (e) {
+    console.log('TOKEN CREATION FAILED');
+    console.log(e);
+    self.callback(e);
+  } else {
+    console.log('TOKEN CREATION SUCCESSFULL');
+    console.log('SETTING TOKEN HEADER');
+    console.log(self.tmpd);
+    self.tmpd.user.request.res.set('X-AUTH-TOKEN', token.token);
+    self.callback(null, {
+      user: token.user
+    });
+  }
+};
+var findHandler =
+/*#__PURE__*/
+function () {
+  var _ref = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee() {
+    var e,
+        r,
+        self,
+        pao,
+        password,
+        _args = arguments;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            e = _args.length > 0 && _args[0] !== undefined ? _args[0] : null;
+            r = _args.length > 1 && _args[1] !== undefined ? _args[1] : null;
+            self = this;
+            pao = self.pao;
+
+            if (e) {
+              self.callback({
+                message: 'An error occured attempting to find user'
+              }, null);
+            } else {
+              if (pao.pa_isArray(r) && r.length === 0) {
+                self.callback({
+                  message: 'User does not exist'
+                }, null);
+              } else {
+                self.log('Login User exist');
+                self.log(r);
+                self.log(self.tmpd); // let user = {email: self.tmpd.user.parsed.user.email,username: 'sample'}
+                // self.emit({type:'create-jwt-token',data:{payload: user,callback: self.setTokenHeader.bind(self)}})
+
+                password = self.tmpd.user.parsed.user.password;
+                self.emit({
+                  type: 'compare-payload',
+                  data: {
+                    payload: {
+                      plainpass: password,
+                      hash: r.password
+                    },
+                    callback: self.compare.bind(this)
+                  }
+                });
+              }
+            } // token.res.set('X-AUTH-TOKEN',token.tk)
+
+
+          case 5:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function findHandler() {
+    return _ref.apply(this, arguments);
+  };
+}();
+var compare = function compare() {
+  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var c = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var self = this;
+
+  if (e) {
+    console.log(e);
+    self.callback({
+      message: 'Login failed due to server error:hash'
+    });
+  } else {
+    if (c) {
+      self.log('Login User is valid');
+      self.log(c);
+      var user = {
+        username: self.tmpd.user.parsed.user.email
+      };
+      self.emit({
+        type: 'create-jwt-token',
+        data: {
+          payload: user,
+          callback: self.setTokenHeader.bind(self)
+        }
+      });
+    } else {
+      self.callback({
+        message: 'Invalid login'
+      }, null);
+    }
+  }
+};
+
+/***/ }),
+/* 94 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__authentication__ = __webpack_require__(95);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__authentication__["a" /* default */]);
+
+/***/ }),
+/* 95 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(96);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Authentication = function Authentication(pao) {
+  _classCallCheck(this, Authentication);
+
+  this.pao = pao; // methods
+
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
+  this.handleShareMiddleware = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleShareMiddleware */];
+  this.auth = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* auth */];
+  this.token = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* token */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Authentication);
+
+/***/ }),
+/* 96 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleShareMiddleware; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return auth; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return token; });
+var init = function init() {
+  this.log('Authentication has been initialised');
+  this.listens({
+    'share-middleware': this.handleShareMiddleware.bind(this)
+  });
+};
+var handleShareMiddleware = function handleShareMiddleware() {
+  var self = this;
+  console.log('HANLDE SHARE MIDDLEWARE EVENT HAS OCCURED');
+  self.emit({
+    type: "add-ext-middleware",
+    data: {
+      type: 'private',
+      level: 'top',
+      middleware: {
+        funk: self.auth.bind(self)
+      }
+    }
+  });
+};
+var auth = function auth(req, res, next) {
+  var self = this;
+  self.log('THE REQUEST HEADERS');
+  self.request = {
+    req: req,
+    res: res,
+    next: next
+  };
+  self.log(req.headers);
+
+  if (req.headers['x-auth-token']) {
+    var _token = req.headers['x-auth-token'];
+    self.emit({
+      type: 'verify-jwt-token',
+      data: {
+        token: _token,
+        callback: self.token.bind(this)
+      }
+    });
+  } else {
+    console.log('THE X-AUTH DOES NOT EXIST');
+    self.emit({
+      type: 'write-server-request-response',
+      data: {
+        data: {
+          error: true,
+          message: 'Required token header required'
+        },
+        res: res
+      }
+    });
+  }
+};
+var token = function token() {
+  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var r = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var self = this;
+  self.log('Authentication Middleware executed');
+
+  if (e) {
+    console.log(e);
+    var data = {
+      error: true,
+      message: "Invalid token"
+    };
+    self.emit({
+      type: 'write-server-request-response',
+      data: {
+        data: data,
+        res: self.request.res
+      }
+    });
+  } else {
+    // re.req.user = r 
+    console.log('THE SUCCESSFULLY VERIFIED TOKEN');
+    console.log(r);
+    self.request.next();
+  }
 };
 
 /***/ })
