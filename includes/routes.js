@@ -14,6 +14,11 @@ export default  [
         type: 'public'
     },
     {
+        path: '/job',
+        method: 'POST',
+        type: 'public'
+    },
+    {
         path: '/login/:username/:pass',
         method: 'post',
         type: 'public'

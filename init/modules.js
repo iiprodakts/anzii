@@ -1,6 +1,7 @@
 
 import Test from '../modules/test'
 import List from '../modules/list'
+import Job from '../modules/job'
 import Fetch from '../modules/fetch'
 import Jwt from '../modules/jwt'
 import Hash from '../modules/hash'
@@ -10,5 +11,5 @@ import Authentication from '../modules/authentication'
 
 export default {
 
-    Test,List,Fetch,Jwt,Hash,Register,Login,Authentication
+    Test,List,Job,Fetch,Jwt,Hash,Register,Login,Authentication
 }
