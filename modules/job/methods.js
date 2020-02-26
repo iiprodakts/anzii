@@ -110,7 +110,7 @@ export const searchBatch = function(key){
 					tables:['jo_job','jo_recruiter','jo_company'],
 					joins: 3,
 					joinPoints: ['jo_job.u_id EQUALS jo_recruiter.id','jo_company.id EQUALS jo_recruiter.company_id'],
-					conditions: [`MATCH [job_title] AGAINST [${key}] NATURAL`,`OR MATCH [description] AGAINST [php] NATURAL`],
+					conditions: [`MATCH [job_title] AGAINST [${key}] NATURAL`,`OR MATCH [position] AGAINST [php] NATURAL`,`OR MATCH [skills] AGAINST [php] NATURAL`],
 					take: 10,
 					soundex: true,
 					type: 'inner'

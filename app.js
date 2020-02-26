@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -89,40 +89,34 @@ module.exports = require("jsonfile");
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("config");
+__webpack_require__(5);
+module.exports = __webpack_require__(6);
+
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(6);
-module.exports = __webpack_require__(7);
-
-
-/***/ }),
-/* 6 */
 /***/ (function(module, exports) {
 
 module.exports = require("@babel/polyfill");
+
+/***/ }),
+/* 6 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server_serverdev__ = __webpack_require__(7);
+
+Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
 
 /***/ }),
 /* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server_serverdev__ = __webpack_require__(8);
-
-Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
-
-/***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_anzii__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_anzii__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__init_modules__ = __webpack_require__(69);
 
  // import Server from '../shared/modules/server/index'
@@ -140,12 +134,12 @@ Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
 }); // export default server
 
 /***/ }),
-/* 9 */
+/* 8 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base__ = __webpack_require__(10);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__esm_esm__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__esm_esm__ = __webpack_require__(18);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_activate__ = __webpack_require__(68);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -168,14 +162,14 @@ var Anzii = function Anzii() {
 /* harmony default export */ __webpack_exports__["a"] = (new Anzii());
 
 /***/ }),
-/* 10 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pillar_pillar__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pillar_pillar__ = __webpack_require__(10);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pillar_pillar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__pillar_pillar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__base_core__ = __webpack_require__(17);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_pao__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__base_core__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_pao__ = __webpack_require__(17);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -191,7 +185,7 @@ var Base = function Base() {
 /* harmony default export */ __webpack_exports__["a"] = (new Base());
 
 /***/ }),
-/* 11 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -199,17 +193,17 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 // DEPENDECIES 
 var os = __webpack_require__(2);
 
-var util = __webpack_require__(12);
+var util = __webpack_require__(11);
 
-var async = __webpack_require__(13);
+var async = __webpack_require__(12);
 
-var extend = __webpack_require__(14);
+var extend = __webpack_require__(13);
 
-var fs = __webpack_require__(15);
+var fs = __webpack_require__(14);
 
 var path = __webpack_require__(0);
 
-var uuid = __webpack_require__(16);
+var uuid = __webpack_require__(15);
 /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
@@ -1373,37 +1367,37 @@ module.exports = {
 };
 
 /***/ }),
-/* 12 */
+/* 11 */
 /***/ (function(module, exports) {
 
 module.exports = require("util");
 
 /***/ }),
-/* 13 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = require("async");
 
 /***/ }),
-/* 14 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = require("node.extend");
 
 /***/ }),
-/* 15 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = require("fs");
 
 /***/ }),
-/* 16 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = require("uuid");
 
 /***/ }),
-/* 17 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1811,7 +1805,7 @@ CORE.prototype.sanna = function () {
 /* harmony default export */ __webpack_exports__["a"] = (CORE);
 
 /***/ }),
-/* 18 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2031,16 +2025,16 @@ PAO.prototype.create = function (moduleID, modInstId) {
 /* harmony default export */ __webpack_exports__["a"] = (PAO);
 
 /***/ }),
-/* 19 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middleware_index__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__parsers_index__ = __webpack_require__(23);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router_index__ = __webpack_require__(26);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__request_index__ = __webpack_require__(29);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__server_index__ = __webpack_require__(32);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_index__ = __webpack_require__(36);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middleware_index__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__parsers_index__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router_index__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__request_index__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__server_index__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_index__ = __webpack_require__(35);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__anziiloger_index__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__system_index__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mysql_index__ = __webpack_require__(54);
@@ -2084,20 +2078,20 @@ var Esm = function Esm() {
 /* harmony default export */ __webpack_exports__["a"] = (new Esm());
 
 /***/ }),
-/* 20 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middleware__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middleware__ = __webpack_require__(20);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__middleware__["a" /* default */]);
 
 /***/ }),
-/* 21 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(21);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -2136,7 +2130,7 @@ var Middleware = function Middleware(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Middleware);
 
 /***/ }),
-/* 22 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2307,20 +2301,20 @@ var allWares = function allWares(app, xpress) {
 };
 
 /***/ }),
-/* 23 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__parsers__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__parsers__ = __webpack_require__(23);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__parsers__["a" /* default */]);
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(24);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -2345,7 +2339,7 @@ var Parsers = function Parsers(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Parsers);
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2376,20 +2370,20 @@ var handleShareMiddleware = function handleShareMiddleware() {
 };
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(26);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__router__["a" /* default */]);
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(27);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -2418,7 +2412,7 @@ var Router = function Router(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Router);
 
 /***/ }),
-/* 28 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2619,20 +2613,20 @@ var filterCallback = function filterCallback(filterType, moduleMiddleware) {
 };
 
 /***/ }),
-/* 29 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__request__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__request__ = __webpack_require__(29);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__request__["a" /* default */]);
 
 /***/ }),
-/* 30 */
+/* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(30);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -2662,7 +2656,7 @@ var Request = function Request(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Request);
 
 /***/ }),
-/* 31 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2845,25 +2839,25 @@ var failureHandle = function failureHandle(data) {
 };
 
 /***/ }),
-/* 32 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server__ = __webpack_require__(32);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__server__["a" /* default */]);
 
 /***/ }),
-/* 33 */
+/* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(33);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
-var express = __webpack_require__(35),
+var express = __webpack_require__(34),
     // fs = require('fs'),
 // randomstring = require("randomstring"),
 jsonfile = __webpack_require__(3),
@@ -2909,7 +2903,7 @@ var Server = function Server(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Server);
 
 /***/ }),
-/* 34 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3027,33 +3021,33 @@ var handleWriteServerRequestResponse = function handleWriteServerRequestResponse
 };
 
 /***/ }),
-/* 35 */
+/* 34 */
 /***/ (function(module, exports) {
 
 module.exports = require("express");
+
+/***/ }),
+/* 35 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(36);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */]);
 
 /***/ }),
 /* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(37);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */]);
-
-/***/ }),
-/* 37 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(38);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__confy__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(37);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__confy__ = __webpack_require__(38);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
  // Dependecies 
 
-var envObserver = __webpack_require__(4);
+var envObserver = __webpack_require__(42);
 
 var supportsColor = __webpack_require__(43);
 
@@ -3078,7 +3072,7 @@ var Config = function Config(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Config);
 
 /***/ }),
-/* 38 */
+/* 37 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3197,12 +3191,12 @@ var enviroment = function enviroment() {
 };
 
 /***/ }),
-/* 39 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__includes_routes__ = __webpack_require__(40);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__includes_globals__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__includes_routes__ = __webpack_require__(39);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__includes_globals__ = __webpack_require__(41);
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -3232,11 +3226,11 @@ var enviroment = function enviroment() {
 });
 
 /***/ }),
-/* 40 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middlewares__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middlewares__ = __webpack_require__(40);
 
 /* harmony default export */ __webpack_exports__["a"] = ([{
   path: '/register',
@@ -3278,7 +3272,7 @@ var enviroment = function enviroment() {
 }]);
 
 /***/ }),
-/* 41 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3302,7 +3296,7 @@ var list = [{
 }];
 
 /***/ }),
-/* 42 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3347,6 +3341,12 @@ var all = [{
     next();
   }
 }];
+
+/***/ }),
+/* 42 */
+/***/ (function(module, exports) {
+
+module.exports = require("config");
 
 /***/ }),
 /* 43 */
@@ -3710,7 +3710,7 @@ var handleShutDowns = function handleShutDowns() {
     }
   });
   self.context.on('unhandledRejection', function (code) {
-    console.log('uncaughtException occured from unhandlerejected');
+    console.log('uncaughtException occured from unhandleredjected', code.stack);
 
     if (!self.systemIsShuttingDown) {
       self.shutDown('uncaughtException', code);
@@ -3772,31 +3772,36 @@ var Mysql = function Mysql(pao) {
 
   this.pao = pao; // // methods
 
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* init */];
-  this.handleMysqlDataRequest = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* handleMysqlDataRequest */];
-  this.insertOne = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* insertOne */];
-  this.insertMany = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* insertMany */];
-  this.findOne = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* findOne */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* init */];
+  this.handleMysqlDataRequest = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* handleMysqlDataRequest */];
+  this.insertOne = __WEBPACK_IMPORTED_MODULE_0__methods__["m" /* insertOne */];
+  this.insertMany = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* insertMany */];
+  this.findOne = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* findOne */];
   this.updateOne = __WEBPACK_IMPORTED_MODULE_0__methods__["updateOne"];
   this.TRANSACTION = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* TRANSACTION */];
   this.PROCEDURE = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* PROCEDURE */];
   this.JOIN = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* JOIN */];
   this.SEARCH = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* SEARCH */];
-  this.procedure = __WEBPACK_IMPORTED_MODULE_0__methods__["q" /* procedure */];
-  this.transaction = __WEBPACK_IMPORTED_MODULE_0__methods__["x" /* transaction */];
-  this.join = __WEBPACK_IMPORTED_MODULE_0__methods__["m" /* join */];
-  this.joinExek = __WEBPACK_IMPORTED_MODULE_0__methods__["o" /* joinExek */];
-  this.joinStatement = __WEBPACK_IMPORTED_MODULE_0__methods__["p" /* joinStatement */];
-  this.joinConditionsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["n" /* joinConditionsFormat */];
-  this.search = __WEBPACK_IMPORTED_MODULE_0__methods__["s" /* search */];
-  this.searchExek = __WEBPACK_IMPORTED_MODULE_0__methods__["u" /* searchExek */];
-  this.searchStatement = __WEBPACK_IMPORTED_MODULE_0__methods__["w" /* searchStatement */];
-  this.searchConditionsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["t" /* searchConditionsFormat */];
-  this.searchOptions = __WEBPACK_IMPORTED_MODULE_0__methods__["v" /* searchOptions */];
+  this.procedure = __WEBPACK_IMPORTED_MODULE_0__methods__["t" /* procedure */];
+  this.transaction = __WEBPACK_IMPORTED_MODULE_0__methods__["C" /* transaction */];
+  this.join = __WEBPACK_IMPORTED_MODULE_0__methods__["n" /* join */];
+  this.joinExek = __WEBPACK_IMPORTED_MODULE_0__methods__["p" /* joinExek */];
+  this.joinStatement = __WEBPACK_IMPORTED_MODULE_0__methods__["q" /* joinStatement */];
+  this.joinConditionsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["o" /* joinConditionsFormat */];
+  this.search = __WEBPACK_IMPORTED_MODULE_0__methods__["v" /* search */];
+  this.searchExek = __WEBPACK_IMPORTED_MODULE_0__methods__["x" /* searchExek */];
+  this.searchStatement = __WEBPACK_IMPORTED_MODULE_0__methods__["A" /* searchStatement */];
+  this.searchConditionsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["w" /* searchConditionsFormat */];
+  this.searchOptions = __WEBPACK_IMPORTED_MODULE_0__methods__["z" /* searchOptions */];
   this.combineFields = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* combineFields */];
-  this.insert = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* insert */];
-  this.rollback = __WEBPACK_IMPORTED_MODULE_0__methods__["r" /* rollback */];
+  this.insert = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* insert */];
+  this.rollback = __WEBPACK_IMPORTED_MODULE_0__methods__["u" /* rollback */];
   this.deleteOne = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* deleteOne */];
+  this.searchFieldsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["y" /* searchFieldsFormat */];
+  this.fieldFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* fieldFormat */];
+  this.options = __WEBPACK_IMPORTED_MODULE_0__methods__["s" /* options */];
+  this.sort = __WEBPACK_IMPORTED_MODULE_0__methods__["B" /* sort */];
+  this.limit = __WEBPACK_IMPORTED_MODULE_0__methods__["r" /* limit */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Mysql);
@@ -3806,32 +3811,37 @@ var Mysql = function Mysql(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return handleMysqlDataRequest; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return insertOne; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return insertMany; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return findOne; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return handleMysqlDataRequest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return insertOne; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return insertMany; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return findOne; });
 /* unused harmony export UpdateOne */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return deleteOne; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return transaction; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return procedure; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return join; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return search; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "C", function() { return transaction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return procedure; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return join; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return search; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return TRANSACTION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return PROCEDURE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return insert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return insert; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JOIN; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return SEARCH; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return combineFields; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return rollback; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return joinExek; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return joinConditionsFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return joinStatement; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "u", function() { return searchExek; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return searchConditionsFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return searchStatement; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return searchOptions; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_config__ = __webpack_require__(4);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "u", function() { return rollback; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return joinExek; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return joinConditionsFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return joinStatement; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return searchExek; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return searchConditionsFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return searchStatement; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "z", function() { return searchOptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return searchFieldsFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return fieldFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return options; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "B", function() { return sort; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return limit; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_config__ = __webpack_require__(42);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_config___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_config__);
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
@@ -3916,8 +3926,10 @@ var insertOne = function insertOne(data) {
   if (!pao.pa_isObject(data)) {} else {
     try {
       var q = data.query.user;
-      var fields = Object.keys(q);
-      var sql = "INSERT INTO ?? (".concat(fields[0], ",").concat(fields[1], ",").concat(fields[2], ",").concat(fields[3], ") VALUES(?)");
+
+      var _fields = Object.keys(q);
+
+      var sql = "INSERT INTO ?? (".concat(_fields[0], ",").concat(_fields[1], ",").concat(_fields[2], ",").concat(_fields[3], ") VALUES(?)");
       var queryAttributes = [data.table, ["NULL", q.email, q.first_name, q.last_name]];
       sql = data.conn.format(sql, queryAttributes); //  let sql = `INSERT INTO ${data.table} SET ?`
 
@@ -4078,7 +4090,7 @@ var TRANSACTION = function TRANSACTION(collections, conn) {
 
   for (var _c = 0; _c < collections.length; _c++) {
     var i = collections[_c];
-    var fields = null;
+    var _fields2 = null;
     var sources = null;
     var own = null;
 
@@ -4092,8 +4104,8 @@ var TRANSACTION = function TRANSACTION(collections, conn) {
       }
     }
 
-    sources ? fields = self.combineFields(sources, own, collectionsIds) : '';
-    fields ? i.fields = fields : '';
+    sources ? _fields2 = self.combineFields(sources, own, collectionsIds) : '';
+    _fields2 ? i.fields = _fields2 : '';
     self.insert(i, conn).then(function (insert) {
       collectionsIds.push(insert);
     })["catch"](function (failedInsert) {
@@ -4122,7 +4134,7 @@ function () {
         breakOut,
         _c2,
         i,
-        fields,
+        _fields3,
         sources,
         own,
         _args = arguments;
@@ -4149,7 +4161,7 @@ function () {
             }
 
             i = collections[_c2];
-            fields = null;
+            _fields3 = null;
             sources = null;
             own = null;
 
@@ -4169,8 +4181,8 @@ function () {
             }
 
           case 21:
-            sources ? fields = self.combineFields(sources, own, collectionsIds) : '';
-            fields ? i.fields = fields : '';
+            sources ? _fields3 = self.combineFields(sources, own, collectionsIds) : '';
+            _fields3 ? i.fields = _fields3 : '';
             _context.next = 25;
             return self.insert(i, conn).then(function (insert) {
               collectionsIds.push(insert);
@@ -4582,7 +4594,7 @@ var joinStatement = function joinStatement(options) {
       break;
 
     default:
-      return "SELECT ".concat(options.fields, "\n               FROM  ??\n               JOIN  ").concat(options.tables[0], "\n                  ON ").concat(options.searchPoints[0], "\n               WHERE ").concat(options.from.condition, "\n               ");
+      return "SELECT ".concat(options.fields, "\n               FROM  ??\n               JOIN  ").concat(options.tables[0], "\n                  ON ").concat(options.joinPoints[0], "\n               WHERE ").concat(options.from.condition, "\n               ");
   }
 };
 var searchExek = function searchExek(search, conn) {
@@ -4645,41 +4657,60 @@ var searchConditionsFormat = function searchConditionsFormat(conditions) {
       console.log(conList);
       var operand = '';
       var leftoperand = '';
+      var multiCon = false;
       var match = false;
 
-      if (conList.length > 3) {
-        if (conList[0].trim() === 'MATCH' && conList.length === 5) {
+      if (conList[0].trim() === 'MATCH' || conList[1].trim() === 'MATCH') {
+        if (conList.indexOf('AGAINST') > 0 && conList.length >= 5) {
           var oCon = conList.slice(0);
           console.log('THE O CON');
           console.log(oCon);
-          var matchFields = oCon[1].trim();
-          var matchKeys = oCon[3].trim();
+          multiCon = oCon[0].trim().toUpperCase() !== 'MATCH' ? true : false;
+          var matchFields = '';
+          var matchKeys = '';
+
+          if (multiCon) {
+            matchFields = oCon[2].trim();
+            matchKeys = oCon[4].trim();
+          } else {
+            matchFields = oCon[1].trim();
+            matchKeys = oCon[3].trim();
+          }
+
           matchFields[0] === '[' ? matchFields = matchFields.slice(1, matchFields.length - 1) : '';
           matchKeys[0] === '[' ? matchKeys = matchKeys.slice(1, matchKeys.length - 1) : '';
           console.log('THE MATCH FIELDS');
           console.log(matchFields);
           var op = '';
-          operand = oCon[2].trim();
+          operand = multiCon ? oCon[3].trim() : oCon[2].trim();
+          var mode = multiCon ? oCon[5] : oCon[4];
 
-          switch (oCon[4]) {
+          switch (mode) {
             case 'BOOLEAN':
-              op = "AGAINST (".concat(matchKeys, " IN BOOLEAN MODE)");
+              op = "AGAINST (\"".concat(matchKeys, "\"\" IN BOOLEAN MODE) ");
               break;
 
             case 'QUERY':
-              op = "AGAINST (".concat(matchKeys, " IN QUERY EXPRESSION MODE)");
+              op = "AGAINST (\"".concat(matchKeys, "\" IN QUERY EXPRESSION MODE) ");
               break;
 
             default:
-              op = "AGAINST (\"".concat(matchKeys, "\" IN NATURAL LANGUAGE MODE)");
+              op = "AGAINST (\"".concat(matchKeys, "\" IN NATURAL LANGUAGE MODE) ");
           }
 
-          conList[0] = "MATCH (".concat(matchFields, ") ").concat(op); //  leftoperand = ` ${op}`
+          conList[0] = multiCon ? "".concat(oCon[0], " MATCH (").concat(matchFields, ") ").concat(op) : "MATCH (".concat(matchFields, ") ").concat(op); //  leftoperand = ` ${op}`
 
           match = true;
         } else {}
       } else {
-        switch (conList[1]) {
+        var _oCon = conList.slice(0);
+
+        console.log('THE O CON');
+        console.log(_oCon);
+        multiCon = _oCon[0].trim().toUpperCase() === ('AND' || 'OR') ? true : false;
+        var operator = multiCon ? conList[2] : conList[1];
+
+        switch (operator) {
           case 'EQUALS':
             operand = '=';
             break;
@@ -4708,10 +4739,10 @@ var searchConditionsFormat = function searchConditionsFormat(conditions) {
             operand = '=';
         }
 
-        leftoperand = conList[2];
+        leftoperand = multiCon ? conList[3] : conList[2];
       }
 
-      match ? _condition2 += "".concat(conList[0]) : _condition2 += "".concat(conList[0], " ").concat(operand, " '").concat(leftoperand, "'");
+      match ? _condition2 += "".concat(conList[0]) : multiCon ? _condition2 += " ".concat(conList[0], " ").concat(conList[1], " ").concat(operand, " '").concat(leftoperand, "' ") : _condition2 += "".concat(conList[0], " ").concat(operand, " '").concat(leftoperand, "' ");
     });
 
     console.log('THE search FROM CONDITION');
@@ -4735,21 +4766,23 @@ var searchStatement = function searchStatement(options) {
     console.log('THE OPTIONS LENGTH');
     console.log(options.length);
 
+    var _sort = options.sort ? self.sort(options.sort) : ' ';
+
     switch (options.length) {
       case 3:
-        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM ??\n                JOIN ??\n                  ON ").concat(options.joinPoints[0], "\n                JOIN ??\n                  ON ").concat(options.joinPoints[1], "\n                WHERE ").concat(options.from.condition, "\n                \n                ");
+        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM ??\n                JOIN ??\n                  ON ").concat(options.joinPoints[0], "\n                JOIN ??\n                  ON ").concat(options.joinPoints[1], "\n                WHERE ").concat(options.from.condition, "\n                ").concat(_sort, "\n                \n                ");
         break;
 
       case 4:
-        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM ").concat(options.from.table, "\n                JOIN ").concat(options.tables[0], "\n                  ON ").concat(options.joinPoints[0], "\n                JOIN ").concat(options.tables[1], "\n                  ON ").concat(options.joinPoints[1], "\n                JOIN ").concat(options.tables[2], "\n                  ON ").concat(options.joinPoints[2], "\n                WHERE ").concat(options.from.condition, "\n                \n                ");
+        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM ").concat(options.from.table, "\n                JOIN ").concat(options.tables[0], "\n                  ON ").concat(options.joinPoints[0], "\n                JOIN ").concat(options.tables[1], "\n                  ON ").concat(options.joinPoints[1], "\n                JOIN ").concat(options.tables[2], "\n                  ON ").concat(options.joinPoints[2], "\n                WHERE ").concat(options.from.condition, "\n                ").concat(_sort, "\n                \n                ");
         break;
 
       case 5:
-        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM ").concat(options.from.table, "\n                JOIN ").concat(options.tables[0], "\n                  ON ").concat(options.joinPoints[0], "\n                JOIN ").concat(options.tables[1], "\n                  ON ").concat(options.joinPoints[1], "\n                JOIN ").concat(options.tables[2], "\n                  ON ").concat(options.joinPoints[2], " \n                JOIN ").concat(options.tables[3], "\n                  ON ").concat(options.joinPoints[3], "\n                WHERE ").concat(options.from.condition, "\n                \n                ");
+        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM ").concat(options.from.table, "\n                JOIN ").concat(options.tables[0], "\n                  ON ").concat(options.joinPoints[0], "\n                JOIN ").concat(options.tables[1], "\n                  ON ").concat(options.joinPoints[1], "\n                JOIN ").concat(options.tables[2], "\n                  ON ").concat(options.joinPoints[2], " \n                JOIN ").concat(options.tables[3], "\n                  ON ").concat(options.joinPoints[3], "\n                WHERE ").concat(options.from.condition, "\n                ").concat(_sort, "\n                ");
         break;
 
       default:
-        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM  ??\n                JOIN  ").concat(options.tables[0], "\n                  ON ").concat(options.joinPoints[0], "\n                WHERE ").concat(options.from.condition, "\n              ");
+        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM  ??\n                JOIN  ").concat(options.tables[0], "\n                  ON ").concat(options.joinPoints[0], "\n                WHERE ").concat(options.from.condition, "\n                ").concat(_sort, "\n              ");
     }
 
     return sqlAttribs;
@@ -4759,10 +4792,12 @@ var searchStatement = function searchStatement(options) {
       from: options.from
     };
 
+    var _sort2 = options.sort ? self.sort(options.sort) : ' ';
+
     if (contains(options.from, 'condition')) {
-      _sqlAttribs.statement = "SELECT ".concat(options.fields, "\n              FROM  ??\n              WHERE ").concat(options.from.condition, "\n              ");
+      _sqlAttribs.statement = "SELECT ".concat(options.fields, "\n              FROM  ??\n              WHERE ").concat(options.from.condition, "\n              ").concat(_sort2, "\n              ");
     } else {
-      _sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                              FROM  ??\n                              ");
+      _sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                              FROM  ??\n                              ").concat(_sort2, "\n                              ");
     }
 
     return _sqlAttribs;
@@ -4777,43 +4812,133 @@ var searchOptions = function searchOptions(i) {
 
   if (contains(i, ['joins', 'conditions', 'joinPoints'])) {
     console.log('THE SEARCH ITEM CONTAINS BOTH JOINS,CONDITIONS, AND JOINPOINTS');
-    var options = {};
-    options.from = {
-      table: i.tables[0],
-      condition: self.searchConditionsFormat(i.conditions)
-    };
-    options.joinPoints = i.joinPoints ? self.searchConditionsFormat(i.joinPoints, 'ON') : null;
-    options.length = i.tables.length;
-    options.tables = i.tables.splice(1, i.tables.length);
-    contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? options.fields = '*' : options.fields = i.returnFields : '';
-    contains(i, 'type') ? options.type = i.type : '';
-    contains(i, 'take') ? options.take = i.take : '';
-    contains(i, 'soundex') ? options.soundex : '';
-    return options;
-  } else if (contains(i, ['conditions'])) {
     var _options = {};
     _options.from = {
       table: i.tables[0],
       condition: self.searchConditionsFormat(i.conditions)
     };
+    _options.joinPoints = i.joinPoints ? self.searchConditionsFormat(i.joinPoints, 'ON') : null;
+    _options.length = i.tables.length;
+    _options.tables = i.tables.splice(1, i.tables.length);
+    contains(i, ['returnFields', 'opiks']) ? _options.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : '';
     contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options.fields = '*' : _options.fields = i.returnFields : '';
+    contains(i, 'opiks') ? _options.fields = self.searchFieldsFormat(i.opiks) : '';
     contains(i, 'type') ? _options.type = i.type : '';
     contains(i, 'take') ? _options.take = i.take : '';
+    contains(i, 'range') ? _options.range = i.range : '';
     contains(i, 'soundex') ? _options.soundex : '';
+    contains(i, 'sort') ? _options.sort : '';
     return _options;
-  } else if (contains(i, 'tables') && i.tables instanceof Array) {
+  } else if (contains(i, ['conditions'])) {
     var _options2 = {};
     _options2.from = {
-      table: i.tables[0]
+      table: i.tables[0],
+      condition: self.searchConditionsFormat(i.conditions)
     };
+    contains(i, ['returnFields', 'opiks']) ? _options2.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : '';
     contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options2.fields = '*' : _options2.fields = i.returnFields : '';
+    contains(i, 'opiks') ? _options2.fields = self.searchFieldsFormat(i.opiks) : '';
     contains(i, 'type') ? _options2.type = i.type : '';
     contains(i, 'take') ? _options2.take = i.take : '';
+    contains(i, 'range') ? _options2.range = i.range : '';
     contains(i, 'soundex') ? _options2.soundex : '';
+    contains(i, 'sort') ? _options2.sort : '';
     return _options2;
+  } else if (contains(i, 'tables') && i.tables instanceof Array) {
+    var _options3 = {};
+    _options3.from = {
+      table: i.tables[0]
+    };
+    contains(i, ['returnFields', 'opiks']) ? _options3.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : '';
+    contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options3.fields = '*' : _options3.fields = i.returnFields : '';
+    contains(i, 'opiks') ? _options3.fields = self.searchFieldsFormat(i.opiks) : '';
+    contains(i, 'type') ? _options3.type = i.type : '';
+    contains(i, 'take') ? _options3.take = i.take : '';
+    contains(i, 'range') ? _options3.range = i.range : '';
+    contains(i, 'soundex') ? _options3.soundex : '';
+    contains(i, 'sort') ? _options3.sort : '';
+    return _options3;
   } else {
     return null;
   }
+};
+var searchFieldsFormat = function searchFieldsFormat(fields) {
+  var rFields = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  console.log('THE SELECT STATEMENT OPIKS OBJECT');
+  console.log(fields);
+  console.log(rFields);
+  var fis = fields;
+  var keyword = '';
+  var otherFields = rFields ? rFields : [];
+  var fieldstatement = '';
+  fis.forEach(function (f, i) {
+    var formated = self.fieldFormat(f);
+
+    if (formated instanceof Object) {
+      keyword = formated.value.toUpperCase();
+    } else {
+      fieldstatement += formated;
+    }
+  });
+  return "".concat(keyword, " ").concat(fieldstatement, ", ").concat(_toConsumableArray(otherFields));
+};
+var fieldFormat = function fieldFormat(field) {
+  var from = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  console.log('THE SELECT STATEMENT OPIKS OBJECT');
+  console.log(fields);
+  var fieldList = field.trim().split('.');
+  var fieldstatement = null;
+  var as = fieldList[0] === 'fuxin' ? fieldList.length > 3 ? "AS ".concat(self.options("".concat(fieldList[3]), 'as')) : ' ' : ' ';
+
+  switch (fieldList[0]) {
+    case 'keyword':
+      fieldstatement = from ? fieldList[1].toUpperCase() : {
+        statement: 'keyword',
+        value: fieldList[1].toUpperCase()
+      };
+      break;
+
+    case 'fuxin':
+      fieldstatement = "".concat(fieldList[1].toUpperCase(), "(").concat(self.options("".concat(fieldList[2]), 'option'), ") ").concat(as, " ");
+      break;
+
+    case 'field':
+      if (fieldList.length === 3) fieldstatement = "".concat(fieldList[1], " AS ").concat(self.option(fieldList[2], 'as'));
+      fieldstatement = '';
+      break;
+
+    default:
+      fieldstatement = '';
+  }
+
+  return fieldstatement;
+};
+var options = function options(option) {
+  var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  var stripedOption = option.slice(option.indexOf('['), option.lastIndexOf(']'));
+
+  if (type === 'as') {
+    return "".concat(stripedOption);
+  } else if (type === 'option') {
+    var args = stripedOption.split(',');
+
+    if (args instanceof Array && args.length > 1) {
+      if (args[0].indexOf('keyword') > 0) {
+        return self.fieldFormat(args[0], true);
+      } else if (args[0].indexOf('fuxin') > 0) {
+        return self.fieldFormat(args[0]);
+      }
+    } else {
+      return args.join(',');
+    }
+  } else {}
+};
+var sort = function sort() {
+  var sort = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  return '';
+};
+var limit = function limit() {
+  var sort = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
 };
 
 /***/ }),
@@ -5528,7 +5653,7 @@ var searchBatch = function searchBatch(key) {
     tables: ['jo_job', 'jo_recruiter', 'jo_company'],
     joins: 3,
     joinPoints: ['jo_job.u_id EQUALS jo_recruiter.id', 'jo_company.id EQUALS jo_recruiter.company_id'],
-    conditions: ["MATCH [job_title] AGAINST [".concat(key, "] NATURAL"), "OR MATCH [description] AGAINST [php] NATURAL"],
+    conditions: ["MATCH [job_title] AGAINST [".concat(key, "] NATURAL"), "OR MATCH [position] AGAINST [php] NATURAL", "OR MATCH [skills] AGAINST [php] NATURAL"],
     take: 10,
     soundex: true,
     type: 'inner'
