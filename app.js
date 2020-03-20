@@ -3284,7 +3284,7 @@ var enviroment = function enviroment() {
   type: 'public'
 }, {
   path: '/job',
-  method: 'GET',
+  method: 'POST',
   type: 'public'
 }, {
   path: '/login/:username/:pass',
@@ -6333,29 +6333,121 @@ var Job = function Job(pao) {
 /* unused harmony export getJobDetail */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return searchBatch; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return searchBatchHandler; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_webpack__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_webpack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_webpack__);
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+
 var init = function init() {
   this.log('Job has been initialised');
   this.listens({
     'handle-job-task': this.handleJobTask.bind(this)
   });
 };
-var handleJobTask = function handleJobTask(data) {
-  var self = this;
-  self.getJobs(data);
-};
-var getJobs = function getJobs(data) {
+var handleJobTask =
+/*#__PURE__*/
+function () {
+  var _ref = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee(data) {
+    var self, pao, contains, isOBject, user;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            console.log(data);
+            self = this;
+            pao = self.pao;
+            contains = pao.pa_contains;
+            isOBject = pao.pa_isObject;
+            user = data.payload.user;
+            self.callback = data.callback; // let uid = user.ID
+
+            console.log('THE DATA INSIDE Adash');
+            console.log(user);
+            console.log('THE PARSED DATA TEST');
+            console.log(data);
+            console.log(user);
+            self.getJobs(user).then(function (jobs) {
+              self.callback(null, jobs);
+            })["catch"](function (e) {
+              console.log('Reject error');
+              console.log(e);
+              self.callback(e, null);
+            }); // if(!isOBject(user)) return self.callback({message: 'User has not been specified'},null)
+            // if(!user.action) return self.callback({message: 'Invalid request'},null)
+            // if(!contains(user,['payload'])) return self.callback({message: 'missing required key'},null)
+            // if(!contains(user.payload,['ID'])) return self.callback({message: 'missing required key'},null)
+
+            /*switch(user.action){
+            	
+            	case 'getAlertCategories': {
+            		
+            		self
+            		.getGroupedAlerts(user.payload)
+            		.then((alertCats)=>{self.callback(null,alertCats)})
+            		.catch((e)=>{
+            			console.log('Reject error')
+            			console.log(e)
+            			self.callback(e,null)
+            		})
+            	}
+            	break;
+            	case 'saveAlerts':{
+            		
+            		self.deleteAccount(data)
+            		.then((deleteStat)=>self.callback(null,deleteStat))
+            		.catch((e)=>self.callback(e,null))
+            	}
+            	break;
+            	default: 
+            	self.callback(new Error('Unknown data request'),null)
+            	
+            	
+            }*/
+
+          case 13:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function handleJobTask(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+var getJobs = function getJobs(pay) {
+  var _this = this;
+
   var self = this;
   var pao = self.pao;
-  self.callback = data.callback;
-  console.log('THE PARSED DATA JOBGETJOBS');
-  console.log(data);
-  console.log(data.user.parsed.user.search.key);
-  var search = data.user.parsed.user.search; // console.log(data.parsed.search)
+  console.log('THE PAYLOAD IN GETJOBS');
+  console.log(pay); // let u = pay.ID
+  // let catID = pay.catID
 
-  self.query('mysql.SEARCH', {
-    batch: true,
-    search: self.searchBatch(search.key)
-  }, self.searchBatchHandler.bind(this));
+  var range = {};
+
+  if (pay.skip && pay.limit) {
+    range = {
+      offset: pay.skip,
+      count: pay.limit
+    };
+  }
+
+  return new Promise(function (resolve, reject) {
+    self.query('mysql.SEARCH', {
+      batch: true,
+      search: self.searchBatch('office', 'malamulele', 'limpopo', range)
+    }, self.searchBatchHandler.bind(_this, resolve, reject)); // self.query(
+    // 	'mysql.SEARCH',
+    // 	 {batch: true,search: self.searchBatch(search.key)},
+    // 	  self.searchBatchHandler.bind(this)
+    // )
+  });
 };
 var getJFP = function getJFP(data) {
   var self = this;
@@ -6397,7 +6489,7 @@ var getJobDetail = function getJobDetail(data) {
     });
   } else {}
 };
-var searchBatch = function searchBatch(key) {
+var searchBatch = function searchBatch(key, city, state, range) {
   // let fields = {
   // 	jo_user: { id: 'NULL',u_type: data.usertype,first_name: data.firstname,last_name: data.lastname,email: data.email },
   // 	jo_account: {own:{id:'NULL'},tables: [{name:'jo_user',values:['u_type.account_name']}]},
@@ -6411,13 +6503,15 @@ var searchBatch = function searchBatch(key) {
   // 	{name: 'jo_login',lastInsert: ['jo_user'],fields: fields.jo_login}
   //    ]
   return [{
-    returnFields: ['all'],
-    tables: ['jo_job', 'jo_recruiter', 'jo_company'],
+    returnFields: ['jo_job.id'],
+    tables: ['jo_job', 'jo_country', 'jo_company'],
     joins: 3,
-    joinPoints: ['jo_job.u_id EQUALS jo_recruiter.id', 'jo_company.id EQUALS jo_recruiter.company_id'],
-    conditions: ["MATCH [job_title] AGAINST [".concat(key, "] NATURAL"), "OR MATCH [description] AGAINST [php] NATURAL"],
-    take: 10,
+    joinPoints: ['jo_job.u_id EQUALS jo_country.id', 'jo_job.company_id EQUALS jo_company.id'],
+    conditions: ["GROUP::2 START GROUP::2 START MATCH [job_title] AGAINST [".concat(key, "] NATURAL, OR MATCH [position] AGAINST [").concat(key, "] NATURAL;AND jo_job.country_id EQUALS 202"), "AND GROUP::2 START city_name EQUALS ".concat(city, "; OR state_name EQUALS ").concat(state)],
+    opiks: ['field.job_title.as[jobTitle]', 'field.company_logo.as[logo]', 'field.salary.as[jobSalary]', 'field.name.as[employer]', 'field.salary_currency.as[currency]', 'field.is_main_featured.as[isMainFeatured]', 'field.job_type.as[type]', 'field.approved_at.as[date]', 'field.is_featured.as[isFeatured]', 'field.is_free.as[isFree]', 'field.is_sponsored.as[isSponsored]'],
+    range: "".concat(range.offset, ",").concat(range.count),
     soundex: true,
+    sort: 'order[jobTitle].asc',
     type: 'inner'
   }, {
     returnFields: ['state_name', 'country_id'],
@@ -6427,18 +6521,30 @@ var searchBatch = function searchBatch(key) {
   }, {
     returnFields: ['all'],
     tables: ['jo_category']
+  }, {
+    tables: ['jo_job', 'jo_country', 'jo_company'],
+    joins: 3,
+    joinPoints: ['jo_job.u_id EQUALS jo_country.id', 'jo_job.company_id EQUALS jo_company.id'],
+    conditions: ["GROUP::2 START GROUP::2 START MATCH [job_title] AGAINST [".concat(key, "] NATURAL, OR MATCH [position] AGAINST [").concat(key, "] NATURAL;AND jo_job.country_id EQUALS 202"), "AND GROUP::2 START city_name EQUALS ".concat(city, "; OR state_name EQUALS ").concat(state)],
+    opiks: ['fuxin.count.options[*].as[totalJobs]']
   }];
 };
 var searchBatchHandler = function searchBatchHandler() {
-  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  var batchResults = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var resolve = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var reject = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var e = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var batchResults = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
   var self = this;
   var pao = self.pao;
   console.log('THE BATCH RESULTS');
   console.log(batchResults);
-  self.callback(null, {
-    batch: batchResults
-  });
+  if (e) return reject(e, null);
+  var result = {};
+  result.posts = batchResults[0];
+  result.states = batchResults[1];
+  result.categories = batchResults[2];
+  result.totalJobs = batchResults[3][0].totalJobs;
+  resolve(result);
 };
 
 /***/ }),
@@ -8506,6 +8612,12 @@ var searchBatchHandler = function searchBatchHandler() {
     batch: batchResults
   });
 };
+
+/***/ }),
+/* 109 */
+/***/ (function(module, exports) {
+
+module.exports = require("webpack");
 
 /***/ })
 /******/ ]);

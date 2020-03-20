@@ -20,7 +20,7 @@ export default  [
     },
     {
         path: '/job',
-        method: 'GET',
+        method: 'POST',
         type: 'public'
     },
     {

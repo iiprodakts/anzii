@@ -1,3 +1,4 @@
+import { SplitChunksPlugin } from "webpack"
 
 
 
@@ -15,35 +16,111 @@ export const init = function(){
 }
 
 
-export const handleJobTask = function(data){
+export const handleJobTask = async function(data){
 
 	
+	console.log(data)
 	const self = this 
-    self.getJobs(data)
+	const pao = self.pao
+	const contains = pao.pa_contains
+	const isOBject = pao.pa_isObject
+	let user = data.payload.user
+	self.callback = data.callback
+
+	
+
+	// let uid = user.ID
+	console.log('THE DATA INSIDE Adash')
+	console.log(user)
+	
+	console.log('THE PARSED DATA TEST')
+	console.log(data)
+	console.log(user)
+
+	self
+	.getJobs(user)
+	.then((jobs)=>{self.callback(null,jobs)})
+	.catch((e)=>{
+		console.log('Reject error')
+		console.log(e)
+		self.callback(e,null)
+	})
+
+
+	
+
+	// if(!isOBject(user)) return self.callback({message: 'User has not been specified'},null)
+	// if(!user.action) return self.callback({message: 'Invalid request'},null)
+	// if(!contains(user,['payload'])) return self.callback({message: 'missing required key'},null)
+	// if(!contains(user.payload,['ID'])) return self.callback({message: 'missing required key'},null)
+  
+	/*switch(user.action){
+		
+		case 'getAlertCategories': {
+			
+			self
+			.getGroupedAlerts(user.payload)
+			.then((alertCats)=>{self.callback(null,alertCats)})
+			.catch((e)=>{
+				console.log('Reject error')
+				console.log(e)
+				self.callback(e,null)
+			})
+		}
+		break;
+		case 'saveAlerts':{
+			
+			self.deleteAccount(data)
+			.then((deleteStat)=>self.callback(null,deleteStat))
+			.catch((e)=>self.callback(e,null))
+		}
+		break;
+		default: 
+		self.callback(new Error('Unknown data request'),null)
+		
+		
+	}*/
+
 
 } 
 
 
-export const getJobs = function(data){
+export const getJobs = function(pay){
 	
 	
 	const self = this 
-	let pao = self.pao
+	const pao = self.pao 
+	console.log('THE PAYLOAD IN GETJOBS')
+	console.log(pay)
+	// let u = pay.ID
+	// let catID = pay.catID
+	let range = {}
+	if(pay.skip && pay.limit){
+		range = {offset:pay.skip,count: pay.limit}
+	}
+	
+	
+	return new Promise((resolve,reject)=>{
+		
+		
+		
+	
+		self.query(
+				'mysql.SEARCH',
+				{batch: true,search: self.searchBatch('office','malamulele','limpopo',range)},
+				self.searchBatchHandler.bind(this,resolve,reject)
+			)
 
-	self.callback = data.callback
-
-	console.log('THE PARSED DATA JOBGETJOBS')
-	console.log(data)
-	console.log(data.user.parsed.user.search.key)
-	let search = data.user.parsed.user.search
-	// console.log(data.parsed.search)
-
+			// self.query(
+			// 	'mysql.SEARCH',
+			// 	 {batch: true,search: self.searchBatch(search.key)},
+			// 	  self.searchBatchHandler.bind(this)
+			// )
+			
+		
+	})
  
-	self.query(
-		'mysql.SEARCH',
-		 {batch: true,search: self.searchBatch(search.key)},
-		  self.searchBatchHandler.bind(this)
-	)
+	
 
 
 }
@@ -123,7 +200,7 @@ export const getJobDetail = function(data){
 } 
 
 
-export const searchBatch = function(key){
+export const searchBatch = function(key,city,state,range){
 
 	// let fields = {
 	
@@ -146,13 +223,19 @@ export const searchBatch = function(key){
 
 	   return [
 				{
-					returnFields: ['all'],
-					tables:['jo_job','jo_recruiter','jo_company'],
+					returnFields: ['jo_job.id'],
+					tables:['jo_job','jo_country','jo_company'],
 					joins: 3,
-					joinPoints: ['jo_job.u_id EQUALS jo_recruiter.id','jo_company.id EQUALS jo_recruiter.company_id'],
-					conditions: [`MATCH [job_title] AGAINST [${key}] NATURAL`,`OR MATCH [description] AGAINST [php] NATURAL`],
-					take: 10,
+					joinPoints: ['jo_job.u_id EQUALS jo_country.id','jo_job.company_id EQUALS jo_company.id'],
+					conditions: [`GROUP::2 START GROUP::2 START MATCH [job_title] AGAINST [${key}] NATURAL, OR MATCH [position] AGAINST [${key}] NATURAL;AND jo_job.country_id EQUALS 202`,
+								`AND GROUP::2 START city_name EQUALS ${city}; OR state_name EQUALS ${state}`],
+					opiks: ['field.job_title.as[jobTitle]','field.company_logo.as[logo]','field.salary.as[jobSalary]',
+					'field.name.as[employer]','field.salary_currency.as[currency]','field.is_main_featured.as[isMainFeatured]',
+					'field.job_type.as[type]','field.approved_at.as[date]','field.is_featured.as[isFeatured]',
+					'field.is_free.as[isFree]','field.is_sponsored.as[isSponsored]',],
+					range:`${range.offset},${range.count}`,
 					soundex: true,
+					sort: 'order[jobTitle].asc',
 					type: 'inner'
 			   },
 			   {
@@ -164,19 +247,36 @@ export const searchBatch = function(key){
 			  {
 				returnFields: ['all'],
 				tables:['jo_category']
-		      }
+			  },
+			  {
+				
+				tables:['jo_job','jo_country','jo_company'],
+				joins: 3,
+				joinPoints: ['jo_job.u_id EQUALS jo_country.id','jo_job.company_id EQUALS jo_company.id'],
+				conditions: [`GROUP::2 START GROUP::2 START MATCH [job_title] AGAINST [${key}] NATURAL, OR MATCH [position] AGAINST [${key}] NATURAL;AND jo_job.country_id EQUALS 202`,
+							`AND GROUP::2 START city_name EQUALS ${city}; OR state_name EQUALS ${state}`],
+				opiks: ['fuxin.count.options[*].as[totalJobs]']
+		   },
 
 	   ]
 }
 
-export const searchBatchHandler = function(e=null,batchResults=null){
+export const searchBatchHandler = function(resolve=null,reject=null,e=null,batchResults=null){
 
 	const self = this 
 	let pao = self.pao
 
 	console.log('THE BATCH RESULTS') 
 	console.log(batchResults)
-	self.callback(null,{batch:batchResults})
+   if(e) return reject(e,null)
+
+   let result = {}
+   result.posts = batchResults[0]
+   result.states = batchResults[1]
+   result.categories = batchResults[2]
+   result.totalJobs = batchResults[3][0].totalJobs
+
+   resolve(result)
 
 
 }
