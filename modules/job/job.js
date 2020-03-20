@@ -9,7 +9,14 @@ class Job{
   constructor(pao){
 
     this.pao = pao
-  
+    // this.partners = [
+    
+    //  {
+    //  	url: 'https://www.indeed.com'
+    //    apiCreds:{uname: 'name'}
+    //  }
+    
+    // ]
     
 
 

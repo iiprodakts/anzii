@@ -38,9 +38,7 @@ export const getJobs = function(data){
 	let search = data.user.parsed.user.search
 	// console.log(data.parsed.search)
 
-
-
-
+ 
 	self.query(
 		'mysql.SEARCH',
 		 {batch: true,search: self.searchBatch(search.key)},
@@ -81,7 +79,49 @@ export const getNativeJobs = function(data){
 
 	}
 
-}
+} 
+
+
+export const saveApplication = function(data){
+	
+	
+	const self = this 
+	let pao = self.pao
+	let cpus = 4
+
+	console.log(data)
+	if(data.hasOwnProperty('callback')){
+
+		data.callback(null,{fetch: ['Fetch','the','data',cpus]})
+
+			
+		
+	}else{
+
+	}
+
+} 
+
+export const getJobDetail = function(data){
+	
+	
+	const self = this 
+	let pao = self.pao
+	let cpus = 4
+
+	console.log(data)
+	if(data.hasOwnProperty('callback')){
+
+		data.callback(null,{fetch: ['Fetch','the','data',cpus]})
+
+			
+		
+	}else{
+
+	}
+
+} 
+
 
 export const searchBatch = function(key){
 
@@ -110,7 +150,7 @@ export const searchBatch = function(key){
 					tables:['jo_job','jo_recruiter','jo_company'],
 					joins: 3,
 					joinPoints: ['jo_job.u_id EQUALS jo_recruiter.id','jo_company.id EQUALS jo_recruiter.company_id'],
-					conditions: [`MATCH [job_title] AGAINST [${key}] NATURAL`,`OR MATCH [position] AGAINST [php] NATURAL`,`OR MATCH [skills] AGAINST [php] NATURAL`],
+					conditions: [`MATCH [job_title] AGAINST [${key}] NATURAL`,`OR MATCH [description] AGAINST [php] NATURAL`],
 					take: 10,
 					soundex: true,
 					type: 'inner'
@@ -140,5 +180,3 @@ export const searchBatchHandler = function(e=null,batchResults=null){
 
 
 }
-
-

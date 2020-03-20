@@ -9,13 +9,18 @@ export default  [
         type: 'public'
     },
     {
+        path: '/test',
+        method: 'POST',
+        type: 'public'
+    },
+    {
         path: '/login',
         method: 'POST',
         type: 'public'
     },
     {
         path: '/job',
-        method: 'POST',
+        method: 'GET',
         type: 'public'
     },
     {
@@ -26,7 +31,16 @@ export default  [
     {
         path: '/user',
         method: 'GET',
-
+        type: 'private'
+    },
+    {
+        path: '/adash',
+        method: 'POST',
+        type: 'private'
+    },
+    {
+        path: '/inalerts',
+        method: 'POST',
         type: 'private'
     },
     {
@@ -38,6 +52,12 @@ export default  [
         path: '/list/:name',
         method: 'GET',
         middlewares: middlewares.list,
+        type: 'private'
+    },
+    {
+        path: '/upload/:name',
+        method: 'POST',
+        middlewares: [{type:'module',value: 'upload'}],
         type: 'private'
     },
     {

@@ -31,7 +31,7 @@ export const registerStrategy = function(data){
  
 	const self = this 
 	const pao = self.pao 
-	let user = data.user.parsed.user
+	let user = data.payload.user
 	console.log('THE DATA INSIDE STRATEGY')
 	console.log(user)
 	
@@ -114,7 +114,7 @@ export const social = function(data){
 export const isUserExist  = function(data){
 
 	  const self = this 
-	  let user =  data.user.parsed.user
+	  let user =  data.payload.user
 	  self.log('Checking if user is taken') 
 	  self.callback = data.callback
 	  self.query(
@@ -123,6 +123,8 @@ export const isUserExist  = function(data){
 			self.findHandler.bind(this)
 	  )
 	  
+	 
+	//   {conditions: ['where']}
 	 
 	  
 }

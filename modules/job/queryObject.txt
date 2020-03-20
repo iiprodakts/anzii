@@ -1,0 +1,19 @@
+
+
+returnFields : [
+
+    'job_title',
+    'description'
+]
+
+opiks: [
+    'keyword.DISTINCT',
+    'fuxin.concat.opions[job_title,1].as[title]',
+    'field.job_title.as[title],
+    'fuxin.concat.options[keyword.ALL,job_title].as[allAlerts],
+    'fuxin.concat.options[fuxin.avg.options[job_title]].as[allAlerts]
+    
+    ]
+sort: 'order[job_title].asc'
+take: '10'
+range: '2,5'

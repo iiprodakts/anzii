@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 4);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -89,34 +89,40 @@ module.exports = require("jsonfile");
 
 /***/ }),
 /* 4 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-__webpack_require__(5);
-module.exports = __webpack_require__(6);
-
+module.exports = require("config");
 
 /***/ }),
 /* 5 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("@babel/polyfill");
+__webpack_require__(6);
+module.exports = __webpack_require__(7);
+
 
 /***/ }),
 /* 6 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server_serverdev__ = __webpack_require__(7);
-
-Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
+module.exports = require("@babel/polyfill");
 
 /***/ }),
 /* 7 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_anzii__ = __webpack_require__(8);
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server_serverdev__ = __webpack_require__(8);
+
+Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_anzii__ = __webpack_require__(9);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__init_modules__ = __webpack_require__(69);
 
  // import Server from '../shared/modules/server/index'
@@ -134,12 +140,12 @@ Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
 }); // export default server
 
 /***/ }),
-/* 8 */
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base__ = __webpack_require__(9);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__esm_esm__ = __webpack_require__(18);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__esm_esm__ = __webpack_require__(19);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_activate__ = __webpack_require__(68);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -162,14 +168,14 @@ var Anzii = function Anzii() {
 /* harmony default export */ __webpack_exports__["a"] = (new Anzii());
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pillar_pillar__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pillar_pillar__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pillar_pillar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__pillar_pillar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__base_core__ = __webpack_require__(16);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_pao__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__base_core__ = __webpack_require__(17);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_pao__ = __webpack_require__(18);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -185,7 +191,7 @@ var Base = function Base() {
 /* harmony default export */ __webpack_exports__["a"] = (new Base());
 
 /***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -193,17 +199,17 @@ function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterat
 // DEPENDECIES 
 var os = __webpack_require__(2);
 
-var util = __webpack_require__(11);
+var util = __webpack_require__(12);
 
-var async = __webpack_require__(12);
+var async = __webpack_require__(13);
 
-var extend = __webpack_require__(13);
+var extend = __webpack_require__(14);
 
-var fs = __webpack_require__(14);
+var fs = __webpack_require__(15);
 
 var path = __webpack_require__(0);
 
-var uuid = __webpack_require__(15);
+var uuid = __webpack_require__(16);
 /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
@@ -1367,37 +1373,37 @@ module.exports = {
 };
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, exports) {
 
 module.exports = require("util");
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, exports) {
 
 module.exports = require("async");
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports) {
 
 module.exports = require("node.extend");
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = require("fs");
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = require("uuid");
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1805,7 +1811,7 @@ CORE.prototype.sanna = function () {
 /* harmony default export */ __webpack_exports__["a"] = (CORE);
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2025,16 +2031,16 @@ PAO.prototype.create = function (moduleID, modInstId) {
 /* harmony default export */ __webpack_exports__["a"] = (PAO);
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middleware_index__ = __webpack_require__(19);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__parsers_index__ = __webpack_require__(22);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router_index__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__request_index__ = __webpack_require__(28);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__server_index__ = __webpack_require__(31);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_index__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middleware_index__ = __webpack_require__(20);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__parsers_index__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router_index__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__request_index__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__server_index__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_index__ = __webpack_require__(36);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__anziiloger_index__ = __webpack_require__(44);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__system_index__ = __webpack_require__(49);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mysql_index__ = __webpack_require__(54);
@@ -2078,20 +2084,20 @@ var Esm = function Esm() {
 /* harmony default export */ __webpack_exports__["a"] = (new Esm());
 
 /***/ }),
-/* 19 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middleware__ = __webpack_require__(20);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__middleware__["a" /* default */]);
-
-/***/ }),
 /* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middleware__ = __webpack_require__(21);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__middleware__["a" /* default */]);
+
+/***/ }),
+/* 21 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(22);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -2130,7 +2136,7 @@ var Middleware = function Middleware(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Middleware);
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2301,20 +2307,20 @@ var allWares = function allWares(app, xpress) {
 };
 
 /***/ }),
-/* 22 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__parsers__ = __webpack_require__(23);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__parsers__["a" /* default */]);
-
-/***/ }),
 /* 23 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(24);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__parsers__ = __webpack_require__(24);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__parsers__["a" /* default */]);
+
+/***/ }),
+/* 24 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(25);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -2339,7 +2345,7 @@ var Parsers = function Parsers(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Parsers);
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2370,20 +2376,20 @@ var handleShareMiddleware = function handleShareMiddleware() {
 };
 
 /***/ }),
-/* 25 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(26);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__router__["a" /* default */]);
-
-/***/ }),
 /* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(27);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(27);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__router__["a" /* default */]);
+
+/***/ }),
+/* 27 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(28);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -2412,7 +2418,7 @@ var Router = function Router(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Router);
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2613,20 +2619,20 @@ var filterCallback = function filterCallback(filterType, moduleMiddleware) {
 };
 
 /***/ }),
-/* 28 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__request__ = __webpack_require__(29);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__request__["a" /* default */]);
-
-/***/ }),
 /* 29 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__request__ = __webpack_require__(30);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__request__["a" /* default */]);
+
+/***/ }),
+/* 30 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(31);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -2656,7 +2662,7 @@ var Request = function Request(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Request);
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2686,14 +2692,15 @@ var init = function init() {
 var handleRequestHandOver = function handleRequestHandOver(data) {
   var self = this;
   self.request.res = data.res;
-  var parsed = self.parseRequest(data.req);
-  console.log('parsed');
-  console.log(parsed.url.trim().split('/'));
-  var handler = parsed.url.split('/')[1];
+  var parsed = self.parseRequest(data.req); // console.log('parsed')
+  // console.log(parsed.url.trim().split('/'))
+
+  var handler = parsed.handler;
 
   if (handler) {
     self.requestData = {
       parsed: parsed,
+      user: parsed.user,
       handler: handler,
       request: {
         req: data.req,
@@ -2715,19 +2722,53 @@ var parseRequest = function parseRequest(req) {
   var requiredData = {
     url: req.originalUrl
   };
+  var url = requiredData.url.indexOf('/') === 0 ? requiredData.url.slice(1, requiredData.url.length) : requiredData.url;
+  var isPath = url.indexOf('/') > 0 ? true : false;
 
   if (req.query && Object.keys(req.query).length > 0) {
     console.log('THE QUERY');
     console.log(req.query);
     requiredData.user = req.query;
-  } else if (req.params && Object.keys(req.params).length > 1) {
+    var urlFragments = url.split('?');
+
+    if (isPath) {
+      var pathFrags = urlFragments[0].split('/');
+      console.log('THE PATH FRAGS');
+      console.log(pathFrags);
+      requiredData.handler = pathFrags[0];
+    } else {
+      console.log('THE REMAINING CONTENT AFTER SPLIT OF ?');
+      console.log(urlFragments);
+      requiredData.handler = urlFragments[0];
+    }
+  } else if (req.params && Object.keys(req.params).length > 0) {
     console.log('THE PARAMS');
     console.log(req.params);
     requiredData.user = req.params;
+
+    if (isPath) {
+      var _pathFrags = url.split('/');
+
+      console.log('THE PATH FRAGS');
+      console.log(_pathFrags);
+      requiredData.handler = _pathFrags[0];
+    } else {
+      requiredData.handler = url;
+    }
   } else if (req.body && Object.keys(req.body).length > 0) {
     console.log('THE REQUEST BODY');
     console.log(req.body);
     requiredData.user = req.body;
+
+    if (isPath) {
+      var _pathFrags2 = url.split('/');
+
+      console.log('THE PATH FRAGS');
+      console.log(_pathFrags2);
+      requiredData.handler = _pathFrags2[0];
+    } else {
+      requiredData.handler = url;
+    }
   }
 
   return requiredData;
@@ -2759,7 +2800,7 @@ var handleRequestGlobalResponse = function handleRequestGlobalResponse(data) {
     self.emit({
       type: "handle-".concat(self.requestData.handler, "-task"),
       data: {
-        user: self.requestData,
+        payload: self.requestData,
         callback: self.taskerHandler.bind(self)
       }
     });
@@ -2839,25 +2880,25 @@ var failureHandle = function failureHandle(data) {
 };
 
 /***/ }),
-/* 31 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server__ = __webpack_require__(32);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__server__["a" /* default */]);
-
-/***/ }),
 /* 32 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(33);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server__ = __webpack_require__(33);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__server__["a" /* default */]);
+
+/***/ }),
+/* 33 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(34);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
-var express = __webpack_require__(34),
+var express = __webpack_require__(35),
     // fs = require('fs'),
 // randomstring = require("randomstring"),
 jsonfile = __webpack_require__(3),
@@ -2903,7 +2944,7 @@ var Server = function Server(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Server);
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -2925,11 +2966,8 @@ var init = function init() {
   });
 };
 var handleConfigServer = function handleConfigServer(data) {
-  var self = this;
-  self.emit({
-    type: 'share-middleware',
-    data: ''
-  });
+  var self = this; // self.emit({type:'share-middleware',data:''})
+
   self.emit({
     type: 'attach-middleware',
     data: {
@@ -3021,33 +3059,33 @@ var handleWriteServerRequestResponse = function handleWriteServerRequestResponse
 };
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports) {
 
 module.exports = require("express");
-
-/***/ }),
-/* 35 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(36);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */]);
 
 /***/ }),
 /* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__confy__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(37);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */]);
+
+/***/ }),
+/* 37 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__confy__ = __webpack_require__(39);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
  // Dependecies 
 
-var envObserver = __webpack_require__(42);
+var envObserver = __webpack_require__(4);
 
 var supportsColor = __webpack_require__(43);
 
@@ -3072,7 +3110,7 @@ var Config = function Config(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Config);
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3191,12 +3229,12 @@ var enviroment = function enviroment() {
 };
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__includes_routes__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__includes_globals__ = __webpack_require__(41);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__includes_routes__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__includes_globals__ = __webpack_require__(42);
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -3226,14 +3264,18 @@ var enviroment = function enviroment() {
 });
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middlewares__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middlewares__ = __webpack_require__(41);
 
 /* harmony default export */ __webpack_exports__["a"] = ([{
   path: '/register',
+  method: 'POST',
+  type: 'public'
+}, {
+  path: '/test',
   method: 'POST',
   type: 'public'
 }, {
@@ -3242,7 +3284,7 @@ var enviroment = function enviroment() {
   type: 'public'
 }, {
   path: '/job',
-  method: 'POST',
+  method: 'GET',
   type: 'public'
 }, {
   path: '/login/:username/:pass',
@@ -3253,6 +3295,14 @@ var enviroment = function enviroment() {
   method: 'GET',
   type: 'private'
 }, {
+  path: '/adash',
+  method: 'POST',
+  type: 'private'
+}, {
+  path: '/inalerts',
+  method: 'POST',
+  type: 'private'
+}, {
   path: 'view/:profile',
   method: 'GET',
   type: 'public'
@@ -3260,6 +3310,14 @@ var enviroment = function enviroment() {
   path: '/list/:name',
   method: 'GET',
   middlewares: __WEBPACK_IMPORTED_MODULE_0__middlewares__["a" /* list */],
+  type: 'private'
+}, {
+  path: '/upload/:name',
+  method: 'POST',
+  middlewares: [{
+    type: 'module',
+    value: 'upload'
+  }],
   type: 'private'
 }, {
   path: '/pirlo/:name/:pass',
@@ -3272,7 +3330,7 @@ var enviroment = function enviroment() {
 }]);
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3296,7 +3354,7 @@ var list = [{
 }];
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3341,12 +3399,6 @@ var all = [{
     next();
   }
 }];
-
-/***/ }),
-/* 42 */
-/***/ (function(module, exports) {
-
-module.exports = require("config");
 
 /***/ }),
 /* 43 */
@@ -3772,36 +3824,43 @@ var Mysql = function Mysql(pao) {
 
   this.pao = pao; // // methods
 
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* init */];
-  this.handleMysqlDataRequest = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* handleMysqlDataRequest */];
-  this.insertOne = __WEBPACK_IMPORTED_MODULE_0__methods__["m" /* insertOne */];
-  this.insertMany = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* insertMany */];
-  this.findOne = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* findOne */];
-  this.updateOne = __WEBPACK_IMPORTED_MODULE_0__methods__["updateOne"];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* init */];
+  this.handleMysqlDataRequest = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* handleMysqlDataRequest */];
+  this.insertOne = __WEBPACK_IMPORTED_MODULE_0__methods__["n" /* insertOne */];
+  this.insertMany = __WEBPACK_IMPORTED_MODULE_0__methods__["m" /* insertMany */];
+  this.find = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* find */];
+  this.remove = __WEBPACK_IMPORTED_MODULE_0__methods__["z" /* remove */];
+  this.updateOne = __WEBPACK_IMPORTED_MODULE_0__methods__["K" /* updateOne */];
+  this.set = __WEBPACK_IMPORTED_MODULE_0__methods__["H" /* set */];
+  this.queryOptions = __WEBPACK_IMPORTED_MODULE_0__methods__["x" /* queryOptions */];
+  this.queryTemplate = __WEBPACK_IMPORTED_MODULE_0__methods__["y" /* queryTemplate */];
   this.TRANSACTION = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* TRANSACTION */];
   this.PROCEDURE = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* PROCEDURE */];
   this.JOIN = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* JOIN */];
   this.SEARCH = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* SEARCH */];
-  this.procedure = __WEBPACK_IMPORTED_MODULE_0__methods__["t" /* procedure */];
-  this.transaction = __WEBPACK_IMPORTED_MODULE_0__methods__["C" /* transaction */];
-  this.join = __WEBPACK_IMPORTED_MODULE_0__methods__["n" /* join */];
-  this.joinExek = __WEBPACK_IMPORTED_MODULE_0__methods__["p" /* joinExek */];
-  this.joinStatement = __WEBPACK_IMPORTED_MODULE_0__methods__["q" /* joinStatement */];
-  this.joinConditionsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["o" /* joinConditionsFormat */];
-  this.search = __WEBPACK_IMPORTED_MODULE_0__methods__["v" /* search */];
-  this.searchExek = __WEBPACK_IMPORTED_MODULE_0__methods__["x" /* searchExek */];
-  this.searchStatement = __WEBPACK_IMPORTED_MODULE_0__methods__["A" /* searchStatement */];
-  this.searchConditionsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["w" /* searchConditionsFormat */];
-  this.searchOptions = __WEBPACK_IMPORTED_MODULE_0__methods__["z" /* searchOptions */];
+  this.procedure = __WEBPACK_IMPORTED_MODULE_0__methods__["w" /* procedure */];
+  this.transaction = __WEBPACK_IMPORTED_MODULE_0__methods__["J" /* transaction */];
+  this.join = __WEBPACK_IMPORTED_MODULE_0__methods__["o" /* join */];
+  this.joinExek = __WEBPACK_IMPORTED_MODULE_0__methods__["q" /* joinExek */];
+  this.joinStatement = __WEBPACK_IMPORTED_MODULE_0__methods__["r" /* joinStatement */];
+  this.joinConditionsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["p" /* joinConditionsFormat */];
+  this.search = __WEBPACK_IMPORTED_MODULE_0__methods__["B" /* search */];
+  this.searchExek = __WEBPACK_IMPORTED_MODULE_0__methods__["D" /* searchExek */];
+  this.searchStatement = __WEBPACK_IMPORTED_MODULE_0__methods__["G" /* searchStatement */];
+  this.searchConditionsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["C" /* searchConditionsFormat */];
+  this.searchOptions = __WEBPACK_IMPORTED_MODULE_0__methods__["F" /* searchOptions */];
   this.combineFields = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* combineFields */];
-  this.insert = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* insert */];
-  this.rollback = __WEBPACK_IMPORTED_MODULE_0__methods__["u" /* rollback */];
-  this.deleteOne = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* deleteOne */];
-  this.searchFieldsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["y" /* searchFieldsFormat */];
-  this.fieldFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* fieldFormat */];
-  this.options = __WEBPACK_IMPORTED_MODULE_0__methods__["s" /* options */];
-  this.sort = __WEBPACK_IMPORTED_MODULE_0__methods__["B" /* sort */];
-  this.limit = __WEBPACK_IMPORTED_MODULE_0__methods__["r" /* limit */];
+  this.insert = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* insert */];
+  this.rollback = __WEBPACK_IMPORTED_MODULE_0__methods__["A" /* rollback */];
+  this.deleteOne = __WEBPACK_IMPORTED_MODULE_0__methods__["deleteOne"];
+  this.searchFieldsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["E" /* searchFieldsFormat */];
+  this.fieldFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* fieldFormat */];
+  this.options = __WEBPACK_IMPORTED_MODULE_0__methods__["t" /* options */];
+  this.sort = __WEBPACK_IMPORTED_MODULE_0__methods__["I" /* sort */];
+  this.limit = __WEBPACK_IMPORTED_MODULE_0__methods__["s" /* limit */];
+  this.parseGroup = __WEBPACK_IMPORTED_MODULE_0__methods__["v" /* parseGroup */];
+  this.parseFormatCondition = __WEBPACK_IMPORTED_MODULE_0__methods__["u" /* parseFormatCondition */];
+  this.conditionsConnector = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* conditionsConnector */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Mysql);
@@ -3811,38 +3870,55 @@ var Mysql = function Mysql(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return handleMysqlDataRequest; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return insertOne; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return insertMany; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return findOne; });
-/* unused harmony export UpdateOne */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return deleteOne; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "C", function() { return transaction; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return procedure; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return join; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return search; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return handleMysqlDataRequest; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return insertOne; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return insertMany; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return find; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "K", function() { return updateOne; });
+/* unused harmony export updateMany */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "z", function() { return remove; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return queryOptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return queryTemplate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "J", function() { return transaction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return procedure; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return join; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "B", function() { return search; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return TRANSACTION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return PROCEDURE; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return insert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return insert; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JOIN; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return SEARCH; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return combineFields; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "u", function() { return rollback; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return joinExek; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return joinConditionsFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return joinStatement; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return searchExek; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return searchConditionsFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return searchStatement; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "z", function() { return searchOptions; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return searchFieldsFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return fieldFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return options; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "B", function() { return sort; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return limit; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_config__ = __webpack_require__(42);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_config___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_config__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return rollback; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return joinExek; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return joinConditionsFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return joinStatement; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "D", function() { return searchExek; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "C", function() { return searchConditionsFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "G", function() { return searchStatement; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "F", function() { return searchOptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "E", function() { return searchFieldsFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return fieldFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return options; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "I", function() { return sort; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return limit; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return parseGroup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "u", function() { return parseFormatCondition; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return conditionsConnector; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "H", function() { return set; });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(source, true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(source).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread(); }
 
 function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance"); }
@@ -3850,13 +3926,6 @@ function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread n
 function _iterableToArray(iter) { if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter); }
 
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } }
-
-function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
-
-function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
-function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
-
 
 var init = function init() {
   console.log('Mysql has been initialised');
@@ -3868,9 +3937,9 @@ var handleMysqlDataRequest = function handleMysqlDataRequest(data) {
   var self = this;
   var pao = self.pao;
   self.log("Handling Mysql Data Request");
-  self.log(data.table);
-  self.log(data.outComehandler);
-  self.log(data.opi); // self.log(data)
+  self.log(data.table); // self.log(data.outComehandler)
+  // self.log(data.opi)
+  // self.log(data)
 
   if (!pao.pa_contains(data, ['conn', 'table', 'opi', 'query', 'outComehandler'])) {
     self.log('Data request operations failed');
@@ -3886,6 +3955,9 @@ var handleMysqlDataRequest = function handleMysqlDataRequest(data) {
       } else {
         if (!self[data.opi]) {
           self.log('DATA.OPI IS NOT CONTAINED AS FUNCTION');
+          data.outComehandler({
+            message: 'The specified operation is not supported'
+          });
         } else {
           console.log('THE CODE GOES THIS FAR');
 
@@ -3894,10 +3966,10 @@ var handleMysqlDataRequest = function handleMysqlDataRequest(data) {
             self[data.opi](data);
             console.log('this runs after opi finishes');
           } else if (data.opi === 'find') {
-            data.opi = 'findOne';
+            // data.opi = 'findOne' 
             self[data.opi](data);
           } else if (data.opi === 'updateOne') {
-            data.opi = 'UpdateOne';
+            data.opi = 'updateOne';
             self[data.opi](data);
           } else if (data.opi === 'transaction') {
             data.opi = 'transaction';
@@ -3919,46 +3991,41 @@ var handleMysqlDataRequest = function handleMysqlDataRequest(data) {
     }
   }
 };
-var insertOne = function insertOne(data) {
+var insertOne = function insertOne(insert) {
   var self = this;
   var pao = self.pao;
 
-  if (!pao.pa_isObject(data)) {} else {
+  if (!pao.pa_isObject(insert)) {} else {
     try {
-      var q = data.query.user;
+      var sql = "INSERT INTO ?? (?) VALUES(?)";
+      var queryAttributes = [insert.table, _toConsumableArray(insert.fields), _toConsumableArray(insert.values)];
+      sql = conn.format(sql, queryAttributes); //  let sql = `INSERT INTO ${data.table} SET ?`
 
-      var _fields = Object.keys(q);
-
-      var sql = "INSERT INTO ?? (".concat(_fields[0], ",").concat(_fields[1], ",").concat(_fields[2], ",").concat(_fields[3], ") VALUES(?)");
-      var queryAttributes = [data.table, ["NULL", q.email, q.first_name, q.last_name]];
-      sql = data.conn.format(sql, queryAttributes); //  let sql = `INSERT INTO ${data.table} SET ?`
-
-      data.conn.query(sql, function (e, r, f) {
+      conn.query(sql, function (e, r, f) {
         console.log('INSERT RESULT');
         console.log(r);
         console.log(e);
-        if (e) data.outComehandler(e, null);
-        r.user = {
-          email: q.email,
-          username: q.first_name
-        };
-        data.outComehandler(null, r);
+        if (e) handler(e, null);
+        r.user = insert.values;
+        handler(null, r);
       });
     } catch (e) {
       console.log('CAUTH ERROR');
       console.log(e);
-      data.outComehandler(e, null);
+      handler(e, null);
     }
   }
 };
-var insertMany = function insertMany(data) {
+var insertMany = function insertMany(insert) {
   if (!pao.pa_isObject(data)) {} else {
     try {
-      var sql = "INSERT\xA0INTO\xA0".concat(data.table, "\xA0SET\xA0?");
+      var sql = "INSERT INTO ?? (?) VALUES(?)";
       var result = [];
       var fullImplement = true;
-      data.forEach(function (d, i) {
-        data.query(sql, d, function (e, r, f) {
+      insert.bulk.forEach(function (insertItem, i) {
+        var queryAttributes = [insertItem.table, _toConsumableArray(insertItem.fields), _toConsumableArray(insertItem.values)];
+        sql = conn.format(sql, queryAttributes);
+        conn.query(sql, insertItem, function (e, r, f) {
           if (e) {
             fullImplement = false;
           } else {
@@ -3966,69 +4033,354 @@ var insertMany = function insertMany(data) {
           }
         });
       });
-      data.outComeHandler(null, result);
+      console.log('bulk insert completed');
+      handler(null, result);
     } catch (e) {
-      data.outComeHandler(e, null);
+      handler(e, null);
     }
   }
 };
-var findOne = function findOne(data) {
+var find =
+/*#__PURE__*/
+function () {
+  var _ref = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee2(findiks) {
+    var self, pao, _ret;
+
+    return regeneratorRuntime.wrap(function _callee2$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            self = this;
+            pao = self.pao; // console.log('fIND.FINDIKS')
+            // console.log(findiks.query.length)
+            // if(findiks.query.length > 0){ return findiks.outComehandler({message: 'ERROR IN MYSQL.FIND.METHOD'})}
+
+            console.log('THE DATA IN FINDONE');
+            console.log(findiks);
+
+            if (pao.pa_isObject(findiks)) {
+              _context3.next = 8;
+              break;
+            }
+
+            return _context3.abrupt("return");
+
+          case 8:
+            return _context3.delegateYield(
+            /*#__PURE__*/
+            regeneratorRuntime.mark(function _callee() {
+              var conn, handler, query, result, multiple, _loop, q, _ret2;
+
+              return regeneratorRuntime.wrap(function _callee$(_context2) {
+                while (1) {
+                  switch (_context2.prev = _context2.next) {
+                    case 0:
+                      conn = findiks.conn;
+                      handler = findiks.outComehandler;
+                      query = [];
+                      result = [];
+                      multiple = false;
+
+                      if (findiks.table.toUpperCase().trim() === 'MULTIPLE') {
+                        multiple = true;
+                        query = findiks.query;
+                      } else {
+                        query.push(findiks.query);
+                      }
+
+                      _loop =
+                      /*#__PURE__*/
+                      regeneratorRuntime.mark(function _loop(q) {
+                        var find, sql, attribs, sqliks, queryAttributes;
+                        return regeneratorRuntime.wrap(function _loop$(_context) {
+                          while (1) {
+                            switch (_context.prev = _context.next) {
+                              case 0:
+                                find = null;
+
+                                if (multiple) {
+                                  find = _objectSpread({
+                                    table: query[q].table
+                                  }, query[q]);
+                                } else {
+                                  find = _objectSpread({
+                                    table: findiks.table
+                                  }, query[q]); // find.opiks && Object.keys(find).length === 2 ? '' : !find.conditions ? find.conditions = [`${Object.keys(query)[0]} ISEQUALS ${query[Object.keys(query)[0]]}`]: ''
+                                }
+
+                                _context.prev = 2;
+                                sql = '';
+                                attribs = null;
+                                sqliks = self.queryTemplate(self.queryOptions(find), 'select');
+                                console.log('THE SQLKIKS OBJECT FIND');
+                                console.log(sqliks);
+                                attribs = [sqliks.attribs.from.table];
+                                sql = sqliks.statement;
+                                queryAttributes = attribs;
+                                console.log('THE SQL BEFORE FORMAT');
+                                console.log(sql);
+                                sql = conn.format(sql, queryAttributes);
+                                console.log(sql);
+                                _context.next = 17;
+                                return conn.query(sql, function (e, r, f) {
+                                  console.log('THE QUERY IS COMPLETED WITH RESULTS');
+                                  console.log(e);
+                                  console.log(r); // console.log(typeof r)
+                                  // console.log(f)
+                                  // console.log(r instanceof Array)
+                                  // console.log(pao.pa_isArray(r))
+                                  // console.log(r.length)
+                                  // console.log('After R evaluation')
+
+                                  if (e) result.push(e);
+
+                                  if (pao.pa_isArray(r) && r.length > 0 && query.length !== 1) {
+                                    r = r[0];
+                                    result.push(r);
+                                  } else {
+                                    result = r;
+                                  }
+
+                                  if (q === query.length - 1) {
+                                    console.log('THE LOOP IS COMPLETE WITH DATA:');
+                                    console.log(result);
+                                    handler(null, result);
+                                  }
+                                });
+
+                              case 17:
+                                _context.next = 22;
+                                break;
+
+                              case 19:
+                                _context.prev = 19;
+                                _context.t0 = _context["catch"](2);
+                                return _context.abrupt("return", {
+                                  v: {
+                                    v: handler(_context.t0, null)
+                                  }
+                                });
+
+                              case 22:
+                              case "end":
+                                return _context.stop();
+                            }
+                          }
+                        }, _loop, null, [[2, 19]]);
+                      });
+                      q = 0;
+
+                    case 8:
+                      if (!(q < query.length)) {
+                        _context2.next = 16;
+                        break;
+                      }
+
+                      return _context2.delegateYield(_loop(q), "t0", 10);
+
+                    case 10:
+                      _ret2 = _context2.t0;
+
+                      if (!(_typeof(_ret2) === "object")) {
+                        _context2.next = 13;
+                        break;
+                      }
+
+                      return _context2.abrupt("return", _ret2.v);
+
+                    case 13:
+                      q++;
+                      _context2.next = 8;
+                      break;
+
+                    case 16:
+                    case "end":
+                      return _context2.stop();
+                  }
+                }
+              }, _callee);
+            })(), "t0", 9);
+
+          case 9:
+            _ret = _context3.t0;
+
+            if (!(_typeof(_ret) === "object")) {
+              _context3.next = 12;
+              break;
+            }
+
+            return _context3.abrupt("return", _ret.v);
+
+          case 12:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee2, this);
+  }));
+
+  return function find(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+var updateOne = function updateOne(updatiks) {
   var self = this;
   var pao = self.pao;
-  console.log('THE DATA IN FINDONE');
-  console.log(data);
+  var conn = updatiks.conn;
+  var handler = updatiks.outComehandler;
 
+  var update = _objectSpread({
+    table: updatiks.table
+  }, updatiks.query);
+
+  if (!pao.pa_isObject(updatiks)) {} else {
+    try {
+      var sql = '';
+      var attribs = null;
+      var sqliks = self.queryTemplate(self.queryOptions(update), 'update');
+      console.log('THE SQLKIKS OBJECT UPDATE');
+      console.log(sqliks);
+      attribs = [sqliks.attribs.from.table];
+      sql = sqliks.statement;
+      var queryAttributes = attribs;
+      console.log('THE SQL BEFORE FORMAT');
+      console.log(sql);
+      sql = conn.format(sql, queryAttributes);
+      console.log(sql);
+      conn.query(sql, function (e, r, f) {
+        if (e) handler(e, null);
+        handler(null, r);
+      });
+    } catch (e) {
+      handler(e, null);
+    }
+  }
+};
+var updateMany = function updateMany(update) {
   if (!pao.pa_isObject(data)) {} else {
     try {
-      var keys = Object.keys(data.query.user);
-      var sql = "SELECT * FROM ?? WHERE ?? = ? LIMIT 1";
-      var queryAttributes = [data.table, keys[0], data.query.user[keys[0]]];
-      sql = data.conn.format(sql, queryAttributes);
-      console.log('THE SQL');
+      var sql = "UPDATE TABLE ?? SET\xA0??\xA0WHERE\xA0??";
+      var result = [];
+      var fullImplement = true;
+      update.bulk.forEach(function (updateItem, i) {
+        var queryAttributes = [update.table, _toConsumableArray(update.fields), update.condition];
+        sql = conn.format(sql, queryAttributes);
+        conn.query(sql, updateItem, function (e, r, f) {
+          if (e) {
+            fullImplement = false;
+          } else {
+            result.push(r);
+          }
+        });
+      });
+      console.log('bulk update completed');
+      handler(null, result);
+    } catch (e) {
+      handler(e, null);
+    }
+  }
+};
+var remove = function remove(removiks) {
+  var self = this;
+  var pao = self.pao;
+  var conn = removiks.conn;
+  var handler = removiks.outComehandler;
+
+  var remove = _objectSpread({
+    table: removiks.table
+  }, removiks.query);
+
+  if (!pao.pa_isObject(document)) {} else {
+    try {
+      var sql = '';
+      var attribs = null;
+      var sqliks = self.queryTemplate(self.queryOptions(remove), 'delete');
+      console.log('THE SQLKIKS OBJECT DELETED[REMOVE]');
+      console.log(sqliks);
+      attribs = [sqliks.attribs.from.table];
+      sql = sqliks.statement;
+      var queryAttributes = attribs;
+      console.log('THE SQL BEFORE FORMAT');
       console.log(sql);
-      data.conn.query(sql, [data.query], function (e, r, f) {
-        console.log('THE QUERY IS COMPLETED WITH RESULTS');
-        console.log(e);
-        console.log(r);
-        console.log(_typeof(r));
-        console.log(f);
-        console.log(r instanceof Array);
-        console.log('After R evaluation');
-        if (e) data.outComehandler(e, null, data);
-        if (pao.pa_isArray(r) && r.length > 0) r = r[0];
-        data.outComehandler(null, r, data);
+      sql = conn.format(sql, queryAttributes);
+      console.log(sql);
+      conn.query(sql, function (e, r, f) {
+        if (e) handler(e, null);
+        handler(null, r);
       });
     } catch (e) {
-      // console.log('AN ERROR OCCURED IN FIND ONE ')
-      // console.log(e)
-      data.outComehandler(e, null);
+      handler(e, null);
     }
   }
 };
-var UpdateOne = function UpdateOne(data) {
-  if (!pao.pa_isObject(document)) {} else {
-    try {
-      var sql = "SELECT * FROM\xA0".concat(data.table, "\xA0WHERE\xA0?");
-      var result = data.query(sql, [data.query], function (e, r, f) {
-        if (e) data.outComeHandler(e, null);
-        data.outComeHandler(null, r);
-      });
-    } catch (e) {
-      data.outComeHandler(e, null);
-    }
-  }
+var queryOptions = function queryOptions(i) {
+  console.log('THE search BATCH ITEM');
+  console.log(i);
+  var self = this;
+  var pao = self.pao;
+  var contains = pao.pa_contains; // let rest = {
+  // 	conditions: [`country_id EQUALS 202`],
+  // 	opiks: ['field.id.as[stateId]','field.state_name.as[state]','field.country_id.as[countryId]'],
+  // 	sort: 'order[state_name].asc',
+  // 	range: '2,5',
+  // 	take: 5
+  //   }
+
+  var options = {};
+  i.conditions ? options.from = {
+    table: i.table,
+    condition: self.searchConditionsFormat(i.conditions)
+  } : options.from = {
+    table: i.table
+  };
+  contains(i, ['returnFields', 'opiks']) ? options.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : contains(i, 'opiks') ? options.fields = self.searchFieldsFormat(i.opiks) : contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? options.fields = '*' : options.fields = i.returnFields : options.fields = '*';
+  contains(i, 'take') ? options.take = i.take : '';
+  contains(i, 'range') ? options.range = i.range : '';
+  contains(i, 'sort') ? options.sort = i.sort : '';
+  contains(i, 'set') ? options.set = self.set(i.set) : '';
+  return options;
 };
-var deleteOne = function deleteOne(data) {
-  if (!pao.pa_isObject(document)) {} else {
-    try {
-      var sql = "SELECT * FROM\xA0".concat(data.table, "\xA0WHERE\xA0?");
-      var result = data.query(sql, [data.query], function (e, r, f) {
-        if (e) data.outComeHandler(e, null);
-        data.outComeHandler(null, r);
-      });
-    } catch (e) {
-      data.outComeHandler(e, null);
+var queryTemplate = function queryTemplate(options, type) {
+  var self = this;
+  var pao = self.pao;
+  var contains = pao.pa_contains;
+  console.log('THE QUERY TEMPLATE');
+  console.log(options);
+
+  if (type === 'select') {
+    var sqlAttribs = {};
+    sqlAttribs.attribs = {
+      from: options.from
+    };
+    var _limit = ' ';
+
+    var _sort = options.sort ? self.sort(options.sort) : ' ';
+
+    options.take ? _limit = self.limit(options.take, 'take') : options.range ? _limit = self.limit(options.range, 'range') : ' ';
+
+    if (contains(options.from, 'condition')) {
+      sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                              FROM  ??\n                              WHERE ").concat(options.from.condition, "\n                              ").concat(_sort, "\n                              ").concat(_limit, "\n\n                              ");
+    } else {
+      sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                              FROM  ??\n                              ").concat(_sort, "\n                              ").concat(_limit, "\n                              ");
     }
+
+    return sqlAttribs;
+  } else if (type === 'update') {
+    var _sqlAttribs = {};
+    _sqlAttribs.attribs = {
+      from: options.from
+    };
+    _sqlAttribs.statement = "UPDATE ??\n                            SET ".concat(options.set, "\n                            WHERE ").concat(options.from.condition, "\n                            ");
+    return _sqlAttribs;
+  } else if (type === 'delete') {
+    var _sqlAttribs2 = {};
+    _sqlAttribs2.attribs = {
+      from: options.from
+    };
+    _sqlAttribs2.statement = "DELETE\n                            FROM ??\n                            WHERE ".concat(options.from.condition, "\n                            ");
+    return _sqlAttribs2;
   }
 };
 var transaction = function transaction(data) {
@@ -4039,8 +4391,6 @@ var transaction = function transaction(data) {
   } else {
     self.TRANSACTION(data.query, data.conn, data.outComehandler);
   }
-
-  h;
 };
 var procedure = function procedure(data) {
   console.log('THE procedure got a call');
@@ -4088,9 +4438,9 @@ var TRANSACTION = function TRANSACTION(collections, conn) {
   var collectionsIds = [];
   var breakOut = false;
 
-  for (var _c = 0; _c < collections.length; _c++) {
-    var i = collections[_c];
-    var _fields2 = null;
+  for (var c = 0; c < collections.length; c++) {
+    var i = collections[c];
+    var fields = null;
     var sources = null;
     var own = null;
 
@@ -4104,8 +4454,8 @@ var TRANSACTION = function TRANSACTION(collections, conn) {
       }
     }
 
-    sources ? _fields2 = self.combineFields(sources, own, collectionsIds) : '';
-    _fields2 ? i.fields = _fields2 : '';
+    sources ? fields = self.combineFields(sources, own, collectionsIds) : '';
+    fields ? i.fields = fields : '';
     self.insert(i, conn).then(function (insert) {
       collectionsIds.push(insert);
     })["catch"](function (failedInsert) {
@@ -4115,7 +4465,7 @@ var TRANSACTION = function TRANSACTION(collections, conn) {
     });
     if (breakOut) break;
 
-    if (_c === collections.length - 1) {
+    if (c === collections.length - 1) {
       console.log('Operation completed successfully');
       handler('Transaction Operation sucessful');
     }
@@ -4124,26 +4474,25 @@ var TRANSACTION = function TRANSACTION(collections, conn) {
 var PROCEDURE =
 /*#__PURE__*/
 function () {
-  var _ref = _asyncToGenerator(
+  var _ref2 = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee(collections, conn) {
+  regeneratorRuntime.mark(function _callee3(collections, conn) {
     var handler,
         self,
         pao,
         collectionsIds,
         breakOut,
-        _c2,
+        c,
         i,
-        _fields3,
+        fields,
         sources,
         own,
-        _args = arguments;
-
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+        _args4 = arguments;
+    return regeneratorRuntime.wrap(function _callee3$(_context4) {
       while (1) {
-        switch (_context.prev = _context.next) {
+        switch (_context4.prev = _context4.next) {
           case 0:
-            handler = _args.length > 2 && _args[2] !== undefined ? _args[2] : null;
+            handler = _args4.length > 2 && _args4[2] !== undefined ? _args4[2] : null;
             self = this;
             pao = self.pao;
             self.log('THE PROCEDURE METHOD');
@@ -4152,26 +4501,26 @@ function () {
             self.log(conn);
             collectionsIds = [];
             breakOut = false;
-            _c2 = 0;
+            c = 0;
 
           case 10:
-            if (!(_c2 < collections.length)) {
-              _context.next = 31;
+            if (!(c < collections.length)) {
+              _context4.next = 31;
               break;
             }
 
-            i = collections[_c2];
-            _fields3 = null;
+            i = collections[c];
+            fields = null;
             sources = null;
             own = null;
 
             if (pao.pa_contains(i, 'fields')) {
-              _context.next = 20;
+              _context4.next = 20;
               break;
             }
 
             handler('Required collection/table field missing');
-            return _context.abrupt("break", 31);
+            return _context4.abrupt("break", 31);
 
           case 20:
             if (pao.pa_contains(i.fields, 'tables')) {
@@ -4181,9 +4530,9 @@ function () {
             }
 
           case 21:
-            sources ? _fields3 = self.combineFields(sources, own, collectionsIds) : '';
-            _fields3 ? i.fields = _fields3 : '';
-            _context.next = 25;
+            sources ? fields = self.combineFields(sources, own, collectionsIds) : '';
+            fields ? i.fields = fields : '';
+            _context4.next = 25;
             return self.insert(i, conn).then(function (insert) {
               collectionsIds.push(insert);
             })["catch"](function (failedInsert) {
@@ -4193,14 +4542,14 @@ function () {
 
           case 25:
             if (!breakOut) {
-              _context.next = 27;
+              _context4.next = 27;
               break;
             }
 
-            return _context.abrupt("break", 31);
+            return _context4.abrupt("break", 31);
 
           case 27:
-            if (_c2 === collections.length - 1) {
+            if (c === collections.length - 1) {
               console.log('Operation completed successfully');
               console.log(collectionsIds);
 
@@ -4218,20 +4567,20 @@ function () {
             }
 
           case 28:
-            _c2++;
-            _context.next = 10;
+            c++;
+            _context4.next = 10;
             break;
 
           case 31:
           case "end":
-            return _context.stop();
+            return _context4.stop();
         }
       }
-    }, _callee, this);
+    }, _callee3, this);
   }));
 
-  return function PROCEDURE(_x, _x2) {
-    return _ref.apply(this, arguments);
+  return function PROCEDURE(_x2, _x3) {
+    return _ref2.apply(this, arguments);
   };
 }();
 var insert = function insert(inset, conn) {
@@ -4291,18 +4640,18 @@ var insert = function insert(inset, conn) {
 var JOIN =
 /*#__PURE__*/
 function () {
-  var _ref2 = _asyncToGenerator(
+  var _ref3 = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee2(join, conn) {
+  regeneratorRuntime.mark(function _callee4(join, conn) {
     var handler,
         self,
         pao,
-        _args2 = arguments;
-    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        _args5 = arguments;
+    return regeneratorRuntime.wrap(function _callee4$(_context5) {
       while (1) {
-        switch (_context2.prev = _context2.next) {
+        switch (_context5.prev = _context5.next) {
           case 0:
-            handler = _args2.length > 2 && _args2[2] !== undefined ? _args2[2] : null;
+            handler = _args5.length > 2 && _args5[2] !== undefined ? _args5[2] : null;
             self = this;
             pao = self.pao;
             self.joinExek(join, conn).then(function (result) {
@@ -4317,36 +4666,38 @@ function () {
 
           case 4:
           case "end":
-            return _context2.stop();
+            return _context5.stop();
         }
       }
-    }, _callee2, this);
+    }, _callee4, this);
   }));
 
-  return function JOIN(_x3, _x4) {
-    return _ref2.apply(this, arguments);
+  return function JOIN(_x4, _x5) {
+    return _ref3.apply(this, arguments);
   };
 }();
 var SEARCH =
 /*#__PURE__*/
 function () {
-  var _ref3 = _asyncToGenerator(
+  var _ref4 = _asyncToGenerator(
   /*#__PURE__*/
-  regeneratorRuntime.mark(function _callee4(search, conn) {
+  regeneratorRuntime.mark(function _callee6(search, conn) {
     var handler,
         self,
         pao,
-        _args5 = arguments;
-    return regeneratorRuntime.wrap(function _callee4$(_context5) {
+        _args8 = arguments;
+    return regeneratorRuntime.wrap(function _callee6$(_context8) {
       while (1) {
-        switch (_context5.prev = _context5.next) {
+        switch (_context8.prev = _context8.next) {
           case 0:
-            handler = _args5.length > 2 && _args5[2] !== undefined ? _args5[2] : null;
+            handler = _args8.length > 2 && _args8[2] !== undefined ? _args8[2] : null;
             self = this;
             pao = self.pao;
+            console.log('THE SEARCH search object contents');
+            console.log(search);
 
             if (pao.pa_contains(search, 'batch')) {
-              _context5.next = 7;
+              _context8.next = 9;
               break;
             }
 
@@ -4359,33 +4710,40 @@ function () {
               console.log(failedRequest);
               handler(failedRequest, null);
             });
-            _context5.next = 8;
+            _context8.next = 10;
             break;
 
-          case 7:
-            return _context5.delegateYield(
+          case 9:
+            return _context8.delegateYield(
             /*#__PURE__*/
-            regeneratorRuntime.mark(function _callee3() {
-              var resultSet, batch, _loop, s;
+            regeneratorRuntime.mark(function _callee5() {
+              var resultSet, batch, _loop2, s;
 
-              return regeneratorRuntime.wrap(function _callee3$(_context4) {
+              return regeneratorRuntime.wrap(function _callee5$(_context7) {
                 while (1) {
-                  switch (_context4.prev = _context4.next) {
+                  switch (_context7.prev = _context7.next) {
                     case 0:
                       resultSet = [];
                       batch = search.search;
-                      _loop =
+                      _loop2 =
                       /*#__PURE__*/
-                      regeneratorRuntime.mark(function _loop(s) {
-                        return regeneratorRuntime.wrap(function _loop$(_context3) {
+                      regeneratorRuntime.mark(function _loop2(s) {
+                        return regeneratorRuntime.wrap(function _loop2$(_context6) {
                           while (1) {
-                            switch (_context3.prev = _context3.next) {
+                            switch (_context6.prev = _context6.next) {
                               case 0:
-                                _context3.next = 2;
+                                _context6.next = 2;
                                 return self.searchExek(batch[s], conn).then(function (result) {
                                   console.log('search is successful, pushing results to the resultSet');
                                   console.log(result);
-                                  resultSet.push(result); // handler(null,result)
+                                  resultSet.push(result);
+
+                                  if (s === batch.length - 1) {
+                                    console.log('Operation completed successfully');
+                                    console.log(resultSet);
+                                    handler(null, resultSet);
+                                  } // handler(null,result)
+
                                 })["catch"](function (failedRequest) {
                                   console.log('search FAILED');
                                   console.log(failedRequest);
@@ -4397,59 +4755,52 @@ function () {
                                 });
 
                               case 2:
-                                if (s === batch.length - 1) {
-                                  console.log('Operation completed successfully');
-                                  console.log(resultSet);
-                                  handler(null, resultSet);
-                                }
-
-                              case 3:
                               case "end":
-                                return _context3.stop();
+                                return _context6.stop();
                             }
                           }
-                        }, _loop);
+                        }, _loop2);
                       });
                       s = 0;
 
                     case 4:
                       if (!(s < batch.length)) {
-                        _context4.next = 9;
+                        _context7.next = 9;
                         break;
                       }
 
-                      return _context4.delegateYield(_loop(s), "t0", 6);
+                      return _context7.delegateYield(_loop2(s), "t0", 6);
 
                     case 6:
                       s++;
-                      _context4.next = 4;
+                      _context7.next = 4;
                       break;
 
                     case 9:
                     case "end":
-                      return _context4.stop();
+                      return _context7.stop();
                   }
                 }
-              }, _callee3);
-            })(), "t0", 8);
+              }, _callee5);
+            })(), "t0", 10);
 
-          case 8:
+          case 10:
           case "end":
-            return _context5.stop();
+            return _context8.stop();
         }
       }
-    }, _callee4, this);
+    }, _callee6, this);
   }));
 
-  return function SEARCH(_x5, _x6) {
-    return _ref3.apply(this, arguments);
+  return function SEARCH(_x6, _x7) {
+    return _ref4.apply(this, arguments);
   };
 }();
 var combineFields = function combineFields(tables, own, ids) {
   var fields = {};
   console.log('COMBINE FIELDS GETS A CALL');
   tables.forEach(function (v, i) {
-    var _loop2 = function _loop2(co) {
+    var _loop3 = function _loop3(co) {
       if (ids[co].collection === v.name) {
         v.values.forEach(function (vv, ii) {
           console.log('THE VV');
@@ -4464,9 +4815,9 @@ var combineFields = function combineFields(tables, own, ids) {
     };
 
     for (var co = 0; co < ids.length; co++) {
-      var _ret = _loop2(co);
+      var _ret3 = _loop3(co);
 
-      if (_ret === "break") break;
+      if (_ret3 === "break") break;
     }
   });
   var keys = Object.keys(own);
@@ -4600,6 +4951,8 @@ var joinStatement = function joinStatement(options) {
 var searchExek = function searchExek(search, conn) {
   var self = this;
   var contains = self.pao.pa_contains;
+  console.log('THE SEARCH');
+  console.log(search);
   return new Promise(function (resolve, reject) {
     // do a thing, possibly async, then… 
     console.log('Executing the search promise');
@@ -4633,118 +4986,124 @@ var searchConditionsFormat = function searchConditionsFormat(conditions) {
   var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
   console.log('CONDITIONS');
   console.log(conditions);
+  var self = this;
+  var pao = self.pao;
 
   if (type) {
-    var cons = conditions;
-    var condition = [];
-    cons.forEach(function (con, i) {
-      var conList = con.trim().split(' ');
-      var operand = '=';
-      condition.push("".concat(conList[0], " ").concat(operand, " ").concat(conList[2]));
-    });
+    var condition = self.parseFormatCondition(conditions, type);
     console.log('THE search ON CONDITION');
     console.log(condition);
     return condition;
   } else {
-    var _cons2 = conditions;
+    var cons = conditions;
     var _condition2 = '';
-
-    _cons2.forEach(function (con, i) {
-      console.log('THE con ITEM');
-      console.log(con);
-      var conList = con.trim().split(' ');
-      console.log('THE CONLIST');
-      console.log(conList);
-      var operand = '';
-      var leftoperand = '';
-      var multiCon = false;
-      var match = false;
-
-      if (conList[0].trim() === 'MATCH' || conList[1].trim() === 'MATCH') {
-        if (conList.indexOf('AGAINST') > 0 && conList.length >= 5) {
-          var oCon = conList.slice(0);
-          console.log('THE O CON');
-          console.log(oCon);
-          multiCon = oCon[0].trim().toUpperCase() !== 'MATCH' ? true : false;
-          var matchFields = '';
-          var matchKeys = '';
-
-          if (multiCon) {
-            matchFields = oCon[2].trim();
-            matchKeys = oCon[4].trim();
-          } else {
-            matchFields = oCon[1].trim();
-            matchKeys = oCon[3].trim();
-          }
-
-          matchFields[0] === '[' ? matchFields = matchFields.slice(1, matchFields.length - 1) : '';
-          matchKeys[0] === '[' ? matchKeys = matchKeys.slice(1, matchKeys.length - 1) : '';
-          console.log('THE MATCH FIELDS');
-          console.log(matchFields);
-          var op = '';
-          operand = multiCon ? oCon[3].trim() : oCon[2].trim();
-          var mode = multiCon ? oCon[5] : oCon[4];
-
-          switch (mode) {
-            case 'BOOLEAN':
-              op = "AGAINST (\"".concat(matchKeys, "\"\" IN BOOLEAN MODE) ");
-              break;
-
-            case 'QUERY':
-              op = "AGAINST (\"".concat(matchKeys, "\" IN QUERY EXPRESSION MODE) ");
-              break;
-
-            default:
-              op = "AGAINST (\"".concat(matchKeys, "\" IN NATURAL LANGUAGE MODE) ");
-          }
-
-          conList[0] = multiCon ? "".concat(oCon[0], " MATCH (").concat(matchFields, ") ").concat(op) : "MATCH (".concat(matchFields, ") ").concat(op); //  leftoperand = ` ${op}`
-
-          match = true;
-        } else {}
+    cons.forEach(function (con, i) {
+      if (con.indexOf('GROUP::') >= 0) {
+        console.log('CONDITION FROM SEARCHCONDITIONFORMAT');
+        console.log(con);
+        _condition2 += self.parseGroup(con);
       } else {
-        var _oCon = conList.slice(0);
-
-        console.log('THE O CON');
-        console.log(_oCon);
-        multiCon = _oCon[0].trim().toUpperCase() === ('AND' || 'OR') ? true : false;
-        var operator = multiCon ? conList[2] : conList[1];
-
-        switch (operator) {
-          case 'EQUALS':
-            operand = '=';
-            break;
-
-          case 'ISGREATEROREQUALS':
-            operand = '>=';
-            break;
-
-          case 'ISLESSOREQUALS':
-            operand = '<=';
-            break;
-
-          case 'ISLIKE':
-            operand = 'LIKE';
-            break;
-
-          case 'ISIN':
-            operand = 'IN';
-            break;
-
-          case 'ISREGEX':
-            operand = 'REGEXP';
-            break;
-
-          default:
-            operand = '=';
-        }
-
-        leftoperand = multiCon ? conList[3] : conList[2];
+        _condition2 += self.parseFormatCondition(con);
       }
+      /*console.log('THE con ITEM')
+      console.log(con)
+      let conList = con.trim().split(' ')
+      console.log('THE CONLIST')
+      console.log(conList)
+      let operand = ''
+      let leftoperand = ''
+      let multiCon = false
+      let match = false
+        if(conList[0].trim() === 'MATCH' || conList[1].trim() === 'MATCH'){
+          
+        if(conList.indexOf('AGAINST') > 0 && conList.length >= 5){
+              let oCon = conList.slice(0)
+            console.log('THE O CON')
+          console.log(oCon) 
+           multiCon = oCon[0].trim().toUpperCase() !== 'MATCH' ? true : false
+            let matchFields = ''
+          let matchKeys = ''
+            if(multiCon){
+            
+              matchFields = oCon[2].trim()
+            matchKeys = oCon[4].trim()
+            
+          }else{
+              
+                matchFields = oCon[1].trim()
+              matchKeys = oCon[3].trim()
+          }
+          
+            matchFields[0] === '[' ? matchFields = matchFields.slice(1,matchFields.length -1) : ''
+          matchKeys[0] === '[' ? matchKeys = matchKeys.slice(1,matchKeys.length - 1) : ''
+          console.log('THE MATCH FIELDS')
+          console.log(matchFields)
+          let op = ''
+          operand = multiCon ? oCon[3].trim() : oCon[2].trim() 
+          let mode = multiCon ? oCon[5] : oCon[4]
+        
+          
+          switch(mode){
+            case 'BOOLEAN' : 
+            op = `AGAINST ("${matchKeys}"" IN BOOLEAN MODE) `
+          break;
+          case 'QUERY' : 
+            op = `AGAINST ("${matchKeys}" IN QUERY EXPRESSION MODE) `
+          break;
+          
+          default: 
+            op = `AGAINST ("${matchKeys}" IN NATURAL LANGUAGE MODE) `
+            }
+            conList[0] = multiCon ? `${oCon[0]} MATCH (${matchFields}) ${op}` :`MATCH (${matchFields}) ${op}`
+        //  leftoperand = ` ${op}`
+          match = true
+              
+          }else{
+            }
+        }else{
+            
+          let oCon = conList.slice(0)
+            console.log('THE O CON')
+          console.log(oCon) 
+          multiCon = oCon[0].trim().toUpperCase() === ('AND' || 'OR' || 'NOT') ? true : false     
+          let operator = multiCon ? conList[2] : conList[1]
+          switch(operator){
+            case 'EQUALS' : 
+            operand = '='
+            break;
+          case 'ISGREATEROREQUALS' : 
+            operand = '>='
+            break;
+          case 'ISLESSOREQUALS' : 
+            operand = '<='
+            break;
+          case 'ISLIKE' : 
+            operand = 'LIKE'
+            break;
+          case 'ISIN' : 
+          operand = 'IN'
+          break;
+          case 'ISREGEX' : 
+            operand = 'REGEXP'
+            break;
+          case 'ISNOT' : 
+          operand = 'NOT'
+          break;
+          case 'ISNOTNULL' : 
+          operand = 'IS NOT NULL'
+          break;
+          case 'ISNULL' : 
+          operand = 'IS NULL'
+          break;
+          default: 
+            operand = '='
+        }
+        leftoperand = multiCon ? conList[3] : conList[2]
+        }
+        match ? condition += `${conList[0]}` : multiCon ? condition += ` ${conList[0]} ${conList[1]} ${operand} '${leftoperand}' `
+      : condition += `${conList[0]} ${operand} '${leftoperand}' `*/
 
-      match ? _condition2 += "".concat(conList[0]) : multiCon ? _condition2 += " ".concat(conList[0], " ").concat(conList[1], " ").concat(operand, " '").concat(leftoperand, "' ") : _condition2 += "".concat(conList[0], " ").concat(operand, " '").concat(leftoperand, "' ");
     });
-
     console.log('THE search FROM CONDITION');
     console.log(_condition2);
     return _condition2.trim();
@@ -4765,42 +5124,48 @@ var searchStatement = function searchStatement(options) {
     };
     console.log('THE OPTIONS LENGTH');
     console.log(options.length);
+    var _limit2 = ' ';
 
-    var _sort = options.sort ? self.sort(options.sort) : ' ';
+    var _sort2 = options.sort ? self.sort(options.sort) : ' ';
+
+    options.take ? _limit2 = self.limit(options.take, 'take') : options.range ? _limit2 = self.limit(options.range, 'range') : ' ';
 
     switch (options.length) {
       case 3:
-        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM ??\n                JOIN ??\n                  ON ").concat(options.joinPoints[0], "\n                JOIN ??\n                  ON ").concat(options.joinPoints[1], "\n                WHERE ").concat(options.from.condition, "\n                ").concat(_sort, "\n                \n                ");
+        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM ??\n                JOIN ??\n                  ON ").concat(options.joinPoints[0], "\n                JOIN ??\n                  ON ").concat(options.joinPoints[1], "\n                WHERE ").concat(options.from.condition, "\n                ").concat(_sort2, "\n                ").concat(_limit2, "\n                \n                ");
         break;
 
       case 4:
-        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM ").concat(options.from.table, "\n                JOIN ").concat(options.tables[0], "\n                  ON ").concat(options.joinPoints[0], "\n                JOIN ").concat(options.tables[1], "\n                  ON ").concat(options.joinPoints[1], "\n                JOIN ").concat(options.tables[2], "\n                  ON ").concat(options.joinPoints[2], "\n                WHERE ").concat(options.from.condition, "\n                ").concat(_sort, "\n                \n                ");
+        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM ").concat(options.from.table, "\n                JOIN ").concat(options.tables[0], "\n                  ON ").concat(options.joinPoints[0], "\n                JOIN ").concat(options.tables[1], "\n                  ON ").concat(options.joinPoints[1], "\n                JOIN ").concat(options.tables[2], "\n                  ON ").concat(options.joinPoints[2], "\n                WHERE ").concat(options.from.condition, "\n                ").concat(_sort2, "\n                ").concat(_limit2, "\n                ");
         break;
 
       case 5:
-        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM ").concat(options.from.table, "\n                JOIN ").concat(options.tables[0], "\n                  ON ").concat(options.joinPoints[0], "\n                JOIN ").concat(options.tables[1], "\n                  ON ").concat(options.joinPoints[1], "\n                JOIN ").concat(options.tables[2], "\n                  ON ").concat(options.joinPoints[2], " \n                JOIN ").concat(options.tables[3], "\n                  ON ").concat(options.joinPoints[3], "\n                WHERE ").concat(options.from.condition, "\n                ").concat(_sort, "\n                ");
+        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM ").concat(options.from.table, "\n                JOIN ").concat(options.tables[0], "\n                  ON ").concat(options.joinPoints[0], "\n                JOIN ").concat(options.tables[1], "\n                  ON ").concat(options.joinPoints[1], "\n                JOIN ").concat(options.tables[2], "\n                  ON ").concat(options.joinPoints[2], " \n                JOIN ").concat(options.tables[3], "\n                  ON ").concat(options.joinPoints[3], "\n                WHERE ").concat(options.from.condition, "\n                ").concat(_sort2, "\n                ").concat(_limit2, "\n                ");
         break;
 
       default:
-        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM  ??\n                JOIN  ").concat(options.tables[0], "\n                  ON ").concat(options.joinPoints[0], "\n                WHERE ").concat(options.from.condition, "\n                ").concat(_sort, "\n              ");
+        sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                FROM  ??\n                JOIN  ").concat(options.tables[0], "\n                  ON ").concat(options.joinPoints[0], "\n                WHERE ").concat(options.from.condition, "\n                ").concat(_sort2, "\n                ").concat(_limit2, "\n              ");
     }
 
     return sqlAttribs;
   } else {
-    var _sqlAttribs = {};
-    _sqlAttribs.attribs = {
+    var _sqlAttribs3 = {};
+    _sqlAttribs3.attribs = {
       from: options.from
     };
+    var _limit3 = ' ';
 
-    var _sort2 = options.sort ? self.sort(options.sort) : ' ';
+    var _sort3 = options.sort ? self.sort(options.sort) : ' ';
+
+    options.take ? _limit3 = self.limit(options.take, 'take') : options.range ? _limit3 = self.limit(options.range, 'range') : ' ';
 
     if (contains(options.from, 'condition')) {
-      _sqlAttribs.statement = "SELECT ".concat(options.fields, "\n              FROM  ??\n              WHERE ").concat(options.from.condition, "\n              ").concat(_sort2, "\n              ");
+      _sqlAttribs3.statement = "SELECT ".concat(options.fields, "\n              FROM  ??\n              WHERE ").concat(options.from.condition, "\n              ").concat(_sort3, "\n              ").concat(_limit3, "\n              ");
     } else {
-      _sqlAttribs.statement = "SELECT ".concat(options.fields, "\n                              FROM  ??\n                              ").concat(_sort2, "\n                              ");
+      _sqlAttribs3.statement = "SELECT ".concat(options.fields, "\n                              FROM  ??\n                              ").concat(_sort3, "\n                              ").concat(_limit3, "\n                              ");
     }
 
-    return _sqlAttribs;
+    return _sqlAttribs3;
   }
 };
 var searchOptions = function searchOptions(i) {
@@ -4819,44 +5184,45 @@ var searchOptions = function searchOptions(i) {
     };
     _options.joinPoints = i.joinPoints ? self.searchConditionsFormat(i.joinPoints, 'ON') : null;
     _options.length = i.tables.length;
-    _options.tables = i.tables.splice(1, i.tables.length);
-    contains(i, ['returnFields', 'opiks']) ? _options.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : '';
-    contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options.fields = '*' : _options.fields = i.returnFields : '';
-    contains(i, 'opiks') ? _options.fields = self.searchFieldsFormat(i.opiks) : '';
+    _options.tables = i.tables.splice(1, i.tables.length); //  contains(i,['returnFields','opiks']) ? options.fields = self.searchFieldsFormat(i.opiks,i.returnFields) : ''
+    //  contains(i,'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? options.fields='*' : options.fields= i.returnFields : ''
+    //  contains(i,'opiks') ?  options.fields = self.searchFieldsFormat(i.opiks) : ''
+
+    contains(i, ['returnFields', 'opiks']) ? _options.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : contains(i, 'opiks') ? _options.fields = self.searchFieldsFormat(i.opiks) : contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options.fields = '*' : _options.fields = i.returnFields : '';
     contains(i, 'type') ? _options.type = i.type : '';
     contains(i, 'take') ? _options.take = i.take : '';
     contains(i, 'range') ? _options.range = i.range : '';
-    contains(i, 'soundex') ? _options.soundex : '';
-    contains(i, 'sort') ? _options.sort : '';
+    contains(i, 'soundex') ? _options.soundex = i.soundex : '';
+    contains(i, 'sort') ? _options.sort = i.sort : '';
     return _options;
   } else if (contains(i, ['conditions'])) {
     var _options2 = {};
     _options2.from = {
       table: i.tables[0],
-      condition: self.searchConditionsFormat(i.conditions)
+      condition: self.searchConditionsFormat(i.conditions) // contains(i,['returnFields','opiks']) ? options.fields = self.searchFieldsFormat(i.opiks,i.returnFields) : ''
+      // contains(i,'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? options.fields='*' : options.fields= i.returnFields : ''
+      // contains(i,'opiks') ?  options.fields = self.searchFieldsFormat(i.opiks) : ''
+
     };
-    contains(i, ['returnFields', 'opiks']) ? _options2.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : '';
-    contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options2.fields = '*' : _options2.fields = i.returnFields : '';
-    contains(i, 'opiks') ? _options2.fields = self.searchFieldsFormat(i.opiks) : '';
+    contains(i, ['returnFields', 'opiks']) ? _options2.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : contains(i, 'opiks') ? _options2.fields = self.searchFieldsFormat(i.opiks) : contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options2.fields = '*' : _options2.fields = i.returnFields : '';
     contains(i, 'type') ? _options2.type = i.type : '';
     contains(i, 'take') ? _options2.take = i.take : '';
     contains(i, 'range') ? _options2.range = i.range : '';
-    contains(i, 'soundex') ? _options2.soundex : '';
-    contains(i, 'sort') ? _options2.sort : '';
+    contains(i, 'soundex') ? _options2.soundex = i.soundex : '';
+    contains(i, 'sort') ? _options2.sort = i.sort : '';
     return _options2;
   } else if (contains(i, 'tables') && i.tables instanceof Array) {
     var _options3 = {};
     _options3.from = {
       table: i.tables[0]
     };
-    contains(i, ['returnFields', 'opiks']) ? _options3.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : '';
-    contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options3.fields = '*' : _options3.fields = i.returnFields : '';
-    contains(i, 'opiks') ? _options3.fields = self.searchFieldsFormat(i.opiks) : '';
+    contains(i, ['returnFields', 'opiks']) ? _options3.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : contains(i, 'opiks') ? _options3.fields = self.searchFieldsFormat(i.opiks) : contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options3.fields = '*' : _options3.fields = i.returnFields : ''; // contains(i,'opiks') ?  options.fields = self.searchFieldsFormat(i.opiks) : ''
+
     contains(i, 'type') ? _options3.type = i.type : '';
     contains(i, 'take') ? _options3.take = i.take : '';
     contains(i, 'range') ? _options3.range = i.range : '';
-    contains(i, 'soundex') ? _options3.soundex : '';
-    contains(i, 'sort') ? _options3.sort : '';
+    contains(i, 'soundex') ? _options3.soundex = i.soundex : '';
+    contains(i, 'sort') ? _options3.sort = i.sort : '';
     return _options3;
   } else {
     return null;
@@ -4867,28 +5233,64 @@ var searchFieldsFormat = function searchFieldsFormat(fields) {
   console.log('THE SELECT STATEMENT OPIKS OBJECT');
   console.log(fields);
   console.log(rFields);
+  var self = this;
+  var contains = self.pao.pa_contains;
   var fis = fields;
   var keyword = '';
-  var otherFields = rFields ? rFields : [];
+  var otherFields = rFields ? rFields.join(',') : '';
+  var all = '';
   var fieldstatement = '';
+  var multiFields = [];
+  var allFields = otherFields.indexOf('all') >= 0;
+  var lastCondition = false;
+  console.log('THE OTHER FIELDS');
+  console.log(otherFields);
+  console.log(otherFields.indexOf('all') >= 0);
+
+  for (var fi = 0; fi < fis.length; fi++) {
+    if (fis[fi].indexOf('fuxin') >= 0 || fis[fi].indexOf('field') >= 0) {
+      multiFields.push(true);
+    }
+
+    if (multiFields.length > 1) {
+      break;
+    }
+  }
+
   fis.forEach(function (f, i) {
     var formated = self.fieldFormat(f);
 
     if (formated instanceof Object) {
       keyword = formated.value.toUpperCase();
     } else {
-      fieldstatement += formated;
+      console.log('THE FORMATED');
+      console.log(formated);
+      console.log(allFields);
+      console.log(otherFields);
+
+      if (i === fis.length - 1) {
+        lastCondition = true;
+      }
+
+      fieldstatement += allFields ? multiFields && i !== fis.length - 1 ? "".concat(formated, ",") : formated : lastCondition && rFields === null ? "".concat(formated) : "".concat(formated, ",");
     }
   });
-  return "".concat(keyword, " ").concat(fieldstatement, ", ").concat(_toConsumableArray(otherFields));
+  allFields === true ? all = '*,' : '';
+  return allFields ? "".concat(all, " ").concat(keyword, " ").concat(fieldstatement) : "".concat(all, " ").concat(keyword, " ").concat(fieldstatement, " ").concat(otherFields);
 };
 var fieldFormat = function fieldFormat(field) {
   var from = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  console.log('THE SELECT STATEMENT OPIKS OBJECT');
-  console.log(fields);
+  console.log('THE SELECT STATEMENT OPIKS OBJECT FIELD FORMAT');
+  console.log(field);
+  var self = this;
+  var contains = self.pao.pa_contains;
   var fieldList = field.trim().split('.');
+  console.log('THE FIELD LIST');
+  console.log(fieldList);
   var fieldstatement = null;
   var as = fieldList[0] === 'fuxin' ? fieldList.length > 3 ? "AS ".concat(self.options("".concat(fieldList[3]), 'as')) : ' ' : ' ';
+  console.log('THE as');
+  console.log(as);
 
   switch (fieldList[0]) {
     case 'keyword':
@@ -4899,12 +5301,11 @@ var fieldFormat = function fieldFormat(field) {
       break;
 
     case 'fuxin':
-      fieldstatement = "".concat(fieldList[1].toUpperCase(), "(").concat(self.options("".concat(fieldList[2]), 'option'), ") ").concat(as, " ");
+      fieldstatement = " ".concat(fieldList[1].toUpperCase(), "(").concat(self.options("".concat(fieldList[2]), 'option'), ") ").concat(as, " ");
       break;
 
     case 'field':
-      if (fieldList.length === 3) fieldstatement = "".concat(fieldList[1], " AS ").concat(self.option(fieldList[2], 'as'));
-      fieldstatement = '';
+      if (fieldList.length === 3) fieldstatement = "".concat(fieldList[1], " AS ").concat(self.options(fieldList[2], 'as'));
       break;
 
     default:
@@ -4915,7 +5316,11 @@ var fieldFormat = function fieldFormat(field) {
 };
 var options = function options(option) {
   var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
-  var stripedOption = option.slice(option.indexOf('['), option.lastIndexOf(']'));
+  var self = this;
+  var contains = self.pao.pa_contains;
+  var stripedOption = option.slice(option.indexOf('[') + 1, option.lastIndexOf(']'));
+  console.log('OPTIONS: STRIPEDOPTION');
+  console.log(stripedOption);
 
   if (type === 'as') {
     return "".concat(stripedOption);
@@ -4927,18 +5332,334 @@ var options = function options(option) {
         return self.fieldFormat(args[0], true);
       } else if (args[0].indexOf('fuxin') > 0) {
         return self.fieldFormat(args[0]);
+      } else {
+        return "".concat(stripedOption);
       }
     } else {
       return args.join(',');
     }
   } else {}
 };
-var sort = function sort() {
-  var sort = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  return '';
+var sort = function sort(_sort4) {
+  console.log('THE SORT GOT A RESPONSE');
+  console.log(_sort4);
+
+  var sortArgs = _sort4.split('.');
+
+  var sortFields = _sort4.slice(_sort4.indexOf('[') + 1, _sort4.lastIndexOf(']'));
+
+  var sortStatement = '';
+
+  if (sortArgs[0].indexOf('order') >= 0) {
+    if (sortArgs.length > 1) {
+      if (sortArgs[1].toUpperCase() === 'DESC') {
+        sortStatement = "ORDER BY ".concat(sortFields, " DESC");
+      } else {
+        sortStatement = "ORDER BY ".concat(sortFields);
+      }
+    } else {
+      sortStatement = "ORDER BY ".concat(sortFields);
+    }
+  } else if (sortArgs[0].indexOf('group') >= 0) {
+    if (sortArgs.length > 1) {
+      if (sortArgs[1].toUpperCase() === 'DESC') {
+        sortStatement = "GROUP BY ".concat(sortFields, " DESC");
+      } else {
+        sortStatement = "GROUP BY ".concat(sortFields, " ASC");
+      }
+    } else {
+      sortStatement = "GROUP BY ".concat(sortFields, " ASC");
+    }
+  }
+
+  return sortStatement;
 };
-var limit = function limit() {
-  var sort = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+var limit = function limit(_limit4) {
+  var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var limitStatement = '';
+
+  if (type === 'take') {
+    limitStatement = "LIMIT ".concat(_limit4);
+  } else if (type === 'range') {
+    var ranges = _limit4.split(',');
+
+    var offset = ranges[0];
+    var count = ranges[1];
+    limitStatement = "LIMIT ".concat(count, " OFFSET ").concat(offset);
+  }
+
+  return limitStatement;
+};
+var parseGroup = function parseGroup(con) {
+  var level = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1;
+  var self = this;
+  var pao = self.pao;
+  var isObject = pao.pa_isObject;
+  var fullCon = '';
+  var connector = '';
+  var res = self.conditionsConnector(con);
+  console.log('THE RES VALUE');
+  console.log(res);
+
+  if (isObject(res)) {
+    console.log('THE RES IS AN OBJECT');
+    console.log(res);
+    con = res.condixion;
+    connector = res.connector;
+  }
+
+  if (con.trim().indexOf('GROUP::') === 0) {
+    console.log('THE GROUP:: string is the first'); //let groupRegx = /GROUP::/
+
+    var exStr = con.replace('GROUP::', '').trim();
+    var groupLen = 0;
+    var startStr = '';
+    var conStr = '';
+    console.log('THE extracted string');
+    console.log(exStr);
+
+    if (typeof parseInt(exStr[0]) === 'number') {
+      console.log('extStr type is a number');
+      groupLen = parseInt(exStr[0]);
+      startStr = exStr.slice(1).trim();
+
+      if (startStr.indexOf('START') === 0 || startStr.indexOf('$') === 0) {
+        conStr = startStr.replace('START', '').trim();
+        console.log(startStr);
+        var groupCons = ''; //  let groupL1Cons = ''
+        //  let groupL2Cons = ''
+        //  let groupL3Cons = ''
+
+        var grouped = [];
+        console.log('PARSEGROUP EXECUTES THIS FAR');
+        console.log(conStr);
+
+        if (level === 1) {
+          groupCons = conStr.split(';');
+          console.log('LEVEL 1 GROUPCONS');
+          console.log(groupCons);
+          grouped = groupCons.map(function (c, i) {
+            var connector = '';
+            console.log('THE C CONDITION');
+            console.log(c);
+            console.log(c.indexOf('GROUP::')); //  self.conditionsConnector()
+
+            if (c.indexOf('GROUP::') >= 0) {
+              return self.parseGroup(c, 2);
+            } else {
+              return self.parseFormatCondition(c);
+            }
+          });
+        } else if (level === 2) {
+          groupCons = conStr.split(',');
+          console.log('LEVEL 2 GROUPCONS');
+          console.log(groupCons);
+          grouped = groupCons.map(function (c, i) {
+            // c = self.conditionsConnector(c)
+            if (c.indexOf('GROUP::') >= 0) {
+              return self.parseGroup(c, 3);
+            } else {
+              return self.parseFormatCondition(c);
+            }
+          });
+        } else if (level === 3) {
+          groupCons = conStr.split('|');
+          grouped = groupCons.map(function (c, i) {
+            return self.parseFormatCondition(c);
+          });
+        }
+
+        console.log('GROUPED');
+        console.log(grouped);
+        console.log(groupCons);
+        fullCon = "".concat(connector, " (").concat(grouped.join(' '), ")");
+      } else {}
+    }
+  }
+
+  console.log('THE FULL GROUPED CONDITION TO BE RETURNED:');
+  console.log(fullCon);
+  return fullCon;
+};
+var parseFormatCondition = function parseFormatCondition(con) {
+  var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var self = this;
+  var pao = self.pao;
+
+  if (type) {
+    var cons = con;
+    var condition = [];
+    cons.forEach(function (kon, i) {
+      var conList = kon.trim().split(' ');
+      var operand = '=';
+      condition.push("".concat(conList[0], " ").concat(operand, " ").concat(conList[2]));
+    });
+    console.log('THE search ON CONDITION');
+    console.log(condition);
+    return condition;
+  } else {
+    var _condition3 = '';
+    console.log('THE con ITEM');
+    console.log(con);
+    var conList = con.trim().split(' '); // let conList = con.trim().match(/(?:"^\s\[]+|"[^"]*")+/g)
+
+    console.log('THE CONLIST');
+    console.log(conList);
+    var operand = '';
+    var leftoperand = '';
+    var multiCon = false;
+    var match = false;
+
+    if (conList[0].trim() === 'MATCH' || conList[1].trim() === 'MATCH') {
+      if (conList.indexOf('AGAINST') > 0 && conList.length >= 5) {
+        var oCon = conList.slice(0);
+        console.log('THE O CON');
+        console.log(oCon);
+        multiCon = oCon[0].trim().toUpperCase() !== 'MATCH' ? true : false;
+        var matchFields = '';
+        var matchKeys = '';
+
+        if (multiCon) {
+          matchFields = oCon[2].trim();
+          matchKeys = oCon[4].trim();
+        } else {
+          matchFields = oCon[1].trim();
+          matchKeys = oCon[3].trim();
+        }
+
+        matchFields[0] === '[' ? matchFields = matchFields.slice(1, matchFields.length - 1) : '';
+        matchKeys[0] === '[' ? matchKeys = matchKeys.slice(1, matchKeys.length - 1) : '';
+        console.log('THE MATCH FIELDS');
+        console.log(matchFields);
+        var op = '';
+        operand = multiCon ? oCon[3].trim() : oCon[2].trim();
+        var mode = multiCon ? oCon[5] : oCon[4];
+
+        switch (mode) {
+          case 'BOOLEAN':
+            op = "AGAINST (\"".concat(matchKeys, "\"\" IN BOOLEAN MODE) ");
+            break;
+
+          case 'QUERY':
+            op = "AGAINST (\"".concat(matchKeys, "\" IN QUERY EXPRESSION MODE) ");
+            break;
+
+          default:
+            op = "AGAINST (\"".concat(matchKeys, "\" IN NATURAL LANGUAGE MODE) ");
+        }
+
+        conList[0] = multiCon ? "".concat(oCon[0], " MATCH (").concat(matchFields, ") ").concat(op) : "MATCH (".concat(matchFields, ") ").concat(op); //  leftoperand = ` ${op}`
+
+        match = true;
+      } else {}
+    } else {
+      var _oCon = conList.slice(0);
+
+      console.log('THE O CON');
+      console.log(_oCon);
+
+      var firstStrItem = _oCon[0].trim().toUpperCase();
+
+      multiCon = firstStrItem === 'AND' || firstStrItem === 'OR' || firstStrItem === 'NOT' ? true : false;
+      var operator = multiCon ? conList[2] : conList[1];
+      console.log('THE MULTICON STATUS:::');
+      console.log(multiCon);
+      console.log(_oCon);
+
+      switch (operator) {
+        case 'EQUALS':
+          operand = '=';
+          break;
+
+        case 'ISGREATEROREQUALS':
+          operand = '>=';
+          break;
+
+        case 'ISLESSOREQUALS':
+          operand = '<=';
+          break;
+
+        case 'ISLIKE':
+          operand = 'LIKE';
+          break;
+
+        case 'ISIN':
+          operand = 'IN';
+          break;
+
+        case 'ISREGEX':
+          operand = 'REGEXP';
+          break;
+
+        case 'ISNOT':
+          operand = 'NOT';
+          break;
+
+        case 'ISNOTNULL':
+          operand = 'IS NOT NULL';
+          break;
+
+        case 'ISNULL':
+          operand = 'IS NULL';
+          break;
+
+        default:
+          operand = '=';
+      }
+
+      leftoperand = multiCon ? conList[3] : conList[2];
+    }
+
+    match ? _condition3 += "".concat(conList[0]) : multiCon ? _condition3 += " ".concat(conList[0], " ").concat(conList[1], " ").concat(operand, " '").concat(leftoperand, "' ") : _condition3 += "".concat(conList[0], " ").concat(operand, " '").concat(leftoperand, "' ");
+    console.log('THE search FROM CONDITION');
+    console.log(_condition3);
+    return _condition3.trim();
+  }
+};
+var conditionsConnector = function conditionsConnector(c) {
+  var connector = {};
+  console.log('THE INDEX OF GROUP:: IN CONDITIONS CONNECTOR');
+  console.log(c.trim().indexOf('GROUP::'));
+  console.log(c);
+
+  if (c.trim().indexOf('GROUP::') > 0) {
+    console.log('THE INDEX OF GROUP IS AT ONE');
+
+    if (c.trim().indexOf('AND') === 0) {
+      connector.connector = " AND";
+      connector.condixion = c.replace('AND', '').trim();
+    } else if (c.trim().indexOf('OR') === 0) {
+      connector.connector = " OR";
+      connector.condixion = c.replace('OR', '').trim();
+    } else if (c.trim().indexOf('NOT') === 0) {
+      connector.connector = " NOT";
+      connector.condixion = c.replace('NOT', '').trim();
+    }
+
+    return connector;
+  } else {
+    return c;
+  }
+};
+var set = function set(_set) {
+  var self = this;
+  var pao = self.pao;
+  var setString = '';
+
+  _set.forEach(function (s, i) {
+    var key = '';
+    var value = '';
+    key = Object.keys(s)[0];
+    value = s[Object.keys(s)[0]];
+    console.log('THE LENGTH OF S');
+    console.log(_set.length);
+    console.log(i);
+    setString += i === _set.length - 1 ? "".concat(key, " = \"").concat(value, "\"") : "".concat(key, " = \"").concat(value, "\", ");
+  });
+
+  console.log('THE SETSTRING');
+  console.log(setString);
+  return setString;
 };
 
 /***/ }),
@@ -5382,6 +6103,12 @@ var Activate = function Activate() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_register__ = __webpack_require__(90);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modules_login__ = __webpack_require__(94);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__modules_authentication__ = __webpack_require__(97);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modules_frametest__ = __webpack_require__(100);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__modules_adash__ = __webpack_require__(103);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__modules_inalerts__ = __webpack_require__(106);
+
+
+
 
 
 
@@ -5394,6 +6121,9 @@ var Activate = function Activate() {
 /* harmony default export */ __webpack_exports__["a"] = ({
   Test: __WEBPACK_IMPORTED_MODULE_0__modules_test__["a" /* default */],
   List: __WEBPACK_IMPORTED_MODULE_1__modules_list__["a" /* default */],
+  Adash: __WEBPACK_IMPORTED_MODULE_10__modules_adash__["a" /* default */],
+  Inalerts: __WEBPACK_IMPORTED_MODULE_11__modules_inalerts__["a" /* default */],
+  FrameTest: __WEBPACK_IMPORTED_MODULE_9__modules_frametest__["a" /* default */],
   Job: __WEBPACK_IMPORTED_MODULE_2__modules_job__["a" /* default */],
   Fetch: __WEBPACK_IMPORTED_MODULE_3__modules_fetch__["a" /* default */],
   Jwt: __WEBPACK_IMPORTED_MODULE_4__modules_jwt__["a" /* default */],
@@ -5571,7 +6301,13 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 var Job = function Job(pao) {
   _classCallCheck(this, Job);
 
-  this.pao = pao;
+  this.pao = pao; // this.partners = [
+  //  {
+  //  	url: 'https://www.indeed.com'
+  //    apiCreds:{uname: 'name'}
+  //  }
+  // ]
+
   this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* init */];
   this.handleJobTask = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* handleJobTask */];
   this.getJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* getJobs */];
@@ -5593,6 +6329,8 @@ var Job = function Job(pao) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getJobs; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getJFP; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getNativeJobs; });
+/* unused harmony export saveApplication */
+/* unused harmony export getJobDetail */
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return searchBatch; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return searchBatchHandler; });
 var init = function init() {
@@ -5635,6 +6373,30 @@ var getNativeJobs = function getNativeJobs(data) {
     });
   } else {}
 };
+var saveApplication = function saveApplication(data) {
+  var self = this;
+  var pao = self.pao;
+  var cpus = 4;
+  console.log(data);
+
+  if (data.hasOwnProperty('callback')) {
+    data.callback(null, {
+      fetch: ['Fetch', 'the', 'data', cpus]
+    });
+  } else {}
+};
+var getJobDetail = function getJobDetail(data) {
+  var self = this;
+  var pao = self.pao;
+  var cpus = 4;
+  console.log(data);
+
+  if (data.hasOwnProperty('callback')) {
+    data.callback(null, {
+      fetch: ['Fetch', 'the', 'data', cpus]
+    });
+  } else {}
+};
 var searchBatch = function searchBatch(key) {
   // let fields = {
   // 	jo_user: { id: 'NULL',u_type: data.usertype,first_name: data.firstname,last_name: data.lastname,email: data.email },
@@ -5653,7 +6415,7 @@ var searchBatch = function searchBatch(key) {
     tables: ['jo_job', 'jo_recruiter', 'jo_company'],
     joins: 3,
     joinPoints: ['jo_job.u_id EQUALS jo_recruiter.id', 'jo_company.id EQUALS jo_recruiter.company_id'],
-    conditions: ["MATCH [job_title] AGAINST [".concat(key, "] NATURAL"), "OR MATCH [position] AGAINST [php] NATURAL", "OR MATCH [skills] AGAINST [php] NATURAL"],
+    conditions: ["MATCH [job_title] AGAINST [".concat(key, "] NATURAL"), "OR MATCH [description] AGAINST [php] NATURAL"],
     take: 10,
     soundex: true,
     type: 'inner'
@@ -6202,7 +6964,7 @@ var handleRegisterTask = function handleRegisterTask(data) {
 var registerStrategy = function registerStrategy(data) {
   var self = this;
   var pao = self.pao;
-  var user = data.user.parsed.user;
+  var user = data.payload.user;
   console.log('THE DATA INSIDE STRATEGY');
   console.log(user);
 
@@ -6248,14 +7010,14 @@ var social = function social(data) {
 };
 var isUserExist = function isUserExist(data) {
   var self = this;
-  var user = data.user.parsed.user;
+  var user = data.payload.user;
   self.log('Checking if user is taken');
   self.callback = data.callback;
   self.query('mysql.jo_user.findOne', {
     user: {
       email: user.email
     }
-  }, self.findHandler.bind(this));
+  }, self.findHandler.bind(this)); //   {conditions: ['where']}
 };
 var isCallback = function isCallback(data) {
   var over = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
@@ -6885,6 +7647,864 @@ var token = function token() {
     console.log(r);
     self.request.next();
   }
+};
+
+/***/ }),
+/* 100 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__frametest__ = __webpack_require__(101);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__frametest__["a" /* default */]);
+
+/***/ }),
+/* 101 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(102);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+ //Dependecies
+
+var crypto = __webpack_require__(93);
+
+var FrameTest = function FrameTest(pao) {
+  _classCallCheck(this, FrameTest);
+
+  this.pao = pao;
+  this.crypto = crypto;
+  this.tmpd = null;
+  this.strategies = {
+    anzii: true,
+    social: true // methods
+
+  };
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* init */];
+  this.handleFrameTestTask = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* handleFrameTestTask */];
+  this.registerStrategy = __WEBPACK_IMPORTED_MODULE_0__methods__["registerStrategy"];
+  this.anzii = __WEBPACK_IMPORTED_MODULE_0__methods__["anzii"];
+  this.social = __WEBPACK_IMPORTED_MODULE_0__methods__["m" /* social */];
+  this.isUserExist = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* isUserExist */];
+  this.isCallback = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* isCallback */];
+  this.hash = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* hash */];
+  this.insertHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* insertHandler */];
+  this.findHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* findHandler */];
+  this.procedureDoc = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* procedureDoc */];
+  this.setTokenHeader = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* setTokenHeader */];
+  this.testy = __WEBPACK_IMPORTED_MODULE_0__methods__["n" /* testy */];
+  this.dataRequestHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* dataRequestHandler */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (FrameTest);
+
+/***/ }),
+/* 102 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return handleFrameTestTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return testy; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return dataRequestHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return social; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return isUserExist; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return isCallback; });
+/* unused harmony export processResults */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return setTokenHeader; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return insertHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return findHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return hash; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return procedureDoc; });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var init = function init() {
+  console.log('Register has been initialised');
+  this.listens({
+    'handle-test-task': this.handleFrameTestTask.bind(this)
+  });
+};
+var handleFrameTestTask = function handleFrameTestTask(data) {
+  var self = this;
+  self.log("HANDLING FRAMEWORK REGISTRATION TASK");
+  self.log(data);
+  self.testy(data);
+};
+var testy = function testy(data) {
+  var self = this;
+  var pao = self.pao;
+  var contains = pao.pa_contains;
+  var user = data.payload.user;
+  self.callback = data.callback;
+  console.log('THE DATA INSIDE TESTY');
+  console.log(user);
+  console.log('THE PARSED DATA TEST');
+  console.log(data);
+  console.log(user); // self.callback(null,user)
+  // let rest = {
+  // 	// conditions: [`email ISEQUALS ${user.email}`],
+  // 	// set: [{first_name: 'Ntsako'},{last_name: 'Mahori'}]
+  // 	opiks: ['fuxin.count.options[*].as[AllUsers]']
+  //   }
+
+  self.query('mysql.jo_user.find', {
+    opiks: ['fuxin.count.options[*].as[AllUsers]']
+  }, self.dataRequestHandler.bind(this));
+};
+var dataRequestHandler = function dataRequestHandler() {
+  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var data = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var self = this;
+  var pao = self.pao;
+  self.log("Executing DataRequestHandler");
+  self.log(data);
+  self.callback(null, data);
+};
+var social = function social(data) {
+  var self = this;
+  self.log('Executing Social registration strategy');
+};
+var isUserExist = function isUserExist(data) {
+  var self = this;
+  var user = data.user.parsed.user;
+  self.log('Checking if user is taken');
+  self.callback = data.callback;
+  self.query('mysql.jo_user.findOne', {
+    user: {
+      email: user.email
+    }
+  }, self.findHandler.bind(this));
+  var rest = {
+    conditions: ["country_id EQUALS 202"],
+    opiks: ['field.id.as[stateId]', 'field.state_name.as[state]', 'field.country_id.as[countryId]'],
+    sort: 'order[state_name].asc',
+    range: '2,5',
+    take: 5 //   {conditions: ['where']}
+
+  };
+};
+var isCallback = function isCallback(data) {
+  var over = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+
+  if (!data.hasOwnProperty('callback')) {
+    self.log('Task handle request me failed', 'warn');
+    self.emit({
+      type: 'request-task-handle-failed',
+      data: {
+        message: 'failed'
+      }
+    });
+  } else {
+    if (over) {
+      data.callback(over);
+    } else {
+      data.callback();
+    }
+  }
+};
+var processResults = function processResults(e, r) {};
+var setTokenHeader = function setTokenHeader() {
+  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var token = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var self = this;
+  var pao = self.pao;
+
+  if (e) {
+    console.log('TOKEN CREATION FAILED');
+    console.log(e);
+    self.callback(e);
+  } else {
+    console.log('TOKEN CREATION SUCCESSFULL');
+    console.log('SETTING TOKEN HEADER');
+    console.log(self.tmpd);
+    self.tmpd.user.request.res.set('X-AUTH-TOKEN', token.token);
+    self.callback(null, {
+      user: token.user
+    });
+  }
+};
+var insertHandler = function insertHandler() {
+  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var r = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var self = this;
+  var pao = self.pao;
+
+  if (e) {
+    self.callback(e, null);
+  } else {
+    if (!r) {
+      self.callback({
+        message: 'Insert operation failed'
+      }, null);
+    } else {
+      self.emit({
+        type: 'create-jwt-token',
+        data: {
+          payload: r.user,
+          callback: self.setTokenHeader.bind(self)
+        }
+      });
+    }
+  }
+};
+var findHandler =
+/*#__PURE__*/
+function () {
+  var _ref = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee() {
+    var e,
+        r,
+        self,
+        pao,
+        user,
+        _args = arguments;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            e = _args.length > 0 && _args[0] !== undefined ? _args[0] : null;
+            r = _args.length > 1 && _args[1] !== undefined ? _args[1] : null;
+            self = this;
+            pao = self.pao;
+
+            if (e) {
+              self.callback({
+                message: 'An error occured attempting to find user'
+              }, null);
+            } else {
+              console.log('THE VALUE R');
+              console.log(pao.pa_isArray(r));
+              console.log(r.length);
+              console.log(r.length > 0);
+              console.log('after r has been re-assigned a new value');
+              console.log(r);
+              console.log(!r);
+
+              if (pao.pa_isArray(r) && r.length === 0) {
+                console.log('ANZII USER DOES NOT EXIST, CREATE USER');
+                user = self.tmpd.user.parsed.user;
+                self.emit({
+                  type: "hash-payload",
+                  data: {
+                    payload: user.password,
+                    callback: self.hash.bind(self)
+                  }
+                });
+              } else {
+                console.log('THE TAKEN USER');
+                console.log(r);
+                self.callback({
+                  message: 'User is already taken'
+                }, null);
+              }
+            } // token.res.set('X-AUTH-TOKEN',token.tk)
+
+
+          case 5:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function findHandler() {
+    return _ref.apply(this, arguments);
+  };
+}();
+var hash =
+/*#__PURE__*/
+function () {
+  var _ref2 = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee2() {
+    var e,
+        h,
+        self,
+        user,
+        password,
+        _hash,
+        _args2 = arguments;
+
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            e = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : null;
+            h = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : null;
+            self = this;
+
+            if (!e) {
+              _context2.next = 8;
+              break;
+            }
+
+            console.log(e);
+            self.callback({
+              message: 'registration failed due to server error:hash'
+            });
+            _context2.next = 18;
+            break;
+
+          case 8:
+            console.log('hashed');
+            console.log(h);
+            user = self.tmpd.user.parsed.user;
+            password = h;
+            _context2.next = 14;
+            return self.crypto.randomBytes(35).toString('hex');
+
+          case 14:
+            _hash = _context2.sent;
+            user.password = password;
+            user.hash = _hash;
+            self.query('mysql.PROCEDURE', self.procedureDoc(user), self.insertHandler.bind(this)); // self.query(
+            // 	'mysql.jo_user.insertOne',
+            // 	  {user: {id: null,email: user.email,first_name: user.firstname,last_name: user.lastname,password: password,hash: hash}},
+            // 	  self.insertHandler.bind(this)
+            // )
+
+          case 18:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this);
+  }));
+
+  return function hash() {
+    return _ref2.apply(this, arguments);
+  };
+}();
+var procedureDoc = function procedureDoc(data) {
+  var fields = {
+    jo_user: {
+      id: 'NULL',
+      u_type: data.usertype,
+      first_name: data.firstname,
+      last_name: data.lastname,
+      email: data.email
+    },
+    jo_account: {
+      own: {
+        id: 'NULL'
+      },
+      tables: [{
+        name: 'jo_user',
+        values: ['u_type.account_name']
+      }]
+    },
+    jo_user_account_join: {
+      own: {
+        id: 'NULL'
+      },
+      tables: [{
+        name: 'jo_user',
+        values: ['id.u_id', 'email.account_email']
+      }, {
+        name: 'jo_account',
+        values: ['id.account_id']
+      }]
+    },
+    jo_login: {
+      own: {
+        id: 'NULL',
+        password: data.password
+      },
+      tables: [{
+        name: 'jo_user',
+        values: ['id.u_id', 'email.username']
+      }]
+    }
+  };
+  return [{
+    name: 'jo_user',
+    fields: fields.jo_user
+  }, {
+    name: 'jo_account',
+    fields: fields.jo_account
+  }, {
+    name: 'jo_user_account_join',
+    lastInsert: ['jo_user', 'jo_account'],
+    fields: fields.jo_user_account_join
+  }, {
+    name: 'jo_login',
+    lastInsert: ['jo_user'],
+    fields: fields.jo_login
+  }];
+};
+
+/***/ }),
+/* 103 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__adash__ = __webpack_require__(104);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__adash__["a" /* default */]);
+
+/***/ }),
+/* 104 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(105);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Adash = function Adash(pao) {
+  _classCallCheck(this, Adash);
+
+  this.pao = pao;
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* init */];
+  this.handleAdashTask = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleAdashTask */];
+  this.getApplicantTools = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* getApplicantTools */];
+  this.searchBatch = __WEBPACK_IMPORTED_MODULE_0__methods__["searchBatch"];
+  this.searchBatchHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["searchBatchHandler"];
+  this.dataRequestHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* dataRequestHandler */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Adash);
+
+/***/ }),
+/* 105 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleAdashTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getApplicantTools; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return dataRequestHandler; });
+function _typeof(obj) { if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var init = function init() {
+  this.log('Bookmark has been initialised');
+  this.listens({
+    'handle-adash-task': this.handleAdashTask.bind(this)
+  });
+};
+var handleAdashTask = function handleAdashTask(data) {
+  console.log(data);
+  var self = this;
+  var pao = self.pao;
+  var contains = pao.pa_contains;
+  var isOBject = pao.pa_isObject;
+  var user = data.payload.user;
+  self.callback = data.callback;
+  if (!isOBject(user)) return self.callback({
+    message: 'User has not been specified'
+  }, null);
+  if (!contains(user, ['ID'])) return self.callback({
+    message: 'missing required key'
+  }, null);
+  var uid = user.ID;
+  console.log('THE DATA INSIDE Adash');
+  console.log(user);
+  console.log('THE PARSED DATA TEST');
+  console.log(data);
+  console.log(user);
+  self.getApplicantTools(uid).then(function (counts) {
+    self.callback(null, counts);
+  })["catch"](function (e) {
+    console.log('Reject error');
+    console.log(e);
+    self.callback(e, null);
+  });
+};
+var getApplicantTools = function getApplicantTools(uid) {
+  var _this = this;
+
+  var self = this;
+  return new Promise(function (resolve, reject) {
+    var queries = [{
+      table: 'jo_job_alert',
+      opiks: ['fuxin.count.options[*].as[alertsCount]'],
+      conditions: ["u_id EQUALS ".concat(uid)]
+    }, {
+      table: 'jo_job_bookmark',
+      opiks: ['fuxin.count.options[*].as[savedCount]'],
+      conditions: ["u_id EQUALS ".concat(uid)]
+    }, {
+      table: 'jo_search_history',
+      opiks: ['fuxin.count.options[*].as[historyCount]'],
+      conditions: ["u_id EQUALS ".concat(uid)]
+    }];
+    self.query('mysql.multiple.find', queries, self.dataRequestHandler.bind(_this, resolve, reject));
+  });
+};
+var dataRequestHandler = function dataRequestHandler() {
+  var resolve = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var reject = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var e = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var result = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var self = this;
+  var pao = self.pao;
+  console.log('THE TYPE OF E IN DATAREQUEST HANDLER');
+  console.log(_typeof(e));
+  console.log(e);
+  console.log(resolve);
+  console.log(reject);
+  if (e) reject(new Error('An error has occured Inside MYSQL'));
+  resolve(result); // self.log("Executing DataRequestHandler:ADASH")
+  // self.log(data)
+  // self.callback(null,data)
+};
+
+/***/ }),
+/* 106 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__inalerts__ = __webpack_require__(107);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__inalerts__["a" /* default */]);
+
+/***/ }),
+/* 107 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(108);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Inalerts = function Inalerts(pao) {
+  _classCallCheck(this, Inalerts);
+
+  this.pao = pao;
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* init */];
+  this.handleInternalAlertsTask = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* handleInternalAlertsTask */];
+  this.saveAlerts = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* saveAlerts */];
+  this.getAlerts = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* getAlerts */];
+  this.manageAlerts = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* manageAlerts */];
+  this.getGroupedAlerts = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* getGroupedAlerts */];
+  this.dataRequestAlertGroupHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* dataRequestAlertGroupHandler */];
+  this.multiDataRequestHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* multiDataRequestHandler */]; //  this.searchBatch = methods.searchBatch
+  //  this.searchBatchHandler = methods.searchBatchHandler
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Inalerts);
+
+/***/ }),
+/* 108 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return handleInternalAlertsTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return saveAlerts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getAlerts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return manageAlerts; });
+/* unused harmony export deleteAlerts */
+/* unused harmony export updateAlerts */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getGroupedAlerts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return dataRequestAlertGroupHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return multiDataRequestHandler; });
+/* unused harmony export searchBatch */
+/* unused harmony export searchBatchHandler */
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var init = function init() {
+  this.log('Inalerts has been initialised');
+  this.listens({
+    'handle-inalerts-task': this.handleInternalAlertsTask.bind(this)
+  });
+};
+var handleInternalAlertsTask =
+/*#__PURE__*/
+function () {
+  var _ref = _asyncToGenerator(
+  /*#__PURE__*/
+  regeneratorRuntime.mark(function _callee(data) {
+    var self, pao, contains, isOBject, user;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            console.log(data);
+            self = this;
+            pao = self.pao;
+            contains = pao.pa_contains;
+            isOBject = pao.pa_isObject;
+            user = data.payload.user;
+            self.callback = data.callback; // let uid = user.ID
+
+            console.log('THE DATA INSIDE Adash');
+            console.log(user);
+            console.log('THE PARSED DATA TEST');
+            console.log(data);
+            console.log(user);
+
+            if (isOBject(user)) {
+              _context.next = 14;
+              break;
+            }
+
+            return _context.abrupt("return", self.callback({
+              message: 'User has not been specified'
+            }, null));
+
+          case 14:
+            if (user.action) {
+              _context.next = 16;
+              break;
+            }
+
+            return _context.abrupt("return", self.callback({
+              message: 'Invalid request'
+            }, null));
+
+          case 16:
+            if (contains(user, ['payload'])) {
+              _context.next = 18;
+              break;
+            }
+
+            return _context.abrupt("return", self.callback({
+              message: 'missing required key'
+            }, null));
+
+          case 18:
+            if (contains(user.payload, ['ID'])) {
+              _context.next = 20;
+              break;
+            }
+
+            return _context.abrupt("return", self.callback({
+              message: 'missing required key'
+            }, null));
+
+          case 20:
+            _context.t0 = user.action;
+            _context.next = _context.t0 === 'getAlertCategories' ? 23 : _context.t0 === 'saveAlerts' ? 25 : _context.t0 === 'getAlerts' ? 27 : _context.t0 === 'updateAlerts' ? 29 : _context.t0 === 'deleteAlerts' ? 31 : _context.t0 === 'manageAlerts' ? 33 : 35;
+            break;
+
+          case 23:
+            self.getGroupedAlerts(user.payload).then(function (alertCats) {
+              self.callback(null, alertCats);
+            })["catch"](function (e) {
+              console.log('Reject error');
+              console.log(e);
+              self.callback(e, null);
+            });
+            return _context.abrupt("break", 36);
+
+          case 25:
+            self.deleteAccount(data).then(function (deleteStat) {
+              return self.callback(null, deleteStat);
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context.abrupt("break", 36);
+
+          case 27:
+            self.getAlerts(user.payload).then(function (alerts) {
+              return self.callback(null, alerts);
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context.abrupt("break", 36);
+
+          case 29:
+            self.updateUser(data).then(function (updated) {
+              return self.callback(null, updated);
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context.abrupt("break", 36);
+
+          case 31:
+            self.updateUser(data).then(function (updated) {
+              return self.callback(null, updated);
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context.abrupt("break", 36);
+
+          case 33:
+            self.updateUser(data).then(function (updated) {
+              return self.callback(null, updated);
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context.abrupt("break", 36);
+
+          case 35:
+            self.callback(new Error('Unknown data request'), null);
+
+          case 36:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function handleInternalAlertsTask(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+var saveAlerts = function saveAlerts(data) {
+  var _this = this;
+
+  var self = this;
+  var pao = self.pao;
+  return new Promise(function (resolve, reject) {
+    if (!data.profile) return reject(new Error('Invalid Request'));
+    if (!data.profile.userId) return reject(new Error('Invalid'));
+    var query = {
+      returnFields: ['first_name', 'last_name', 'profile', 'email'],
+      tables: ['jo_user', 'jo_alerts'],
+      joins: 2,
+      joinPoints: ['jo_user.id EQUALS jo_alerst_subscription.u_id'],
+      conditions: ["id EQUALS ".concat(profile.userID)],
+      type: 'inner'
+    };
+    self.query('mysql.SEARCH', query, self.dataRequestHandler.bind(_this, resolve, reject));
+  });
+};
+var getAlerts = function getAlerts(pay) {
+  var _this2 = this;
+
+  var self = this;
+  var pao = self.pao;
+  var uid = pay.ID;
+  var catID = pay.catID;
+  return new Promise(function (resolve, reject) {
+    var conditions = catID > 0 ? ["u_id EQUALS ".concat(uid), "AND alert_category_id EQUALS ".concat(catID)] : ["u_id EQUALS ".concat(uid)];
+    var queries = {
+      returnFields: ['frequency'],
+      opiks: ['field.id.as[alertID]', 'field.job_keyword.as[jobKeyword]', 'field.date_created.as[alertDate]'],
+      conditions: conditions,
+      take: 5
+    };
+    self.query('mysql.jo_job_alert.find', queries, self.multiDataRequestHandler.bind(_this2, resolve, reject));
+  });
+};
+var manageAlerts = function manageAlerts(data) {
+  var self = this;
+  var pao = self.pao;
+  self.query('mysql.jo_alerts.removeOne', data, self.dealWithDataStorageResponse(response));
+};
+var deleteAlerts = function deleteAlerts(data) {
+  var _this3 = this;
+
+  var self = this;
+  var pao = self.pao;
+  return new Promise(function (resolve, reject) {
+    if (!data.profile) return reject(new Error('Invalid Request'));
+    if (!data.profile.userId) return reject(new Error('Invalid'));
+    var query = {
+      returnFields: ['first_name', 'last_name', 'profile', 'email'],
+      tables: ['jo_user', 'jo_alerts'],
+      joins: 2,
+      joinPoints: ['jo_user.id EQUALS jo_alerst_subscription.u_id'],
+      conditions: ["id EQUALS ".concat(profile.userID)],
+      type: 'inner'
+    };
+    self.query('mysql.SEARCH', query, self.dataRequestHandler.bind(_this3, resolve, reject));
+  });
+};
+var updateAlerts = function updateAlerts(data) {
+  var _this4 = this;
+
+  var self = this;
+  var pao = self.pao;
+  return new Promise(function (resolve, reject) {
+    if (!data.profile) return reject(new Error('Invalid Request'));
+    if (!data.profile.userId) return reject(new Error('Invalid'));
+    var query = {
+      returnFields: ['first_name', 'last_name', 'profile', 'email'],
+      tables: ['jo_user', 'jo_alerts'],
+      joins: 2,
+      joinPoints: ['jo_user.id EQUALS jo_alerst_subscription.u_id'],
+      conditions: ["id EQUALS ".concat(profile.userID)],
+      type: 'inner'
+    };
+    self.query('mysql.SEARCH', query, self.dataRequestHandler.bind(_this4, resolve, reject));
+  });
+};
+var getGroupedAlerts = function getGroupedAlerts(pay) {
+  var _this5 = this;
+
+  var self = this;
+  var uid = pay.ID;
+  return new Promise(function (resolve, reject) {
+    var queries = {
+      tables: ['jo_job_alert_category', 'jo_category'],
+      joins: 2,
+      opiks: ['field.category_id.as[categoryID]', 'field.alert_category_count.as[jobAlertCount]', 'fuxin.substring_index.options[category_name,"/",1].as[name]'],
+      joinPoints: ['jo_job_alert_category.category_id EQUALS jo_category.id'],
+      conditions: ["u_id EQUALS ".concat(uid)],
+      type: 'inner'
+    };
+    self.query('mysql.SEARCH', queries, self.dataRequestAlertGroupHandler.bind(_this5, resolve, reject)); // 		SELECT category_id AS categoryID,alert_category_count AS jobAlertCount,category_name AS name
+    // FROM jo_job_alert_category 
+    // INNER JOIN jo_category
+    // 	ON jo_job_alert_category.category_id = jo_category.id 
+    // WHERE u_id=1
+  });
+};
+var dataRequestAlertGroupHandler = function dataRequestAlertGroupHandler() {
+  var resolve = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var reject = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var e = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var result = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var self = this;
+  var pao = self.pao;
+  console.log('THE TYPE OF E IN DATAREQUEST HANDLER');
+  if (e) reject(new Error('An error has occured Inside MYSQL'));
+  resolve(result);
+};
+var multiDataRequestHandler = function multiDataRequestHandler() {
+  var resolve = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var reject = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var e = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var result = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var self = this;
+  var pao = self.pao;
+  console.log('THE TYPE OF E IN DATAREQUEST HANDLER');
+  if (e) reject(new Error('An error has occured Inside MYSQL'));
+  resolve(result);
+};
+var searchBatch = function searchBatch(key) {
+  return [{
+    returnFields: ['all'],
+    tables: ['jo_job', 'jo_recruiter', 'jo_company'],
+    joins: 3,
+    joinPoints: ['jo_job.u_id EQUALS jo_recruiter.id', 'jo_company.id EQUALS jo_recruiter.company_id'],
+    conditions: ["MATCH [job_title] AGAINST [".concat(key, "] NATURAL"), "OR MATCH [description] AGAINST [php] NATURAL"],
+    take: 10,
+    soundex: true,
+    type: 'inner'
+  }, {
+    returnFields: ['state_name', 'country_id'],
+    tables: ['jo_states'],
+    joinPoints: ['jo_states.id EQUALS jo_country.u_id'],
+    conditions: ["country_id EQUALS 202"]
+  }, {
+    returnFields: ['all'],
+    tables: ['jo_category']
+  }];
+};
+var searchBatchHandler = function searchBatchHandler() {
+  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var batchResults = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var self = this;
+  var pao = self.pao;
+  console.log('THE BATCH RESULTS');
+  console.log(batchResults);
+  self.callback(null, {
+    batch: batchResults
+  });
 };
 
 /***/ })
