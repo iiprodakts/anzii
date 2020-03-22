@@ -60,6 +60,7 @@
     "randomstring": "^1.1.5",
     "redis": "^2.6.3",
     "supports-color": "^7.1.0",
+    "uuid": "^7.0.2",
     "webpack": "^3.10.0",
     "webpack-node-externals": "^1.6.0",
     "winston": "^3.2.1"

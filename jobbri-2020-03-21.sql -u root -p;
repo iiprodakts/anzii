@@ -1,0 +1,3 @@
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MariaDB server version for the right syntax to use near 'mysqldump jobbri > G:' at line 1
+MariaDB [(none)]> mysqldump jobbri > G:\Turtrozz jobbri-2020-03-21.sql -u root -p
