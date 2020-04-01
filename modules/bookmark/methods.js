@@ -15,85 +15,71 @@ export const init = function(){
 }
 
 
-export const handleBookmarkTask = function(data){
+export const handleBookmarkTask = async function(data){
 
-  const self = this 
+	console.log(data)
+	const self = this 
 	const pao = self.pao
 	const contains = pao.pa_contains
+	const isOBject = pao.pa_isObject
 	let user = data.payload.user
 	self.callback = data.callback
-	console.log('THE DATA INSIDE BOOKMARK')
+
+	
+
+	// let uid = user.ID
+	console.log('THE DATA INSIDE Adash')
 	console.log(user)
 	
-	if(!user.action) return self.callback({message: "missing required data"},null) 
-	
+	console.log('THE PARSED DATA TEST')
+	console.log(data)
+	console.log(user)
+
+	if(!isOBject(user)) return self.callback({message: 'User has not been specified'},null)
+	if(!user.action) return self.callback({message: 'Invalid request'},null)
+	if(!contains(user,['payload'])) return self.callback({message: 'missing required key'},null)
+	if(!contains(user.payload,['ID'])) return self.callback({message: 'missing required key'},null)
+  
 	switch(user.action){
 		
-		case 'save': {
+		case 'getBookmarks': {
 			
-			 if(isObject(user.payload)){
-			 	
-			 	 if(!contains(user.payload,['id','job_id','keyword'])){
-			 	 	
-			 	 	 self.callback({message:'Bad request'},null)
-			 	 }else{
-			 	 	
-			 	 	self.saveBookmark(user.payload)
-			 	 	
-			 	 }
-			 }else{
-			 	
-			 	 self.callback({message:'Bad request'},null)
-			 	
-			 }
-		}
-		break
-		case 'delete': {
-			
-			if(isObject(user.payload)){
-			 	
-			 	 if(!contains(user.payload,['id','job_id'])){
-			 	 	
-			 	 	 self.callback({message:'Bad request'},null)
-			 	 }else{
-			 	 	
-			 	 	self.deleteBookmark(user.payload)
-			 	 	
-			 	 }
-			 }else{
-			 	
-			 	 self.callback({message:'Bad request'},null)
-			 	
-			 }
-			
+			self
+			.getSavedBookmarks(user.payload)
+			.then((bookmarks)=>{self.callback(null,bookmarks)})
+			.catch((e)=>{
+				console.log('Reject error')
+				console.log(e)
+				self.callback(e,null)
+			})
 		}
 		break;
-		case 'retrieve':{
+		case 'bookmarkItem':{
 			
-			if(isObject(user.payload)){
-			 	
-			 	 if(!contains(user.payload,['id'])){
-			 	 	
-			 	 	 self.callback({message:'Bad request'},null)
-			 	 }else{
-			 	 	
-			 	 	self.getBookmark(user.payload)
-			 	 	
-			 	 }
-			 }else{
-			 	
-			 	 self.callback({message:'Bad request'},null)
-			 	
-			 }
+			self.bookmark(user.payload)
+			.then((bookmarkStatus)=>self.callback(null,bookmarkStatus))
+			.catch((e)=>self.callback(e,null))
 		}
-		break
-		default: self.callback({message:'Invalid request'},null)
+		break;
+		case 'deleteBookmark':{
+			
+			self.deleteBookmark(user.payload)
+			.then((deleted)=>self.callback(null,deleted))
+			.catch((e)=>self.callback(e,null))
+		}
+		break;		
+		default: 
+		self.callback(new Error('Unknown data request'),null)
+		
+		
 	}
+
+	
 
 } 
 
 
-export const saveBookmark = function(data){
+export const bookmark = function(pay){
 	
 	
 	const self = this 
@@ -109,63 +95,83 @@ export const saveBookmark = function(data){
 
 }
 
-export const getBookmark = function(data){
+export const getSavedBookmarks = function(pay){
 	
-	const self = this 
-	let pao = self.pao 
+	
 
 	
-	 let rest = {
-		  
-	 	conditions: [`u_id EQUALS ${data.id}`],
-	 	limit: 5
+	return new Promise((resolve,reject)=>{
+
+		const self = this 
+		let pao = self.pao 
+		let uid = pay.ID
+
+		let queries = 
+				{
+					returnFields: ['id'],
+					tables:['jo_job_bookmark'],
+					conditions: [`u_id EQUALS ${uid}`],
+					opiks: ['field.u_id.as[userID]','field.job_id.as[jobID]','field.job_title.as[jobTitle]','field.logo_url.as[logo]','field.salary.as[jobSalary]',
+					'field.company_name.as[employer]','field.salary_currency.as[currency]',
+					'field.job_type.as[type]','field.post_date.as[postDate]','field.date_bookmarked.as[dateBookmarked]'],
+					sort: 'order[jobTitle].asc',
+					
+			}
 		
-	  }
-	  
-	  
-	self.query(
-		'mysql.jo_job_bookmark.find',
-		  rest,
-		  self.dataRequestHandler.bind(this)
-	)
+	
+			
+		self.query(
+				'mysql.SEARCH',
+				queries,
+				self.multiDataRequestHandler.bind(this,resolve,reject)
+			)
+			
+	
+	
+	})
 	
 
 }
 
 
 
-export const deleteBookmark = function(data){
+export const deleteBookmark = function(pay){
+	
+	
+	return new Promise((resolve,reject)=>{
+		
+		
+		const self = this 
+		const pao = self.pao 
+		let uid = pay.ID
+		let alertID = pay.alertID
+		
+		
+		let queries = {conditions: [`u_id EQUALS ${uid} `,`AND id EQUALS ${alertID}`]}
+	
+		self.query(
+				'mysql.jo_job_bookmark.remove',
+				queries,
+				self.multiDataRequestHandler.bind(this,resolve,reject)
+			)
+			
+		
+	})
+	
+
+}
+
+export const multiDataRequestHandler = function(resolve=null,reject=null,e=null,result=null){
 	
 	
 	const self = this 
-	const pao = self.pao 
-	
-
-  self.query(
-  
-		'mysql.jo_job_bookmark.remove',
-		  data,
-		  self.dealRequestHandler(response)
-	 )
-	
-
-	
+	let pao = self.pao
+	console.log('THE TYPE OF E IN DATAREQUEST HANDLER')
+	console.log(e)
+	if(e) reject(new Error('An error has occured Inside MYSQL'))
+	resolve(result)
 
 }
-
-export const dataRequestHandler = function(e=null,data=null){
-
- 
-	const self = this
-	const pao = self.pao 
-	self.log("Executing DataRequestHandler:ADASH")
-	self.log(data)
-	self.callback(null,data)
-
-
-
-} 
-
 
 
 

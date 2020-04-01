@@ -44,6 +44,11 @@ export default  [
         type: 'private'
     },
     {
+        path: '/bookmark',
+        method: 'POST',
+        type: 'private'
+    },
+    {
         path: 'view/:profile',
         method: 'GET',
         type: 'public'
@@ -55,13 +60,19 @@ export default  [
         type: 'private'
     },
     {
-        path: '/upload/:name',
+        path: '/upload',
         method: 'POST',
         middlewares: [{type:'module',value: 'upload'}],
         type: 'private'
     },
     {
         path: '/pirlo/:name/:pass',
+        method: 'GET',
+        type: 'public'
+    },
+    {
+        path: '/download/:fileName',
+        alias: 'downloadr',
         method: 'GET',
         type: 'public'
     },

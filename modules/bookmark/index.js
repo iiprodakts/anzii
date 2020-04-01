@@ -1,4 +1,4 @@
 
-import Job from "./job";
+import Bookmark from "./bookmark";
 
-export default Job
+export default Bookmark

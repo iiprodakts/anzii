@@ -17,11 +17,77 @@ export const init = function(){
 export const handleFrameTestTask= function(data){
 
  
+	console.log(data)
 	const self = this 
-	self.log("HANDLING FRAMEWORK REGISTRATION TASK")
-	self.log(data)
+	const pao = self.pao
+	const contains = pao.pa_contains
+	const isOBject = pao.pa_isObject
+	let user = data.payload.user
+	let request = data.payload.request
+	self.callback = data.callback
+
 	
-	self.testy(data)
+
+	// let uid = user.ID
+	console.log('THE DATA INSIDE Adash')
+	console.log(user)
+	
+	console.log('THE PARSED DATA TEST')
+	console.log(data)
+	console.log(user)
+
+	if(!isOBject(user)) return self.callback({message: 'User has not been specified'},null)
+	if(!user.action) return self.callback({message: 'Invalid request'},null)
+	if(!contains(user,['payload'])) return self.callback({message: 'missing required key'},null)
+	if(!contains(user.payload,['ID'])) return self.callback({message: 'missing required key'},null)
+  
+	switch(user.action){
+		
+		case 'delete': {
+			
+			self
+			.deleteThingy(user.payload)
+			.then((alertCats)=>{self.callback(null,alertCats)})
+			.catch((e)=>{
+				console.log('Reject error')
+				console.log(e)
+				self.callback(e,null)
+			})
+		}
+		break;
+		case 'save':{
+			
+			self.saveThingy(data)
+			.then((deleteStat)=>self.callback(null,deleteStat))
+			.catch((e)=>self.callback(e,null))
+		}
+		break;
+		case 'update':{
+			
+			self.updateThingy(user.payload)
+			.then((alerts)=>self.callback(null,alerts))
+			.catch((e)=>self.callback(e,null))
+		}
+		break;
+		case 'find':{
+			
+			self.findThingy(user.payload)
+			.then((alert)=>self.callback(null,alert))
+			.catch((e)=>self.callback(e,null))
+		}
+		break;
+		case 'do': {
+			
+			self.doThingy(user.payload,request)
+			.then((doData)=>self.callback(null,doData))
+			.catch((e)=>self.callback(e,null))
+		}
+		break;
+		default: 
+		self.callback(new Error('Unknown data request'),null)
+		
+		
+	}
 
 } 
 
@@ -33,7 +99,10 @@ export const testy = function(data){
 	const pao = self.pao
 	const contains = pao.pa_contains
 	let user = data.payload.user
+	let clientRequest = data.payload.request
 	self.callback = data.callback
+	const fetch = require('node-fetch')
+
 	console.log('THE DATA INSIDE TESTY')
 	console.log(user)
 	
@@ -51,11 +120,48 @@ export const testy = function(data){
 		
 	//   }
 
-	self.query(
-		'mysql.jo_user.find',
-		  {opiks: ['fuxin.count.options[*].as[AllUsers]']},
-		  self.dataRequestHandler.bind(this)
-	)
+	// self.query(
+	// 	'mysql.jo_user.find',
+	// 	  {opiks: ['fuxin.count.options[*].as[AllUsers]']},
+	// 	  self.dataRequestHandler.bind(this)
+	// )
+
+	const forwarded = clientRequest.req.headers['x-forwarded-for']
+	const ip = forwarded ? forwarded.split(/, /)[0] : clientRequest.req.connection.remoteAddress
+	// let ip = request.req.headers['x-forwarded-for'] || request.req.connection.remoteAddress;
+	let uAgent = clientRequest.req.headers['user-agent']
+
+	let url = self.url
+	   url += `&user_ip=${ip}&user_agent=${uAgent}`
+	   
+	//    var request = require('request');
+
+	console.log('SELF.FETCH')
+	// console.log(self.fetch)
+
+	// return self.callback(null,{type: typeof self.fetch})
+
+
+	self.fetch.get(url).then(response => {
+		console.log('THE REQUEST HAS SUCCEEDED TO CAREERJET')
+		console.log(response.data)
+		return self.callback(null,{success: response.data}) 
+		//return response.json();
+	  }).catch(err => {self.callback(err,null);});
+
+
+		// request(url, function (error, response, body) {
+		// 	if (!error && response.statusCode == 200) {
+
+		// 		console.log('THE REQUEST HAS SUCCEEDED TO CAREERJET')
+		// 		return self.callback(null,{response}) 
+		// 	}else{
+		// 		console.log('THE REQUEST HAS FAILED TO CAREERJET')
+		// 	}
+		// })
+
+
+	
 	
 
 	
@@ -65,7 +171,216 @@ export const testy = function(data){
 
 } 
 
+export const deleteThingy = function(pay){
+	
+	
+	const self = this 
+	const pao = self.pao 
+	let uid = pay.ID
+	let alertID = pay.alertID
 
+	
+	
+	return new Promise((resolve,reject)=>{
+		
+		
+		 
+		
+		
+		let queries = {conditions: [`u_id EQUALS ${uid} `,`AND id EQUALS ${alertID}`]}
+	
+		self.query(
+				'mysql.jo_job_alert.remove',
+				queries,
+				self.thingyDataRequestHandler.bind(this,resolve,reject)
+			)
+			
+		
+	})
+	
+
+}
+export const saveThingy = function(data){
+	
+	
+	const self = this 
+	let pao = self.pao 
+	
+	
+	
+  return new Promise((resolve,reject)=>{
+		
+		
+		if(!data.profile) return reject(new Error('Invalid Request')) 
+		
+		if(!data.profile.userId) return reject(new Error('Invalid'))
+		
+		let query ={
+			
+					conditions: [`id EQUALS ${profile.userID}`]
+			   }
+		
+		self.query(
+		'mysql.SEARCH',
+		  query,
+		  self.thingyDataRequestHandler.bind(this,resolve,reject)
+	)
+		
+	})
+	
+
+}
+export const updateThingy = function(data){
+	
+	
+	const self = this 
+	let pao = self.pao 
+	
+	
+	
+  return new Promise((resolve,reject)=>{
+		
+		
+		if(!data.profile) return reject(new Error('Invalid Request')) 
+		
+		if(!data.profile.userId) return reject(new Error('Invalid'))
+		
+		let query ={
+			
+					conditions: [`id EQUALS ${profile.userID}`]
+			   }
+		
+		self.query(
+		'mysql.SEARCH',
+		  query,
+		  self.thingyDataRequestHandler.bind(this,resolve,reject)
+	)
+		
+	})
+	
+
+}
+export const findThingy = function(data){
+	
+	
+	const self = this 
+	let pao = self.pao 
+	
+	
+	
+  return new Promise((resolve,reject)=>{
+		
+		
+		if(!data.profile) return reject(new Error('Invalid Request')) 
+		
+		if(!data.profile.userId) return reject(new Error('Invalid'))
+		
+		let query ={
+			
+					conditions: [`id EQUALS ${profile.userID}`]
+			   }
+		
+		self.query(
+		'mysql.SEARCH',
+		  query,
+		  self.thingyDataRequestHandler.bind(this,resolve,reject)
+	)
+		
+	})
+	
+
+}
+export const doThingy = function(pay,request){
+	
+	
+	
+	
+  return new Promise((resolve,reject)=>{
+		
+		
+	const self = this 
+	const pao = self.pao
+	const contains = pao.pa_contains
+	let user = pay
+	let clientRequest = request
+	
+
+	console.log('THE DATA INSIDE TESTY')
+	console.log(user)
+	
+
+	console.log('THE PARSED DATA TEST')
+	console.log(user)
+	// self.callback(null,user)
+
+	// let rest = {
+		  
+	// 	// conditions: [`email ISEQUALS ${user.email}`],
+	// 	// set: [{first_name: 'Ntsako'},{last_name: 'Mahori'}]
+	// 	opiks: ['fuxin.count.options[*].as[AllUsers]']
+		
+	//   }
+
+	// self.query(
+	// 	'mysql.jo_user.find',
+	// 	  {opiks: ['fuxin.count.options[*].as[AllUsers]']},
+	// 	  self.dataRequestHandler.bind(this)
+	// )
+
+	const forwarded = clientRequest.req.headers['x-forwarded-for']
+	const ip = forwarded ? forwarded.split(/, /)[0] : clientRequest.req.connection.remoteAddress
+	// let ip = request.req.headers['x-forwarded-for'] || request.req.connection.remoteAddress;
+	let uAgent = clientRequest.req.headers['user-agent']
+
+	let url = self.url
+	   url += `&user_ip=${ip}&user_agent=${uAgent}`
+	   
+	//    var request = require('request');
+
+	console.log('SELF.FETCH')
+	// console.log(self.fetch)
+
+	// return self.callback(null,{type: typeof self.fetch})
+
+
+	self.fetch.get(url).then(response => {
+		console.log('THE REQUEST HAS SUCCEEDED TO CAREERJET')
+		console.log(response.data)
+		return resolve({success: response.data}) 
+		//return response.json();
+	  }).catch(err => {reject(err);});
+
+
+		// request(url, function (error, response, body) {
+		// 	if (!error && response.statusCode == 200) {
+
+		// 		console.log('THE REQUEST HAS SUCCEEDED TO CAREERJET')
+		// 		return self.callback(null,{response}) 
+		// 	}else{
+		// 		console.log('THE REQUEST HAS FAILED TO CAREERJET')
+		// 	}
+		// })
+
+
+	
+	
+		
+	})
+	
+
+}
+
+export const thingyDataRequestHandler = function(resolve=null,reject=null,e=null,result=null){
+	
+	
+	const self = this 
+	let pao = self.pao
+	console.log('THE TYPE OF E IN DATAREQUEST HANDLER')
+	console.log(e)
+	if(e) reject(e)
+	resolve(result)
+
+}
 export const dataRequestHandler = function(e=null,data=null){
 
  
@@ -78,6 +393,7 @@ export const dataRequestHandler = function(e=null,data=null){
 
 
 } 
+
 
 
 export const social = function(data){

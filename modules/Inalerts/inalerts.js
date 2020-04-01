@@ -21,8 +21,10 @@ class Inalerts{
      this.getAlerts = methods.getAlerts
      this.manageAlerts = methods.manageAlerts
      this.getGroupedAlerts = methods.getGroupedAlerts
+     this.updateUserAlert = methods.updateUserAlert
      this.dataRequestAlertGroupHandler = methods.dataRequestAlertGroupHandler
      this.multiDataRequestHandler = methods.multiDataRequestHandler
+     this.getAlertById = methods.getAlertById
      
     //  this.searchBatch = methods.searchBatch
     //  this.searchBatchHandler = methods.searchBatchHandler

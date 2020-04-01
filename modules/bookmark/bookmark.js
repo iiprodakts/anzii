@@ -17,12 +17,10 @@ class Bookmark{
     
      this.init = methods.init
      this.handleBookmarkTask = methods.handleBookmarkTask 
-     this.saveBookmark = methods.saveBookmark
-     this.getBookmark = methods.getBookmark
+     this.bookmark = methods.bookmark
+     this.getSavedBookmarks = methods.getSavedBookmarks
      this.deleteBookmark = methods.DeleteBookmark
-     this.searchBatch = methods.searchBatch
-     this.searchBatchHandler = methods.searchBatchHandler 
-     this.dealWithDataStorageResponse = methods.dealWithDataStorageRespomse
+     this.multiDataRequestHandler = methods.multiDataRequestHandler
     
   }
 

@@ -13,11 +13,13 @@ class Imageman{
   constructor(pao){
 
     this.pao = pao
-    this.jimp = jimp
+    this.grafix = jimp
     
     
      this.init = methods.init
-     this.handleManipulateImage = methods.handleManipulateImage
+     this.handleManipulateImage = methods.handleManipulateImage 
+     this.handleResizeImage = methods.handleResizeImage
+     this.handleCropImage = methods.handleCropImage
      this.resizeImage = methods.resizeImage
      this.cropImage = methods.cropImage
      this.greyScale = methods.greyScale

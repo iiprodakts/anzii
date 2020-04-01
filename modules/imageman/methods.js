@@ -7,11 +7,11 @@ export const init = function(){
   this.log('Job has been initialised') 
   this.listens({
 		
-	'handle-manipulate-image': this.handleManipulateImage.bind(this),
-	'handle-resize-image': this.handleResizeImage.bind(this),
-	'handle-greyscale-image': this.handleResizeImage.bind(this),
-	'handle-crop-image': this.handleResizeImage.bind(this),
-  'handle-scale-image': this.handleResizeImage.bind(this) 
+	'manipulate-image': this.handleManipulateImage.bind(this),
+	'resize-image': this.handleResizeImage.bind(this),
+	'greyscale-image': this.handleResizeImage.bind(this),
+	'crop-image': this.handleResizeImage.bind(this),
+    'scale-image': this.handleResizeImage.bind(this) 
   
   
   })
@@ -40,26 +40,30 @@ export const handleResizeImage = async function(data){
 
 
 	const self = this 
-	self.resizeImage(data)
-	 .then((resized)=>{
-	 	
-	 	   data.callback(null,resized)
+	self.callback = data.callback
+	let imageData = data.image
+	self.resizeImage(imageData)
+	 .then(async function(resized){
+		 
+		   await self.log('THE RESIZED IMAGE')
+		   await self.log(resized)
+	 	   self.callback(null,resized)
 	 	
 	 	})
 	 .catch((e)=>{
 	 	
-	 	  data.callback(e,null)
+	 	  self.callback(e,null)
 	 	
 	 })
 
 } 
 
-export const resizeImage = function(data){
+export const resizeImage = function(imageData){
 
 
 	const self = this 
 	const grafix = self.grafix
-	const {image,dimensions} = data 
+	const {image,dimensions} = imageData
 	const {x,y} = dimensions
 
 	
@@ -68,13 +72,24 @@ export const resizeImage = function(data){
 
        grafix.read(image)
        .then((img)=>{
-       	
-       img.resize(x,y)
-       .then((resized)=>resolve(resized))
-       .catch((e)=>{
-       	
-       	reject(new Error(e.message))
-       })
+		   
+			 console.log('READ IMAGE IMAGE ')
+			 console.log(img)
+			 console.log(img.resize)
+			img.resize(x,y)
+			.writeAsync(image)
+			.then((resized)=>{
+				console.log('THE WRITTEN IMAGE')
+				console.log(resized)
+				resolve(resized)
+
+			})
+			.catch((e)=>{
+				
+			 	reject(new Error(e.message))
+			 })
+
+			 
        	
        })
        .catch((e)=>{

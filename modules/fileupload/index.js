@@ -1,4 +1,4 @@
 
-import FileMan from "./fileman";
+import FileUpload from "./fileupload";
 
-export default FileMan
+export default FileUpload

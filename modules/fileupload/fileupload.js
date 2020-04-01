@@ -17,7 +17,7 @@ class FileUpload{
 
     this.pao = pao
     this.multiFormParser = multiPartFormParser
-    this.IncomingForm = this.multiFormParser.IncomingForm
+    // this.IncomingForm = this.multiFormParser.IncomingForm
     // this.supportedStorageTypes = ['local','awsS3','cloudinary','digitalOcean']
     // this.supportedFileTypes = {image: ['png,gif,jpeg,jpg'],text: ['pdf','docx','txt'],db:['sql','csv']}
     

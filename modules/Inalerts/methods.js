@@ -69,24 +69,35 @@ export const handleInternalAlertsTask = async function(data){
 			.catch((e)=>self.callback(e,null))
 		}
 		break;
-		case 'updateAlerts': {
+		case 'getAlertById':{
 			
-			self.updateUser(data)
-			.then((updated)=>self.callback(null,updated))
+			self.getAlertById(user.payload)
+			.then((alert)=>self.callback(null,alert))
+			.catch((e)=>self.callback(e,null))
+		}
+		break;
+		case 'updateAlert': {
+			
+			self.updateUserAlert(user.payload)
+			.then((updated)=>{
+
+				updated.changedRows && updated.changedRows > 0 
+					? self.callback(null,{updateStatus: true,frequency: user.payload.update.frequency})
+					: self.callback(null,{updateStatus: false})
+			})
 			.catch((e)=>self.callback(e,null))
 		}
 		break;
 		case 'deleteAlerts': {
 			
-			self.updateUser(data)
-			.then((updated)=>self.callback(null,updated))
-			.catch((e)=>self.callback(e,null))
-		}
-		break;
-		case 'manageAlerts': {
-			
-			self.updateUser(data)
-			.then((updated)=>self.callback(null,updated))
+			self.deleteAlerts(data)
+			.then((deleted)=>{
+
+				deleted.affectedRows && deleted.affectedRows > 0 
+					? self.callback(null,{deleteStatus: true})
+					: self.callback(null,{deleteStatus: false})
+				
+			})
 			.catch((e)=>self.callback(e,null))
 		}
 		break;
@@ -169,6 +180,39 @@ export const getAlerts = function(pay){
 }
 
 
+export const getAlertById = function(pay){
+	
+	
+	const self = this 
+	const pao = self.pao 
+	let uid = pay.ID
+	let alertID = pay.alertID
+
+	
+	
+	return new Promise((resolve,reject)=>{
+		
+		
+		 
+		
+		let queries = 
+			{returnFields:['frequency'],opiks: ['field.id.as[alertID]','field.job_keyword.as[jobKeyword]','field.date_created.as[alertDate]'],conditions: [`u_id EQUALS ${uid} `,`AND id EQUALS ${alertID}`]}
+		
+	
+		self.query(
+				'mysql.jo_job_alert.find',
+				queries,
+				self.multiDataRequestHandler.bind(this,resolve,reject)
+			)
+			
+		
+	})
+ 
+
+}
+
+
+
 
 export const manageAlerts = function(data){
 	
@@ -191,77 +235,79 @@ export const manageAlerts = function(data){
 }
 
 
-export const deleteAlerts = function(data){
+export const deleteAlerts = function(pay){
 	
 	
-	const self = this 
-	let pao = self.pao 
+	return new Promise((resolve,reject)=>{
+		
+		
+		const self = this 
+		const pao = self.pao 
+		let uid = pay.ID
+		let alertID = pay.alertID
+		
+		
+		let queries = {conditions: [`u_id EQUALS ${uid} `,`AND id EQUALS ${alertID}`]}
 	
-	
-	
-  return new Promise((resolve,reject)=>{
-		
-		
-		if(!data.profile) return reject(new Error('Invalid Request')) 
-		
-		if(!data.profile.userId) return reject(new Error('Invalid'))
-		
-		let query = 	{
-			
-					returnFields: ['first_name','last_name','profile','email'],
-					tables:['jo_user','jo_alerts'],
-					joins: 2,
-					joinPoints: ['jo_user.id EQUALS jo_alerst_subscription.u_id'],
-					conditions: [`id EQUALS ${profile.userID}`],
-					type: 'inner'
-			   }
-		
 		self.query(
-		'mysql.SEARCH',
-		  query,
-		  self.dataRequestHandler.bind(this,resolve,reject)
-	)
+				'mysql.jo_job_alert.remove',
+				queries,
+				self.multiDataRequestHandler.bind(this,resolve,reject)
+			)
+			
 		
 	})
-	
 
 }
 
 
-export const updateAlerts = function(data){
+export const updateUserAlert = function(pay){
 	
 	
 	const self = this 
-	let pao = self.pao 
-	
-	
-	
-  return new Promise((resolve,reject)=>{
-		
-		
-		if(!data.profile) return reject(new Error('Invalid Request')) 
-		
-		if(!data.profile.userId) return reject(new Error('Invalid'))
-		
-		let query = 	{
-			
-					returnFields: ['first_name','last_name','profile','email'],
-					tables:['jo_user','jo_alerts'],
-					joins: 2,
-					joinPoints: ['jo_user.id EQUALS jo_alerst_subscription.u_id'],
-					conditions: [`id EQUALS ${profile.userID}`],
-					type: 'inner'
-			   }
-		
-		self.query(
-		'mysql.SEARCH',
-		  query,
-		  self.dataRequestHandler.bind(this,resolve,reject)
-	)
-		
-	})
+	const pao = self.pao 
+
+	console.log('The update')
+	console.log(pay)
+
+
 	
 
+
+	return new Promise((resolve,reject)=>{
+		
+		
+		 if(!pay.update) return reject(new Error('Update data missing'))
+
+		 let uid = pay.ID
+		 let alertID = pay.alertID 
+		 let update = pay.update 
+		 let frequency = update.frequency
+
+
+
+		 
+		
+		let queries = 
+			{conditions: [`u_id EQUALS ${uid} `,`AND id EQUALS ${alertID}`],
+			 set: [{frequency:frequency}]
+			}
+		
+	
+		self.query(
+				'mysql.jo_job_alert.updateOne',
+				queries,
+				self.multiDataRequestHandler.bind(this,resolve,reject)
+			)
+
+			
+		
+	})
+	 
+	
+	
+	
+	
 }
 
 export const getGroupedAlerts = function(pay){
@@ -324,6 +370,7 @@ export const multiDataRequestHandler = function(resolve=null,reject=null,e=null,
 	const self = this 
 	let pao = self.pao
 	console.log('THE TYPE OF E IN DATAREQUEST HANDLER')
+	console.log(e)
 	if(e) reject(new Error('An error has occured Inside MYSQL'))
 	resolve(result)
 
