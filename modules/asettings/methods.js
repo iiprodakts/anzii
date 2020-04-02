@@ -18,37 +18,55 @@ export const init = function(){
 export const handleAsettingsTask = async function(data){
 
 	
+	console.log(data)
 	const self = this 
+	const pao = self.pao
+	const contains = pao.pa_contains
+	const isOBject = pao.pa_isObject
+	let user = data.payload.user
 	self.callback = data.callback
-  
-  if(!data.action) return data.callback({message: 'Invalid request'},null)
+
+	
+
+	// let uid = user.ID
+	console.log('THE DATA INSIDE Adash')
+	console.log(user)
+	
+	console.log('THE PARSED DATA TEST')
+	console.log(data)
+	console.log(user)
+
+	if(!isOBject(user)) return self.callback({message: 'User has not been specified'},null)
+	if(!user.action) return self.callback({message: 'Invalid request'},null)
+	if(!contains(user,['payload'])) return self.callback({message: 'missing required key'},null)
+	if(!contains(user.payload,['ID'])) return self.callback({message: 'missing required key'},null)
   
   switch(data.action){
   	
   	 case 'getProfile': {
   	 	
-  	 	self.getProfile(data)
-  	 	.then((user)=>self.callback(null,user))
+  	 	self.getProfile(user.payload)
+  	 	.then((retrievedUser)=>self.callback(null,retrievedUser))
   	 	.catch((e)=>self.callback(e,null))
   	 }
   	 break;
   	 case 'deleteAccount':{
   	 	
-  	 	self.deleteAccount(data)
+  	 	self.deleteAccount(user.payload)
   	 	.then((deleteStat)=>self.callback(null,deleteStat))
   	 	.catch((e)=>self.callback(e,null))
   	 }
   	 break;
   	 case 'changeAvatar':{
   	 	
-  	 	  self.changeAvatar(data)
+  	 	  self.changeAvatar(user.payload)
   	 	.then((changedAv)=>self.callback(null,changedAv))
   	 	.catch((e)=>self.callback(e,null))
   	 }
   	 break;
   	 case 'updateUser': {
   	 	
-  	 	self.updateUser(data)
+  	 	self.updateUser(user.payload)
   	 	.then((updated)=>self.callback(null,updated))
   	 	.catch((e)=>self.callback(e,null))
   	 }
@@ -61,7 +79,7 @@ export const handleAsettingsTask = async function(data){
 } 
 
 
-export const getUserProfile = function(data){
+export const getUserProfile = function(pay){
 	
 	
 	const self = this 
@@ -98,7 +116,7 @@ export const getUserProfile = function(data){
 }
 
 
-export const deleteAccount = function(data){
+export const deleteAccount = function(pay){
 	
 	
 	const self = this 
@@ -134,7 +152,7 @@ export const deleteAccount = function(data){
 }
 
 
-export const updateUser = function(data){
+export const updateUser = function(pay){
 	
 	
 	const self = this 
@@ -169,7 +187,7 @@ export const updateUser = function(data){
 
 }
 
-export const changeAvatar = function(data){
+export const changeAvatar = function(pay){
 	
 	
 	const self = this 
@@ -205,7 +223,7 @@ export const changeAvatar = function(data){
 }
 
 
-export const alertUnsubscription = function(data){
+export const alertUnsubscription = function(pay){
 	
 	
 	const self = this 
@@ -235,7 +253,7 @@ export const alertUnsubscription = function(data){
   
 }
 
-export const alertAddition = function(data){
+export const alertAddition = function(pay){
 	
 	
 	const self = this 
@@ -269,7 +287,7 @@ export const alertAddition = function(data){
 }
 
 
-export const alertMailUpdate = function(data){
+export const alertMailUpdate = function(pay){
 	
 	
 	const self = this 
