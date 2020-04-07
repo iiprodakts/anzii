@@ -1151,16 +1151,32 @@ module.exports = {
 
   /*********************************** OBJECT AND ARRAY CASTING ************************************************************/
   object_to_array: function object_to_array(castObj) {
+    var keys = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+    console.log('THE CAST OBJECT');
+    console.log(castObj);
+
     if (castObj instanceof Object) {
       if (!(castObj instanceof Array)) {
         var arr = [];
         var count = 0;
 
-        for (var key in castObj) {
-          arr[count] = castObj[key];
-          ++count;
+        if (keys) {
+          for (var key in castObj) {
+            arr[count] = {
+              key: key,
+              value: castObj[key]
+            };
+            ++count;
+          }
+        } else {
+          for (var _key in castObj) {
+            arr[count] = castObj[_key];
+            ++count;
+          }
         }
 
+        console.log('THE RETURN OF CONVERTED OBJECT');
+        console.log(arr);
         return arr;
       } else {
         return castObj;
@@ -1802,8 +1818,10 @@ CORE.prototype.converts = function () {
     clone: function clone(c) {
       return PILLAR.clone(c);
     },
-    objectToArray: function objectToArray(o) {
-      return PILLAR.object_to_array(o);
+    objectToArray: function objectToArray() {
+      var o = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};
+      var key = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
+      return PILLAR.object_to_array(o, key);
     },
     stringToArray: function stringToArray(str, sep) {
       return PILLAR.string_to_array(str, sep);
@@ -1901,7 +1919,7 @@ CORE.prototype.sanna = function () {
                   handler: handler
                 }
               });
-            } else if (model[1].trim() === 'PROCEDURE' || 'JOIN' || 'SEARCH' || 'TRANSACTION') {
+            } else if (model[1].trim() === 'PROCEDURE' || 'JOIN' || 'SEARCH' || 'TRANSACTION' || 'UPDATEANDTAKE') {
               var _mo = {
                 vendor: modelFrags[0],
                 table: modelFrags[1].toLowerCase(),
@@ -3250,8 +3268,7 @@ var handleWriteServerRequestResponse = function handleWriteServerRequestResponse
     data.res.set('Connection', 'close');
     data.res.status(200).send(data.data);
     console.log(data.data);
-    self.log('SERVER HAS SENT A RESPONSE BACK TO THE CLIENT');
-    return;
+    return self.log('SERVER HAS SENT A RESPONSE BACK TO THE CLIENT');
   } else {
     self.streamResponse(data);
   }
@@ -3278,10 +3295,9 @@ var streamResponse = function streamResponse(data) {
             return rStream.pipe(data.res);
 
           case 4:
-            self.log('SERVER HAS SENT A STREAM RESPONSE BACK TO THE CLIENT');
-            return _context.abrupt("return");
+            return _context.abrupt("return", self.log('SERVER HAS SENT A STREAM RESPONSE BACK TO THE CLIENT'));
 
-          case 6:
+          case 5:
           case "end":
             return _context.stop();
         }
@@ -3575,6 +3591,24 @@ var enviroment = function enviroment() {
   path: '/download/:fileName',
   alias: 'downloadr',
   method: 'GET',
+  type: 'public'
+}, {
+  path: '/profile',
+  alias: 'asettings',
+  middlewares: [{
+    type: 'module',
+    value: 'upload'
+  }],
+  method: 'POST',
+  type: 'public'
+}, {
+  path: '/avatar',
+  alias: 'asettings',
+  middlewares: [{
+    type: 'module',
+    value: 'upload'
+  }],
+  method: 'POST',
   type: 'public'
 }, {
   path: '/fetch',
@@ -4165,38 +4199,43 @@ var Mysql = function Mysql(pao) {
   this.insertOne = __WEBPACK_IMPORTED_MODULE_0__methods__["n" /* insertOne */];
   this.insertMany = __WEBPACK_IMPORTED_MODULE_0__methods__["m" /* insertMany */];
   this.find = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* find */];
-  this.remove = __WEBPACK_IMPORTED_MODULE_0__methods__["z" /* remove */];
-  this.updateOne = __WEBPACK_IMPORTED_MODULE_0__methods__["K" /* updateOne */];
-  this.set = __WEBPACK_IMPORTED_MODULE_0__methods__["H" /* set */];
-  this.queryOptions = __WEBPACK_IMPORTED_MODULE_0__methods__["x" /* queryOptions */];
-  this.queryTemplate = __WEBPACK_IMPORTED_MODULE_0__methods__["y" /* queryTemplate */];
+  this.remove = __WEBPACK_IMPORTED_MODULE_0__methods__["A" /* remove */];
+  this.updateOne = __WEBPACK_IMPORTED_MODULE_0__methods__["O" /* updateOne */];
+  this.set = __WEBPACK_IMPORTED_MODULE_0__methods__["I" /* set */];
+  this.queryOptions = __WEBPACK_IMPORTED_MODULE_0__methods__["y" /* queryOptions */];
+  this.queryTemplate = __WEBPACK_IMPORTED_MODULE_0__methods__["z" /* queryTemplate */];
   this.TRANSACTION = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* TRANSACTION */];
   this.PROCEDURE = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* PROCEDURE */];
   this.JOIN = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* JOIN */];
   this.SEARCH = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* SEARCH */];
-  this.procedure = __WEBPACK_IMPORTED_MODULE_0__methods__["w" /* procedure */];
-  this.transaction = __WEBPACK_IMPORTED_MODULE_0__methods__["J" /* transaction */];
+  this.procedure = __WEBPACK_IMPORTED_MODULE_0__methods__["x" /* procedure */];
+  this.transaction = __WEBPACK_IMPORTED_MODULE_0__methods__["M" /* transaction */];
   this.join = __WEBPACK_IMPORTED_MODULE_0__methods__["o" /* join */];
   this.joinExek = __WEBPACK_IMPORTED_MODULE_0__methods__["q" /* joinExek */];
   this.joinStatement = __WEBPACK_IMPORTED_MODULE_0__methods__["r" /* joinStatement */];
   this.joinConditionsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["p" /* joinConditionsFormat */];
-  this.search = __WEBPACK_IMPORTED_MODULE_0__methods__["B" /* search */];
-  this.searchExek = __WEBPACK_IMPORTED_MODULE_0__methods__["D" /* searchExek */];
-  this.searchStatement = __WEBPACK_IMPORTED_MODULE_0__methods__["G" /* searchStatement */];
-  this.searchConditionsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["C" /* searchConditionsFormat */];
-  this.searchOptions = __WEBPACK_IMPORTED_MODULE_0__methods__["F" /* searchOptions */];
+  this.search = __WEBPACK_IMPORTED_MODULE_0__methods__["C" /* search */];
+  this.searchExek = __WEBPACK_IMPORTED_MODULE_0__methods__["E" /* searchExek */];
+  this.searchStatement = __WEBPACK_IMPORTED_MODULE_0__methods__["H" /* searchStatement */];
+  this.searchConditionsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["D" /* searchConditionsFormat */];
+  this.searchOptions = __WEBPACK_IMPORTED_MODULE_0__methods__["G" /* searchOptions */];
   this.combineFields = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* combineFields */];
   this.insert = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* insert */];
-  this.rollback = __WEBPACK_IMPORTED_MODULE_0__methods__["A" /* rollback */];
+  this.rollback = __WEBPACK_IMPORTED_MODULE_0__methods__["B" /* rollback */];
   this.deleteOne = __WEBPACK_IMPORTED_MODULE_0__methods__["deleteOne"];
-  this.searchFieldsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["E" /* searchFieldsFormat */];
+  this.searchFieldsFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["F" /* searchFieldsFormat */];
   this.fieldFormat = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* fieldFormat */];
-  this.options = __WEBPACK_IMPORTED_MODULE_0__methods__["t" /* options */];
-  this.sort = __WEBPACK_IMPORTED_MODULE_0__methods__["I" /* sort */];
+  this.options = __WEBPACK_IMPORTED_MODULE_0__methods__["u" /* options */];
+  this.sort = __WEBPACK_IMPORTED_MODULE_0__methods__["J" /* sort */];
   this.limit = __WEBPACK_IMPORTED_MODULE_0__methods__["s" /* limit */];
-  this.parseGroup = __WEBPACK_IMPORTED_MODULE_0__methods__["v" /* parseGroup */];
-  this.parseFormatCondition = __WEBPACK_IMPORTED_MODULE_0__methods__["u" /* parseFormatCondition */];
+  this.parseGroup = __WEBPACK_IMPORTED_MODULE_0__methods__["w" /* parseGroup */];
+  this.parseFormatCondition = __WEBPACK_IMPORTED_MODULE_0__methods__["v" /* parseFormatCondition */];
   this.conditionsConnector = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* conditionsConnector */];
+  this.updateandtake = __WEBPACK_IMPORTED_MODULE_0__methods__["P" /* updateandtake */];
+  this.updateJoinTemplate = __WEBPACK_IMPORTED_MODULE_0__methods__["N" /* updateJoinTemplate */];
+  this.multiTableUpdate = __WEBPACK_IMPORTED_MODULE_0__methods__["t" /* multiTableUpdate */];
+  this.take = __WEBPACK_IMPORTED_MODULE_0__methods__["K" /* take */];
+  this.takeSql = __WEBPACK_IMPORTED_MODULE_0__methods__["L" /* takeSql */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Mysql);
@@ -4211,38 +4250,43 @@ var Mysql = function Mysql(pao) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return insertOne; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return insertMany; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return find; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "K", function() { return updateOne; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "O", function() { return updateOne; });
 /* unused harmony export updateMany */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "z", function() { return remove; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return queryOptions; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return queryTemplate; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "J", function() { return transaction; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return procedure; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "P", function() { return updateandtake; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "N", function() { return updateJoinTemplate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return multiTableUpdate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "K", function() { return take; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "L", function() { return takeSql; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return remove; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "y", function() { return queryOptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "z", function() { return queryTemplate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "M", function() { return transaction; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "x", function() { return procedure; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return join; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "B", function() { return search; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "C", function() { return search; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return TRANSACTION; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return PROCEDURE; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return insert; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return JOIN; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return SEARCH; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return combineFields; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "A", function() { return rollback; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "B", function() { return rollback; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return joinExek; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return joinConditionsFormat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return joinStatement; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "D", function() { return searchExek; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "C", function() { return searchConditionsFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "G", function() { return searchStatement; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "F", function() { return searchOptions; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "E", function() { return searchFieldsFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "E", function() { return searchExek; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "D", function() { return searchConditionsFormat; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "H", function() { return searchStatement; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "G", function() { return searchOptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "F", function() { return searchFieldsFormat; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return fieldFormat; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return options; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "I", function() { return sort; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "u", function() { return options; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "J", function() { return sort; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return limit; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return parseGroup; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "u", function() { return parseFormatCondition; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "w", function() { return parseGroup; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "v", function() { return parseFormatCondition; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return conditionsConnector; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "H", function() { return set; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "I", function() { return set; });
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
 
 function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
@@ -4325,6 +4369,8 @@ var handleMysqlDataRequest = function handleMysqlDataRequest(data) {
             self[data.opi](data);
           } else if (data.opi === 'remove') {
             data.opi = 'remove';
+            self[data.opi](data);
+          } else if (data.opi === 'updateandtake') {
             self[data.opi](data);
           } else {
             self[data.opi](data);
@@ -4620,6 +4666,261 @@ var updateMany = function updateMany(update) {
     }
   }
 };
+var updateandtake = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(updateAndTake) {
+    var self, pao, conn, handler, updateTake, _options;
+
+    return regeneratorRuntime.wrap(function _callee3$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            console.log('THE UPDATIKANDTAKE');
+            console.log(updateAndTake);
+            self = this;
+            pao = self.pao;
+            conn = updateAndTake.conn;
+            handler = updateAndTake.outComehandler;
+            updateTake = updateAndTake.query; //console.log(update)
+
+            if (pao.pa_isObject(updateAndTake)) {
+              _context4.next = 10;
+              break;
+            }
+
+            _context4.next = 20;
+            break;
+
+          case 10:
+            _context4.prev = 10;
+            _context4.next = 13;
+            return self.searchOptions(updateTake, true);
+
+          case 13:
+            _options = _context4.sent;
+            self.multiTableUpdate(_options, conn).then(function (updated) {
+              if (updated.changedRows > 0) {
+                self.take(_options, conn, updateTake.conditions).then(function (taken) {
+                  handler(null, {
+                    updated: updated,
+                    taken: taken
+                  });
+                })["catch"](function (e) {
+                  handler(e, null);
+                });
+              } else {
+                // handler({updated: false,taken: taken})
+                console.log('NO CHANGED ROWS IN A MULTIPLE UPDATE');
+                self.take(_options, conn, updateTake.conditions).then(function (taken) {
+                  handler(null, {
+                    updated: updated,
+                    taken: taken
+                  });
+                })["catch"](function (e) {
+                  handler(e, null);
+                }); //
+                // {
+                //   tables:['jo_user','jo_login'],
+                //   joins: 2,
+                //   joinPoints: ['jo_user.id EQUALS jo_login.id'],
+                //   conditions: [`jo_user.id EQUALS 1`,`AND jo_login.u_id EQUALS 1`],
+                //   opiks: ['field.first_name.as[firstName]','field.last_name.as[lastName]',
+                //   set: [{first_name: 'Surprise',last_name: 'Mashele'},{password: '1234567'}],
+                //   takeFrom: 'jo_user'
+                //  }
+              }
+            })["catch"](function (e) {
+              handler(e, null);
+            });
+            _context4.next = 20;
+            break;
+
+          case 17:
+            _context4.prev = 17;
+            _context4.t0 = _context4["catch"](10);
+            handler(_context4.t0, null);
+
+          case 20:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee3, this, [[10, 17]]);
+  }));
+
+  return function updateandtake(_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+var updateJoinTemplate = function updateJoinTemplate(options) {
+  // `UPDATE ??
+  // SET ${options.set}
+  // WHERE ${options.from.condition}
+  // `
+  var self = this;
+  self.log('UPDATE OPTIONS');
+  self.log(options);
+  var sqlAttribs = {};
+  sqlAttribs.attribs = {
+    from: options.from,
+    tables: options.tables
+  };
+
+  switch (options.length) {
+    case 3:
+      sqlAttribs.statement = "UPDATE ??,??,??\n                              JOIN ".concat(options.tables[0], "\n                                ON ").concat(options.conditions[0], "\n                              JOIN ").concat(options.tables[1], "\n                                ON ").concat(options.conditions[1], "\n                              SET ").concat(options.set, "\n                              WHERE ").concat(options.from.condition, "\n                              \n                              ");
+      break;
+
+    case 4:
+      sqlAttribs.statement = "UPDATE ??,??,??,??\n                            JOIN ".concat(options.tables[0], "\n                              ON ").concat(options.conditions[0], "\n                            JOIN ").concat(options.tables[1], "\n                              ON ").concat(options.conditions[1], "\n                            JOIN ").concat(options.tables[2], "\n                            ON ").concat(options.conditions[2], "\n                            SET ").concat(options.set, "\n                            WHERE ").concat(options.from.condition, "\n                            \n                            ");
+      break;
+
+    default:
+      sqlAttribs.statement = "UPDATE ??\n                            JOIN ".concat(options.tables[0], "\n                              ON ").concat(options.joinPoints[0], "\n                            SET ").concat(options.set, "\n                            WHERE ").concat(options.from.condition, "\n                            \n                            ");
+  }
+
+  return sqlAttribs;
+};
+var multiTableUpdate = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(options, conn) {
+    var self, pao, contains;
+    return regeneratorRuntime.wrap(function _callee4$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            self = this;
+            pao = self.pao;
+            contains = pao.pa_contains;
+            return _context5.abrupt("return", new Promise(function (resolve, reject) {
+              try {
+                // console.log('THE SQLKIKS OBJECT UPDATE')
+                // console.log(sqliks)
+                // attribs = [sqliks.attribs.from.table]
+                var sql = '';
+                var attribs = null;
+                var sqliks = self.updateJoinTemplate(options);
+                console.log('THE SQLKIKS OBJECT');
+                console.log(sqliks);
+                contains(sqliks.attribs, 'tables') ? attribs = [sqliks.attribs.from.table].concat(_toConsumableArray(sqliks.attribs.tables)) : attribs = [sqliks.attribs.from.table];
+                sql = sqliks.statement;
+                var queryAttributes = attribs;
+                console.log('THE SQL BEFORE FORMAT::MULTIUPDATE');
+                console.log(sql);
+                sql = conn.format(sql, queryAttributes);
+                console.log(sql);
+                conn.query(sql, function (e, r, f) {
+                  if (e) return reject(e);
+                  resolve(r);
+                });
+              } catch (e) {
+                reject(e);
+              }
+            }));
+
+          case 4:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee4, this);
+  }));
+
+  return function multiTableUpdate(_x3, _x4) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+var take = /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(options, conn, conditions) {
+    var self, pao;
+    return regeneratorRuntime.wrap(function _callee5$(_context6) {
+      while (1) {
+        switch (_context6.prev = _context6.next) {
+          case 0:
+            self = this;
+            pao = self.pao;
+            return _context6.abrupt("return", new Promise(function (resolve, reject) {
+              if (options.takeFrom) {
+                var takeFrom = options.takeFrom;
+
+                if (takeFrom.conditions) {
+                  self.log('THE TAKEFROM CONDITIION IS SET');
+                  options.conditions = takeFrom.conditions;
+                  takeFrom.tables.length > 1 ? options.length = takeFrom.tables.length : '';
+                  options.length ? takeFrom.joinPoints ? options.joinPoints = takeFrom.joinPoints : '' : '';
+                  self.takeSql(options, conn).then(function (resultset) {
+                    resolve(resultset);
+                  })["catch"](function (e) {
+                    reject(e);
+                  });
+                } else {
+                  self.log('THE TAKEFROM HAS NO SET CONDITIONS');
+                  self.log(options);
+                  delete options.length;
+                  options.from.condition = self.searchConditionsFormat([conditions[0]]); // options.tables = options.tables[0]
+
+                  self.takeSql(options, conn).then(function (resultset) {
+                    resolve(resultset);
+                  })["catch"](function (e) {
+                    reject(e);
+                  });
+                }
+              } else {
+                self.log('THE TAKEFROM IS NOT DEFINED');
+                self.takeSql(options, conn).then(function (resultset) {
+                  resolve(resultset);
+                })["catch"](function (e) {
+                  reject(e);
+                });
+              }
+            }));
+
+          case 3:
+          case "end":
+            return _context6.stop();
+        }
+      }
+    }, _callee5, this);
+  }));
+
+  return function take(_x5, _x6, _x7) {
+    return _ref4.apply(this, arguments);
+  };
+}();
+var takeSql = function takeSql(takeOptions, conn) {
+  var self = this;
+  var pao = self.pao;
+  var contains = pao.pa_contains;
+  console.log('THE SEARCH');
+  console.log(search);
+  return new Promise(function (resolve, reject) {
+    // do a thing, possibly async, then… 
+    console.log('Executing the search promise');
+    var sql = '';
+    var attribs = null;
+    var sqliks = self.searchStatement(takeOptions);
+    console.log('THE SQLKIKS OBJECT');
+    console.log(sqliks);
+    contains(sqliks.attribs, 'tables') ? attribs = [sqliks.attribs.from.table].concat(_toConsumableArray(sqliks.attribs.tables)) : attribs = [sqliks.attribs.from.table];
+    sql = sqliks.statement;
+    var queryAttributes = attribs;
+    console.log('THE SQL BEFORE FORMAT::');
+    console.log(sql);
+    console.log(conn);
+    sql = conn.format(sql, queryAttributes);
+    console.log(sql);
+    conn.query(sql, function (e, r, f) {
+      if (e) {
+        console.log('Promise is rejecting search');
+        console.log(e);
+        reject(e);
+      } else {
+        console.log('Promise is Resolving search');
+        console.log(r);
+        console.log(r[0]);
+        resolve(r);
+      }
+    });
+  });
+};
 var remove = function remove(removiks) {
   var self = this;
   var pao = self.pao;
@@ -4680,6 +4981,7 @@ var queryOptions = function queryOptions(i) {
   contains(i, 'range') ? options.range = i.range : '';
   contains(i, 'sort') ? options.sort = i.sort : '';
   contains(i, 'set') ? options.set = self.set(i.set) : '';
+  contains(i, 'takeFrom') ? options.takeFrom = i.takeFrom : '';
   console.log('THE OPTIONS');
   console.log(options);
   return options;
@@ -4815,7 +5117,7 @@ var TRANSACTION = function TRANSACTION(collections, conn) {
   }
 };
 var PROCEDURE = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(collections, conn) {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(collections, conn) {
     var handler,
         self,
         pao,
@@ -4826,12 +5128,12 @@ var PROCEDURE = /*#__PURE__*/function () {
         fields,
         sources,
         own,
-        _args4 = arguments;
-    return regeneratorRuntime.wrap(function _callee3$(_context4) {
+        _args7 = arguments;
+    return regeneratorRuntime.wrap(function _callee6$(_context7) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context7.prev = _context7.next) {
           case 0:
-            handler = _args4.length > 2 && _args4[2] !== undefined ? _args4[2] : null;
+            handler = _args7.length > 2 && _args7[2] !== undefined ? _args7[2] : null;
             self = this;
             pao = self.pao;
             self.log('THE PROCEDURE METHOD');
@@ -4844,7 +5146,7 @@ var PROCEDURE = /*#__PURE__*/function () {
 
           case 10:
             if (!(c < collections.length)) {
-              _context4.next = 31;
+              _context7.next = 31;
               break;
             }
 
@@ -4854,12 +5156,12 @@ var PROCEDURE = /*#__PURE__*/function () {
             own = null;
 
             if (pao.pa_contains(i, 'fields')) {
-              _context4.next = 20;
+              _context7.next = 20;
               break;
             }
 
             handler('Required collection/table field missing');
-            return _context4.abrupt("break", 31);
+            return _context7.abrupt("break", 31);
 
           case 20:
             if (pao.pa_contains(i.fields, 'tables')) {
@@ -4871,7 +5173,7 @@ var PROCEDURE = /*#__PURE__*/function () {
           case 21:
             sources ? fields = self.combineFields(sources, own, collectionsIds) : '';
             fields ? i.fields = fields : '';
-            _context4.next = 25;
+            _context7.next = 25;
             return self.insert(i, conn).then(function (insert) {
               collectionsIds.push(insert);
             })["catch"](function (failedInsert) {
@@ -4881,11 +5183,11 @@ var PROCEDURE = /*#__PURE__*/function () {
 
           case 25:
             if (!breakOut) {
-              _context4.next = 27;
+              _context7.next = 27;
               break;
             }
 
-            return _context4.abrupt("break", 31);
+            return _context7.abrupt("break", 31);
 
           case 27:
             if (c === collections.length - 1) {
@@ -4907,19 +5209,19 @@ var PROCEDURE = /*#__PURE__*/function () {
 
           case 28:
             c++;
-            _context4.next = 10;
+            _context7.next = 10;
             break;
 
           case 31:
           case "end":
-            return _context4.stop();
+            return _context7.stop();
         }
       }
-    }, _callee3, this);
+    }, _callee6, this);
   }));
 
-  return function PROCEDURE(_x2, _x3) {
-    return _ref2.apply(this, arguments);
+  return function PROCEDURE(_x8, _x9) {
+    return _ref5.apply(this, arguments);
   };
 }();
 var insert = function insert(inset, conn) {
@@ -4977,16 +5279,16 @@ var insert = function insert(inset, conn) {
   });
 };
 var JOIN = /*#__PURE__*/function () {
-  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(join, conn) {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(join, conn) {
     var handler,
         self,
         pao,
-        _args5 = arguments;
-    return regeneratorRuntime.wrap(function _callee4$(_context5) {
+        _args8 = arguments;
+    return regeneratorRuntime.wrap(function _callee7$(_context8) {
       while (1) {
-        switch (_context5.prev = _context5.next) {
+        switch (_context8.prev = _context8.next) {
           case 0:
-            handler = _args5.length > 2 && _args5[2] !== undefined ? _args5[2] : null;
+            handler = _args8.length > 2 && _args8[2] !== undefined ? _args8[2] : null;
             self = this;
             pao = self.pao;
             self.joinExek(join, conn).then(function (result) {
@@ -5001,34 +5303,34 @@ var JOIN = /*#__PURE__*/function () {
 
           case 4:
           case "end":
-            return _context5.stop();
+            return _context8.stop();
         }
       }
-    }, _callee4, this);
+    }, _callee7, this);
   }));
 
-  return function JOIN(_x4, _x5) {
-    return _ref3.apply(this, arguments);
+  return function JOIN(_x10, _x11) {
+    return _ref6.apply(this, arguments);
   };
 }();
 var SEARCH = /*#__PURE__*/function () {
-  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(search, conn) {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(search, conn) {
     var handler,
         self,
         pao,
-        _args8 = arguments;
-    return regeneratorRuntime.wrap(function _callee6$(_context8) {
+        _args11 = arguments;
+    return regeneratorRuntime.wrap(function _callee9$(_context11) {
       while (1) {
-        switch (_context8.prev = _context8.next) {
+        switch (_context11.prev = _context11.next) {
           case 0:
-            handler = _args8.length > 2 && _args8[2] !== undefined ? _args8[2] : null;
+            handler = _args11.length > 2 && _args11[2] !== undefined ? _args11[2] : null;
             self = this;
             pao = self.pao;
             console.log('THE SEARCH search object contents');
             console.log(search);
 
             if (pao.pa_contains(search, 'batch')) {
-              _context8.next = 9;
+              _context11.next = 9;
               break;
             }
 
@@ -5041,25 +5343,25 @@ var SEARCH = /*#__PURE__*/function () {
               console.log(failedRequest);
               handler(failedRequest, null);
             });
-            _context8.next = 10;
+            _context11.next = 10;
             break;
 
           case 9:
-            return _context8.delegateYield( /*#__PURE__*/regeneratorRuntime.mark(function _callee5() {
+            return _context11.delegateYield( /*#__PURE__*/regeneratorRuntime.mark(function _callee8() {
               var resultSet, batch, _loop2, s;
 
-              return regeneratorRuntime.wrap(function _callee5$(_context7) {
+              return regeneratorRuntime.wrap(function _callee8$(_context10) {
                 while (1) {
-                  switch (_context7.prev = _context7.next) {
+                  switch (_context10.prev = _context10.next) {
                     case 0:
                       resultSet = [];
                       batch = search.search;
                       _loop2 = /*#__PURE__*/regeneratorRuntime.mark(function _loop2(s) {
-                        return regeneratorRuntime.wrap(function _loop2$(_context6) {
+                        return regeneratorRuntime.wrap(function _loop2$(_context9) {
                           while (1) {
-                            switch (_context6.prev = _context6.next) {
+                            switch (_context9.prev = _context9.next) {
                               case 0:
-                                _context6.next = 2;
+                                _context9.next = 2;
                                 return self.searchExek(batch[s], conn).then(function (result) {
                                   console.log('search is successful, pushing results to the resultSet');
                                   console.log(result);
@@ -5083,7 +5385,7 @@ var SEARCH = /*#__PURE__*/function () {
 
                               case 2:
                               case "end":
-                                return _context6.stop();
+                                return _context9.stop();
                             }
                           }
                         }, _loop2);
@@ -5092,35 +5394,35 @@ var SEARCH = /*#__PURE__*/function () {
 
                     case 4:
                       if (!(s < batch.length)) {
-                        _context7.next = 9;
+                        _context10.next = 9;
                         break;
                       }
 
-                      return _context7.delegateYield(_loop2(s), "t0", 6);
+                      return _context10.delegateYield(_loop2(s), "t0", 6);
 
                     case 6:
                       s++;
-                      _context7.next = 4;
+                      _context10.next = 4;
                       break;
 
                     case 9:
                     case "end":
-                      return _context7.stop();
+                      return _context10.stop();
                   }
                 }
-              }, _callee5);
+              }, _callee8);
             })(), "t0", 10);
 
           case 10:
           case "end":
-            return _context8.stop();
+            return _context11.stop();
         }
       }
-    }, _callee6, this);
+    }, _callee9, this);
   }));
 
-  return function SEARCH(_x6, _x7) {
-    return _ref4.apply(this, arguments);
+  return function SEARCH(_x12, _x13) {
+    return _ref7.apply(this, arguments);
   };
 }();
 var combineFields = function combineFields(tables, own, ids) {
@@ -5496,40 +5798,28 @@ var searchStatement = function searchStatement(options) {
   }
 };
 var searchOptions = function searchOptions(i) {
-  console.log('THE search BATCH ITEM');
-  console.log(i);
+  var multiSet = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   var self = this;
   var pao = self.pao;
   var contains = pao.pa_contains;
+  var setTables = '';
+  setTables = multiSet ? _toConsumableArray(i.tables) : '';
+  self.log('THE search BATCH ITEM');
+  self.log(i);
+  console.log(i);
 
   if (contains(i, ['joins', 'conditions', 'joinPoints'])) {
     console.log('THE SEARCH ITEM CONTAINS BOTH JOINS,CONDITIONS, AND JOINPOINTS');
-    var _options = {};
-    _options.from = {
-      table: i.tables[0],
-      condition: self.searchConditionsFormat(i.conditions)
-    };
-    _options.joinPoints = i.joinPoints ? self.searchConditionsFormat(i.joinPoints, 'ON') : null;
-    _options.length = i.tables.length;
-    _options.tables = i.tables.splice(1, i.tables.length); //  contains(i,['returnFields','opiks']) ? options.fields = self.searchFieldsFormat(i.opiks,i.returnFields) : ''
-    //  contains(i,'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? options.fields='*' : options.fields= i.returnFields : ''
-    //  contains(i,'opiks') ?  options.fields = self.searchFieldsFormat(i.opiks) : ''
-
-    contains(i, ['returnFields', 'opiks']) ? _options.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : contains(i, 'opiks') ? _options.fields = self.searchFieldsFormat(i.opiks) : contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options.fields = '*' : _options.fields = i.returnFields : '';
-    contains(i, 'type') ? _options.type = i.type : '';
-    contains(i, 'take') ? _options.take = i.take : '';
-    contains(i, 'range') ? _options.range = i.range : '';
-    contains(i, 'soundex') ? _options.soundex = i.soundex : '';
-    contains(i, 'sort') ? _options.sort = i.sort : '';
-    return _options;
-  } else if (contains(i, ['conditions'])) {
     var _options2 = {};
     _options2.from = {
       table: i.tables[0],
       condition: self.searchConditionsFormat(i.conditions)
-    }; // contains(i,['returnFields','opiks']) ? options.fields = self.searchFieldsFormat(i.opiks,i.returnFields) : ''
-    // contains(i,'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? options.fields='*' : options.fields= i.returnFields : ''
-    // contains(i,'opiks') ?  options.fields = self.searchFieldsFormat(i.opiks) : ''
+    };
+    _options2.joinPoints = i.joinPoints ? self.searchConditionsFormat(i.joinPoints, 'ON') : null;
+    _options2.length = i.tables.length;
+    _options2.tables = i.tables.splice(1, i.tables.length); //  contains(i,['returnFields','opiks']) ? options.fields = self.searchFieldsFormat(i.opiks,i.returnFields) : ''
+    //  contains(i,'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? options.fields='*' : options.fields= i.returnFields : ''
+    //  contains(i,'opiks') ?  options.fields = self.searchFieldsFormat(i.opiks) : ''
 
     contains(i, ['returnFields', 'opiks']) ? _options2.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : contains(i, 'opiks') ? _options2.fields = self.searchFieldsFormat(i.opiks) : contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options2.fields = '*' : _options2.fields = i.returnFields : '';
     contains(i, 'type') ? _options2.type = i.type : '';
@@ -5537,20 +5827,42 @@ var searchOptions = function searchOptions(i) {
     contains(i, 'range') ? _options2.range = i.range : '';
     contains(i, 'soundex') ? _options2.soundex = i.soundex : '';
     contains(i, 'sort') ? _options2.sort = i.sort : '';
+    contains(i, 'set') ? _options2.set = multiSet ? self.set(i.set, setTables) : self.set(i.set) : '';
+    contains(i, 'takeFrom') ? _options2.takeFrom = i.takeFrom : '';
     return _options2;
-  } else if (contains(i, 'tables') && i.tables instanceof Array) {
+  } else if (contains(i, ['conditions'])) {
     var _options3 = {};
     _options3.from = {
-      table: i.tables[0]
-    };
-    contains(i, ['returnFields', 'opiks']) ? _options3.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : contains(i, 'opiks') ? _options3.fields = self.searchFieldsFormat(i.opiks) : contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options3.fields = '*' : _options3.fields = i.returnFields : ''; // contains(i,'opiks') ?  options.fields = self.searchFieldsFormat(i.opiks) : ''
+      table: i.tables[0],
+      condition: self.searchConditionsFormat(i.conditions)
+    }; // contains(i,['returnFields','opiks']) ? options.fields = self.searchFieldsFormat(i.opiks,i.returnFields) : ''
+    // contains(i,'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? options.fields='*' : options.fields= i.returnFields : ''
+    // contains(i,'opiks') ?  options.fields = self.searchFieldsFormat(i.opiks) : ''
 
+    contains(i, ['returnFields', 'opiks']) ? _options3.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : contains(i, 'opiks') ? _options3.fields = self.searchFieldsFormat(i.opiks) : contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options3.fields = '*' : _options3.fields = i.returnFields : '';
     contains(i, 'type') ? _options3.type = i.type : '';
     contains(i, 'take') ? _options3.take = i.take : '';
     contains(i, 'range') ? _options3.range = i.range : '';
     contains(i, 'soundex') ? _options3.soundex = i.soundex : '';
     contains(i, 'sort') ? _options3.sort = i.sort : '';
+    contains(i, 'set') ? _options3.set = multiSet ? self.set(i.set, setTables) : self.set(i.set) : '';
+    contains(i, 'takeFrom') ? _options3.takeFrom = i.takeFrom : '';
     return _options3;
+  } else if (contains(i, 'tables') && i.tables instanceof Array) {
+    var _options4 = {};
+    _options4.from = {
+      table: i.tables[0]
+    };
+    contains(i, ['returnFields', 'opiks']) ? _options4.fields = self.searchFieldsFormat(i.opiks, i.returnFields) : contains(i, 'opiks') ? _options4.fields = self.searchFieldsFormat(i.opiks) : contains(i, 'returnFields') ? i.returnFields.length === 1 && i.returnFields[0].trim() === 'all' ? _options4.fields = '*' : _options4.fields = i.returnFields : ''; // contains(i,'opiks') ?  options.fields = self.searchFieldsFormat(i.opiks) : ''
+
+    contains(i, 'type') ? _options4.type = i.type : '';
+    contains(i, 'take') ? _options4.take = i.take : '';
+    contains(i, 'range') ? _options4.range = i.range : '';
+    contains(i, 'soundex') ? _options4.soundex = i.soundex : '';
+    contains(i, 'sort') ? _options4.sort = i.sort : '';
+    contains(i, 'set') ? _options4.set = multiSet ? self.set(i.set, setTables) : self.set(i.set) : '';
+    contains(i, 'takeFrom') ? _options4.takeFrom = i.takeFrom : '';
+    return _options4;
   } else {
     return null;
   }
@@ -5969,24 +6281,36 @@ var conditionsConnector = function conditionsConnector(c) {
   }
 };
 var set = function set(_set) {
+  var multiSets = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
   var self = this;
   var pao = self.pao;
-  var setString = '';
+  var objectToArray = pao.pa_objectToArray;
+  self.log('THE SET');
+  self.log(_set);
+  self.log(multiSets);
+  var setStrings = '';
 
   _set.forEach(function (s, i) {
-    var key = '';
-    var value = '';
-    key = Object.keys(s)[0];
-    value = s[Object.keys(s)[0]];
-    console.log('THE LENGTH OF S');
-    console.log(_set.length);
-    console.log(i);
-    setString += i === _set.length - 1 ? "".concat(key, " = \"").concat(value, "\"") : "".concat(key, " = \"").concat(value, "\", ");
+    var setString = '';
+    var modSet = objectToArray(s, true);
+    console.log('THE CONVERTED SET OBJECT');
+    console.log(modSet);
+    modSet.forEach(function (col, pos) {
+      multiSets ? setString += pos === modSet.length - 1 ? "".concat(multiSets[i], ".").concat(col.key, " = \"").concat(col.value, "\"") : "".concat(multiSets[i], ".").concat(col.key, " = \"").concat(col.value, "\", ") : setString += pos === modSet.length - 1 ? "".concat(col.key, " = \"").concat(col.value, "\"") : "".concat(col.key, " = \"").concat(col.value, "\", ");
+    });
+    setStrings += i === _set.length - 1 ? "".concat(setString) : "".concat(setString, ", "); // let key = ''
+    // let value = ''
+    // key = Object.keys(s)[0]
+    // value = s[Object.keys(s)[0]]
+    // console.log('THE LENGTH OF S')
+    // console.log(set.length)
+    // console.log(i)
+    // setString += i === set.length - 1 ? `${key} = "${value}"` : `${key} = "${value}", `
   });
 
-  console.log('THE SETSTRING');
-  console.log(setString);
-  return setString;
+  console.log('THE SETSTRINGS');
+  console.log(setStrings);
+  return setStrings;
 };
 
 /***/ }),
@@ -6439,6 +6763,8 @@ var Activate = function Activate() {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__modules_downloadr__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__modules_fileupload__ = __webpack_require__(126);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__modules_upload__ = __webpack_require__(130);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__modules_asettings__ = __webpack_require__(138);
+
 
 
 
@@ -6460,6 +6786,7 @@ var Activate = function Activate() {
 /* harmony default export */ __webpack_exports__["a"] = ({
   Test: __WEBPACK_IMPORTED_MODULE_0__modules_test__["a" /* default */],
   List: __WEBPACK_IMPORTED_MODULE_1__modules_list__["a" /* default */],
+  Asettings: __WEBPACK_IMPORTED_MODULE_18__modules_asettings__["a" /* default */],
   FileMan: __WEBPACK_IMPORTED_MODULE_2__modules_fileman__["a" /* default */],
   ImageMan: __WEBPACK_IMPORTED_MODULE_3__modules_imageman__["a" /* default */],
   Upload: __WEBPACK_IMPORTED_MODULE_17__modules_upload__["a" /* default */],
@@ -8328,18 +8655,56 @@ var saveThingy = function saveThingy(data) {
     self.query('mysql.SEARCH', query, self.thingyDataRequestHandler.bind(_this2, resolve, reject));
   });
 };
-var updateThingy = function updateThingy(data) {
+var updateThingy = function updateThingy(pay) {
   var _this3 = this;
 
   var self = this;
   var pao = self.pao;
+  console.log('The update');
+  console.log(pay); // 	{
+  // 		tables:['jo_user','jo_login'],
+  // 		joins: 2,
+  // 		joinPoints: ['jo_user.id EQUALS jo_login.id'],
+  // 		conditions: [[`jo_user.id EQUALS 1`],[`AND jo_login.u_id EQUALS 1`]],
+  // 		opiks: ['field.first_name.as[firstName]','field.last_name.as[lastName]',
+  // 		set: [{first_name: 'Surprise',last_name: 'Mashele'},{password: '1234567'}],
+  // 		takeFrom: 'jo_user'
+  //    }
+
   return new Promise(function (resolve, reject) {
-    if (!data.profile) return reject(new Error('Invalid Request'));
-    if (!data.profile.userId) return reject(new Error('Invalid'));
-    var query = {
-      conditions: ["id EQUALS ".concat(profile.userID)]
+    if (!pay.update) return reject(new Error('Update data missing'));
+    var uid = pay.ID; //  let alertID = pay.alertID 
+
+    var update = pay.update;
+    var firstName = update.firstName;
+    var lastName = update.lastName;
+    var phone = update.phone;
+    var password = update.password; //  let frequency = update.frequency 
+
+    var queries = {
+      returnFields: ['password'],
+      tables: ['jo_user', 'jo_login'],
+      joins: 2,
+      joinPoints: ['jo_user.id EQUALS jo_login.id'],
+      conditions: ["jo_user.id EQUALS 1", "AND jo_login.u_id EQUALS 1"],
+      opiks: ['field.first_name.as[firstName]', 'field.last_name.as[lastName]'],
+      set: [{
+        first_name: firstName,
+        last_name: lastName,
+        phone: phone
+      }, {
+        password: password
+      }] // takeFrom: 'jo_user'
+
     };
-    self.query('mysql.SEARCH', query, self.thingyDataRequestHandler.bind(_this3, resolve, reject));
+    self.query('mysql.UPDATEANDTAKE', queries, self.thingyDataRequestHandler.bind(_this3, resolve, reject)); //   {conditions: [`id EQUALS ${uid} `],
+    //  set: [{first_name: firstName,last_name: lastName,phone:phone},{password:password}]
+    // }
+    // self.query(
+    // 		'mysql.jo_user.updateOne',
+    // 		queries,
+    // 		self.thingyDataRequestHandler.bind(this,resolve,reject)
+    // 	)
   });
 };
 var findThingy = function findThingy(data) {
@@ -11232,17 +11597,18 @@ var FileMan = function FileMan(pao) {
     db: ['sql', 'csv']
   };
   this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* init */];
-  this.handleParseFile = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* handleParseFile */];
+  this.handleParseFile = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* handleParseFile */];
   this.handleSaveFile = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* handleSaveFile */];
   this.beginFileSave = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* beginFileSave */];
   this.handleRenameFile = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* handleRenameFile */];
   this.renameFile = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* renameFile */];
-  this.handleGetFile = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleGetFile */];
-  this.handleMakeFile = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* handleMakeFile */];
-  this.handleRemoveFile = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* handleRemoveFile */];
-  this.generateFileName = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* generateFileName */];
+  this.handleGetFile = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* handleGetFile */];
+  this.handleMakeFile = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* handleMakeFile */]; //  this.handleRemoveFile = methods.handleRemoveFile
+
+  this.generateFileName = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* generateFileName */];
   this.validateFile = __WEBPACK_IMPORTED_MODULE_0__methods__["n" /* validateFile */];
   this.saveFile = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* saveFile */];
+  this.deleteFile = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* deleteFile */];
   this.saveToSource = __WEBPACK_IMPORTED_MODULE_0__methods__["saveToSource"];
   this.handleTakeSystemBase = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* handleTakeSystemBase */];
 };
@@ -11255,15 +11621,15 @@ var FileMan = function FileMan(pao) {
 
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return handleParseFile; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return handleParseFile; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return handleSaveFile; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleGetFile; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return handleGetFile; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return handleTakeSystemBase; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return beginFileSave; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return handleMakeFile; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return handleMakeFile; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return handleRenameFile; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return handleRemoveFile; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return generateFileName; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return deleteFile; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return generateFileName; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return validateFile; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return saveFile; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return renameFile; });
@@ -11276,7 +11642,7 @@ var init = function init() {
   this.log('FileMan has been initialised');
   this.listens({
     'save-file': this.handleSaveFile.bind(this),
-    'remove-file': this.handleRemoveFile.bind(this),
+    // 'remove-file': this.handleRemoveFile.bind(this),
     'take-system-base': this.handleTakeSystemBase.bind(this),
     'get-file': this.handleGetFile.bind(this)
   });
@@ -11318,7 +11684,7 @@ var handleParseFile = /*#__PURE__*/function () {
 }();
 var handleSaveFile = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(data) {
-    var self, firstKey, file, resized;
+    var self, firstKey, file;
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
@@ -11338,11 +11704,12 @@ var handleSaveFile = /*#__PURE__*/function () {
               self.log('FIRST KEY');
               self.log(firstKey);
               file = data.files[firstKey];
-              resized = data.files.resized;
               self.log(file);
               self.beginFileSave({
                 path: file.path,
                 dir: data.dir,
+                old: data.old,
+                saveType: data.saveType,
                 userID: data.ID
               }).then(function (response) {
                 console.log('FILEHANDLE FILE SAVE');
@@ -11474,19 +11841,123 @@ var beginFileSave = function beginFileSave(file) {
     // catch((e)=>{
     // 	reject(new Error(e))
     // })
-    if (file.saveType === 'save') {
-      self.saveFile(file).then(function (savedFile) {
-        resolve(savedFile);
-      })["catch"](function (e) {
-        reject(new Error(e));
-      });
-    } else {
-      self.renameFile(file.path, file.dir, file.userID).then(function (renamedFile) {
-        resolve(renamedFile);
-      })["catch"](function (e) {
-        reject(new Error(e));
-      });
-    }
+    //   if(file.saveType === 'save'){
+    // self
+    // .saveFile(file)
+    // .then((savedFile)=>{
+    // 	if(saveType === 'unlinkold'){
+    // 	return	self.deleteFile(file.old)
+    // 			.then((deleted)=>{
+    // 				resolve(deleted)
+    // 			})
+    // 			.catch((e)=>{
+    // 				reject(e)
+    // 			})
+    // 	}
+    // 	resolve(savedFile)
+    // })
+    // .catch((e)=>{
+    // 	reject(new Error(e))
+    // })
+    //   }else{
+    self.renameFile(file.path, file.dir, file.userID).then( /*#__PURE__*/function () {
+      var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(renamedFile) {
+        var old, oldChunks;
+        return regeneratorRuntime.wrap(function _callee5$(_context5) {
+          while (1) {
+            switch (_context5.prev = _context5.next) {
+              case 0:
+                _context5.next = 2;
+                return self.log('THE RENAMED FILE');
+
+              case 2:
+                _context5.next = 4;
+                return self.log(file);
+
+              case 4:
+                if (!(file.saveType === 'unlinkold')) {
+                  _context5.next = 16;
+                  break;
+                }
+
+                old = file.old;
+                oldChunks = old.split('_');
+                _context5.next = 9;
+                return self.log('THE OLD FILE MUST BE DELETED');
+
+              case 9:
+                _context5.next = 11;
+                return self.log(oldChunks);
+
+              case 11:
+                if (!(oldChunks[2] === '0')) {
+                  _context5.next = 13;
+                  break;
+                }
+
+                return _context5.abrupt("return", resolve(renamedFile));
+
+              case 13:
+                _context5.next = 15;
+                return self.log('ABOUT TO DELETE THE FILE');
+
+              case 15:
+                return _context5.abrupt("return", self.deleteFile(file.dir, file.old).then( /*#__PURE__*/function () {
+                  var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(deleted) {
+                    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+                      while (1) {
+                        switch (_context4.prev = _context4.next) {
+                          case 0:
+                            _context4.next = 2;
+                            return self.log('A FILE HAS BEEN DELETED');
+
+                          case 2:
+                            _context4.next = 4;
+                            return self.log(deleted);
+
+                          case 4:
+                            resolve({
+                              url: renamedFile.url,
+                              deltedFile: true
+                            });
+
+                          case 5:
+                          case "end":
+                            return _context4.stop();
+                        }
+                      }
+                    }, _callee4);
+                  }));
+
+                  return function (_x5) {
+                    return _ref5.apply(this, arguments);
+                  };
+                }())["catch"](function (e) {
+                  self.log('THE DELETION HAS FAILED WITH ERROR');
+                  self.log(e);
+                  resolve({
+                    url: renameFile.url,
+                    deletedFile: false
+                  }); //reject(e)
+                }));
+
+              case 16:
+                resolve(renamedFile);
+
+              case 17:
+              case "end":
+                return _context5.stop();
+            }
+          }
+        }, _callee5);
+      }));
+
+      return function (_x4) {
+        return _ref4.apply(this, arguments);
+      };
+    }())["catch"](function (e) {
+      reject(new Error(e));
+    }); // }
   });
 };
 var handleMakeFile = function handleMakeFile(data) {
@@ -11494,11 +11965,11 @@ var handleMakeFile = function handleMakeFile(data) {
   self.getJobs(data);
 };
 var handleRenameFile = /*#__PURE__*/function () {
-  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(oldPath) {
+  var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(oldPath) {
     var self;
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+    return regeneratorRuntime.wrap(function _callee6$(_context6) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context6.prev = _context6.next) {
           case 0:
             self = this;
             self.renameFile(oldPath).then(function (newFile) {
@@ -11509,26 +11980,83 @@ var handleRenameFile = /*#__PURE__*/function () {
 
           case 2:
           case "end":
-            return _context4.stop();
+            return _context6.stop();
         }
       }
-    }, _callee4, this);
+    }, _callee6, this);
   }));
 
-  return function handleRenameFile(_x4) {
-    return _ref4.apply(this, arguments);
+  return function handleRenameFile(_x6) {
+    return _ref6.apply(this, arguments);
   };
 }();
-var handleRemoveFile = function handleRemoveFile(filePath) {
-  var self = this;
-  return new Promise(function (resolve, reject) {
-    fs.unlink(filePath).then(function () {
-      return resolve(true);
-    })["catch"](function (e) {
-      reject(new Error(e.message));
-    });
-  });
-};
+var deleteFile = /*#__PURE__*/function () {
+  var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(dir, fileName) {
+    var self, fs, path, filePath;
+    return regeneratorRuntime.wrap(function _callee8$(_context8) {
+      while (1) {
+        switch (_context8.prev = _context8.next) {
+          case 0:
+            self = this;
+            fs = self.fs;
+            path = self.path;
+            _context8.next = 5;
+            return self.log('THE DELETE METHOD');
+
+          case 5:
+            filePath = "".concat(self.system.DOCUMENT_ROOT).concat(path.sep).concat(dir).concat(path.sep).concat(fileName);
+            _context8.next = 8;
+            return self.log(filePath);
+
+          case 8:
+            return _context8.abrupt("return", new Promise(function (resolve, reject) {
+              fs.unlink(filePath, /*#__PURE__*/function () {
+                var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(err, deleted) {
+                  return regeneratorRuntime.wrap(function _callee7$(_context7) {
+                    while (1) {
+                      switch (_context7.prev = _context7.next) {
+                        case 0:
+                          _context7.next = 2;
+                          return self.log('THE DELETION RESPONSE::DELETE');
+
+                        case 2:
+                          _context7.next = 4;
+                          return self.log(deleted);
+
+                        case 4:
+                          resolve(true);
+
+                        case 5:
+                        case "end":
+                          return _context7.stop();
+                      }
+                    }
+                  }, _callee7);
+                }));
+
+                return function (_x9, _x10) {
+                  return _ref8.apply(this, arguments);
+                };
+              }()); //    .then(async (delted)=>{
+              // 	   await self.log('THE DELETION RESPONSE')
+              // 	   await self.log(deleted)
+              // 	   resolve(true)
+              // 	})
+              // 	.catch((e)=>{reject(e)})
+            }));
+
+          case 9:
+          case "end":
+            return _context8.stop();
+        }
+      }
+    }, _callee8, this);
+  }));
+
+  return function deleteFile(_x7, _x8) {
+    return _ref7.apply(this, arguments);
+  };
+}();
 var generateFileName = function generateFileName(fileName) {
   var ID = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
   var self = this;
@@ -11574,11 +12102,11 @@ var validateFile = function validateFile(fileName) {
   });
 };
 var saveFile = /*#__PURE__*/function () {
-  var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(file) {
+  var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(file) {
     var self, pao, fs, fileName, path, generateName, name;
-    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+    return regeneratorRuntime.wrap(function _callee9$(_context9) {
       while (1) {
-        switch (_context5.prev = _context5.next) {
+        switch (_context9.prev = _context9.next) {
           case 0:
             self = this;
             pao = self.pao;
@@ -11586,24 +12114,24 @@ var saveFile = /*#__PURE__*/function () {
             fileName = file.fileName, path = file.path, generateName = file.generateName;
 
             if (!generateName) {
-              _context5.next = 10;
+              _context9.next = 10;
               break;
             }
 
-            _context5.next = 7;
+            _context9.next = 7;
             return self.generateFileName(fileName);
 
           case 7:
-            _context5.t0 = _context5.sent;
-            _context5.next = 11;
+            _context9.t0 = _context9.sent;
+            _context9.next = 11;
             break;
 
           case 10:
-            _context5.t0 = fileName;
+            _context9.t0 = fileName;
 
           case 11:
-            name = _context5.t0;
-            return _context5.abrupt("return", new Promise(function (resolve, reject) {
+            name = _context9.t0;
+            return _context9.abrupt("return", new Promise(function (resolve, reject) {
               if (!(name instanceof String)) return reject(new Error(name.message));
               var savePath = "".concat(self.dir).concat(path).concat(name);
               var wStream = fs.createWriteStream(savePath);
@@ -11624,36 +12152,36 @@ var saveFile = /*#__PURE__*/function () {
 
           case 13:
           case "end":
-            return _context5.stop();
+            return _context9.stop();
         }
       }
-    }, _callee5, this);
+    }, _callee9, this);
   }));
 
-  return function saveFile(_x5) {
-    return _ref5.apply(this, arguments);
+  return function saveFile(_x11) {
+    return _ref9.apply(this, arguments);
   };
 }();
 var renameFile = /*#__PURE__*/function () {
-  var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(fileName, dir, ID) {
+  var _ref10 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee10(fileName, dir, ID) {
     var self, fs, path, name, newPath;
-    return regeneratorRuntime.wrap(function _callee6$(_context6) {
+    return regeneratorRuntime.wrap(function _callee10$(_context10) {
       while (1) {
-        switch (_context6.prev = _context6.next) {
+        switch (_context10.prev = _context10.next) {
           case 0:
             self = this;
             fs = self.fs;
             path = self.path;
             console.log('BEFORE RENAME');
-            _context6.next = 6;
+            _context10.next = 6;
             return self.generateFileName(fileName, ID);
 
           case 6:
-            name = _context6.sent;
+            name = _context10.sent;
             console.log('THE NAME RENAME FILE');
             console.log(name);
             newPath = "".concat(self.system.DOCUMENT_ROOT).concat(path.sep).concat(dir).concat(path.sep).concat(name);
-            return _context6.abrupt("return", new Promise(function (resolve, reject) {
+            return _context10.abrupt("return", new Promise(function (resolve, reject) {
               fs.rename(fileName, newPath, function (e) {
                 console.log('the file has been renammed');
                 if (e) return reject(e);
@@ -11673,31 +12201,31 @@ var renameFile = /*#__PURE__*/function () {
 
           case 11:
           case "end":
-            return _context6.stop();
+            return _context10.stop();
         }
       }
-    }, _callee6, this);
+    }, _callee10, this);
   }));
 
-  return function renameFile(_x6, _x7, _x8) {
-    return _ref6.apply(this, arguments);
+  return function renameFile(_x12, _x13, _x14) {
+    return _ref10.apply(this, arguments);
   };
 }();
 var getFile = /*#__PURE__*/function () {
-  var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(data) {
+  var _ref11 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee11(data) {
     var self, fs, name;
-    return regeneratorRuntime.wrap(function _callee7$(_context7) {
+    return regeneratorRuntime.wrap(function _callee11$(_context11) {
       while (1) {
-        switch (_context7.prev = _context7.next) {
+        switch (_context11.prev = _context11.next) {
           case 0:
             self = this;
             fs = self.fs;
-            _context7.next = 4;
+            _context11.next = 4;
             return self.generateFileName(fileName);
 
           case 4:
-            name = _context7.sent;
-            return _context7.abrupt("return", new Promise(function (resolve, reject) {
+            name = _context11.sent;
+            return _context11.abrupt("return", new Promise(function (resolve, reject) {
               fs.rename(fileName, name).then(function (newFile) {
                 resolve(newFile);
               })["catch"](function (e) {
@@ -11707,14 +12235,14 @@ var getFile = /*#__PURE__*/function () {
 
           case 6:
           case "end":
-            return _context7.stop();
+            return _context11.stop();
         }
       }
-    }, _callee7, this);
+    }, _callee11, this);
   }));
 
-  return function getFile(_x9) {
-    return _ref7.apply(this, arguments);
+  return function getFile(_x15) {
+    return _ref11.apply(this, arguments);
   };
 }();
 
@@ -11764,6 +12292,10 @@ var FileUpload = function FileUpload(pao) {
 /* WEBPACK VAR INJECTION */(function(__dirname) {/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return init; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleAddUploadMiddleware; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return parseFile; });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 var init = function init() {
   this.log('Fileupload has been initialised');
   this.listens({
@@ -11777,115 +12309,137 @@ var handleAddUploadMiddleware = function handleAddUploadMiddleware(data) {
   var self = this;
   data.filterCallback(data.type, self.parseFile.bind(self));
 };
-var parseFile = function parseFile(req, res, next) {
-  var self = this;
-  var pao = self.pao;
-  var forOf = pao.pa_forOf; // const form = new self.IncomingForm()
+var parseFile = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(req, res, next) {
+    var self, pao, forOf, form, contentType;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            self = this;
+            pao = self.pao;
+            forOf = pao.pa_forOf; // const form = new self.IncomingForm()
 
-  var form = self.multiFormParser({
-    keepExtensions: true,
-    maxFileSize: 1 * 1024 * 1024,
-    uploadDir: __dirname
-  });
-  self.log("I'm the file upload middleware module that's gonna read the file on the req");
-  var contentType = req.headers['content-type']; // self.log(form.parse)
-  // console.log(next)
+            form = self.multiFormParser({
+              keepExtensions: true,
+              maxFileSize: 1 * 1024 * 1024,
+              uploadDir: __dirname
+            });
+            _context.next = 6;
+            return self.log("I'm the file upload middleware module that's gonna read the file on the req");
 
-  if (contentType.indexOf('multipart/form-data') === -1) {
-    return self.emit({
-      type: 'write-server-request-response',
-      data: {
-        data: {
-          error: true,
-          message: 'Invalid content-type for file upload'
-        },
-        res: res
-      }
-    });
-  } // form.once('error',(e)=>{
-  //   console.log('THE PARSE ERROR HAS OCCURED')
-  //   console.log(e)
-  // })
-  // form.on('file', (field, file) => {
-  //     if(req.uploads && req.uploads instanceof Array){
-  //         req.uploads.push({[field]: file})
-  //     }else{
-  //         req.uploads = new Array({[field]: file})
-  //     }
-  //     // Do something with the file
-  //     // e.g. save it to the database
-  //     // you can access it using file.path
-  //   })
-  // form.on('end', () => {
-  //     console.log('THE UPLOADED FILES PARSING IS COMPLETE, WE THEN FORWARD THE REQUEST TO THE NEXT MIDDLEWARE')
-  //     next()
-  // })
+          case 6:
+            contentType = req.headers['content-type'];
+            _context.next = 9;
+            return self.log(contentType);
 
+          case 9:
+            _context.next = 11;
+            return self.log(req.headers);
 
-  form.parse(req, function (err, fields, files) {
-    console.log('THE PARSE METHOD RUNS');
-    console.log(req.headers);
+          case 11:
+            if (!(contentType.indexOf('multipart/form-data') === -1)) {
+              _context.next = 13;
+              break;
+            }
 
-    if (err) {
-      console.log('The fields error');
-      console.log(err);
-      return self.emit({
-        type: 'write-server-request-response',
-        data: {
-          data: {
-            error: true,
-            message: 'File parse error'
-          },
-          res: res
-        }
-      });
-    } else {
-      console.log('THE UPLOADED FILES PARSING IS COMPLETE, WE THEN FORWARD THE REQUEST TO THE NEXT MIDDLEWARE');
-      console.log(fields);
-      console.log(Object.keys(files).length);
+            return _context.abrupt("return", next());
 
-      if (fields === false && files === false) {
-        return self.emit({
-          type: 'write-server-request-response',
-          data: {
-            data: {
-              error: true,
-              message: 'No fields have been provided'
-            },
-            res: res
-          }
-        });
-      } else {
-        if (files) {
-          console.log('THE files'); // console.log(files)
+          case 13:
+            // form.once('error',(e)=>{
+            //   console.log('THE PARSE ERROR HAS OCCURED')
+            //   console.log(e)
+            // })
+            // form.on('file', (field, file) => {
+            //     if(req.uploads && req.uploads instanceof Array){
+            //         req.uploads.push({[field]: file})
+            //     }else{
+            //         req.uploads = new Array({[field]: file})
+            //     }
+            //     // Do something with the file
+            //     // e.g. save it to the database
+            //     // you can access it using file.path
+            //   })
+            // form.on('end', () => {
+            //     console.log('THE UPLOADED FILES PARSING IS COMPLETE, WE THEN FORWARD THE REQUEST TO THE NEXT MIDDLEWARE')
+            //     next()
+            // })
+            form.parse(req, function (err, fields, files) {
+              console.log('THE PARSE METHOD RUNS');
+              console.log(req.headers);
 
-          var uploads = forOf(files, function (key, value) {
-            console.log('THE forOf methods is running'); // console.log(file)
-            // console.log(key)
-            // console.log(value)
+              if (err) {
+                console.log('The fields error');
+                console.log(err);
+                return self.emit({
+                  type: 'write-server-request-response',
+                  data: {
+                    data: {
+                      error: true,
+                      message: 'File parse error'
+                    },
+                    res: res
+                  }
+                });
+              } else {
+                console.log('THE UPLOADED FILES PARSING IS COMPLETE, WE THEN FORWARD THE REQUEST TO THE NEXT MIDDLEWARE');
+                console.log(fields);
+                console.log(Object.keys(files).length);
 
-            return {
-              p: key,
-              v: {
-                path: value.path,
-                name: value.name
+                if (fields === false && files === false) {
+                  return self.emit({
+                    type: 'write-server-request-response',
+                    data: {
+                      data: {
+                        error: true,
+                        message: 'No fields have been provided'
+                      },
+                      res: res
+                    }
+                  });
+                } else {
+                  if (files) {
+                    console.log('THE files'); // console.log(files)
+
+                    var uploads = forOf(files, function (key, value) {
+                      console.log('THE forOf methods is running'); // console.log(file)
+                      // console.log(key)
+                      // console.log(value)
+
+                      return {
+                        p: key,
+                        v: {
+                          path: value.path,
+                          name: value.name
+                        }
+                      };
+                    }, false);
+                    console.log('THE UPLOADS');
+                    console.log(uploads);
+                    req.uploads = {
+                      files: uploads,
+                      fields: fields
+                    }; // console.log('THE FILES')
+                    // console.log(req.uploads)
+
+                    next();
+                  }
+                }
               }
-            };
-          }, false);
-          console.log('THE UPLOADS');
-          console.log(uploads);
-          req.uploads = {
-            files: uploads,
-            fields: fields
-          }; // console.log('THE FILES')
-          // console.log(req.uploads)
+            });
 
-          next();
+          case 14:
+          case "end":
+            return _context.stop();
         }
       }
-    }
-  });
-};
+    }, _callee, this);
+  }));
+
+  return function parseFile(_x, _x2, _x3) {
+    return _ref.apply(this, arguments);
+  };
+}();
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "/"))
 
 /***/ }),
@@ -12272,6 +12826,706 @@ var greyScale = function greyScale(data) {
 /***/ (function(module, exports) {
 
 module.exports = require("jimp");
+
+/***/ }),
+/* 138 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__asettings__ = __webpack_require__(139);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__asettings__["a" /* default */]);
+
+/***/ }),
+/* 139 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(140);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var Asettings = function Asettings(pao) {
+  _classCallCheck(this, Asettings);
+
+  this.pao = pao;
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* init */];
+  this.handleAsettingsTask = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* handleAsettingsTask */];
+  this.getUserProfile = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* getUserProfile */];
+  this.deleteAccount = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* deleteAccount */];
+  this.updateUser = __WEBPACK_IMPORTED_MODULE_0__methods__["p" /* updateUser */];
+  this.changeAvatar = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* changeAvatar */];
+  this.handleImageManipulation = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* handleImageManipulation */];
+  this.modifyFile = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* modifyFile */];
+  this.saveUploads = __WEBPACK_IMPORTED_MODULE_0__methods__["m" /* saveUploads */];
+  this.handleFileSave = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* handleFileSave */];
+  this.saveFileUrlToDb = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* saveFileUrlToDb */];
+  this.dataRequestHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* dataRequestHandler */];
+  this.getApplicantTools = __WEBPACK_IMPORTED_MODULE_0__methods__["getApplicantTools"];
+  this.searchBatch = __WEBPACK_IMPORTED_MODULE_0__methods__["n" /* searchBatch */];
+  this.searchBatchHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["o" /* searchBatchHandler */];
+  this.dealWithDataStorageResponse = __WEBPACK_IMPORTED_MODULE_0__methods__["dealWithDataStorageRespomse"];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Asettings);
+
+/***/ }),
+/* 140 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return handleAsettingsTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getUserProfile; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return deleteAccount; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return updateUser; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return changeAvatar; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return modifyFile; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return handleImageManipulation; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return saveUploads; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return handleFileSave; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return saveFileUrlToDb; });
+/* unused harmony export alertUnsubscription */
+/* unused harmony export alertAddition */
+/* unused harmony export alertMailUpdate */
+/* unused harmony export dataRequestDeleteHandler */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return dataRequestHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return searchBatch; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return searchBatchHandler; });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var init = function init() {
+  this.log('Asettings has been initialised');
+  this.listens({
+    'handle-asettings-task': this.handleAsettingsTask.bind(this)
+  });
+};
+var handleAsettingsTask = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(data) {
+    var self, pao, contains, isOBject, forOf, user, uploads;
+    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            console.log(data);
+            self = this;
+            pao = self.pao;
+            contains = pao.pa_contains;
+            isOBject = pao.pa_isObject;
+            forOf = pao.pa_forOf;
+            user = data.payload.user;
+            self.callback = data.callback;
+
+            if (user.uploads) {
+              uploads = user.uploads;
+              user.action = uploads.fields.action, user.payload = {
+                files: uploads.files || null,
+                ID: uploads.fields.ID,
+                old: uploads.fields.old
+              };
+            } // let uid = user.ID
+
+
+            _context4.next = 11;
+            return self.log('THE DATA INSIDE ASETTINGS');
+
+          case 11:
+            _context4.next = 13;
+            return self.log(user);
+
+          case 13:
+            if (isOBject(user)) {
+              _context4.next = 15;
+              break;
+            }
+
+            return _context4.abrupt("return", self.callback({
+              message: 'User has not been specified'
+            }, null));
+
+          case 15:
+            if (user.action) {
+              _context4.next = 17;
+              break;
+            }
+
+            return _context4.abrupt("return", self.callback({
+              message: 'Invalid request'
+            }, null));
+
+          case 17:
+            if (contains(user, ['payload'])) {
+              _context4.next = 19;
+              break;
+            }
+
+            return _context4.abrupt("return", self.callback({
+              message: 'missing required key'
+            }, null));
+
+          case 19:
+            if (contains(user.payload, ['ID'])) {
+              _context4.next = 21;
+              break;
+            }
+
+            return _context4.abrupt("return", self.callback({
+              message: 'missing required key'
+            }, null));
+
+          case 21:
+            _context4.t0 = user.action;
+            _context4.next = _context4.t0 === 'getProfile' ? 24 : _context4.t0 === 'deleteAccount' ? 26 : _context4.t0 === 'changeAvatar' ? 28 : _context4.t0 === 'updateUser' ? 30 : _context4.t0 === 'updateUserAlert' ? 32 : _context4.t0 === 'addAltAlert' ? 34 : _context4.t0 === 'removeAlert' ? 36 : _context4.t0 === 'unsubscribeFromAlerts' ? 38 : 40;
+            break;
+
+          case 24:
+            self.getUserProfile(user.payload).then( /*#__PURE__*/function () {
+              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(retrievedUser) {
+                var userProfile;
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        userProfile = retrievedUser[0];
+                        userProfile.url = "http://localhost:3000/download/".concat(userProfile.profileUrl); //    retrievedUser.url = `http://localhost:3000/download/${retrievedUser.profile_url}`
+
+                        _context.next = 4;
+                        return self.log('THE RETRIEVED USER');
+
+                      case 4:
+                        _context.next = 6;
+                        return self.log(userProfile);
+
+                      case 6:
+                        self.callback(null, userProfile);
+
+                      case 7:
+                      case "end":
+                        return _context.stop();
+                    }
+                  }
+                }, _callee);
+              }));
+
+              return function (_x2) {
+                return _ref2.apply(this, arguments);
+              };
+            }())["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context4.abrupt("break", 41);
+
+          case 26:
+            self.deleteAccount(user.payload).then(function (deleteStat) {
+              return self.callback(null, deleteStat);
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context4.abrupt("break", 41);
+
+          case 28:
+            self.changeAvatar(user.payload).then( /*#__PURE__*/function () {
+              var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(changedAv) {
+                var userProfile;
+                return regeneratorRuntime.wrap(function _callee2$(_context2) {
+                  while (1) {
+                    switch (_context2.prev = _context2.next) {
+                      case 0:
+                        _context2.next = 2;
+                        return self.log('THE CHANGED AV');
+
+                      case 2:
+                        userProfile = {
+                          url: "http://localhost:3000/download/".concat(changedAv.profileUrl),
+                          profileUrl: changedAv.profileUrl
+                        };
+                        self.callback(null, userProfile);
+
+                      case 4:
+                      case "end":
+                        return _context2.stop();
+                    }
+                  }
+                }, _callee2);
+              }));
+
+              return function (_x3) {
+                return _ref3.apply(this, arguments);
+              };
+            }())["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context4.abrupt("break", 41);
+
+          case 30:
+            self.updateUser(user.payload).then( /*#__PURE__*/function () {
+              var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(updated) {
+                return regeneratorRuntime.wrap(function _callee3$(_context3) {
+                  while (1) {
+                    switch (_context3.prev = _context3.next) {
+                      case 0:
+                      case "end":
+                        return _context3.stop();
+                    }
+                  }
+                }, _callee3);
+              }));
+
+              return function (_x4) {
+                return _ref4.apply(this, arguments);
+              };
+            }())["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context4.abrupt("break", 41);
+
+          case 32:
+            self.updateUser(user.payload).then(function (updated) {
+              return self.callback(null, updated);
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context4.abrupt("break", 41);
+
+          case 34:
+            self.updateUser(user.payload).then(function (updated) {
+              return self.callback(null, updated);
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context4.abrupt("break", 41);
+
+          case 36:
+            self.updateUser(user.payload).then(function (updated) {
+              return self.callback(null, updated);
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context4.abrupt("break", 41);
+
+          case 38:
+            self.updateUser(user.payload).then(function (updated) {
+              return self.callback(null, updated);
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context4.abrupt("break", 41);
+
+          case 40:
+            self.callback(new Error('Unknown data request'), null);
+
+          case 41:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4, this);
+  }));
+
+  return function handleAsettingsTask(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+var getUserProfile = function getUserProfile(pay) {
+  var _this = this;
+
+  var self = this;
+  var pao = self.pao;
+  var uid = pay.ID;
+  return new Promise(function (resolve, reject) {
+    // if(!data.profile) return reject(new Error('Invalid Request')) 
+    // if(!data.profile.userId) return reject(new Error('Invalid'))
+    var query = {
+      returnFields: ['jo_job_alert_subscriber.email', 'jo_job_alert_subscriber.id'],
+      tables: ['jo_user', 'jo_job_alert_subscriber'],
+      joins: 2,
+      joinPoints: ['jo_user.id EQUALS jo_job_alert_subscriber.u_id'],
+      conditions: ["jo_user.id EQUALS ".concat(uid)],
+      opiks: ['field.profile_url.as[profileUrl]', 'field.first_name.as[firstName]', 'field.last_name.as[lastName]'],
+      type: 'inner'
+    };
+    self.query('mysql.SEARCH', query, self.dataRequestHandler.bind(_this, resolve, reject));
+  });
+};
+var deleteAccount = function deleteAccount(pay) {
+  var _this2 = this;
+
+  var self = this;
+  var pao = self.pao;
+  var _data = data,
+      account = _data.account;
+  return new Promise(function (resolve, reject) {
+    if (!data.account) return reject(new Error('Invalid Request'));
+    if (!data.account.userId) return reject(new Error('Invalid Request'));
+    var query = {
+      conditions: ["id EQUALS ".concat(account.userID)]
+    };
+    self.query('mysql.jo_user.remove', query, self.dataRequestDeleteHandler.bind(_this2, resolve, reject));
+  });
+};
+var updateUser = function updateUser(pay) {
+  var _this3 = this;
+
+  var self = this;
+  var pao = self.pao;
+  return new Promise(function (resolve, reject) {
+    var update = pay.update;
+    var set = {};
+    var password = update.password;
+    var uid = update.ID;
+
+    if (update.fullName) {
+      var names = update.fullName.split(' ');
+      set.first_name = names[0];
+      set.last_name = names[names.length - 1];
+    } // set.password = update.password
+
+
+    var query = [{
+      set: set,
+      conditions: ["id EQUALS ".concat(uid)]
+    }, {
+      set: {
+        password: password
+      },
+      conditions: ["id EQUALS ".concat(uid)]
+    }];
+    self.query('mysql.jo_user.update', query, self.dataRequestUserUpdateHandler.bind(_this3, resolve, reject));
+  });
+  self.query('mysql.UPDATEANDTAKE', query, self.dataRequestUserUpdateHandler.bind(this, resolve, reject));
+};
+var changeAvatar = function changeAvatar(pay) {
+  var self = this;
+  var pao = self.pao;
+  var files = pay.files;
+  var file = files.file.path;
+  var ID = pay.ID;
+  var old = pay.old;
+  return new Promise( /*#__PURE__*/function () {
+    var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(resolve, reject) {
+      return regeneratorRuntime.wrap(function _callee9$(_context9) {
+        while (1) {
+          switch (_context9.prev = _context9.next) {
+            case 0:
+              self.modifyFile(file, 'resize-image').then( /*#__PURE__*/function () {
+                var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(resized) {
+                  return regeneratorRuntime.wrap(function _callee7$(_context7) {
+                    while (1) {
+                      switch (_context7.prev = _context7.next) {
+                        case 0:
+                          _context7.next = 2;
+                          return self.log('RESIZE SUCCESSFULL');
+
+                        case 2:
+                          _context7.next = 4;
+                          return self.log(resized);
+
+                        case 4:
+                          self.saveUploads(files, ID, old).then( /*#__PURE__*/function () {
+                            var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(saved) {
+                              return regeneratorRuntime.wrap(function _callee6$(_context6) {
+                                while (1) {
+                                  switch (_context6.prev = _context6.next) {
+                                    case 0:
+                                      _context6.next = 2;
+                                      return self.log('THE SAVED FILE UPLOADS');
+
+                                    case 2:
+                                      _context6.next = 4;
+                                      return self.log(saved);
+
+                                    case 4:
+                                      self.saveFileUrlToDb(saved.url, ID).then( /*#__PURE__*/function () {
+                                        var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(updated) {
+                                          var updatedUser;
+                                          return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                                            while (1) {
+                                              switch (_context5.prev = _context5.next) {
+                                                case 0:
+                                                  _context5.next = 2;
+                                                  return self.log('THE UPDATED FILE URL');
+
+                                                case 2:
+                                                  _context5.next = 4;
+                                                  return self.log(updated);
+
+                                                case 4:
+                                                  updatedUser = {
+                                                    profileUrl: saved.url
+                                                  };
+                                                  resolve(updatedUser);
+
+                                                case 6:
+                                                case "end":
+                                                  return _context5.stop();
+                                              }
+                                            }
+                                          }, _callee5);
+                                        }));
+
+                                        return function (_x9) {
+                                          return _ref8.apply(this, arguments);
+                                        };
+                                      }())["catch"](function (e) {
+                                        reject(e);
+                                      });
+
+                                    case 5:
+                                    case "end":
+                                      return _context6.stop();
+                                  }
+                                }
+                              }, _callee6);
+                            }));
+
+                            return function (_x8) {
+                              return _ref7.apply(this, arguments);
+                            };
+                          }())["catch"](function (e) {
+                            return reject(e);
+                          });
+
+                        case 5:
+                        case "end":
+                          return _context7.stop();
+                      }
+                    }
+                  }, _callee7);
+                }));
+
+                return function (_x7) {
+                  return _ref6.apply(this, arguments);
+                };
+              }())["catch"]( /*#__PURE__*/function () {
+                var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(e) {
+                  return regeneratorRuntime.wrap(function _callee8$(_context8) {
+                    while (1) {
+                      switch (_context8.prev = _context8.next) {
+                        case 0:
+                          _context8.next = 2;
+                          return self.log('An error occured');
+
+                        case 2:
+                          reject(e);
+
+                        case 3:
+                        case "end":
+                          return _context8.stop();
+                      }
+                    }
+                  }, _callee8);
+                }));
+
+                return function (_x10) {
+                  return _ref9.apply(this, arguments);
+                };
+              }());
+
+            case 1:
+            case "end":
+              return _context9.stop();
+          }
+        }
+      }, _callee9);
+    }));
+
+    return function (_x5, _x6) {
+      return _ref5.apply(this, arguments);
+    };
+  }());
+};
+var modifyFile = function modifyFile(file, event) {
+  var _this4 = this;
+
+  console.log('ABOUT TO SEND THE FILE TO IMAGEMAN');
+  var self = this;
+  return new Promise(function (resolve, reject) {
+    var fileOptions = {
+      dimensions: {
+        x: 250,
+        y: 250
+      },
+      image: file
+    };
+    console.log(file);
+    self.emit({
+      type: event,
+      data: {
+        image: fileOptions,
+        callback: self.handleImageManipulation.bind(_this4, resolve, reject)
+      }
+    });
+  }); // console.log('CHECK IF ASYNC FROM ANOTHER MODULE EXECUTES ACCORDINGLY')
+};
+var handleImageManipulation = function handleImageManipulation(resolve, reject) {
+  var e = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var resizeResponse = arguments.length > 3 ? arguments[3] : undefined;
+
+  if (e) {
+    reject(e);
+  } else {
+    resolve(resizeResponse);
+  }
+};
+var saveUploads = function saveUploads(files, userID, old) {
+  var _this5 = this;
+
+  var self = this;
+  var pao = self.pao; // let files = files 
+
+  return new Promise(function (resolve, reject) {
+    self.emit({
+      type: 'save-file',
+      data: {
+        files: files,
+        multiple: false,
+        old: old,
+        dir: '/uploads',
+        ID: userID,
+        saveType: 'unlinkold',
+        callback: self.handleFileSave.bind(_this5, resolve, reject)
+      }
+    });
+  });
+};
+var handleFileSave = function handleFileSave(resolve, reject) {
+  var e = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var saveResponse = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+
+  if (e) {
+    reject(e);
+  } else {
+    resolve(saveResponse);
+  }
+};
+var saveFileUrlToDb = function saveFileUrlToDb(url, uid) {
+  var _this6 = this;
+
+  var self = this;
+  return new Promise(function (resolve, reject) {
+    var queries = {
+      conditions: ["id EQUALS ".concat(uid, " ")],
+      set: [{
+        profile_url: url
+      }]
+    };
+    self.query('mysql.jo_user.updateOne', queries, self.dataRequestHandler.bind(_this6, resolve, reject));
+  });
+};
+var alertUnsubscription = function alertUnsubscription(pay) {
+  var _this7 = this;
+
+  var self = this;
+  var pao = self.pao;
+  var _data2 = data,
+      update = _data2.update;
+  return new Promise(function (resolve, reject) {
+    if (!data.update) return reject(new Error('Invalid Request'));
+    if (!data.update.userId) return reject(new Error('Invalid Request'));
+    var query = {
+      // set : {password: p}
+      conditions: ["id EQUALS ".concat(account.userID)]
+    };
+    self.query('mysql.jo_user.update', query, self.dataRequestUserUpdateHandler.bind(_this7, resolve, reject));
+  });
+};
+var alertAddition = function alertAddition(pay) {
+  var _this8 = this;
+
+  var self = this;
+  var pao = self.pao;
+  var _data3 = data,
+      update = _data3.update;
+  return new Promise(function (resolve, reject) {
+    if (!data.update) return reject(new Error('Invalid Request'));
+    if (!data.update.userId) return reject(new Error('Invalid Request'));
+    var query = {
+      // set : {password: p}
+      conditions: ["id EQUALS ".concat(account.userID)]
+    };
+    self.query('mysql.jo_user.update', query, self.dataRequestUserUpdateHandler.bind(_this8, resolve, reject));
+  });
+};
+var alertMailUpdate = function alertMailUpdate(pay) {
+  var _this9 = this;
+
+  var self = this;
+  var pao = self.pao;
+  var _data4 = data,
+      update = _data4.update;
+  return new Promise(function (resolve, reject) {
+    if (!data.update) return reject(new Error('Invalid Request'));
+    if (!data.update.userId) return reject(new Error('Invalid Request'));
+    var query = {
+      // set : {password: p}
+      conditions: ["id EQUALS ".concat(account.userID)]
+    };
+    self.query('mysql.jo_user.update', query, self.dataRequestUserUpdateHandler.bind(_this9, resolve, reject));
+  });
+};
+var dataRequestDeleteHandler = function dataRequestDeleteHandler() {
+  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var result = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var self = this;
+  var pao = self.pao;
+  if (e) return reject(new Error('db error'));
+  if (!result) return reject(new Error(''));
+  resolve(result);
+};
+var dataRequestHandler = function dataRequestHandler(resolve, reject) {
+  var e = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var result = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var self = this;
+  var pao = self.pao;
+  if (e) return reject(e);
+  resolve(result);
+};
+var searchBatch = function searchBatch(key) {
+  // let fields = {
+  // 	jo_user: { id: 'NULL',u_type: data.usertype,first_name: data.firstname,last_name: data.lastname,email: data.email },
+  // 	jo_account: {own:{id:'NULL'},tables: [{name:'jo_user',values:['u_type.account_name']}]},
+  // 	jo_user_account_join: {own:{id:'NULL'},tables: [{name:'jo_user',values:['id.u_id','email.account_email']},{name:'jo_account',values:['id.account_id']}]},
+  // 	jo_login: {own:{id:'NULL',password:data.password},tables: [{name:'jo_user',values:['id.u_id','email.username']}]}
+  // }
+  // return [
+  // 	{name: 'jo_user',fields: fields.jo_user},
+  // 	{name: 'jo_account',fields: fields.jo_account},
+  // 	{name: 'jo_user_account_join',lastInsert: ['jo_user','jo_account'],fields: fields.jo_user_account_join},
+  // 	{name: 'jo_login',lastInsert: ['jo_user'],fields: fields.jo_login}
+  //    ]
+  return [{
+    returnFields: ['all'],
+    tables: ['jo_job', 'jo_recruiter', 'jo_company'],
+    joins: 3,
+    joinPoints: ['jo_job.u_id EQUALS jo_recruiter.id', 'jo_company.id EQUALS jo_recruiter.company_id'],
+    conditions: ["MATCH [job_title] AGAINST [".concat(key, "] NATURAL"), "OR MATCH [description] AGAINST [php] NATURAL"],
+    take: 10,
+    soundex: true,
+    type: 'inner'
+  }, {
+    returnFields: ['state_name', 'country_id'],
+    tables: ['jo_states'],
+    joinPoints: ['jo_states.id EQUALS jo_country.u_id'],
+    conditions: ["country_id EQUALS 202"]
+  }, {
+    returnFields: ['all'],
+    tables: ['jo_category']
+  }];
+};
+var searchBatchHandler = function searchBatchHandler() {
+  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var batchResults = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var self = this;
+  var pao = self.pao;
+  console.log('THE BATCH RESULTS');
+  console.log(batchResults);
+  self.callback(null, {
+    batch: batchResults
+  });
+};
 
 /***/ })
 /******/ ]);

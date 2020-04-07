@@ -34,7 +34,7 @@ export const handleUploadTask = async function(data){
 
 			self.saveFileUrlToDb(uploaded.url,userID)
 			.then((saved)=>{
-
+				
 				self.callback(null,{updated: saved})
 			})
 			.catch((e)=>{

@@ -17,8 +17,8 @@ import Bookmark from '../modules/bookmark'
 import Downloadr from '../modules/downloadr'
 import FileUpload from '../modules/fileupload'
 import Upload from '../modules/upload'
-
+import Asettings from '../modules/asettings'
 export default {
 
-    Test,List,FileMan,ImageMan,Upload,Adash,Downloadr,Inalerts,Bookmark,FrameTest,Job,Fetch,Jwt,Hash,Register,Login,Authentication,FileUpload
+    Test,List,Asettings,FileMan,ImageMan,Upload,Adash,Downloadr,Inalerts,Bookmark,FrameTest,Job,Fetch,Jwt,Hash,Register,Login,Authentication,FileUpload
 }

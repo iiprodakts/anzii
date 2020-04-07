@@ -230,33 +230,83 @@ export const saveThingy = function(data){
 	
 
 }
-export const updateThingy = function(data){
-	
+export const updateThingy = function(pay){
+
 	
 	const self = this 
-	let pao = self.pao 
+	const pao = self.pao 
+
+	console.log('The update')
+	console.log(pay) 
+
+// 	{
+					
+// 		tables:['jo_user','jo_login'],
+// 		joins: 2,
+// 		joinPoints: ['jo_user.id EQUALS jo_login.id'],
+// 		conditions: [[`jo_user.id EQUALS 1`],[`AND jo_login.u_id EQUALS 1`]],
+// 		opiks: ['field.first_name.as[firstName]','field.last_name.as[lastName]',
+// 		set: [{first_name: 'Surprise',last_name: 'Mashele'},{password: '1234567'}],
+// 		takeFrom: 'jo_user'
+//    }
+
+
 	
+
+
+	return new Promise((resolve,reject)=>{
+		
+		
+		 if(!pay.update) return reject(new Error('Update data missing'))
+
+		 let uid = pay.ID
+		//  let alertID = pay.alertID 
+		 let update = pay.update 
+		 let firstName = update.firstName 
+		 let lastName = update.lastName 
+		 let phone = update.phone
+		 let password = update.password
+		//  let frequency = update.frequency 
+
+
+
+		 
+		
+		let queries = 
+					{
+				    returnFields: ['password'],		
+					tables:['jo_user','jo_login'],
+					joins: 2,
+					joinPoints: ['jo_user.id EQUALS jo_login.id'],
+					conditions: [`jo_user.id EQUALS 1`,`AND jo_login.u_id EQUALS 1`],
+					opiks: ['field.first_name.as[firstName]','field.last_name.as[lastName]'],
+					set: [{first_name: firstName,last_name: lastName,phone:phone},{password:password}],
+					// takeFrom: 'jo_user'
+				  }
+
+				  self.query(
+					'mysql.UPDATEANDTAKE',
+					queries,
+					self.thingyDataRequestHandler.bind(this,resolve,reject)
+				  )
 	
+
+			//   {conditions: [`id EQUALS ${uid} `],
+			//  set: [{first_name: firstName,last_name: lastName,phone:phone},{password:password}]
+			// }
+
+		
 	
-  return new Promise((resolve,reject)=>{
-		
-		
-		if(!data.profile) return reject(new Error('Invalid Request')) 
-		
-		if(!data.profile.userId) return reject(new Error('Invalid'))
-		
-		let query ={
+		// self.query(
+		// 		'mysql.jo_user.updateOne',
+		// 		queries,
+		// 		self.thingyDataRequestHandler.bind(this,resolve,reject)
+		// 	)
+
 			
-					conditions: [`id EQUALS ${profile.userID}`]
-			   }
-		
-		self.query(
-		'mysql.SEARCH',
-		  query,
-		  self.thingyDataRequestHandler.bind(this,resolve,reject)
-	)
 		
 	})
+	 
 	
 
 }

@@ -36,10 +36,11 @@ class FileMan{
      this.renameFile = methods. renameFile
      this.handleGetFile = methods.handleGetFile
      this.handleMakeFile = methods.handleMakeFile
-     this.handleRemoveFile = methods.handleRemoveFile
+    //  this.handleRemoveFile = methods.handleRemoveFile
      this.generateFileName = methods.generateFileName
      this.validateFile = methods.validateFile
-     this.saveFile = methods.saveFile
+     this.saveFile = methods.saveFile 
+     this.deleteFile = methods.deleteFile
      this.saveToSource = methods.saveToSource
      this.handleTakeSystemBase = methods.handleTakeSystemBase
      

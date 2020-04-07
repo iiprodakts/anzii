@@ -16,4 +16,45 @@ opiks: [
     ]
 sort: 'order[job_title].asc'
 take: '10'
-range: '2,5'
+range: '2,5' 
+
+
+
+let updateAndTake = {
+
+                {
+					returnFields: ['jo_job.id'],
+					tables:['jo_job','jo_country','jo_company'],
+					joins: 3,
+					joinPoints: ['jo_job.u_id EQUALS jo_country.id','jo_job.company_id EQUALS jo_company.id'],
+					conditions: [`GROUP::2 START GROUP::2 START MATCH [job_title] AGAINST [${key}] NATURAL, OR MATCH [position] AGAINST [${key}] NATURAL;AND jo_job.country_id EQUALS 202`,
+								`AND GROUP::2 START city_name EQUALS ${city}; OR state_name EQUALS ${state}`],
+					opiks: ['field.job_title.as[jobTitle]','field.company_logo.as[logo]','field.salary.as[jobSalary]',
+					'field.name.as[employer]','field.salary_currency.as[currency]','field.is_main_featured.as[isMainFeatured]',
+					'field.job_type.as[type]','field.approved_at.as[date]','field.is_featured.as[isFeatured]',
+					'field.is_free.as[isFree]','field.is_sponsored.as[isSponsored]',],
+					range:`${range.offset},${range.count}`,
+                    set: {},
+					soundex: true,
+                    takeFrom: 'jo_job',
+					sort: 'order[jobTitle].asc',
+					type: 'inner'
+			   }
+}
+
+
+
+let updateAndTake = {
+
+                {
+					
+					tables:['jo_user','jo_login'],
+					joins: 2,
+					joinPoints: ['jo_user.id EQUALS jo_login.id'],
+					conditions: [[`jo_user.id EQUALS 1`],[`AND jo_login.u_id EQUALS 1`]],
+					opiks: ['field.first_name.as[firstName]','field.last_name.as[lastName]',
+                    set: [{first_name: 'Surprise',last_name: 'Mashele'},{password: '1234567'}],
+                    takeFrom: 'jo_user'
+			   }
+}
+

@@ -22,31 +22,54 @@ export const handleAsettingsTask = async function(data){
 	const self = this 
 	const pao = self.pao
 	const contains = pao.pa_contains
-	const isOBject = pao.pa_isObject
+	const isOBject = pao.pa_isObject 
+	const forOf = pao.pa_forOf
 	let user = data.payload.user
 	self.callback = data.callback
+
+	if(user.uploads){
+
+		let uploads = user.uploads
+		user.action  = uploads.fields.action,
+		user.payload = {
+
+				files: uploads.files || null,
+				ID: uploads.fields.ID,
+				old: uploads.fields.old
+			
+		}
+	}
 
 	
 
 	// let uid = user.ID
-	console.log('THE DATA INSIDE Adash')
-	console.log(user)
+	await self.log('THE DATA INSIDE ASETTINGS')
+	await self.log(user)
 	
-	console.log('THE PARSED DATA TEST')
-	console.log(data)
-	console.log(user)
+	// console.log('THE PARSED DATA TEST')
+	// console.log(data)
+	// console.log(user)
 
 	if(!isOBject(user)) return self.callback({message: 'User has not been specified'},null)
 	if(!user.action) return self.callback({message: 'Invalid request'},null)
 	if(!contains(user,['payload'])) return self.callback({message: 'missing required key'},null)
 	if(!contains(user.payload,['ID'])) return self.callback({message: 'missing required key'},null)
   
-  switch(data.action){
+  switch(user.action){
   	
   	 case 'getProfile': {
   	 	
-  	 	self.getProfile(user.payload)
-  	 	.then((retrievedUser)=>self.callback(null,retrievedUser))
+  	 	self.getUserProfile(user.payload)
+  	 	.then(async (retrievedUser)=>{
+
+			   let userProfile = retrievedUser[0]
+			    userProfile.url = `http://localhost:3000/download/${userProfile.profileUrl}`
+
+			//    retrievedUser.url = `http://localhost:3000/download/${retrievedUser.profile_url}`
+			   await self.log('THE RETRIEVED USER') 
+			   await self.log(userProfile)
+			   self.callback(null,userProfile)
+			})
   	 	.catch((e)=>self.callback(e,null))
   	 }
   	 break;
@@ -60,17 +83,61 @@ export const handleAsettingsTask = async function(data){
   	 case 'changeAvatar':{
   	 	
   	 	  self.changeAvatar(user.payload)
-  	 	.then((changedAv)=>self.callback(null,changedAv))
-  	 	.catch((e)=>self.callback(e,null))
+			.then(async (changedAv)=>{
+				await self.log('THE CHANGED AV')
+
+				let userProfile = {
+					url : `http://localhost:3000/download/${changedAv.profileUrl}`,
+					profileUrl: changedAv.profileUrl
+				}
+				
+				self.callback(null,userProfile)
+				})
+			.catch((e)=>self.callback(e,null))
   	 }
   	 break;
   	 case 'updateUser': {
   	 	
   	 	self.updateUser(user.payload)
-  	 	.then((updated)=>self.callback(null,updated))
+  	 	.then(async (updated)=>{
+
+			//    self.callback(null,updated) 
+
+		
+
+			})
   	 	.catch((e)=>self.callback(e,null))
-  	 }
-  	 default: 
+	 }
+	 break;
+	 case 'updateUserAlert': {
+  	 	
+		self.updateUser(user.payload)
+		.then((updated)=>self.callback(null,updated))
+		.catch((e)=>self.callback(e,null))
+	 }
+	 break;
+	 case 'addAltAlert': {
+  	 	
+		self.updateUser(user.payload)
+		.then((updated)=>self.callback(null,updated))
+		.catch((e)=>self.callback(e,null))
+	 }
+	 break; 
+	 case 'removeAlert': {
+  	 	
+		self.updateUser(user.payload)
+		.then((updated)=>self.callback(null,updated))
+		.catch((e)=>self.callback(e,null))
+	 }
+	 break; 
+	 case 'unsubscribeFromAlerts': {
+  	 	
+		self.updateUser(user.payload)
+		.then((updated)=>self.callback(null,updated))
+		.catch((e)=>self.callback(e,null))
+	 }
+	 break;     
+	 default: 
   	 self.callback(new Error('Unknown data request'),null)
   	
   	
@@ -84,23 +151,24 @@ export const getUserProfile = function(pay){
 	
 	const self = this 
 	const pao = self.pao 
-	const {profile} = data
+	let uid = pay.ID 
 	
 	
 	return new Promise((resolve,reject)=>{
 		
 		
-		if(!data.profile) return reject(new Error('Invalid Request')) 
+		// if(!data.profile) return reject(new Error('Invalid Request')) 
 		
-		if(!data.profile.userId) return reject(new Error('Invalid'))
+		// if(!data.profile.userId) return reject(new Error('Invalid'))
 		
-		let query = 	{
+		let query = {
 			
-					returnFields: ['first_name','last_name','profile','email'],
-					tables:['jo_user','jo_alerts'],
+					returnFields: ['jo_job_alert_subscriber.email','jo_job_alert_subscriber.id'],
+					tables:['jo_user','jo_job_alert_subscriber'],
 					joins: 2,
-					joinPoints: ['jo_user.id EQUALS jo_alerst_subscription.u_id'],
-					conditions: [`id EQUALS ${profile.userID}`],
+					joinPoints: ['jo_user.id EQUALS jo_job_alert_subscriber.u_id'],
+					conditions: [`jo_user.id EQUALS ${uid}`],
+					opiks: ['field.profile_url.as[profileUrl]','field.first_name.as[firstName]','field.last_name.as[lastName]'],
 					type: 'inner'
 			   }
 		
@@ -157,20 +225,39 @@ export const updateUser = function(pay){
 	
 	const self = this 
 	const pao = self.pao 
-	const {update} = data
+
+
 	
 	
 	return new Promise((resolve,reject)=>{
 		
+		const {update} = pay 
+
+		let set = {} 
+		let password = update.password 
+		let uid = update.ID
+
+
+		if(update.fullName) {
+
+			let names = update.fullName.split(' ') 
+			set.first_name = names[0] 
+			set.last_name = names[names.length-1]
+		}
+		// set.password = update.password
 		
-		if(!data.update) return reject(new Error('Invalid Request')) 
-		
-		if(!data.update.userId) return reject(new Error('Invalid Request'))
-		
-		let query = 	{
-			    // set : {password: p}
-					conditions: [`id EQUALS ${account.userID}`]
-			   }
+		let query = [
+
+			  {
+			    set : set,
+				conditions: [`id EQUALS ${uid}`]
+			   },
+			   {
+			    set : {password: password},
+				conditions: [`id EQUALS ${uid}`]
+			   },
+
+			]
 		
 		self.query(
 		'mysql.jo_user.update',
@@ -179,6 +266,13 @@ export const updateUser = function(pay){
 	)
 		
 	})
+
+
+	self.query(
+		'mysql.UPDATEANDTAKE',
+		  query,
+		  self.dataRequestUserUpdateHandler.bind(this,resolve,reject)
+	)
   
 
 
@@ -192,26 +286,59 @@ export const changeAvatar = function(pay){
 	
 	const self = this 
 	const pao = self.pao 
-	const {avatar} = data
+	let files = pay.files
+	let file = files.file.path 
+	let ID = pay.ID 
+	let old = pay.old
+	
+
+
 	
 	
-	return new Promise((resolve,reject)=>{
+	return new Promise(async (resolve,reject)=>{
 		
 		
-		if(!data.avatar) return reject(new Error('Invalid Request')) 
+		self.modifyFile(file,'resize-image')
+		.then(async (resized)=>{
+
+			await self.log('RESIZE SUCCESSFULL')
+			await self.log(resized)
+
+			self.saveUploads(files,ID,old)
+			.then(async (saved)=>{
+
+				// resolve(saved)
+				await self.log('THE SAVED FILE UPLOADS')
+				await self.log(saved)
+
+				self.saveFileUrlToDb(saved.url,ID)
+				.then(async (updated)=>{
+					
+					await self.log('THE UPDATED FILE URL')
+					await self.log(updated)
+					let updatedUser  = {
+						profileUrl: saved.url
+					}
+					resolve(updatedUser)
+
+				})
+				.catch((e)=>{
+
+					reject(e)
+
+				})
+
+			})
+			.catch((e)=>reject(e))
+
+		})
+		.catch(async (e)=>{
+
+			await self.log('An error occured')
+			reject(e)
+		})
+
 		
-		if(!data.avatar.userId) return reject(new Error('Invalid Request'))
-		
-		let query = 	{
-			    // set : {password: p}
-					conditions: [`id EQUALS ${account.userID}`]
-			   }
-		
-		self.query(
-		'mysql.jo_user.update',
-		  query,
-		  self.dataRequestUserUpdateHandler.bind(this,resolve,reject)
-	)
 		
 	})
   
@@ -221,6 +348,102 @@ export const changeAvatar = function(pay){
 
 
 }
+
+export const modifyFile = function(file,event){
+
+	console.log('ABOUT TO SEND THE FILE TO IMAGEMAN')
+
+	const self = this 
+
+
+	return new Promise((resolve,reject)=>{
+
+		let fileOptions = {
+
+			dimensions: {x: 250,y: 250},
+			image: file
+	
+		}
+	
+		console.log(file)
+	
+		self.emit({type: event,data: {image: fileOptions,callback: self.handleImageManipulation.bind(this,resolve,reject)}})
+
+	})
+	
+	// console.log('CHECK IF ASYNC FROM ANOTHER MODULE EXECUTES ACCORDINGLY')
+}
+
+
+export const handleImageManipulation = function(resolve,reject,e=null,resizeResponse){
+
+	if(e){
+		reject(e)
+	}else{
+		resolve(resizeResponse)
+	}
+}
+
+export const saveUploads = function(files,userID,old){
+	
+	
+	const self = this 
+	let pao = self.pao 
+	// let files = files 
+
+	
+
+	return new Promise((resolve,reject)=>{
+
+			self.emit({type:'save-file',data: {files: files,multiple: false,old: old,dir: '/uploads',ID: userID,saveType:'unlinkold',callback: self.handleFileSave.bind(this,resolve,reject)}})
+
+	})
+	
+
+
+
+
+}
+
+export const handleFileSave = function(resolve,reject,e=null,saveResponse=null){
+
+
+	 if(e){
+		 reject(e)
+	 }else{
+		 resolve(saveResponse)
+	 }
+
+}
+
+export const saveFileUrlToDb = function(url,uid){
+
+	const self = this 
+
+	return new Promise((resolve,reject)=>{
+
+		let queries = 
+			{conditions: [`id EQUALS ${uid} `],
+			 set: [{profile_url:url}]
+			}
+		
+	
+		self.query(
+				'mysql.jo_user.updateOne',
+				queries,
+				self.dataRequestHandler.bind(this,resolve,reject)
+			)
+
+
+
+	})
+
+
+
+	
+	
+}
+
 
 
 export const alertUnsubscription = function(pay){
@@ -338,18 +561,23 @@ export const dataRequestDeleteHandler = function(e=null,result=null){
 }
 
 
-export const dataRequestHandler = function(e=null,result=null,resolve,reject){
+export const dataRequestHandler = function(resolve,reject,e=null,result=null){
 	
 	
 	const self = this 
 	let pao = self.pao 
 	
-	if(e) return reject(new Error('db error'))
-  if(!result) return reject(new Error('')) 
-  
+	if(e) return reject(e)
    resolve(result)
 
 }
+
+
+
+
+
+
+
 
 export const searchBatch = function(key){
 

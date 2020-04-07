@@ -77,6 +77,20 @@ export default  [
         type: 'public'
     },
     {
+        path: '/profile',
+        alias: 'asettings',
+        middlewares: [{type:'module',value: 'upload'}],
+        method: 'POST',
+        type: 'public'
+    },
+    {
+        path: '/avatar',
+        alias: 'asettings',
+        middlewares: [{type:'module',value: 'upload'}],
+        method: 'POST',
+        type: 'public'
+    },
+    {
         path: '/fetch',
         method: 'GET',
         type: 'public'

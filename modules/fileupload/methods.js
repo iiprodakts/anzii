@@ -28,7 +28,7 @@ export const handleAddUploadMiddleware = function(data){
 
 } 
 
-export const parseFile = function(req,res,next){
+export const parseFile = async function(req,res,next){
 
      
     const self = this 
@@ -38,21 +38,25 @@ export const parseFile = function(req,res,next){
     const form = self.multiFormParser({
       keepExtensions: true,maxFileSize: 1 * 1024 * 1024,uploadDir: __dirname}
       )
-    self.log(`I'm the file upload middleware module that's gonna read the file on the req`)
+    await self.log(`I'm the file upload middleware module that's gonna read the file on the req`)
     let contentType = req.headers['content-type']
+    await self.log(contentType)
+    await self.log(req.headers)
+
     // self.log(form.parse)
     // console.log(next)
 
     if(contentType.indexOf('multipart/form-data') === -1){
 
-      return 	self.emit({
-                  type:'write-server-request-response',
-                  data: {
-                    data: {  error: true,message: 'Invalid content-type for file upload'},
-                    res: res
+      return 	next()
+      // self.emit({
+      //             type:'write-server-request-response',
+      //             data: {
+      //               data: {  error: true,message: 'Invalid content-type for file upload'},
+      //               res: res
                   
-                  }
-	  	      	})
+      //             }
+	  	//       	})
     }
 
 

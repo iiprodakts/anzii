@@ -8,7 +8,7 @@ export const init = function(){
   this.listens({
 		
 	'save-file': this.handleSaveFile.bind(this),
-	'remove-file': this.handleRemoveFile.bind(this),
+	// 'remove-file': this.handleRemoveFile.bind(this),
 	'take-system-base': this.handleTakeSystemBase.bind(this),
 	'get-file': this.handleGetFile.bind(this)
    
@@ -74,9 +74,8 @@ export const handleSaveFile = async function(data){
 		self.log('FIRST KEY')
 		self.log(firstKey)
 		let file = data.files[firstKey]
-		let resized = data.files.resized
 		self.log(file)
-		self.beginFileSave({path: file.path,dir: data.dir,userID: data.ID})
+		self.beginFileSave({path: file.path,dir: data.dir,old: data.old,saveType: data.saveType,userID: data.ID})
 		.then((response)=>{
 			console.log('FILEHANDLE FILE SAVE')
 			console.log(response)
@@ -198,25 +197,75 @@ export const beginFileSave = function(file){
       		
       	// 	reject(new Error(e))
       	// })
-		  if(file.saveType === 'save'){
+		//   if(file.saveType === 'save'){
 
-			self
-      		.saveFile(file)
-      		.then((savedFile)=>{
-      			
-      			resolve(savedFile)
-      		})
-      		.catch((e)=>{
-      			
-      			reject(new Error(e))
-      		})
+			// self
+      		// .saveFile(file)
+      		// .then((savedFile)=>{
+				  
+			// 	if(saveType === 'unlinkold'){
 
-		  }else{
+				  
+
+			// 	return	self.deleteFile(file.old)
+			// 			.then((deleted)=>{
+
+			// 				resolve(deleted)
+
+			// 			})
+			// 			.catch((e)=>{
+
+			// 				reject(e)
+
+			// 			})
+			// 	}
+
+      		// 	resolve(savedFile)
+      		// })
+      		// .catch((e)=>{
+      			
+      		// 	reject(new Error(e))
+      		// })
+
+		//   }else{
 
 			self
       		.renameFile(file.path,file.dir,file.userID)
-      		.then((renamedFile)=>{
-      			
+      		.then(async (renamedFile)=>{
+				  
+				await self.log('THE RENAMED FILE')
+				await self.log(file)
+				if(file.saveType === 'unlinkold'){
+
+				   let old = file.old 
+				   let oldChunks = old.split('_')
+				   await self.log('THE OLD FILE MUST BE DELETED')
+				   await self.log(oldChunks)
+				   
+				   if(oldChunks[2] === '0') return resolve(renamedFile)
+
+					await self.log('ABOUT TO DELETE THE FILE')
+					
+
+					return	self.deleteFile(file.dir,file.old)
+							.then(async (deleted)=>{
+	
+								await self.log('A FILE HAS BEEN DELETED')
+								await self.log(deleted)
+								resolve({url: renamedFile.url,deltedFile: true})
+	
+							})
+							.catch((e)=>{
+								
+								self.log('THE DELETION HAS FAILED WITH ERROR')
+								self.log(e)
+								resolve({url: renameFile.url,deletedFile: false})
+								//reject(e)
+	
+							})
+				}
+	
+					  
       			resolve(renamedFile)
       		})
       		.catch((e)=>{
@@ -224,7 +273,7 @@ export const beginFileSave = function(file){
       			reject(new Error(e))
       		})
 
-		  }
+		 // }
 		  
      
   	  
@@ -263,14 +312,34 @@ export const handleRenameFile = async function(oldPath){
 
 
 
-export const handleRemoveFile = function(filePath){
+export const deleteFile = async function(dir,fileName){
 
 	
 	const self = this 
+	const fs = self.fs 
+	const path = self.path 
+
+	await self.log('THE DELETE METHOD')
+
+	let filePath = `${self.system.DOCUMENT_ROOT}${path.sep}${dir}${path.sep}${fileName}`
+	await self.log(filePath)
    
    return new Promise((resolve,reject)=>{
-   	
-   	fs.unlink(filePath).then(()=>resolve(true)).catch((e)=>{reject(new Error(e.message))})
+	   
+	
+	   fs.unlink(filePath,async (err,deleted)=>{
+
+		await self.log('THE DELETION RESPONSE::DELETE')
+		await self.log(deleted)
+		resolve(true)
+
+	 })
+	//    .then(async (delted)=>{
+	// 	   await self.log('THE DELETION RESPONSE')
+	// 	   await self.log(deleted)
+	// 	   resolve(true)
+	// 	})
+	// 	.catch((e)=>{reject(e)})
    	
    })
 
@@ -372,34 +441,30 @@ export const saveFile = async function(file){
   return new Promise((resolve,reject)=>{
   	
   	
-  	
-  	
-  	
-	
-	if(!( name instanceof String)) return reject(new Error(name.message))
-	
-  let savePath = `${self.dir}${path}${name}`
-  let wStream = fs.createWriteStream(savePath) 
-  let rStream = fs.createReadStream(name) 
-  
-  wStream.on('end',()=>{
-  	
-  	 resolve({savedFile: savePath})
-  })
-  
-  wStream.on('error',()=>{
-  	
-  	reject(new Error('Writablestream encountered an error'))
-  	
-  })
-  
-  rStream.on('error',()=>{
-  	
-  	 reject(new Error('Readablestream encountered an error'))
-  	
-  })
-  
-  rStream.pipe(wStream) 
+		if(!( name instanceof String)) return reject(new Error(name.message))
+			
+		let savePath = `${self.dir}${path}${name}`
+		let wStream = fs.createWriteStream(savePath) 
+		let rStream = fs.createReadStream(name) 
+		
+		wStream.on('end',()=>{
+			
+			resolve({savedFile: savePath})
+		})
+		
+		wStream.on('error',()=>{
+			
+			reject(new Error('Writablestream encountered an error'))
+			
+		})
+		
+		rStream.on('error',()=>{
+			
+			reject(new Error('Readablestream encountered an error'))
+			
+		})
+		
+		rStream.pipe(wStream) 
  
   	
   })

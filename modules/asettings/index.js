@@ -1,4 +1,4 @@
 
-import Job from "./job";
+import Asettings from "./asettings";
 
-export default Job
+export default Asettings
