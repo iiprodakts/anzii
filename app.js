@@ -4903,8 +4903,8 @@ var takeSql = function takeSql(takeOptions, conn) {
     sql = sqliks.statement;
     var queryAttributes = attribs;
     console.log('THE SQL BEFORE FORMAT::');
-    console.log(sql);
-    console.log(conn);
+    console.log(sql); // console.log(conn)
+
     sql = conn.format(sql, queryAttributes);
     console.log(sql);
     conn.query(sql, function (e, r, f) {
