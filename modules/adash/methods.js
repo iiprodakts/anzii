@@ -38,7 +38,7 @@ export const handleAdashTask = function(data){
 
 
 
-	self
+ return	self
 	.getApplicantTools(uid)
 	.then((counts)=>{self.callback(null,counts)})
 	.catch((e)=>{

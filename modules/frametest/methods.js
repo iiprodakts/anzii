@@ -277,7 +277,7 @@ export const updateThingy = function(pay){
 				    returnFields: ['password'],		
 					tables:['jo_user','jo_login'],
 					joins: 2,
-					joinPoints: ['jo_user.id EQUALS jo_login.id'],
+					joinPoints: ['jo_user.id EQUALS jo_login.u_id'],
 					conditions: [`jo_user.id EQUALS 1`,`AND jo_login.u_id EQUALS 1`],
 					opiks: ['field.first_name.as[firstName]','field.last_name.as[lastName]'],
 					set: [{first_name: firstName,last_name: lastName,phone:phone},{password:password}],

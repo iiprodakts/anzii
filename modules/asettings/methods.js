@@ -99,13 +99,12 @@ export const handleAsettingsTask = async function(data){
   	 case 'updateUser': {
   	 	
   	 	self.updateUser(user.payload)
-  	 	.then(async (updated)=>{
+  	 	.then((updated)=>{
 
-			//    self.callback(null,updated) 
-
+			updated.taken ? updated.taken instanceof Array ? updated.taken = updated.taken[0]: '' :''
+			return self.callback(null,{update: {...updated.taken}})
 		
-
-			})
+		})
   	 	.catch((e)=>self.callback(e,null))
 	 }
 	 break;
@@ -138,7 +137,7 @@ export const handleAsettingsTask = async function(data){
 	 }
 	 break;     
 	 default: 
-  	 self.callback(new Error('Unknown data request'),null)
+  	 return self.callback(new Error('Unknown data request'),null)
   	
   	
   }
@@ -189,29 +188,44 @@ export const deleteAccount = function(pay){
 	
 	const self = this 
 	const pao = self.pao 
-	const {account} = data
+
+	console.log('The update')
+	console.log(pay)
+
+
 	
-	
+
+
 	return new Promise((resolve,reject)=>{
+			
+			
+			if(!pay.update) return reject(new Error('Update data missing'))
+
+			let uid = pay.ID
+			let alertID = pay.alertID 
+			let update = pay.update 
+			let frequency = update.frequency
+
+
+
+			
+			
+			let queries = 
+				{conditions: [`u_id EQUALS ${uid} `,`AND is_active EQUALS 1`],
+				set: [{is_active:0,is_deleted:1}]
+				}
+			
 		
-		
-		if(!data.account) return reject(new Error('Invalid Request')) 
-		
-		if(!data.account.userId) return reject(new Error('Invalid Request'))
-		
-		let query = 	{
-		
-					conditions: [`id EQUALS ${account.userID}`]
-			   } 
-		
-		self.query(
-		'mysql.jo_user.remove',
-		  query,
-		  self.dataRequestDeleteHandler.bind(this,resolve,reject)
-	)
-		
+			self.query(
+					'mysql.jo_user.updateOne',
+					queries,
+					self.multiDataRequestHandler.bind(this,resolve,reject)
+				)
+
+				
+			
 	})
-  
+		
 
 
 	
@@ -233,50 +247,50 @@ export const updateUser = function(pay){
 		
 		const {update} = pay 
 
-		let set = {} 
-		let password = update.password 
-		let uid = update.ID
+		let set = []
+		// let password = update.password 
+		let uid = pay.ID
 
 
 		if(update.fullName) {
 
-			let names = update.fullName.split(' ') 
-			set.first_name = names[0] 
-			set.last_name = names[names.length-1]
+			// let names = update.fullName.split(' ')
+			let profile = {} 
+			profile.first_name = update.fullName.firstName
+			profile.last_name = update.fullName.lastName 
+			set.push(profile)
 		}
-		// set.password = update.password
-		
-		let query = [
 
-			  {
-			    set : set,
-				conditions: [`id EQUALS ${uid}`]
-			   },
-			   {
-			    set : {password: password},
-				conditions: [`id EQUALS ${uid}`]
-			   },
+		if(update.password){
+			let access = {}
+			access.password = update.password 
+			set.push(access)
+		}
+		// set.password = update.password 
 
-			]
+		console.log('THE SET:ASSETTINGS')
+		console.log(set)
+
 		
-		self.query(
-		'mysql.jo_user.update',
-		  query,
-		  self.dataRequestUserUpdateHandler.bind(this,resolve,reject)
-	)
+		let query = 
+					{
+				
+					tables:['jo_user','jo_login'],
+					joins: 2,
+					joinPoints: ['jo_user.id EQUALS jo_login.u_id'],
+					conditions: [`jo_user.id EQUALS ${uid}`,`AND jo_login.u_id EQUALS ${uid}`],
+					opiks: ['field.first_name.as[firstName]','field.last_name.as[lastName]'],
+					set: set,
+					takeFrom: 'jo_user'
+				}
+
+				self.query(
+					'mysql.UPDATEANDTAKE',
+					query,
+					self.dataRequestHandler.bind(this,resolve,reject)
+				  )
 		
 	})
-
-
-	self.query(
-		'mysql.UPDATEANDTAKE',
-		  query,
-		  self.dataRequestUserUpdateHandler.bind(this,resolve,reject)
-	)
-  
-
-
-	
 
 
 }
@@ -571,11 +585,6 @@ export const dataRequestHandler = function(resolve,reject,e=null,result=null){
    resolve(result)
 
 }
-
-
-
-
-
 
 
 

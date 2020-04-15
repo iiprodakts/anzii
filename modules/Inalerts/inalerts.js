@@ -19,6 +19,10 @@ class Inalerts{
      this.handleInternalAlertsTask = methods.handleInternalAlertsTask 
      this.saveAlerts = methods.saveAlerts
      this.getAlerts = methods.getAlerts
+     this.saveAlertsSubscribtions = methods.saveAlertsSubscribtions 
+     this.getAlertsSubscriptions = methods.getAlertsSubscriptions
+     this.deleteAlertsSubscriptions = methods.deleteAlertsSubscriptions 
+     this.updateAlertsSubscriptions = methods.updateAlertsSubscriptions
      this.manageAlerts = methods.manageAlerts
      this.getGroupedAlerts = methods.getGroupedAlerts
      this.updateUserAlert = methods.updateUserAlert

@@ -2619,8 +2619,8 @@ var attachRoutes = function attachRoutes(data) {
       if (r.alias) aliasList.push(r.path.split('/')[1]), aliatikHandlers.push(r.alias);
       r['router'] = data.router;
       self.renderRoute(r);
-    });
-    data.router.use(self.outOfRouterContext.bind(this));
+    }); // data.router.use(self.outOfRouterContext.bind(this))
+
     aliasList.length > 0 ? self.emit({
       type: 'router-alias-list',
       data: {
@@ -2697,21 +2697,29 @@ var outOfRouterContext = /*#__PURE__*/function () {
         switch (_context.prev = _context.next) {
           case 0:
             self = this;
+            _context.next = 3;
+            return self.log('THE OUTOFROUTERCONTEXT REQUESTS');
+
+          case 3:
+            _context.next = 5;
+            return self.log(req.originalUrl);
+
+          case 5:
             data = {
               error: true,
               type: "NotFound",
               code: 404,
               message: 'Resource was not found: OutOfContext'
             };
-            self.emit({
+            return _context.abrupt("return", self.emit({
               type: 'write-server-request-response',
               data: {
                 data: data,
                 res: res
               }
-            });
+            }));
 
-          case 3:
+          case 7:
           case "end":
             return _context.stop();
         }
@@ -2734,17 +2742,32 @@ function _handOver() {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            console.log('THE CAUGHT REQUEST INSIDE ROUTER');
             self = this;
-            self.emit({
+            _context2.next = 3;
+            return self.log('THE CAUGHT REQUEST INSIDE ROUTER::END POINT HIT');
+
+          case 3:
+            _context2.next = 5;
+            return self.log(req.originalUrl);
+
+          case 5:
+            _context2.next = 7;
+            return self.log(req.params);
+
+          case 7:
+            _context2.next = 9;
+            return self.log(req.body);
+
+          case 9:
+            return _context2.abrupt("return", self.emit({
               type: 'request-handover',
               data: {
                 req: req,
                 res: res
               }
-            }); // return res.json({todo:{list:{items:['I ate food','I wrote code','I read a book','I watched a movie']}}})
+            }));
 
-          case 3:
+          case 10:
           case "end":
             return _context2.stop();
         }
@@ -3260,19 +3283,56 @@ var renderHtml = function renderHtml(req, res) {
     }
   }); //    console.log(this)
 };
-var handleWriteServerRequestResponse = function handleWriteServerRequestResponse(data) {
-  var self = this;
+var handleWriteServerRequestResponse = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(data) {
+    var self;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            self = this;
 
-  if (data.method !== 'stream') {
-    self.log('SERVER IS ABOUT TO SEND RESPONSE BACK TO CLIENT');
-    data.res.set('Connection', 'close');
-    data.res.status(200).send(data.data);
-    console.log(data.data);
-    return self.log('SERVER HAS SENT A RESPONSE BACK TO THE CLIENT');
-  } else {
-    self.streamResponse(data);
-  }
-};
+            if (!(data.method !== 'stream')) {
+              _context.next = 14;
+              break;
+            }
+
+            _context.next = 4;
+            return self.log('SERVER IS ABOUT TO SEND RESPONSE BACK TO CLIENT::REGULAR');
+
+          case 4:
+            _context.next = 6;
+            return self.log(data.data);
+
+          case 6:
+            _context.next = 8;
+            return data.res.set('Connection', 'close');
+
+          case 8:
+            data.res.status(200).send(data.data); // await data.res.end()
+            // // console.log(data.data)
+
+            _context.next = 11;
+            return self.log('SERVER HAS SENT A RESPONSE BACK TO THE CLIENT::REGULAR');
+
+          case 11:
+            return _context.abrupt("return", _context.sent);
+
+          case 14:
+            self.streamResponse(data);
+
+          case 15:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function handleWriteServerRequestResponse(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
 var streamResponse = function streamResponse(data) {
   var self = this;
   var pao = self.pao; // const jsonToJs = pao.pa_jsonToJs
@@ -3282,40 +3342,70 @@ var streamResponse = function streamResponse(data) {
 
   var type = self.mimeTypes[data.data.ext];
   var rStream = data.data.rStream;
-  rStream.on('open', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    return regeneratorRuntime.wrap(function _callee$(_context) {
+  rStream.on('open', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
-        switch (_context.prev = _context.next) {
+        switch (_context2.prev = _context2.next) {
           case 0:
             // console.log('INSIDE ON AND PIPING')
             // console.log(type)
             data.res.set('Content-Type', type);
             data.res.set('Connection', 'close');
-            _context.next = 4;
-            return rStream.pipe(data.res);
+            return _context2.abrupt("return", rStream.pipe(data.res));
 
-          case 4:
-            return _context.abrupt("return", self.log('SERVER HAS SENT A STREAM RESPONSE BACK TO THE CLIENT'));
-
-          case 5:
+          case 3:
           case "end":
-            return _context.stop();
+            return _context2.stop();
         }
       }
-    }, _callee);
+    }, _callee2);
   })));
-  rStream.on('error', function (e) {
-    console.log('THE ERROR READSTREAM');
-    console.log(e);
-    data.res.set('Content-Type', 'application/json');
-    data.res.set('Connection', 'close');
-    data.res.status(404).send({
-      error: true,
-      message: 'Not found'
-    });
-    self.log('SERVER HAS SENT A STREAM RESPONSE BACK TO THE CLIENT');
-    return;
-  });
+  rStream.on('end', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3() {
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            data.res.end();
+            _context3.next = 3;
+            return self.log('Stream request has been successfully served WITH END');
+
+          case 3:
+            return _context3.abrupt("return", _context3.sent);
+
+          case 4:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3);
+  })));
+  rStream.on('error', /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(e) {
+      return regeneratorRuntime.wrap(function _callee4$(_context4) {
+        while (1) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              console.log('THE ERROR READSTREAM');
+              console.log(e);
+              data.res.set('Content-Type', 'application/json');
+              data.res.set('Connection', 'close');
+              return _context4.abrupt("return", data.res.status(404).send({
+                error: true,
+                message: 'Not found'
+              }));
+
+            case 5:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee4);
+    }));
+
+    return function (_x2) {
+      return _ref4.apply(this, arguments);
+    };
+  }());
 };
 
 /***/ }),
@@ -4319,9 +4409,9 @@ var init = function init() {
 };
 var handleMysqlDataRequest = function handleMysqlDataRequest(data) {
   var self = this;
-  var pao = self.pao;
-  self.log("Handling Mysql Data Request");
-  self.log(data.table); // self.log(data.outComehandler)
+  var pao = self.pao; // self.log("Handling Mysql Data Request") 
+  // self.log(data.table)
+  // self.log(data.outComehandler)
   // self.log(data.opi)
   // self.log(data)
 
@@ -4441,18 +4531,17 @@ var find = /*#__PURE__*/function () {
             pao = self.pao; // console.log('fIND.FINDIKS')
             // console.log(findiks.query.length)
             // if(findiks.query.length > 0){ return findiks.outComehandler({message: 'ERROR IN MYSQL.FIND.METHOD'})}
-
-            console.log('THE DATA IN FINDONE');
-            console.log(findiks);
+            // console.log('THE DATA IN FINDONE')
+            // console.log(findiks)
 
             if (pao.pa_isObject(findiks)) {
-              _context3.next = 8;
+              _context3.next = 6;
               break;
             }
 
             return _context3.abrupt("return");
 
-          case 8:
+          case 6:
             return _context3.delegateYield( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
               var conn, handler, query, result, multiple, _loop, q, _ret2;
 
@@ -4582,19 +4671,19 @@ var find = /*#__PURE__*/function () {
                   }
                 }
               }, _callee);
-            })(), "t0", 9);
+            })(), "t0", 7);
 
-          case 9:
+          case 7:
             _ret = _context3.t0;
 
             if (!(_typeof(_ret) === "object")) {
-              _context3.next = 12;
+              _context3.next = 10;
               break;
             }
 
             return _context3.abrupt("return", _ret.v);
 
-          case 12:
+          case 10:
           case "end":
             return _context3.stop();
         }
@@ -4700,8 +4789,9 @@ var updateandtake = /*#__PURE__*/function () {
             self.multiTableUpdate(_options, conn).then(function (updated) {
               if (updated.changedRows > 0) {
                 self.take(_options, conn, updateTake.conditions).then(function (taken) {
+                  // updated.changedRows > 0 ? handler(null,{updated: true,taken: taken}) : ''
                   handler(null, {
-                    updated: updated,
+                    updated: true,
                     taken: taken
                   });
                 })["catch"](function (e) {
@@ -4712,7 +4802,7 @@ var updateandtake = /*#__PURE__*/function () {
                 console.log('NO CHANGED ROWS IN A MULTIPLE UPDATE');
                 self.take(_options, conn, updateTake.conditions).then(function (taken) {
                   handler(null, {
-                    updated: updated,
+                    updated: false,
                     taken: taken
                   });
                 })["catch"](function (e) {
@@ -8685,7 +8775,7 @@ var updateThingy = function updateThingy(pay) {
       returnFields: ['password'],
       tables: ['jo_user', 'jo_login'],
       joins: 2,
-      joinPoints: ['jo_user.id EQUALS jo_login.id'],
+      joinPoints: ['jo_user.id EQUALS jo_login.u_id'],
       conditions: ["jo_user.id EQUALS 1", "AND jo_login.u_id EQUALS 1"],
       opiks: ['field.first_name.as[firstName]', 'field.last_name.as[lastName]'],
       set: [{
@@ -9130,7 +9220,7 @@ var handleAdashTask = function handleAdashTask(data) {
   console.log('THE PARSED DATA TEST');
   console.log(data);
   console.log(user);
-  self.getApplicantTools(uid).then(function (counts) {
+  return self.getApplicantTools(uid).then(function (counts) {
     self.callback(null, counts);
   })["catch"](function (e) {
     console.log('Reject error');
@@ -9200,16 +9290,20 @@ var Inalerts = function Inalerts(pao) {
   _classCallCheck(this, Inalerts);
 
   this.pao = pao;
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* init */];
-  this.handleInternalAlertsTask = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* handleInternalAlertsTask */];
-  this.saveAlerts = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* saveAlerts */];
-  this.getAlerts = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* getAlerts */];
-  this.manageAlerts = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* manageAlerts */];
-  this.getGroupedAlerts = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* getGroupedAlerts */];
-  this.updateUserAlert = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* updateUserAlert */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* init */];
+  this.handleInternalAlertsTask = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* handleInternalAlertsTask */];
+  this.saveAlerts = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* saveAlerts */];
+  this.getAlerts = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* getAlerts */];
+  this.saveAlertsSubscribtions = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* saveAlertsSubscribtions */];
+  this.getAlertsSubscriptions = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* getAlertsSubscriptions */];
+  this.deleteAlertsSubscriptions = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* deleteAlertsSubscriptions */];
+  this.updateAlertsSubscriptions = __WEBPACK_IMPORTED_MODULE_0__methods__["m" /* updateAlertsSubscriptions */];
+  this.manageAlerts = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* manageAlerts */];
+  this.getGroupedAlerts = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* getGroupedAlerts */];
+  this.updateUserAlert = __WEBPACK_IMPORTED_MODULE_0__methods__["n" /* updateUserAlert */];
   this.dataRequestAlertGroupHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* dataRequestAlertGroupHandler */];
-  this.multiDataRequestHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* multiDataRequestHandler */];
-  this.getAlertById = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* getAlertById */]; //  this.searchBatch = methods.searchBatch
+  this.multiDataRequestHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* multiDataRequestHandler */];
+  this.getAlertById = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* getAlertById */]; //  this.searchBatch = methods.searchBatch
   //  this.searchBatchHandler = methods.searchBatchHandler
 };
 
@@ -9220,22 +9314,29 @@ var Inalerts = function Inalerts(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return handleInternalAlertsTask; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return saveAlerts; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getAlerts; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getAlertById; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return manageAlerts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return handleInternalAlertsTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return saveAlerts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getAlerts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return saveAlertsSubscribtions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return getAlertsSubscriptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return deleteAlertsSubscriptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return updateAlertsSubscriptions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getAlertById; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return manageAlerts; });
 /* unused harmony export deleteAlerts */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return updateUserAlert; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getGroupedAlerts; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return updateUserAlert; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getGroupedAlerts; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return dataRequestAlertGroupHandler; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return multiDataRequestHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return multiDataRequestHandler; });
 /* unused harmony export searchBatch */
 /* unused harmony export searchBatchHandler */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_joi__ = __webpack_require__(141);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_joi___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_joi__);
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 
 var init = function init() {
   this.log('Inalerts has been initialised');
@@ -9305,7 +9406,7 @@ var handleInternalAlertsTask = /*#__PURE__*/function () {
 
           case 20:
             _context.t0 = user.action;
-            _context.next = _context.t0 === 'getAlertCategories' ? 23 : _context.t0 === 'saveAlerts' ? 25 : _context.t0 === 'getAlerts' ? 27 : _context.t0 === 'getAlertById' ? 29 : _context.t0 === 'updateAlert' ? 31 : _context.t0 === 'deleteAlerts' ? 33 : 35;
+            _context.next = _context.t0 === 'getAlertCategories' ? 23 : _context.t0 === 'saveAlerts' ? 25 : _context.t0 === 'getAlerts' ? 27 : _context.t0 === 'saveAlertsSubscribtions' ? 29 : _context.t0 === 'getAlertsSubscriptions' ? 31 : _context.t0 === 'deleteAlertsSubscriptions' ? 33 : _context.t0 === 'updateAlertsSubscriptions' ? 35 : _context.t0 === 'getAlertById' ? 38 : _context.t0 === 'updateAlert' ? 40 : _context.t0 === 'deleteAlerts' ? 42 : 44;
             break;
 
           case 23:
@@ -9316,7 +9417,7 @@ var handleInternalAlertsTask = /*#__PURE__*/function () {
               console.log(e);
               self.callback(e, null);
             });
-            return _context.abrupt("break", 36);
+            return _context.abrupt("break", 45);
 
           case 25:
             self.deleteAccount(data).then(function (deleteStat) {
@@ -9324,7 +9425,7 @@ var handleInternalAlertsTask = /*#__PURE__*/function () {
             })["catch"](function (e) {
               return self.callback(e, null);
             });
-            return _context.abrupt("break", 36);
+            return _context.abrupt("break", 45);
 
           case 27:
             self.getAlerts(user.payload).then(function (alerts) {
@@ -9332,17 +9433,68 @@ var handleInternalAlertsTask = /*#__PURE__*/function () {
             })["catch"](function (e) {
               return self.callback(e, null);
             });
-            return _context.abrupt("break", 36);
+            return _context.abrupt("break", 45);
 
           case 29:
+            self.saveAlertsSubscribtion(data).then(function (deleteStat) {
+              return self.callback(null, deleteStat);
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context.abrupt("break", 45);
+
+          case 31:
+            self.getAlertsSubscriptions(user.payload).then(function (alerts) {
+              var alertsEmails = {};
+
+              if (alerts.length > 0) {
+                alertsEmails.mainEmail = alerts[0];
+              } else {
+                alertsEmails.mainEmail = alerts[0];
+                alertsEmails.altEmail = alerts[1];
+              }
+
+              self.callback(null, alertsEmails);
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context.abrupt("break", 45);
+
+          case 33:
+            self.deleteAlertsSubscriptions(data).then(function (deleted) {
+              deleted.affectedRows && deleted.affectedRows > 0 ? self.callback(null, {
+                deleteStatus: true
+              }) : self.callback(null, {
+                deleteStatus: false
+              });
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context.abrupt("break", 45);
+
+          case 35:
+            s;
+            self.updateAlertsSubscriptions(data).then(function (updated) {
+              updated.changedRows && updated.changedRows > 0 ? self.callback(null, {
+                updateStatus: true,
+                frequency: user.payload.update.frequency
+              }) : self.callback(null, {
+                updateStatus: false
+              });
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context.abrupt("break", 45);
+
+          case 38:
             self.getAlertById(user.payload).then(function (alert) {
               return self.callback(null, alert);
             })["catch"](function (e) {
               return self.callback(e, null);
             });
-            return _context.abrupt("break", 36);
+            return _context.abrupt("break", 45);
 
-          case 31:
+          case 40:
             self.updateUserAlert(user.payload).then(function (updated) {
               updated.changedRows && updated.changedRows > 0 ? self.callback(null, {
                 updateStatus: true,
@@ -9353,9 +9505,9 @@ var handleInternalAlertsTask = /*#__PURE__*/function () {
             })["catch"](function (e) {
               return self.callback(e, null);
             });
-            return _context.abrupt("break", 36);
+            return _context.abrupt("break", 45);
 
-          case 33:
+          case 42:
             self.deleteAlerts(data).then(function (deleted) {
               deleted.affectedRows && deleted.affectedRows > 0 ? self.callback(null, {
                 deleteStatus: true
@@ -9365,12 +9517,12 @@ var handleInternalAlertsTask = /*#__PURE__*/function () {
             })["catch"](function (e) {
               return self.callback(e, null);
             });
-            return _context.abrupt("break", 36);
+            return _context.abrupt("break", 45);
 
-          case 35:
+          case 44:
             self.callback(new Error('Unknown data request'), null);
 
-          case 36:
+          case 45:
           case "end":
             return _context.stop();
         }
@@ -9419,43 +9571,56 @@ var getAlerts = function getAlerts(pay) {
     self.query('mysql.jo_job_alert.find', queries, self.multiDataRequestHandler.bind(_this2, resolve, reject));
   });
 };
-var getAlertById = function getAlertById(pay) {
+var saveAlertsSubscribtions = function saveAlertsSubscribtions(data) {
   var _this3 = this;
 
   var self = this;
   var pao = self.pao;
-  var uid = pay.ID;
-  var alertID = pay.alertID;
   return new Promise(function (resolve, reject) {
-    var queries = {
-      returnFields: ['frequency'],
-      opiks: ['field.id.as[alertID]', 'field.job_keyword.as[jobKeyword]', 'field.date_created.as[alertDate]'],
-      conditions: ["u_id EQUALS ".concat(uid, " "), "AND id EQUALS ".concat(alertID)]
+    if (!data.profile) return reject(new Error('Invalid Request'));
+    if (!data.profile.userId) return reject(new Error('Invalid'));
+    var query = {
+      returnFields: ['first_name', 'last_name', 'profile', 'email'],
+      tables: ['jo_user', 'jo_alerts'],
+      joins: 2,
+      joinPoints: ['jo_user.id EQUALS jo_alerst_subscription.u_id'],
+      conditions: ["id EQUALS ".concat(profile.userID)],
+      type: 'inner'
     };
-    self.query('mysql.jo_job_alert.find', queries, self.multiDataRequestHandler.bind(_this3, resolve, reject));
+    self.query('mysql.SEARCH', query, self.dataRequestHandler.bind(_this3, resolve, reject));
   });
 };
-var manageAlerts = function manageAlerts(data) {
-  var self = this;
-  var pao = self.pao;
-  self.query('mysql.jo_alerts.removeOne', data, self.dealWithDataStorageResponse(response));
-};
-var deleteAlerts = function deleteAlerts(pay) {
+var getAlertsSubscriptions = function getAlertsSubscriptions(pay) {
   var _this4 = this;
 
+  var self = this;
+  var pao = self.pao;
+  var uid = pay.ID;
   return new Promise(function (resolve, reject) {
-    var self = _this4;
+    var queries = {
+      opiks: ['field.id.as[alertMailID]', 'field.email.as[alertEmail]'],
+      conditions: ["u_id EQUALS ".concat(uid)],
+      take: 5
+    };
+    self.query('mysql.jo_job_alert_subscriber.find', queries, self.multiDataRequestHandler.bind(_this4, resolve, reject));
+  });
+};
+var deleteAlertsSubscriptions = function deleteAlertsSubscriptions(pay) {
+  var _this5 = this;
+
+  return new Promise(function (resolve, reject) {
+    var self = _this5;
     var pao = self.pao;
     var uid = pay.ID;
     var alertID = pay.alertID;
     var queries = {
       conditions: ["u_id EQUALS ".concat(uid, " "), "AND id EQUALS ".concat(alertID)]
     };
-    self.query('mysql.jo_job_alert.remove', queries, self.multiDataRequestHandler.bind(_this4, resolve, reject));
+    self.query('mysql.jo_job_alert.remove', queries, self.multiDataRequestHandler.bind(_this5, resolve, reject));
   });
 };
-var updateUserAlert = function updateUserAlert(pay) {
-  var _this5 = this;
+var updateAlertsSubscriptions = function updateAlertsSubscriptions(pay) {
+  var _this6 = this;
 
   var self = this;
   var pao = self.pao;
@@ -9473,11 +9638,68 @@ var updateUserAlert = function updateUserAlert(pay) {
         frequency: frequency
       }]
     };
-    self.query('mysql.jo_job_alert.updateOne', queries, self.multiDataRequestHandler.bind(_this5, resolve, reject));
+    self.query('mysql.jo_job_alert.updateOne', queries, self.multiDataRequestHandler.bind(_this6, resolve, reject));
+  });
+};
+var getAlertById = function getAlertById(pay) {
+  var _this7 = this;
+
+  var self = this;
+  var pao = self.pao;
+  var uid = pay.ID;
+  var alertID = pay.alertID;
+  return new Promise(function (resolve, reject) {
+    var queries = {
+      returnFields: ['frequency'],
+      opiks: ['field.id.as[alertID]', 'field.job_keyword.as[jobKeyword]', 'field.date_created.as[alertDate]'],
+      conditions: ["u_id EQUALS ".concat(uid, " "), "AND id EQUALS ".concat(alertID)]
+    };
+    self.query('mysql.jo_job_alert.find', queries, self.multiDataRequestHandler.bind(_this7, resolve, reject));
+  });
+};
+var manageAlerts = function manageAlerts(data) {
+  var self = this;
+  var pao = self.pao;
+  self.query('mysql.jo_alerts.removeOne', data, self.dealWithDataStorageResponse(response));
+};
+var deleteAlerts = function deleteAlerts(pay) {
+  var _this8 = this;
+
+  return new Promise(function (resolve, reject) {
+    var self = _this8;
+    var pao = self.pao;
+    var uid = pay.ID;
+    var alertID = pay.alertID;
+    var queries = {
+      conditions: ["u_id EQUALS ".concat(uid, " "), "AND id EQUALS ".concat(alertID)]
+    };
+    self.query('mysql.jo_job_alert.remove', queries, self.multiDataRequestHandler.bind(_this8, resolve, reject));
+  });
+};
+var updateUserAlert = function updateUserAlert(pay) {
+  var _this9 = this;
+
+  var self = this;
+  var pao = self.pao;
+  console.log('The update');
+  console.log(pay);
+  return new Promise(function (resolve, reject) {
+    if (!pay.update) return reject(new Error('Update data missing'));
+    var uid = pay.ID;
+    var alertID = pay.alertID;
+    var update = pay.update;
+    var frequency = update.frequency;
+    var queries = {
+      conditions: ["u_id EQUALS ".concat(uid, " "), "AND id EQUALS ".concat(alertID)],
+      set: [{
+        frequency: frequency
+      }]
+    };
+    self.query('mysql.jo_job_alert.updateOne', queries, self.multiDataRequestHandler.bind(_this9, resolve, reject));
   });
 };
 var getGroupedAlerts = function getGroupedAlerts(pay) {
-  var _this6 = this;
+  var _this10 = this;
 
   var self = this;
   var uid = pay.ID;
@@ -9490,7 +9712,7 @@ var getGroupedAlerts = function getGroupedAlerts(pay) {
       conditions: ["u_id EQUALS ".concat(uid)],
       type: 'inner'
     };
-    self.query('mysql.SEARCH', queries, self.dataRequestAlertGroupHandler.bind(_this6, resolve, reject)); // 		SELECT category_id AS categoryID,alert_category_count AS jobAlertCount,category_name AS name
+    self.query('mysql.SEARCH', queries, self.dataRequestAlertGroupHandler.bind(_this10, resolve, reject)); // 		SELECT category_id AS categoryID,alert_category_count AS jobAlertCount,category_name AS name
     // FROM jo_job_alert_category 
     // INNER JOIN jo_category
     // 	ON jo_job_alert_category.category_id = jo_category.id 
@@ -12893,6 +13115,12 @@ var Asettings = function Asettings(pao) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return dataRequestHandler; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return searchBatch; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return searchBatchHandler; });
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -12904,11 +13132,11 @@ var init = function init() {
   });
 };
 var handleAsettingsTask = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(data) {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(data) {
     var self, pao, contains, isOBject, forOf, user, uploads;
-    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
       while (1) {
-        switch (_context4.prev = _context4.next) {
+        switch (_context3.prev = _context3.next) {
           case 0:
             console.log(data);
             self = this;
@@ -12929,56 +13157,56 @@ var handleAsettingsTask = /*#__PURE__*/function () {
             } // let uid = user.ID
 
 
-            _context4.next = 11;
+            _context3.next = 11;
             return self.log('THE DATA INSIDE ASETTINGS');
 
           case 11:
-            _context4.next = 13;
+            _context3.next = 13;
             return self.log(user);
 
           case 13:
             if (isOBject(user)) {
-              _context4.next = 15;
+              _context3.next = 15;
               break;
             }
 
-            return _context4.abrupt("return", self.callback({
+            return _context3.abrupt("return", self.callback({
               message: 'User has not been specified'
             }, null));
 
           case 15:
             if (user.action) {
-              _context4.next = 17;
+              _context3.next = 17;
               break;
             }
 
-            return _context4.abrupt("return", self.callback({
+            return _context3.abrupt("return", self.callback({
               message: 'Invalid request'
             }, null));
 
           case 17:
             if (contains(user, ['payload'])) {
-              _context4.next = 19;
+              _context3.next = 19;
               break;
             }
 
-            return _context4.abrupt("return", self.callback({
+            return _context3.abrupt("return", self.callback({
               message: 'missing required key'
             }, null));
 
           case 19:
             if (contains(user.payload, ['ID'])) {
-              _context4.next = 21;
+              _context3.next = 21;
               break;
             }
 
-            return _context4.abrupt("return", self.callback({
+            return _context3.abrupt("return", self.callback({
               message: 'missing required key'
             }, null));
 
           case 21:
-            _context4.t0 = user.action;
-            _context4.next = _context4.t0 === 'getProfile' ? 24 : _context4.t0 === 'deleteAccount' ? 26 : _context4.t0 === 'changeAvatar' ? 28 : _context4.t0 === 'updateUser' ? 30 : _context4.t0 === 'updateUserAlert' ? 32 : _context4.t0 === 'addAltAlert' ? 34 : _context4.t0 === 'removeAlert' ? 36 : _context4.t0 === 'unsubscribeFromAlerts' ? 38 : 40;
+            _context3.t0 = user.action;
+            _context3.next = _context3.t0 === 'getProfile' ? 24 : _context3.t0 === 'deleteAccount' ? 26 : _context3.t0 === 'changeAvatar' ? 28 : _context3.t0 === 'updateUser' ? 30 : _context3.t0 === 'updateUserAlert' ? 32 : _context3.t0 === 'addAltAlert' ? 34 : _context3.t0 === 'removeAlert' ? 36 : _context3.t0 === 'unsubscribeFromAlerts' ? 38 : 40;
             break;
 
           case 24:
@@ -13016,7 +13244,7 @@ var handleAsettingsTask = /*#__PURE__*/function () {
             }())["catch"](function (e) {
               return self.callback(e, null);
             });
-            return _context4.abrupt("break", 41);
+            return _context3.abrupt("break", 41);
 
           case 26:
             self.deleteAccount(user.payload).then(function (deleteStat) {
@@ -13024,7 +13252,7 @@ var handleAsettingsTask = /*#__PURE__*/function () {
             })["catch"](function (e) {
               return self.callback(e, null);
             });
-            return _context4.abrupt("break", 41);
+            return _context3.abrupt("break", 41);
 
           case 28:
             self.changeAvatar(user.payload).then( /*#__PURE__*/function () {
@@ -13058,29 +13286,18 @@ var handleAsettingsTask = /*#__PURE__*/function () {
             }())["catch"](function (e) {
               return self.callback(e, null);
             });
-            return _context4.abrupt("break", 41);
+            return _context3.abrupt("break", 41);
 
           case 30:
-            self.updateUser(user.payload).then( /*#__PURE__*/function () {
-              var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(updated) {
-                return regeneratorRuntime.wrap(function _callee3$(_context3) {
-                  while (1) {
-                    switch (_context3.prev = _context3.next) {
-                      case 0:
-                      case "end":
-                        return _context3.stop();
-                    }
-                  }
-                }, _callee3);
-              }));
-
-              return function (_x4) {
-                return _ref4.apply(this, arguments);
-              };
-            }())["catch"](function (e) {
+            self.updateUser(user.payload).then(function (updated) {
+              updated.taken ? updated.taken instanceof Array ? updated.taken = updated.taken[0] : '' : '';
+              return self.callback(null, {
+                update: _objectSpread({}, updated.taken)
+              });
+            })["catch"](function (e) {
               return self.callback(e, null);
             });
-            return _context4.abrupt("break", 41);
+            return _context3.abrupt("break", 41);
 
           case 32:
             self.updateUser(user.payload).then(function (updated) {
@@ -13088,7 +13305,7 @@ var handleAsettingsTask = /*#__PURE__*/function () {
             })["catch"](function (e) {
               return self.callback(e, null);
             });
-            return _context4.abrupt("break", 41);
+            return _context3.abrupt("break", 41);
 
           case 34:
             self.updateUser(user.payload).then(function (updated) {
@@ -13096,7 +13313,7 @@ var handleAsettingsTask = /*#__PURE__*/function () {
             })["catch"](function (e) {
               return self.callback(e, null);
             });
-            return _context4.abrupt("break", 41);
+            return _context3.abrupt("break", 41);
 
           case 36:
             self.updateUser(user.payload).then(function (updated) {
@@ -13104,7 +13321,7 @@ var handleAsettingsTask = /*#__PURE__*/function () {
             })["catch"](function (e) {
               return self.callback(e, null);
             });
-            return _context4.abrupt("break", 41);
+            return _context3.abrupt("break", 41);
 
           case 38:
             self.updateUser(user.payload).then(function (updated) {
@@ -13112,17 +13329,17 @@ var handleAsettingsTask = /*#__PURE__*/function () {
             })["catch"](function (e) {
               return self.callback(e, null);
             });
-            return _context4.abrupt("break", 41);
+            return _context3.abrupt("break", 41);
 
           case 40:
-            self.callback(new Error('Unknown data request'), null);
+            return _context3.abrupt("return", self.callback(new Error('Unknown data request'), null));
 
           case 41:
           case "end":
-            return _context4.stop();
+            return _context3.stop();
         }
       }
-    }, _callee4, this);
+    }, _callee3, this);
   }));
 
   return function handleAsettingsTask(_x) {
@@ -13155,15 +13372,22 @@ var deleteAccount = function deleteAccount(pay) {
 
   var self = this;
   var pao = self.pao;
-  var _data = data,
-      account = _data.account;
+  console.log('The update');
+  console.log(pay);
   return new Promise(function (resolve, reject) {
-    if (!data.account) return reject(new Error('Invalid Request'));
-    if (!data.account.userId) return reject(new Error('Invalid Request'));
-    var query = {
-      conditions: ["id EQUALS ".concat(account.userID)]
+    if (!pay.update) return reject(new Error('Update data missing'));
+    var uid = pay.ID;
+    var alertID = pay.alertID;
+    var update = pay.update;
+    var frequency = update.frequency;
+    var queries = {
+      conditions: ["u_id EQUALS ".concat(uid, " "), "AND is_active EQUALS 1"],
+      set: [{
+        is_active: 0,
+        is_deleted: 1
+      }]
     };
-    self.query('mysql.jo_user.remove', query, self.dataRequestDeleteHandler.bind(_this2, resolve, reject));
+    self.query('mysql.jo_user.updateOne', queries, self.multiDataRequestHandler.bind(_this2, resolve, reject));
   });
 };
 var updateUser = function updateUser(pay) {
@@ -13173,29 +13397,38 @@ var updateUser = function updateUser(pay) {
   var pao = self.pao;
   return new Promise(function (resolve, reject) {
     var update = pay.update;
-    var set = {};
-    var password = update.password;
-    var uid = update.ID;
+    var set = []; // let password = update.password 
+
+    var uid = pay.ID;
 
     if (update.fullName) {
-      var names = update.fullName.split(' ');
-      set.first_name = names[0];
-      set.last_name = names[names.length - 1];
-    } // set.password = update.password
+      // let names = update.fullName.split(' ')
+      var profile = {};
+      profile.first_name = update.fullName.firstName;
+      profile.last_name = update.fullName.lastName;
+      set.push(profile);
+    }
+
+    if (update.password) {
+      var access = {};
+      access.password = update.password;
+      set.push(access);
+    } // set.password = update.password 
 
 
-    var query = [{
+    console.log('THE SET:ASSETTINGS');
+    console.log(set);
+    var query = {
+      tables: ['jo_user', 'jo_login'],
+      joins: 2,
+      joinPoints: ['jo_user.id EQUALS jo_login.u_id'],
+      conditions: ["jo_user.id EQUALS ".concat(uid), "AND jo_login.u_id EQUALS ".concat(uid)],
+      opiks: ['field.first_name.as[firstName]', 'field.last_name.as[lastName]'],
       set: set,
-      conditions: ["id EQUALS ".concat(uid)]
-    }, {
-      set: {
-        password: password
-      },
-      conditions: ["id EQUALS ".concat(uid)]
-    }];
-    self.query('mysql.jo_user.update', query, self.dataRequestUserUpdateHandler.bind(_this3, resolve, reject));
+      takeFrom: 'jo_user'
+    };
+    self.query('mysql.UPDATEANDTAKE', query, self.dataRequestHandler.bind(_this3, resolve, reject));
   });
-  self.query('mysql.UPDATEANDTAKE', query, self.dataRequestUserUpdateHandler.bind(this, resolve, reject));
 };
 var changeAvatar = function changeAvatar(pay) {
   var self = this;
@@ -13205,51 +13438,51 @@ var changeAvatar = function changeAvatar(pay) {
   var ID = pay.ID;
   var old = pay.old;
   return new Promise( /*#__PURE__*/function () {
-    var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee9(resolve, reject) {
-      return regeneratorRuntime.wrap(function _callee9$(_context9) {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(resolve, reject) {
+      return regeneratorRuntime.wrap(function _callee8$(_context8) {
         while (1) {
-          switch (_context9.prev = _context9.next) {
+          switch (_context8.prev = _context8.next) {
             case 0:
               self.modifyFile(file, 'resize-image').then( /*#__PURE__*/function () {
-                var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(resized) {
-                  return regeneratorRuntime.wrap(function _callee7$(_context7) {
+                var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(resized) {
+                  return regeneratorRuntime.wrap(function _callee6$(_context6) {
                     while (1) {
-                      switch (_context7.prev = _context7.next) {
+                      switch (_context6.prev = _context6.next) {
                         case 0:
-                          _context7.next = 2;
+                          _context6.next = 2;
                           return self.log('RESIZE SUCCESSFULL');
 
                         case 2:
-                          _context7.next = 4;
+                          _context6.next = 4;
                           return self.log(resized);
 
                         case 4:
                           self.saveUploads(files, ID, old).then( /*#__PURE__*/function () {
-                            var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee6(saved) {
-                              return regeneratorRuntime.wrap(function _callee6$(_context6) {
+                            var _ref6 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(saved) {
+                              return regeneratorRuntime.wrap(function _callee5$(_context5) {
                                 while (1) {
-                                  switch (_context6.prev = _context6.next) {
+                                  switch (_context5.prev = _context5.next) {
                                     case 0:
-                                      _context6.next = 2;
+                                      _context5.next = 2;
                                       return self.log('THE SAVED FILE UPLOADS');
 
                                     case 2:
-                                      _context6.next = 4;
+                                      _context5.next = 4;
                                       return self.log(saved);
 
                                     case 4:
                                       self.saveFileUrlToDb(saved.url, ID).then( /*#__PURE__*/function () {
-                                        var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(updated) {
+                                        var _ref7 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(updated) {
                                           var updatedUser;
-                                          return regeneratorRuntime.wrap(function _callee5$(_context5) {
+                                          return regeneratorRuntime.wrap(function _callee4$(_context4) {
                                             while (1) {
-                                              switch (_context5.prev = _context5.next) {
+                                              switch (_context4.prev = _context4.next) {
                                                 case 0:
-                                                  _context5.next = 2;
+                                                  _context4.next = 2;
                                                   return self.log('THE UPDATED FILE URL');
 
                                                 case 2:
-                                                  _context5.next = 4;
+                                                  _context4.next = 4;
                                                   return self.log(updated);
 
                                                 case 4:
@@ -13260,14 +13493,14 @@ var changeAvatar = function changeAvatar(pay) {
 
                                                 case 6:
                                                 case "end":
-                                                  return _context5.stop();
+                                                  return _context4.stop();
                                               }
                                             }
-                                          }, _callee5);
+                                          }, _callee4);
                                         }));
 
-                                        return function (_x9) {
-                                          return _ref8.apply(this, arguments);
+                                        return function (_x8) {
+                                          return _ref7.apply(this, arguments);
                                         };
                                       }())["catch"](function (e) {
                                         reject(e);
@@ -13275,14 +13508,14 @@ var changeAvatar = function changeAvatar(pay) {
 
                                     case 5:
                                     case "end":
-                                      return _context6.stop();
+                                      return _context5.stop();
                                   }
                                 }
-                              }, _callee6);
+                              }, _callee5);
                             }));
 
-                            return function (_x8) {
-                              return _ref7.apply(this, arguments);
+                            return function (_x7) {
+                              return _ref6.apply(this, arguments);
                             };
                           }())["catch"](function (e) {
                             return reject(e);
@@ -13290,22 +13523,22 @@ var changeAvatar = function changeAvatar(pay) {
 
                         case 5:
                         case "end":
-                          return _context7.stop();
+                          return _context6.stop();
                       }
                     }
-                  }, _callee7);
+                  }, _callee6);
                 }));
 
-                return function (_x7) {
-                  return _ref6.apply(this, arguments);
+                return function (_x6) {
+                  return _ref5.apply(this, arguments);
                 };
               }())["catch"]( /*#__PURE__*/function () {
-                var _ref9 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee8(e) {
-                  return regeneratorRuntime.wrap(function _callee8$(_context8) {
+                var _ref8 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee7(e) {
+                  return regeneratorRuntime.wrap(function _callee7$(_context7) {
                     while (1) {
-                      switch (_context8.prev = _context8.next) {
+                      switch (_context7.prev = _context7.next) {
                         case 0:
-                          _context8.next = 2;
+                          _context7.next = 2;
                           return self.log('An error occured');
 
                         case 2:
@@ -13313,27 +13546,27 @@ var changeAvatar = function changeAvatar(pay) {
 
                         case 3:
                         case "end":
-                          return _context8.stop();
+                          return _context7.stop();
                       }
                     }
-                  }, _callee8);
+                  }, _callee7);
                 }));
 
-                return function (_x10) {
-                  return _ref9.apply(this, arguments);
+                return function (_x9) {
+                  return _ref8.apply(this, arguments);
                 };
               }());
 
             case 1:
             case "end":
-              return _context9.stop();
+              return _context8.stop();
           }
         }
-      }, _callee9);
+      }, _callee8);
     }));
 
-    return function (_x5, _x6) {
-      return _ref5.apply(this, arguments);
+    return function (_x4, _x5) {
+      return _ref4.apply(this, arguments);
     };
   }());
 };
@@ -13420,8 +13653,8 @@ var alertUnsubscription = function alertUnsubscription(pay) {
 
   var self = this;
   var pao = self.pao;
-  var _data2 = data,
-      update = _data2.update;
+  var _data = data,
+      update = _data.update;
   return new Promise(function (resolve, reject) {
     if (!data.update) return reject(new Error('Invalid Request'));
     if (!data.update.userId) return reject(new Error('Invalid Request'));
@@ -13437,8 +13670,8 @@ var alertAddition = function alertAddition(pay) {
 
   var self = this;
   var pao = self.pao;
-  var _data3 = data,
-      update = _data3.update;
+  var _data2 = data,
+      update = _data2.update;
   return new Promise(function (resolve, reject) {
     if (!data.update) return reject(new Error('Invalid Request'));
     if (!data.update.userId) return reject(new Error('Invalid Request'));
@@ -13454,8 +13687,8 @@ var alertMailUpdate = function alertMailUpdate(pay) {
 
   var self = this;
   var pao = self.pao;
-  var _data4 = data,
-      update = _data4.update;
+  var _data3 = data,
+      update = _data3.update;
   return new Promise(function (resolve, reject) {
     if (!data.update) return reject(new Error('Invalid Request'));
     if (!data.update.userId) return reject(new Error('Invalid Request'));
@@ -13526,6 +13759,12 @@ var searchBatchHandler = function searchBatchHandler() {
     batch: batchResults
   });
 };
+
+/***/ }),
+/* 141 */
+/***/ (function(module, exports) {
+
+module.exports = require("joi");
 
 /***/ })
 /******/ ]);

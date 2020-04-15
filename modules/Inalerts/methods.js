@@ -1,3 +1,4 @@
+import { alternatives } from "joi"
 
 
 
@@ -66,6 +67,57 @@ export const handleInternalAlertsTask = async function(data){
 			
 			self.getAlerts(user.payload)
 			.then((alerts)=>self.callback(null,alerts))
+			.catch((e)=>self.callback(e,null))
+		}
+		break;
+		case 'saveAlertsSubscribtions':{
+			
+			self.saveAlertsSubscribtion(data)
+			.then((deleteStat)=>self.callback(null,deleteStat))
+			.catch((e)=>self.callback(e,null))
+		}
+		break;
+		case 'getAlertsSubscriptions':{
+			
+			self.getAlertsSubscriptions(user.payload)
+			.then((alerts)=>{
+
+				let alertsEmails = {}
+				if(alerts.length > 0){
+
+					alertsEmails.mainEmail = alerts[0]
+				}else{
+
+					alertsEmails.mainEmail = alerts[0]
+					alertsEmails.altEmail = alerts[1]
+				}
+				self.callback(null,alertsEmails)
+			})
+			.catch((e)=>self.callback(e,null))
+		}
+		break;
+		case 'deleteAlertsSubscriptions': {
+			
+			self.deleteAlertsSubscriptions(data)
+			.then((deleted)=>{
+
+				deleted.affectedRows && deleted.affectedRows > 0 
+					? self.callback(null,{deleteStatus: true})
+					: self.callback(null,{deleteStatus: false})
+				
+			})
+			.catch((e)=>self.callback(e,null))
+		}
+		break;
+		case 'updateAlertsSubscriptions': {s
+			
+			self.updateAlertsSubscriptions(data)
+			.then((updated)=>{
+
+				updated.changedRows && updated.changedRows > 0 
+					? self.callback(null,{updateStatus: true,frequency: user.payload.update.frequency})
+					: self.callback(null,{updateStatus: false})
+			})
 			.catch((e)=>self.callback(e,null))
 		}
 		break;
@@ -177,6 +229,144 @@ export const getAlerts = function(pay){
 	})
  
 
+}
+
+export const saveAlertsSubscribtions = function(data){
+	
+	
+	const self = this 
+	let pao = self.pao
+
+	
+return new Promise((resolve,reject)=>{
+		
+		
+		if(!data.profile) return reject(new Error('Invalid Request')) 
+		
+		if(!data.profile.userId) return reject(new Error('Invalid'))
+		
+		let query = 	{
+			
+					returnFields: ['first_name','last_name','profile','email'],
+					tables:['jo_user','jo_alerts'],
+					joins: 2,
+					joinPoints: ['jo_user.id EQUALS jo_alerst_subscription.u_id'],
+					conditions: [`id EQUALS ${profile.userID}`],
+					type: 'inner'
+			   }
+		
+		self.query(
+		'mysql.SEARCH',
+		  query,
+		  self.dataRequestHandler.bind(this,resolve,reject)
+	)
+		
+	})
+	
+	
+}
+
+export const getAlertsSubscriptions = function(pay){
+	
+	
+	const self = this 
+	const pao = self.pao 
+	let uid = pay.ID
+	
+	
+	return new Promise((resolve,reject)=>{
+		
+
+		
+		let queries = 
+			{opiks: ['field.id.as[alertMailID]','field.email.as[alertEmail]'],conditions: [`u_id EQUALS ${uid}`],take: 5}
+		
+	
+		self.query(
+				'mysql.jo_job_alert_subscriber.find',
+				queries,
+				self.multiDataRequestHandler.bind(this,resolve,reject)
+			)
+			
+		
+	})
+ 
+
+}
+
+export const deleteAlertsSubscriptions = function(pay){
+	
+	
+	return new Promise((resolve,reject)=>{
+		
+		
+		const self = this 
+		const pao = self.pao 
+		let uid = pay.ID
+		let alertID = pay.alertID
+		
+		
+		let queries = {conditions: [`u_id EQUALS ${uid} `,`AND id EQUALS ${alertID}`]}
+	
+		self.query(
+				'mysql.jo_job_alert.remove',
+				queries,
+				self.multiDataRequestHandler.bind(this,resolve,reject)
+			)
+			
+		
+	})
+ 
+
+}
+
+export const updateAlertsSubscriptions = function(pay){
+	
+	
+	const self = this 
+	const pao = self.pao 
+
+	console.log('The update')
+	console.log(pay)
+
+
+	
+
+
+	return new Promise((resolve,reject)=>{
+		
+		
+		 if(!pay.update) return reject(new Error('Update data missing'))
+
+		 let uid = pay.ID
+		 let alertID = pay.alertID 
+		 let update = pay.update 
+		 let frequency = update.frequency
+
+
+
+		 
+		
+		let queries = 
+			{conditions: [`u_id EQUALS ${uid} `,`AND id EQUALS ${alertID}`],
+			 set: [{frequency:frequency}]
+			}
+		
+	
+		self.query(
+				'mysql.jo_job_alert.updateOne',
+				queries,
+				self.multiDataRequestHandler.bind(this,resolve,reject)
+			)
+
+			
+		
+	})
+	 
+	
+	
+	
+	
 }
 
 
