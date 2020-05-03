@@ -19,13 +19,14 @@ export const init = function(){
 export const handleJobTask = async function(data){
 
 	
-	console.log(data)
+	
 	const self = this 
 	const pao = self.pao
 	const contains = pao.pa_contains
 	const isOBject = pao.pa_isObject
 	let user = data.payload.user
-	self.callback = data.callback
+	self.callback = data.callback 
+	self.log(data)
 
 	
 
@@ -100,10 +101,11 @@ export const getJobs = function(pay){
 	}
 	
 	
-	return new Promise((resolve,reject)=>{
+	return new Promise(async (resolve,reject)=>{
 		
 		
-		
+		// await self.log('THE BACTCHSEARCH OBJECT')
+		// await self.log(self.searchBatch('office','malamulele','limpopo',range))
 	
 		self.query(
 				'mysql.SEARCH',
@@ -202,6 +204,7 @@ export const getJobDetail = function(data){
 
 export const searchBatch = function(key,city,state,range){
 
+	 const self = this
 	// let fields = {
 	
 	// 	jo_user: { id: 'NULL',u_type: data.usertype,first_name: data.firstname,last_name: data.lastname,email: data.email },
@@ -219,7 +222,11 @@ export const searchBatch = function(key,city,state,range){
 		
 	//    ]
 
+		let intExp = 1 
+		let intUnit = 'DAY' 
 
+		self.log('THE INTERVAL VALUES')
+		self.log(`${intExp} ${intUnit}`)
 
 	   return [
 				{
@@ -228,11 +235,13 @@ export const searchBatch = function(key,city,state,range){
 					joins: 3,
 					joinPoints: ['jo_job.u_id EQUALS jo_country.id','jo_job.company_id EQUALS jo_company.id'],
 					conditions: [`GROUP::2 START GROUP::2 START MATCH [job_title] AGAINST [${key}] NATURAL, OR MATCH [position] AGAINST [${key}] NATURAL;AND jo_job.country_id EQUALS 202`,
-								`AND GROUP::2 START city_name EQUALS ${city}; OR state_name EQUALS ${state}`],
+								`AND GROUP::3 START city_name EQUALS ${city}; OR state_name EQUALS ${state};AND created_at FUXIN [ISGREATEROREQUALS fuxin.date_sub.options[fuxin.now,INTERVAL ${intExp} ${intUnit}]]`,
+								
+								],
 					opiks: ['field.job_title.as[jobTitle]','field.company_logo.as[logo]','field.salary.as[jobSalary]',
 					'field.name.as[employer]','field.salary_currency.as[currency]','field.is_main_featured.as[isMainFeatured]',
 					'field.job_type.as[type]','field.approved_at.as[date]','field.is_featured.as[isFeatured]',
-					'field.is_free.as[isFree]','field.is_sponsored.as[isSponsored]',],
+					'field.is_free.as[isFree]','field.is_sponsored.as[isSponsored]','field.city_name.as[jobCity]'],
 					range:`${range.offset},${range.count}`,
 					soundex: true,
 					sort: 'order[jobTitle].asc',

@@ -19,7 +19,7 @@ class Inalerts{
      this.handleInternalAlertsTask = methods.handleInternalAlertsTask 
      this.saveAlerts = methods.saveAlerts
      this.getAlerts = methods.getAlerts
-     this.saveAlertsSubscribtions = methods.saveAlertsSubscribtions 
+     this.saveAlertsSubscriptions = methods.saveAlertsSubscriptions 
      this.getAlertsSubscriptions = methods.getAlertsSubscriptions
      this.deleteAlertsSubscriptions = methods.deleteAlertsSubscriptions 
      this.updateAlertsSubscriptions = methods.updateAlertsSubscriptions

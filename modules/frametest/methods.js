@@ -57,8 +57,8 @@ export const handleFrameTestTask= function(data){
 		break;
 		case 'save':{
 			
-			self.saveThingy(data)
-			.then((deleteStat)=>self.callback(null,deleteStat))
+			self.saveThingy(user.payload)
+			.then((saved)=>self.callback(null,saved))
 			.catch((e)=>self.callback(e,null))
 		}
 		break;
@@ -211,17 +211,26 @@ export const saveThingy = function(data){
   return new Promise((resolve,reject)=>{
 		
 		
-		if(!data.profile) return reject(new Error('Invalid Request')) 
+		// if(!data.profile) return reject(new Error('Invalid Request')) 
 		
-		if(!data.profile.userId) return reject(new Error('Invalid'))
+		// if(!data.profile.userId) return reject(new Error('Invalid'))
 		
 		let query ={
 			
-					conditions: [`id EQUALS ${profile.userID}`]
+					insert: {
+						table: 'jo_user',
+						fields: ['u_type','is_active','is_deleted','first_name','last_name','email','phone','join_date'],
+						values: ['applicant',1,0,'Steven','Mashele','steae@gmail.com','0722875412',new Date()]
+					},
+					take:{
+						
+						tables:['jo_user'],
+						opiks: ['field.first_name.as[firstName]','field.last_name.as[lastName]','field.u_type.as[userType]']
+					}
 			   }
 		
 		self.query(
-		'mysql.SEARCH',
+		'mysql.INSERTANDTAKE',
 		  query,
 		  self.thingyDataRequestHandler.bind(this,resolve,reject)
 	)

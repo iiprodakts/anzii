@@ -17,13 +17,14 @@ export const init = function(){
 
 export const handleBookmarkTask = async function(data){
 
-	console.log(data)
+	
 	const self = this 
 	const pao = self.pao
 	const contains = pao.pa_contains
 	const isOBject = pao.pa_isObject
 	let user = data.payload.user
-	self.callback = data.callback
+	self.callback = data.callback 
+	self.log(data)
 
 	
 

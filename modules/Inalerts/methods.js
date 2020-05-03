@@ -1,4 +1,5 @@
 import { alternatives } from "joi"
+import { searchFieldsFormat } from "../../lib/esm/mysql/methods"
 
 
 
@@ -70,10 +71,35 @@ export const handleInternalAlertsTask = async function(data){
 			.catch((e)=>self.callback(e,null))
 		}
 		break;
-		case 'saveAlertsSubscribtions':{
+		case 'saveAlertsSubscriptions':{
 			
-			self.saveAlertsSubscribtion(data)
-			.then((deleteStat)=>self.callback(null,deleteStat))
+			self.saveAlertsSubscriptions(user.payload)
+			.then((saved)=>{
+				
+				let inserted = saved.inserted 
+				let taken = saved.taken 
+				let insertTaken = {} 
+				let alertsEmails = {}
+
+				if(inserted.insertId > 0){
+					insertTaken.inserted = true
+				}
+				if(taken && taken instanceof Array){
+
+					if(taken.length === 1){
+
+						alertsEmails.mainEmail = taken[0]
+						
+					}else{
+
+						alertsEmails.mainEmail = taken[0]
+						alertsEmails.altEmail = taken[1]
+					}
+
+					insertTaken.taken = alertsEmails
+				}
+				self.callback(null,insertTaken)
+			})
 			.catch((e)=>self.callback(e,null))
 		}
 		break;
@@ -83,7 +109,7 @@ export const handleInternalAlertsTask = async function(data){
 			.then((alerts)=>{
 
 				let alertsEmails = {}
-				if(alerts.length > 0){
+				if(alerts.length === 1){
 
 					alertsEmails.mainEmail = alerts[0]
 				}else{
@@ -98,25 +124,64 @@ export const handleInternalAlertsTask = async function(data){
 		break;
 		case 'deleteAlertsSubscriptions': {
 			
-			self.deleteAlertsSubscriptions(data)
+			self.deleteAlertsSubscriptions(user.payload)
 			.then((deleted)=>{
 
-				deleted.affectedRows && deleted.affectedRows > 0 
-					? self.callback(null,{deleteStatus: true})
-					: self.callback(null,{deleteStatus: false})
+				// deleted.affectedRows && deleted.affectedRows > 0 
+				// 	? self.callback(null,{deleteStatus: true})
+				// 	: self.callback(null,{deleteStatus: false})
+
+				if(!deleted.taken){
+
+					deleted.deleted 
+						? self.callback(null,{taskSuccessful: true}) 
+						: self.callback(null,{taskSuccessful: false})
+				}else{
+
+					if(!deleted.deleted){
+
+						self.callback(null,{taken: deleted.taken})
+					}else{
+						self.callback(null,{taskSuccessful: true,taken: deleted.taken})
+					}
+				}
+				
 				
 			})
 			.catch((e)=>self.callback(e,null))
 		}
 		break;
-		case 'updateAlertsSubscriptions': {s
+		case 'updateAlertsSubscriptions': {
 			
-			self.updateAlertsSubscriptions(data)
-			.then((updated)=>{
+			self.updateAlertsSubscriptions(user.payload)
+			.then((alerts)=>{
 
-				updated.changedRows && updated.changedRows > 0 
-					? self.callback(null,{updateStatus: true,frequency: user.payload.update.frequency})
-					: self.callback(null,{updateStatus: false})
+				console.log('THE ALERTS IN UPDATE')
+				console.log(alerts)
+				
+				let alertsEmails = {}
+
+				if(alerts.taken){
+
+					if(alerts.taken.length === 1){
+
+						alertsEmails.mainEmail = alerts.taken[0]
+					}else{
+	
+						alertsEmails.mainEmail = alerts.taken[0]
+						alertsEmails.altEmail = alerts.taken[1]
+					}
+					alerts.updated 
+							? self.callback(null,{taskSuccessful: true,taken:alertsEmails})
+							: self.callback(null,{taskSuccessful: false, taken: alertsEmails})
+
+				}else{
+					
+					alerts.updated
+							? self.callback(null,{taskSuccessful: true,taken:alertsEmails})
+							: self.callback(null,{taskSuccessful: false, taken: alertsEmails})
+				}
+				
 			})
 			.catch((e)=>self.callback(e,null))
 		}
@@ -231,38 +296,43 @@ export const getAlerts = function(pay){
 
 }
 
-export const saveAlertsSubscribtions = function(data){
+export const saveAlertsSubscriptions = function(pay){
 	
 	
 	const self = this 
 	let pao = self.pao
 
-	
-return new Promise((resolve,reject)=>{
+	return new Promise((resolve,reject)=>{
+		
+		 let uid = pay.ID
+		 let save = pay.save 
+		 let email = save.email
 		
 		
-		if(!data.profile) return reject(new Error('Invalid Request')) 
-		
-		if(!data.profile.userId) return reject(new Error('Invalid'))
-		
-		let query = 	{
+		let query ={
 			
-					returnFields: ['first_name','last_name','profile','email'],
-					tables:['jo_user','jo_alerts'],
-					joins: 2,
-					joinPoints: ['jo_user.id EQUALS jo_alerst_subscription.u_id'],
-					conditions: [`id EQUALS ${profile.userID}`],
-					type: 'inner'
+					insert: {
+						table: 'jo_job_alert_subscriber',
+						fields: ['email','u_id','start_date'],
+						values: [`${email}`,`${uid}`,new Date()]
+					},
+					take:{
+						
+						tables:['jo_job_alert_subscriber'],
+						opiks: ['field.id.as[alertMailID]','field.email.as[alertEmail]'],
+						conditions: [`u_id EQUALS ${uid}`],
+						take: 5
+					}
 			   }
 		
 		self.query(
-		'mysql.SEARCH',
+		'mysql.INSERTANDTAKE',
 		  query,
-		  self.dataRequestHandler.bind(this,resolve,reject)
+		  self.multiDataRequestHandler.bind(this,resolve,reject)
 	)
 		
 	})
-	
+
 	
 }
 
@@ -303,16 +373,55 @@ export const deleteAlertsSubscriptions = function(pay){
 		const self = this 
 		const pao = self.pao 
 		let uid = pay.ID
-		let alertID = pay.alertID
+		let alertMailID = pay.delete.alertMailID 
+
+		let conditions = alertMailID === 0 ?  [`jo_job_alert_subscriber.u_id EQUALS ${uid} `] :  [`jo_job_alert_subscriber.u_id EQUALS ${uid} `,`AND jo_job_alert_subscriber.id EQUALS ${alertMailID}`]
 		
 		
-		let queries = {conditions: [`u_id EQUALS ${uid} `,`AND id EQUALS ${alertID}`]}
-	
-		self.query(
-				'mysql.jo_job_alert.remove',
-				queries,
+		
+
+		if(alertMailID === 0){
+
+			let query = {
+
+				tables: ['jo_job_alert_subscriber','jo_job_alert_category','jo_job_alert'],
+				joins: 2,
+				joinPoints: ['jo_job_alert_subscriber.id EQUALS jo_job_alert_category.alert_mail_id','jo_job_alert_category.alert_mail_id EQUALS jo_job_alert.alert_mail_id'],
+				conditions: conditions
+			}
+
+			self.query(
+				'mysql.DELETEMULTIPLE',
+				query,
 				self.multiDataRequestHandler.bind(this,resolve,reject)
 			)
+
+		}else{
+			let query ={
+				
+				remove: {
+					tables: ['jo_job_alert_subscriber','jo_job_alert_category','jo_job_alert'],
+					joins: 3,
+					joinPoints: ['jo_job_alert_subscriber.id EQUALS jo_job_alert_category.alert_mail_id','jo_job_alert_category.alert_mail_id EQUALS jo_job_alert.alert_mail_id'],
+					conditions: conditions
+				},
+				take:{
+					
+					tables:['jo_job_alert_subscriber'],
+					opiks: ['field.id.as[alertMailID]','field.email.as[alertEmail]'],
+					conditions: [`jo_job_alert_subscriber.u_id EQUALS ${uid}`],
+					take: 5
+				}
+			}
+		
+		
+			self.query(
+					'mysql.DELETEANDTAKE',
+					query,
+					self.multiDataRequestHandler.bind(this,resolve,reject)
+				)
+
+		}
 			
 		
 	})
@@ -330,31 +439,44 @@ export const updateAlertsSubscriptions = function(pay){
 	console.log(pay)
 
 
-	
-
-
 	return new Promise((resolve,reject)=>{
 		
 		
-		 if(!pay.update) return reject(new Error('Update data missing'))
+		//  if(!pay.update) return reject(new Error('Update data missing'))
 
 		 let uid = pay.ID
-		 let alertID = pay.alertID 
-		 let update = pay.update 
-		 let frequency = update.frequency
+		 let alertMailID = pay.update.alertMailID 
+		 let updateMail = pay.update.email
+		//  let alertID = pay.alertID 
+		//  let update = pay.update 
+		//  let frequency = update.frequency
 
 
 
 		 
 		
+		// let queries = 
+		// 	{conditions: [`u_id EQUALS ${uid} `,`AND id EQUALS ${alertID}`],
+		// 	 set: [{frequency:frequency}]
+		// 	}
+
 		let queries = 
-			{conditions: [`u_id EQUALS ${uid} `,`AND id EQUALS ${alertID}`],
-			 set: [{frequency:frequency}]
-			}
+					{
+				   
+					tables:['jo_job_alert_subscriber'],
+					conditions: [`u_id EQUALS ${uid} `,`AND id EQUALS ${alertMailID}`],
+					opiks: ['field.id.as[alertMailID]','field.email.as[alertEmail]'],
+					set: [{email: updateMail}],
+					takeFrom: {
+						tables:['jo_job_alert_subscriber'],
+						conditions: [`u_id EQUALS ${uid}`],
+
+					}
+				  }
 		
 	
 		self.query(
-				'mysql.jo_job_alert.updateOne',
+				'mysql.UPDATEANDTAKE',
 				queries,
 				self.multiDataRequestHandler.bind(this,resolve,reject)
 			)
