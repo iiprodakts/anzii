@@ -4,7 +4,8 @@ import * as methods from "./methods"
 //Dependecies
 
 const crypto = require('crypto')
-const fetch = require('axios')
+const fetch = require('axios') 
+// const list = require('./json')
 
 class FrameTest{
   
@@ -16,7 +17,8 @@ class FrameTest{
     this.tmpd = null 
     this.strategies = {anzii:true,social:true}
     this.url = 'http://public.api.careerjet.net/search?locale_code=en_ZA&affid=0e6712acc74087da913e65985433a122&keywords=web developer&location=gauteng&pagesize=50'
-    this.fetch = fetch
+    this.fetch = fetch 
+    // this.list = list
     
 
     // methods

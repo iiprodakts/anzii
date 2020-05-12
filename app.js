@@ -8382,23 +8382,36 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 
 
+var fetch = __webpack_require__(113);
+
+var jobs = __webpack_require__(138);
+
 var Job = function Job(pao) {
   _classCallCheck(this, Job);
 
-  this.pao = pao; // this.partners = [
+  this.pao = pao;
+  this.url = 'http://public.api.careerjet.net/search?locale_code=en_ZA&affid=0e6712acc74087da913e65985433a122';
+  this.fetch = fetch;
+  this.jobsJson = jobs; // this.partners = [
   //  {
   //  	url: 'https://www.indeed.com'
   //    apiCreds:{uname: 'name'}
   //  }
   // ]
 
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* init */];
-  this.handleJobTask = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* handleJobTask */];
-  this.getJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* getJobs */];
-  this.getJFP = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* getJFP */];
-  this.getNativeJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* getNativeJobs */];
-  this.searchBatch = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* searchBatch */];
-  this.searchBatchHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* searchBatchHandler */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* init */];
+  this.handleJobTask = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* handleJobTask */];
+  this.getJobsWithThingy = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* getJobsWithThingy */];
+  this.getCondition = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* getCondition */];
+  this.formatQuery = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* formatQuery */];
+  this.getDbKey = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* getDbKey */];
+  this.generateQueryConditions = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* generateQueryConditions */];
+  this.refineOutsourcedJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* refineOutsourcedJobs */];
+  this.getJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* getJobs */];
+  this.getJFP = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* getJFP */];
+  this.getNativeJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* getNativeJobs */];
+  this.searchBatch = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* searchBatch */];
+  this.searchBatchHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["m" /* searchBatchHandler */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Job);
@@ -8408,21 +8421,24 @@ var Job = function Job(pao) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return handleJobTask; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getJobs; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return getJFP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getNativeJobs; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return handleJobTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return refineOutsourcedJobs; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getJobs; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return getJobsWithThingy; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return getJFP; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return getNativeJobs; });
 /* unused harmony export saveApplication */
 /* unused harmony export getJobDetail */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return searchBatch; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return searchBatchHandler; });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_webpack__ = __webpack_require__(88);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_webpack___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_webpack__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return generateQueryConditions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getCondition; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return formatQuery; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getDbKey; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return searchBatch; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return searchBatchHandler; });
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
-
 
 var init = function init() {
   this.log('Job has been initialised');
@@ -8432,7 +8448,7 @@ var init = function init() {
 };
 var handleJobTask = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(data) {
-    var self, pao, contains, isOBject, user;
+    var self, pao, contains, isOBject, clientRequest, user;
     return regeneratorRuntime.wrap(function _callee$(_context) {
       while (1) {
         switch (_context.prev = _context.next) {
@@ -8441,54 +8457,157 @@ var handleJobTask = /*#__PURE__*/function () {
             pao = self.pao;
             contains = pao.pa_contains;
             isOBject = pao.pa_isObject;
+            clientRequest = data.payload.request;
             user = data.payload.user;
             self.callback = data.callback;
             self.log(data); // let uid = user.ID
 
             console.log('THE DATA INSIDE Adash');
-            console.log(user);
-            console.log('THE PARSED DATA TEST');
-            console.log(data);
-            console.log(user);
-            self.getJobs(user).then(function (jobs) {
-              self.callback(null, jobs);
+            console.log(user); // console.log('THE PARSED DATA TEST')
+            // console.log(data)
+            // console.log(user)
+            // self
+            // .getJobs(user)
+            // .then((jobs)=>{self.callback(null,jobs)})
+            // .catch((e)=>{
+            // 	console.log('Reject error')
+            // 	console.log(e)
+            // 	self.callback(e,null)
+            // })
+
+            if (isOBject(user)) {
+              _context.next = 12;
+              break;
+            }
+
+            return _context.abrupt("return", self.callback({
+              message: 'User has not been specified'
+            }, null));
+
+          case 12:
+            if (user.action) {
+              _context.next = 14;
+              break;
+            }
+
+            return _context.abrupt("return", self.callback({
+              message: 'Invalid request'
+            }, null));
+
+          case 14:
+            if (contains(user, ['payload'])) {
+              _context.next = 16;
+              break;
+            }
+
+            return _context.abrupt("return", self.callback({
+              message: 'missing required key'
+            }, null));
+
+          case 16:
+            _context.t0 = user.action;
+            _context.next = _context.t0 === 'getJobsWithThingy' ? 19 : _context.t0 === 'getJobs' ? 21 : 23;
+            break;
+
+          case 19:
+            self.getJobsWithThingy(user.payload).then(function (jobs) {
+              var pageLimit = user.payload.limit;
+              var totalJobs = jobs.totalJobs;
+              var options = user.payload;
+
+              if (totalJobs === 0 || totalJobs < pageLimit) {
+                var extraJobsLimit = pageLimit - totalJobs; //   let jobsJson = self.jobsJson
+                //   self.log(jobsJson.pages)
+                //   self.log(jobsJson.hits)
+                //   let refinedJobs = self.refineOutsourcedJobs(jobsJson.jobs) 
+                //   jobs.totalJobs = jobs.totalJobs + jobsJson.hits 
+                //   self.log(refinedJobs.length)
+                //   return self.callback(null,refinedJobs)
+
+                var forwarded = clientRequest.req.headers['x-forwarded-for'];
+                var ip = forwarded ? forwarded.split(/, /)[0] : clientRequest.req.connection.remoteAddress;
+                var uAgent = clientRequest.req.headers['user-agent'];
+                var urlParametersString = '';
+                options.keywords ? urlParametersString += "&keywords=".concat(options.keywords) : '';
+                var urlParameters = options.filters.map(function (para, i) {
+                  if (para.key === 'location') para.value = "Cape Town";
+                  return "&".concat(self.getDbKey(para.key), "=").concat(para.value);
+                });
+                console.log('THE URL PARAMETERS');
+                console.log(urlParameters);
+                urlParametersString += "".concat(urlParameters.join(''), " &limit=").concat(extraJobsLimit);
+                var url = "".concat(self.url).concat(urlParametersString);
+                url += "&user_ip=".concat(ip, "&user_agent=").concat(uAgent);
+                self.fetch.get(url).then(function (response) {
+                  console.log('THE REQUEST HAS SUCCEEDED TO CAREERJET');
+                  console.log(response.data); // return resolve({success: response.data}) 
+
+                  var refinedJobs = self.refineOutsourcedJobs(response.data.jobs);
+                  console.log(refinedJobs);
+                  console.log(jobs);
+                  console.log(response.data.hits);
+                  console.log(jobs.totalJobs);
+                  jobs.totalJobs = jobs.totalJobs + response.data.hits;
+                  console.log(jobs.totalJobs);
+                  jobs.posts = jobs.posts.concat(refinedJobs);
+                  self.log(refinedJobs.length);
+                  return self.callback(null, jobs); //return response.json();
+                })["catch"](function (err) {
+                  self.callback(null, jobs);
+                  console.log('JOBS FROM SOURCE FAILED DUE TO');
+                  return console.log(err);
+                });
+              } else {
+                self.callback(null, jobs);
+              }
             })["catch"](function (e) {
               console.log('Reject error');
               console.log(e);
               self.callback(e, null);
-            }); // if(!isOBject(user)) return self.callback({message: 'User has not been specified'},null)
-            // if(!user.action) return self.callback({message: 'Invalid request'},null)
-            // if(!contains(user,['payload'])) return self.callback({message: 'missing required key'},null)
-            // if(!contains(user.payload,['ID'])) return self.callback({message: 'missing required key'},null)
+            });
+            return _context.abrupt("break", 24);
 
-            /*switch(user.action){
-            	
-            	case 'getAlertCategories': {
-            		
-            		self
-            		.getGroupedAlerts(user.payload)
-            		.then((alertCats)=>{self.callback(null,alertCats)})
-            		.catch((e)=>{
-            			console.log('Reject error')
-            			console.log(e)
-            			self.callback(e,null)
-            		})
-            	}
-            	break;
-            	case 'saveAlerts':{
-            		
-            		self.deleteAccount(data)
-            		.then((deleteStat)=>self.callback(null,deleteStat))
-            		.catch((e)=>self.callback(e,null))
-            	}
-            	break;
-            	default: 
-            	self.callback(new Error('Unknown data request'),null)
-            	
-            	
-            }*/
+          case 21:
+            self.getJobs(user.payload).then(function (jobs) {
+              var pageLimit = user.payload.limit;
+              var totalJobs = jobs.totalJobs;
+              var options = user.payload.search;
 
-          case 13:
+              if (totalJobs < pageLimit) {
+                var extraJobsLimit = pageLimit - totalJobs;
+                var forwarded = clientRequest.req.headers['x-forwarded-for'];
+                var ip = forwarded ? forwarded.split(/, /)[0] : clientRequest.req.connection.remoteAddress;
+                var uAgent = clientRequest.req.headers['user-agent'];
+                var urlParameters = options.map(function (para, i) {
+                  return "&".concat(para.key, "=").concat(para.value);
+                });
+                var urlParametersString = "".concat(urlParameters.split(','), " &limit=").concat(extraJobsLimit);
+                var url = "".concat(self.url).concat(urlParametersString);
+                url += "&user_ip=".concat(ip, "&user_agent=").concat(uAgent);
+                self.fetch.get(url).then(function (response) {
+                  console.log('THE REQUEST HAS SUCCEEDED TO CAREERJET');
+                  console.log(response.data); // return resolve({success: response.data}) 
+
+                  var refinedJobs = self.refineOutsourcedJobs(response.data);
+                  jobs.totalJobs = jobs.totalJobs + refinedJobs.totalHits;
+                  return self.callback(null, jobs); //return response.json();
+                })["catch"](function (err) {
+                  self.callback(null, jobs);
+                  console.log('JOBS FROM SOURCE FAILED DUE TO');
+                  return console.log(err);
+                });
+              } else {
+                self.callback(null, jobs);
+              }
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context.abrupt("break", 24);
+
+          case 23:
+            self.callback(new Error('Unknown data request'), null);
+
+          case 24:
           case "end":
             return _context.stop();
         }
@@ -8500,6 +8619,36 @@ var handleJobTask = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
+var refineOutsourcedJobs = function refineOutsourcedJobs(jobs) {
+  var self = this;
+  var pao = self.pao;
+  var contains = pao.pa_contains;
+  var refinedJobs = [];
+  jobs.forEach(function (job, i) {
+    var newJob = {};
+    newJob.jobType = job.job_type || 'Not-specified';
+    newJob.date = job.date;
+    newJob.employer = job.company;
+    newJob.jobTitle = job.title;
+    newJob.url = job.url;
+    if (contains(job, ['salary_min', 'salary_max'])) newJob.jobSalary = "".concat(job.salary_min, "-").concat(job.salary_max);
+
+    if (contains(job, 'locations')) {
+      if (job.locations.toLowerCase() === 'south africa') {
+        newJob.jobCity = 'SA';
+      } else {
+        var locPieces = job.locations.split(',');
+        newJob.jobCity = locPieces[0];
+      }
+    } else {
+      newJob.jobCity = 'SA';
+    }
+
+    job.salary_currency_code ? newJob.currency = job.salary_currency_code : newJob.currency = 'ZAR';
+    refinedJobs.push(newJob);
+  });
+  return refinedJobs;
+};
 var getJobs = function getJobs(pay) {
   var _this = this;
 
@@ -8548,6 +8697,62 @@ var getJobs = function getJobs(pay) {
     };
   }());
 };
+var getJobsWithThingy = function getJobsWithThingy(pay) {
+  var _this2 = this;
+
+  var self = this;
+  var pao = self.pao;
+  console.log('THE PAYLOAD IN GETJOBS');
+  console.log(pay); // let u = pay.ID
+  // let catID = pay.catID
+
+  var range = {};
+
+  if (pay.skip && pay.limit) {
+    range = {
+      offset: pay.skip,
+      count: pay.limit
+    };
+  }
+
+  return new Promise( /*#__PURE__*/function () {
+    var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(resolve, reject) {
+      var conditions;
+      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+        while (1) {
+          switch (_context3.prev = _context3.next) {
+            case 0:
+              // await self.log('THE BACTCHSEARCH OBJECT')
+              // await self.log(self.searchBatch('office','malamulele','limpopo',range))
+              console.log('GET JOBS WITH THING REQUEST');
+              console.log(pay);
+              console.log(pay.filters);
+              console.log(pay.filters[0]);
+              conditions = self.generateQueryConditions(pay);
+              console.log(conditions); // return resolve(conditions)
+
+              self.query('mysql.SEARCH', {
+                batch: true,
+                search: self.searchBatch(conditions, range)
+              }, self.searchBatchHandler.bind(_this2, resolve, reject, true)); // self.query(
+              // 	'mysql.SEARCH',
+              // 	 {batch: true,search: self.searchBatch(search.key)},
+              // 	  self.searchBatchHandler.bind(this)
+              // )
+
+            case 7:
+            case "end":
+              return _context3.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function (_x4, _x5) {
+      return _ref3.apply(this, arguments);
+    };
+  }());
+};
 var getJFP = function getJFP(data) {
   var self = this;
   var pao = self.pao;
@@ -8588,7 +8793,155 @@ var getJobDetail = function getJobDetail(data) {
     });
   } else {}
 };
-var searchBatch = function searchBatch(key, city, state, range) {
+var generateQueryConditions = function generateQueryConditions(options) {
+  // let options = {
+  // 	keywords: '',
+  // 	categories: [],
+  // datePosted: '',
+  // jobType:[],location: '',
+  // salaryRange:[],experience:[],
+  // gender:[],qualification:[],
+  // careerLevel:[] 
+  // }  
+  var self = this;
+  var pao = self.pao;
+  var contains = pao.pa_contains;
+  var conditions = [];
+
+  if (contains(options, 'keywords')) {
+    conditions.push(self.getCondition({
+      key: options.keywords
+    }, 'keywords'));
+  } else {
+    conditions.push(self.getCondition({
+      key: 202
+    }, 'location').trim());
+  }
+
+  if (contains(options, 'filters')) {
+    var filters = options.filters.map(function (f, i) {
+      return {
+        key: f.key,
+        value: f.value,
+        table: 'jo_job',
+        operand: 'ISEQUALS'
+      };
+    });
+    conditions.push(self.getCondition(filters, 'AND'));
+  }
+
+  return conditions;
+};
+var getCondition = function getCondition(option) {
+  var id = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  var self = this;
+  var pao = self.pao;
+  var contains = pao.pa_contains;
+
+  switch (id) {
+    case 'keywords':
+      return "GROUP::2 START GROUP::2 START MATCH [job_title] AGAINST [".concat(option.key, "] NATURAL, OR MATCH [position] AGAINST [").concat(option.key, "] NATURAL;AND jo_job.country_id EQUALS 202");
+
+    case 'location':
+      return "jo_job.country_id EQUALS 202";
+
+    default:
+      return self.formatQuery(option, id);
+  }
+};
+var formatQuery = function formatQuery(options) {
+  var an = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : '';
+  var self = this;
+  var pao = self.pao;
+  var contains = pao.pa_contains;
+  var len = options.length;
+  var stri = '';
+  options.forEach(function (i, p) {
+    if (p === 0 && i.key === 'location') {
+      stri += "".concat(an.toUpperCase(), " GROUP::").concat(len, " START GROUP::2 START city_name EQUALS ").concat(i.value, ", OR state_name EQUALS ").concat(i.value, "; ");
+    } else if (p === 0) {
+      var derivedKey = self.getDbKey(i.key);
+
+      if (i.key === 'datePosted') {
+        var intExp = i.value;
+        var intUnit = '';
+        self.log('THE OUTCOME OF ');
+        self.log(i.value <= 24);
+
+        if (i.value <= 24) {
+          intUnit = 'HOUR';
+        } else if (i.value > 24 && i.value < 168) {
+          intUnit = 'DAY';
+        } else if (i.value >= 168 && i.value < 672) {
+          intUnit = 'WEEK';
+        } else if (i.value >= 672) {
+          intUnit = 'MONTH';
+        }
+
+        var lastCond = ' ';
+        if (p != len - 1) lastCond = '; ';
+        stri += "".concat(an.toUpperCase(), " GROUP::").concat(len, " created_at FUXIN [ISGREATEROREQUALS fuxin.date_sub.options[fuxin.now,INTERVAL ").concat(intExp, " ").concat(intUnit, "]]").concat(lastCond, "\n\t\t\t\t\t\t");
+      } else {
+        var _lastCond = ' ';
+        if (p != len - 1) _lastCond = '; ';
+        stri += "".concat(an.toUpperCase(), " GROUP::2 ").concat(i.table, ".").concat(derivedKey, " ").concat(i.operand, " ").concat(i.value).concat(_lastCond);
+      }
+    } else {
+      var _derivedKey = self.getDbKey(i.key);
+
+      if (i.key === 'datePosted') {
+        var _intExp = i.value;
+        var _intUnit = '';
+
+        if (i.value <= 24) {
+          _intUnit = 'HOUR';
+        } else if (i.value > 24 && i.value < 168) {
+          _intUnit = 'DAY';
+        } else if (i.value >= 168 && i.value < 672) {
+          _intUnit = 'WEEK';
+        } else if (i.value >= 672) {
+          _intExp = 3;
+          _intUnit = 'MONTH';
+        }
+
+        var _lastCond2 = ' ';
+        if (p != len - 1) _lastCond2 = '; ';
+        stri += "AND created_at FUXIN [ISGREATEROREQUALS fuxin.date_sub.options[fuxin.now,INTERVAL ".concat(_intExp, " ").concat(_intUnit, "]]").concat(_lastCond2);
+      } else {
+        var _lastCond3 = ' ';
+        if (p != len - 1) _lastCond3 = '; ';
+        stri += "AND ".concat(i.table, ".").concat(_derivedKey, " ").concat(i.operand, " ").concat(i.value).concat(_lastCond3);
+      }
+    }
+  });
+  return stri.trim();
+};
+var getDbKey = function getDbKey(i) {
+  var self = this;
+  var pao = self.pao;
+  var contains = pao.pa_contains;
+
+  switch (i) {
+    case 'jobType':
+      return 'job_type';
+
+    case 'salaryRange':
+      return 'salary';
+
+    case 'careerLevel':
+      return 'exp_level';
+
+    case 'categories':
+      return 'job_category_id';
+
+    case 'experience':
+      return 'experience_required_years';
+
+    default:
+      return i;
+  }
+};
+var searchBatch = function searchBatch(options, range) {
   var self = this; // let fields = {
   // 	jo_user: { id: 'NULL',u_type: data.usertype,first_name: data.firstname,last_name: data.lastname,email: data.email },
   // 	jo_account: {own:{id:'NULL'},tables: [{name:'jo_user',values:['u_type.account_name']}]},
@@ -8611,7 +8964,8 @@ var searchBatch = function searchBatch(key, city, state, range) {
     tables: ['jo_job', 'jo_country', 'jo_company'],
     joins: 3,
     joinPoints: ['jo_job.u_id EQUALS jo_country.id', 'jo_job.company_id EQUALS jo_company.id'],
-    conditions: ["GROUP::2 START GROUP::2 START MATCH [job_title] AGAINST [".concat(key, "] NATURAL, OR MATCH [position] AGAINST [").concat(key, "] NATURAL;AND jo_job.country_id EQUALS 202"), "AND GROUP::3 START city_name EQUALS ".concat(city, "; OR state_name EQUALS ").concat(state, ";AND created_at FUXIN [ISGREATEROREQUALS fuxin.date_sub.options[fuxin.now,INTERVAL ").concat(intExp, " ").concat(intUnit, "]]")],
+    //  
+    conditions: options,
     opiks: ['field.job_title.as[jobTitle]', 'field.company_logo.as[logo]', 'field.salary.as[jobSalary]', 'field.name.as[employer]', 'field.salary_currency.as[currency]', 'field.is_main_featured.as[isMainFeatured]', 'field.job_type.as[type]', 'field.approved_at.as[date]', 'field.is_featured.as[isFeatured]', 'field.is_free.as[isFree]', 'field.is_sponsored.as[isSponsored]', 'field.city_name.as[jobCity]'],
     range: "".concat(range.offset, ",").concat(range.count),
     soundex: true,
@@ -8629,35 +8983,38 @@ var searchBatch = function searchBatch(key, city, state, range) {
     tables: ['jo_job', 'jo_country', 'jo_company'],
     joins: 3,
     joinPoints: ['jo_job.u_id EQUALS jo_country.id', 'jo_job.company_id EQUALS jo_company.id'],
-    conditions: ["GROUP::2 START GROUP::2 START MATCH [job_title] AGAINST [".concat(key, "] NATURAL, OR MATCH [position] AGAINST [").concat(key, "] NATURAL;AND jo_job.country_id EQUALS 202"), "AND GROUP::2 START city_name EQUALS ".concat(city, "; OR state_name EQUALS ").concat(state)],
+    conditions: options,
     opiks: ['fuxin.count.options[*].as[totalJobs]']
   }];
 };
 var searchBatchHandler = function searchBatchHandler() {
   var resolve = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
   var reject = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  var e = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
-  var batchResults = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var withThingy = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var e = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var batchResults = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : null;
   var self = this;
   var pao = self.pao;
   console.log('THE BATCH RESULTS');
   console.log(batchResults);
   if (e) return reject(e, null);
   var result = {};
-  result.posts = batchResults[0];
-  result.states = batchResults[1];
-  result.categories = batchResults[2];
-  result.totalJobs = batchResults[3][0].totalJobs;
+
+  if (withThingy) {
+    result.posts = batchResults[0];
+    result.states = batchResults[1];
+    result.categories = batchResults[2];
+    result.totalJobs = batchResults[3][0].totalJobs;
+  } else {
+    result.posts = batchResults[0];
+    result.totalJobs = batchResults[3][0].totalJobs;
+  }
+
   resolve(result);
 };
 
 /***/ }),
-/* 88 */
-/***/ (function(module, exports) {
-
-module.exports = require("webpack");
-
-/***/ }),
+/* 88 */,
 /* 89 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -9852,7 +10209,8 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var crypto = __webpack_require__(6);
 
-var fetch = __webpack_require__(113);
+var fetch = __webpack_require__(113); // const list = require('./json')
+
 
 var FrameTest = function FrameTest(pao) {
   _classCallCheck(this, FrameTest);
@@ -9865,7 +10223,8 @@ var FrameTest = function FrameTest(pao) {
     social: true
   };
   this.url = 'http://public.api.careerjet.net/search?locale_code=en_ZA&affid=0e6712acc74087da913e65985433a122&keywords=web developer&location=gauteng&pagesize=50';
-  this.fetch = fetch; // methods
+  this.fetch = fetch; // this.list = list
+  // methods
 
   this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* init */];
   this.handleFrameTestTask = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* handleFrameTestTask */];
@@ -12669,6 +13028,13 @@ var searchBatchHandler = function searchBatchHandler() {
     batch: batchResults
   });
 };
+
+/***/ }),
+/* 137 */,
+/* 138 */
+/***/ (function(module, exports) {
+
+module.exports = {"jobs":[{"locations":"South Africa","site":"","date":"Fri, 20 Mar 2020 16:43:53 GMT","url":"http://jobviewtrack.com/en-za/job-1d4d41654805031a4f5463021a046c2f0041181c0153795b584e440503075400222b0d0002130d0032010712444854434a66270b4618540b6a220f150021475f5d4b19/63f4f57ab87a1dc3d800e748090e146d.html?affid=0e6712acc74087da913e65985433a122","title":"Health Care Financing Specialist","description":"Reports to: Director of Technical Assistance Location: Somewhat flexible, but requires considerable travel and significant portion of the year in Bamako. About Muso: Muso is a rapidly growing global health organization, committed that no on...","company":"Muso","salary":""},{"salary_min":"50","locations":"South Africa","salary_type":"H","date":"Thu, 05 Mar 2020 17:47:14 GMT","description":"Annapurna Solutions in currently looking for a Remote Customer service /Project Manager in South Africa to join our growing team. The Project Manager provides direction, coordination, and execution of small to large scope Product definition...","salary_currency_code":"ZAR","salary":"R50 per hour","site":"","url":"http://jobviewtrack.com/en-za/job-1b12417a4216044e41064f0e4829010a0000241a06194f48490d6005010f401152613e081c13104118483e1c58401d4b5f0b024e6f1b4d066a3601150e00121a061e0a6352404844220f491547061a633908174b540e1b1c470b754240016d2d5207540c05041c473645061e00104f0b704c4305080b557513545c595d/63f4f57ab8a159e62109a7510d153f2c.html?affid=0e6712acc74087da913e65985433a122","title":"virtual work from home - Customer service/ Project Manager","salary_max":"50","company":"Annapurna Solutions"},{"salary_min":"9000","locations":"Kroonstad, Free State","salary_type":"M","date":"Wed, 18 Mar 2020 14:02:20 GMT","description":"Need a capable person with Code 8 lisence Must be alble get new clients Must have a P number Must be computer literate and have his/her own computer. Must be able to work with corporate clients   Founded in 2005 Has large national corporate...","salary_currency_code":"ZAR","salary":"R9000 - 12000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1e12417d48171b4e641b4e171a0e024731451700071a49425c432f340a1d5354630c06151c080922370707075844510d79010c06491d430a090f6c3300431c060010434a532f6e0b011a551b4c625a535f565714/63f4f57aa137200750a2f2b934d1fd8f.html?affid=0e6712acc74087da913e65985433a122","title":"pest control technician","salary_max":"12000","company":"A'Africa Pest Prevention"},{"salary_min":"30000","locations":"Johannesburg, Gauteng","salary_type":"M","date":"Thu, 20 Feb 2020 01:46:04 GMT","description":"(Remote, Full Time, Anywhere in the World) We are looking for self-motivated and results-driven software professionals to join our Global Tech Team and help us leverage automation and technology to transform remarkable companies and free pe...","salary_currency_code":"ZAR","salary":"R30000 - 65000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1e1b416e7f294f2a4202450f07110b156772110506074f0b79485b010301571152612d333e472145020d051c5a4e4f2f6901190b4b1b50061a633c02084f000d6841181a0c1a19/63f4f57a61a428f3ef98df2c22d2cc72.html?affid=0e6712acc74087da913e65985433a122","title":"CRM & ERP Developer / Expert - Remote","salary_max":"65000","company":"Deep Consulting Solutions"},{"salary_min":"30000","locations":"Johannesburg, Gauteng","salary_type":"M","date":"Thu, 20 Feb 2020 00:27:52 GMT","description":"(Remote, Full Time, Anywhere in the World) We are looking for self-motivated and results-driven software professionals to join our Global Tech Team and help us leverage automation and technology to transform remarkable companies and free pe...","salary_currency_code":"ZAR","salary":"R30000 - 65000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1e1d416342000a4e6d27223007071a10045211482c1d4d42534848166d2852184c433b150f040e22260d08105e0b777e2f360a03480045433b0e08131241060d6841181a0c1a19/63f4f57ad38298c5280477db106fe23f.html?affid=0e6712acc74087da913e65985433a122","title":"Full Stack Software Engineer (Node.js, React, AWS) - Remote","salary_max":"65000","company":"Deep Consulting Solutions"},{"salary_min":"12000","locations":"Edenvale, Gauteng","salary_type":"M","date":"Fri, 13 Mar 2020 12:57:26 GMT","description":"International company since 1914 expanding needs 20 reps/managers to start immediately OWN CAR A MUST No experience needed full training provided by company appointments set by company Responsibilities: Developing and identifying new sales ...","salary_currency_code":"ZAR","salary":"R12000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1348417e4c080a1d0739410d09060b151622270905165929704c4305080b550721515a505f515d/63f4f57a0176c53dacb64afcf9e45588.html?affid=0e6712acc74087da913e65985433a122","title":"Sales Managers","salary_max":"12000","company":"Dynamic Promotions"},{"salary_min":"15","locations":"Cape Town, Western Cape","salary_type":"H","date":"Fri, 14 Feb 2020 14:41:29 GMT","description":"Wonder is an on-demand research network where bright minds like you come to explore intriguing and intellectually stimulating topics. With Wonder, you can earn while you learn. It's simple. Do research, get paid. The research you'll do serv...","salary_currency_code":"USD","salary":"$15 per hour","site":"","url":"http://jobviewtrack.com/en-za/job-1a1a416b5f010a02461a430648330b140041060b01716c5958484105010d4254771101150b1516223707041e5f45545954443d0b541141110b096c35005311091b1042297b5f4801030f491745625a535f505c14/63f4f57a96ca72c90b06f9ea3bb8a669.html?affid=0e6712acc74087da913e65985433a122","title":"Join Wonder's Community of Freelance Research Writers!","salary_max":"15","company":"Wonder"},{"salary_min":"40000","locations":"East London, Eastern Cape","salary_type":"M","date":"Tue, 10 Mar 2020 07:59:34 GMT","description":"Duties and Responsibilities: 1. Review cashbook processed by the Finance Officer to ensure that expenses are allocated to the correct GL account and project /cost centres; 2. Conduct Monthly Balance Sheet Recons: o Check all Creditors Recon...","salary_currency_code":"ZAR","salary":"R40000 - 45000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1c4a417d5f0b050b440000220b0201120b5415061d716b485e42580a1b0f490022331a0e04020654755a5b4313190c/63f4f57a7404882d6e8f278019416344.html?affid=0e6712acc74087da913e65985433a122","title":"PROJECT ACCOUNTANT","salary_max":"45000","company":"Sibanye Business Group (Pty) Ltd"},{"salary_min":"90000","locations":"East London, Eastern Cape","salary_type":"M","date":"Tue, 10 Mar 2020 07:36:40 GMT","description":"The CFO is accountable for the administrative, financial, and risk management operations on the organization’s Global Fund, including the development of a financial and operational strategy, metrics tied to that strategy, and the ongoing de...","salary_currency_code":"ZAR","salary":"R90000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-4b1c416e450d0a080732490d090f0d0e044c54270f154348585f2f2707074212002c0e0707040052762e001d4b455e444c084f21411249000d136c240d49110e493543455c434e0d0e022532490d090f0d0e044c755a5b4313190c/63f4f57a4eb180963e6166a9383adbe6.html?affid=0e6712acc74087da913e65985433a122","title":"CHIEF FINANCIAL OFFICER","salary_max":"90000","company":"Sibanye Business Group (Pty) Ltd"},{"salary_min":"20000","locations":"Cape Town, Western Cape","salary_type":"M","date":"Mon, 24 Feb 2020 11:52:15 GMT","description":"The financial accountant will provide financial and administrative support to board members, management, colleagues, donors and other stakeholders of HOPE Cape Town Trust and Association. Candidate will be responsible for all financial repo...","salary_currency_code":"ZAR","salary":"R20000 - 24000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-494a416b440a0e00441d410f48200d040a551a1c081d5e297c4e4e0b1a0053154e176a270709044e1701081f2b190f1c1a5d5b/63f4f57a4bc81f11b2d05fc0f7991109.html?affid=0e6712acc74087da913e65985433a122","title":"Financial Accountant","salary_max":"24000","company":"HOPE Cape Town"},{"locations":"Johannesburg, Gauteng","site":"","date":"Fri, 27 Mar 2020 08:04:14 GMT","url":"http://jobviewtrack.com/en-za/job-1d1a417d5f0b0b1b4400002c1f0f0b15677006070d06495f3f625a0a0a1c2646125259565a/9d2595fca8a59ff1047b3d3f5b796a4a.html?affid=0e6712acc74087da913e65985433a122","title":"Product Owner","description":"Nedbank Recruiting   Requisition ID: 103055   Recruitment Consultant: Nomathamsanqa Nonkonyana   Closing Date: 02nd April 2020   Job Family   Information Technology   Career Stream   It Application Development   Leadership Pipeline   Manage...","company":"Nedbank","salary":""},{"locations":"Johannesburg, Gauteng","site":"","date":"Fri, 27 Mar 2020 08:03:15 GMT","url":"http://jobviewtrack.com/en-za/job-1213416c43050317540021515a505f5051/c8219c309d291431b3dc951803a34b74.html?affid=0e6712acc74087da913e65985433a122","title":"FTP Analyst","description":"Nedbank Recruiting   Job Purpose   The FTP function plays an important role in Nedbank in terms of:  Transferring interest rate risk and liquidity risk to a central unit (BSM) for the strategic management thereof.  Rewarding money-in busine...","company":"Nedbank","salary":""},{"locations":"Johannesburg, Gauteng","site":"","date":"Fri, 27 Mar 2020 07:49:52 GMT","url":"http://jobviewtrack.com/en-za/job-1c48416a5f050b1b460045432508000e0b47542d0714434558485f662207491d4e0448261c060155151c0c537a59524a5f0502034276671109051b06114554381b1c4d595c4040014f2b4913490d0d041c652252150c1c125e4e1d7d5f0b081c46194d066a2c07090c4e13482c1d4d42534848166e5c154511545c/b364d3f60d828356ab427836774bbbe7.html?affid=0e6712acc74087da913e65985433a122","title":"Graduate Programme : Graduate Mining Engineer","description":"Requisition ID: 29668   Job Category: Engineering   With over six decades of business and technical experience in the mining, energy, and infrastructure sectors, we understand that challenges are changing rapidly in every industry. We respo...","company":"Hatch","salary":""},{"salary_min":"25000","locations":"Centurion, Gauteng","salary_type":"M","date":"Fri, 14 Feb 2020 05:52:39 GMT","description":"“Customers will never love a company, until the employees love it first” Trendsetters Travel is seeking a Senior Travel Administrator (preferably with Group & MICE experience) to join our dynamic team. This position is responsible for fulfi...","salary_currency_code":"ZAR","salary":"R25000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1c1c417e480a0601555461070508000e165406091d1c5829695f4c120a020735440e010f07141152151c060128785843440b1d4e730641150d0d6c26014d1d0600005e595c5942166d3a5515560604605c555411425d/63f4f57a54903d21c2ccbf99e4d0d60f.html?affid=0e6712acc74087da913e65985433a122","title":"Senior Travel Administrator","salary_max":"25000","company":"Trendsetters Travel"},{"locations":"Johannesburg, Gauteng","site":"","date":"Sun, 22 Mar 2020 02:44:13 GMT","url":"http://jobviewtrack.com/en-za/job-1e1a4168401403015e19450d1c632d08104e070d057218190c1c1a50/96cff2e408db3df9ddae96a021643f5c.html?affid=0e6712acc74087da913e65985433a122","title":"Employment Counsel - MEA","description":"You're seeing information for Paris. To see local features and services for another location, select a different city. Show more   Traveling?   Employment Counsel - MEA   Legal   in Johannesburg, South Africa   EMPLOYMENT COUNSEL - MEA   At...","company":"Uber","salary":""},{"salary_min":"600000","locations":"Johannesburg, Gauteng","salary_type":"Y","date":"Fri, 27 Mar 2020 08:59:54 GMT","description":"Education   CA(SA)    Skills   Candidates coming from the big four will get first preference  Good academics    Please visit our website to submit your CV directly or to view other finance related jobs. If you have not had any response in t...","salary_currency_code":"ZAR","salary":"R600000 per year","site":"","url":"http://jobviewtrack.com/en-za/job-4e1f416348130317072555020408080e0044542b2871696a1d6e6c663e1b4618490501040a47266176260c0446521d7c58050307411d45076a2f0b100959542b287218190c1c1a50/e7c2f69b64b2e69615217e49534d31fb.html?affid=0e6712acc74087da913e65985433a122","title":"Newly Qualified CA (SA)","salary_max":"600000","company":"Communicate Recruitment"},{"locations":"Johannesburg, Gauteng","site":"","date":"Fri, 27 Mar 2020 08:59:35 GMT","url":"http://jobviewtrack.com/en-za/job-1b1e41657f442e0a4a1d4e433f0e1c0c6768264828174742530d681c1f0b551d450d0b046c2f3700350c041a44297c49400d014e701b52086a293c47324f06036841181a0c1a19/428e3c4397b4a20d65e7d885dde63400.html?affid=0e6712acc74087da913e65985433a122","title":"HR Admin (Work Experience Program)","description":"EXTERNAL VACANCY   POSITION:HR ADMIN (WORK EXPIERIENCE PROGRAME)   REFERENCE NO:2020/03/29/HR   LOCATION:GREENSTONE AND FOURWAYS   REPORTING TO:HR MANAGER   CLOSING DATE:2020 MARCH 29   STIPEND:TBC   PURPOSE OF THE JOB   The recommended Can...","company":"Afrika Tikkun Inc","salary":""},{"salary_min":"650000","locations":"Johannesburg, Gauteng","salary_type":"Y","date":"Fri, 27 Mar 2020 08:59:25 GMT","description":"If you''re looking for a role where you can work along-side highly skilled, like-minded individuals, building next-generation systems impacting the company''s future, then this is the role for you.   Job & Company Description:   This is you...","salary_currency_code":"ZAR","salary":"R650000 per year","site":"","url":"http://jobviewtrack.com/en-za/job-1b49417d54100701495464061e0402081545066a390a5e4352432f200a1842184f130d136f555711455f5d/b9ddf280c20ad3ddb4608811fa32f668.html?affid=0e6712acc74087da913e65985433a122","title":"Python Developer","salary_max":"650000","company":"NETWORK IT BRUMA"},{"locations":"Durban, KwaZulu-Natal","site":"","date":"Fri, 27 Mar 2020 08:59:21 GMT","url":"http://jobviewtrack.com/en-za/job-194e416b4216180f5510490d0f412d0b00521f6a2a1f4f59562f6b0b1d194606440a06066f555711465c50/f7fd50a4d91e3b53f0cff800ab176c93.html?affid=0e6712acc74087da913e65985433a122","title":"Forwarding clerk","description":"Forwarding Clerk – R12000 CTC   Coordinating of overseas collections from order placement to delivery (air freight, sea   freight, out of gauge, project and hazardous cargo)   Identifying and arranging best methods of transport according to...","company":"Khulanathi Chartered Alberante","salary":""},{"locations":"Cape Town, Western Cape","site":"","date":"Fri, 27 Mar 2020 08:59:05 GMT","url":"http://jobviewtrack.com/en-za/job-4e4e417e42021b19460645432c041802094f04050c1d5e0b6e48430d001c0759650d0f0800020052763b0c1d43444f0d7e0b091a50155206482400000c4e110d1b7179445b595a051d0b073045150d0d011708451a1c4936444c544348011d6c74114e0a07134e23005611040603474e53590d2101094e1a45061a633d08035403091b160a6e534a440a0a0b5575125159565753/cac381fea9b31251ec8b4a0cc2252cf5.html?affid=0e6712acc74087da913e65985433a122","title":"Senior Software Development Engineer - EC2 Placement","description":"DESCRIPCIÓN   Build the systems that optimize how EC2 matches requests for Instances with the underlying compute capacity. EC2 Placement is seeking talented engineers to build the online and offline optimization systems for compute workload...","company":"Amazon","salary":""}],"hits":77396,"response_time":0.0394449234008789,"type":"JOBS","pages":3870}
 
 /***/ })
 /******/ ]);
