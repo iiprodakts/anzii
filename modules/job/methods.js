@@ -1,3 +1,4 @@
+import FuzzySearch from "fuzzy-search"
 
 
 
@@ -8,7 +9,8 @@ export const init = function(){
   this.log('Job has been initialised') 
   this.listens({
 		
-	'handle-job-task': this.handleJobTask.bind(this)
+	'handle-job-task': this.handleJobTask.bind(this),
+	'get-new-jobs': this.handleGetNewJobs.bind(this)
   
   })
 
@@ -87,36 +89,50 @@ export const handleJobTask = async function(data){
 
 				  const forwarded = clientRequest.req.headers['x-forwarded-for']
 				  const ip = forwarded ? forwarded.split(/, /)[0] : clientRequest.req.connection.remoteAddress
-				  let uAgent = clientRequest.req.headers['user-agent']
+				  let uAgent = clientRequest.req.headers['user-agent'] 
+				  let blackList = ['sort','limit','currentPage','skip','jq']
 				  let urlParametersString = '' 
+				  let urlParameters = []
 
-				  options.keywords ? urlParametersString += `&keywords=${options.keywords}`: ''
-				  let urlParameters = options.filters.map((para,i)=>{
-					  if(para.key === 'location') para.value = "Cape Town"
-					  return `&${self.getDbKey(para.key)}=${para.value}`
+				  options.jq ? urlParametersString += `&keywords=${options.jq}`: ''
+				  options.sort ? urlParametersString += `&sort=${options.sort}`: '' 
+				  options.currentPage ? urlParametersString += `&page=${options.currentPage}`: ''  
+				  
+				  Object.entries(options).forEach((para,i)=>{
+					
+					  let key = para[0]
+					  if(blackList.indexOf(key) < 0){
+
+						 urlParameters.push(`&${self.getDbKey(key,'source')}=${para[1]}`)
+					  }
+					  
 				  })
 
 				  console.log('THE URL PARAMETERS')
 				  console.log(urlParameters)
-				  urlParametersString += `${urlParameters.join('')} &limit=${extraJobsLimit}`
+				  urlParametersString += `${urlParameters.join('')} &pagesize=${extraJobsLimit}`
 				  let url = `${self.url}${urlParametersString}`
 
-				  url += `&user_ip=${ip}&user_agent=${uAgent}`
+				  url += `&user_ip=${ip}&user_agent=${uAgent}` 
+				  self.log('THE URL')
+				  self.log(url)
+				  self.log(options)
 
 				  self.fetch.get(url).then(response => {
 					console.log('THE REQUEST HAS SUCCEEDED TO CAREERJET')
 					console.log(response.data)
 					// return resolve({success: response.data}) 
 				
-			     
+				 
+					    if(response.data.type.toUpperCase() !== 'JOBS') return self.callback(null,jobs)
 			     
 						let refinedJobs = self.refineOutsourcedJobs(response.data.jobs) 
-						console.log(refinedJobs) 
-						console.log(jobs) 
-						console.log(response.data.hits) 
-						console.log(jobs.totalJobs)
+						// console.log(refinedJobs) 
+						// console.log(jobs) 
+						// console.log(response.data.hits) 
+						// console.log(jobs.totalJobs)
 						jobs.totalJobs = jobs.totalJobs + response.data.hits
-						console.log(jobs.totalJobs)
+						// console.log(jobs.totalJobs)
 						jobs.posts = jobs.posts.concat(refinedJobs) 
 						self.log(refinedJobs.length)
 						                                   
@@ -126,8 +142,8 @@ export const handleJobTask = async function(data){
 				  }).catch(err => {
 
 					  self.callback(null,jobs)
-					  console.log('JOBS FROM SOURCE FAILED DUE TO')
-					  return console.log(err) 
+					//   console.log('JOBS FROM SOURCE FAILED DUE TO')
+					//   return console.log(err) 
 				  });
 			     
 			     
@@ -165,7 +181,7 @@ export const handleJobTask = async function(data){
 				  let uAgent = clientRequest.req.headers['user-agent']
 			  
 				  let urlParameters = options.map((para,i)=>{
-					  return `&${para.key}=${para.value}`
+					  return `&${self.getDbKey(para.key,'source')}=${para.value}`
 				  })
 				  let urlParametersString = `${urlParameters.split(',')} &limit=${extraJobsLimit}`
 				  let url = `${self.url}${urlParametersString}`
@@ -214,6 +230,402 @@ export const handleJobTask = async function(data){
 } 
 
 
+export const handleGetNewJobs = function(data){
+	
+	const self = this 
+	self.logSync('THE NEWJOBS HANDLE REQUEST')
+	self.getNewJobs()
+}
+
+export const getNewJobs = async function(data){
+	
+	const self = this 
+	
+	
+	let ip = self.ip.address()
+	let uAgent = "Mozilla/5.0"  
+	
+	const jobsThreshold  = 100 
+	let pagesize = 20
+	let callCount = jobsThreshold / pagesize 
+	let sort = 'date' 
+	let hits = 1001
+	let accumulatedJobs = [] 
+	let allJobs = []
+	let filteredJobs = [] 
+	let failureCounts = 0 
+	let breakOutOfLoop = false
+	
+	for(let i=0;i <= callCount; i++){
+	
+	
+	   if(accumulatedJobs.length >= jobsThreshold) break 
+	   
+	   	let url =`${self.url}&page=${i}&pagesize=${pagesize}&sort=${sort}&user_ip=${ip}&user_agent=${uAgent}` 
+	   	
+		 await self.fetch.get(url)
+		 .then((response)=>{
+		 	
+		 	 if(response.data.type !== 'JOBS') {
+		 	 	
+		 	 	 if(failureCounts >= 5){
+					 breakOutOfLoop = true
+		 	 	 	 
+		 	 	 }else{
+		 	 	 	
+		 	 	 	failureCounts++ 
+		 	 	 }
+		 	 	
+		 	 }else{
+				  
+				self.logSync('we GOT these Many Jobs')
+				self.logSync(response.data.jobs.length)
+		 	 	let jobs = response.data.jobs 
+		 	 	accumulatedJobs.push(jobs) 
+		 	 	  accumulatedJobs.length === 1 ? hits = response.data.hits :''
+		 	 	  accumulatedJobs.length === 1 
+		 	 	      ? hits < jobsThreshold 
+		 	 	           ? jobsThreshold = hits - i
+		 	 	           : '' 
+		 	 	      :''
+		 	 }
+		 	 
+		 }) 
+		 .catch((e)=>{
+		 	
+		 	   self.logSync('Jobs fetching has bumped into an error') 
+		 	   self.logSync(e)
+		 }) 
+
+		 if(breakOutOfLoop) break
+		
+	}
+	
+
+	
+	
+			// // console.log('THE REQUEST FOR USER ALERTS HAS SUCCEEDED')
+			// // console.log(response.data)
+			// console.log('THE TOTALJOBS')
+			// console.log(response.data.jobs.length)
+			// // return resolve({success: response.data}) 
+
+			self.logSync('THE ACCUMULATED JOBS EQUALS')
+			self.logSync(accumulatedJobs.length)
+	
+			if(accumulatedJobs.length === 0) return 
+			accumulatedJobs.forEach((jobsGroup,i)=>{
+
+				if(i === 0){
+					self.logSync('tHE FIRST ARRAY')
+					self.log(jobsGroup)
+				}
+				allJobs = [...allJobs,...jobsGroup]
+				self.logSync('alljobs lengh at this point after concat')
+				self.logSync(allJobs)
+			})
+			 
+
+
+			// allJobs = accumulatedJobs[0]
+			self.logSync('ALLJOBS')
+			self.logSync(allJobs.length)
+
+			
+			let refinedJobs = self.refineOutsourcedJobs(allJobs) 
+			if(refinedJobs.length < 1) return 
+			self.logSync('the RefinedJobs')
+			self.logSync(refinedJobs.length)
+			
+			// refinedJobs = refinedJobs.filter(async(j,i)=>{
+
+			// 	let now = new Date() 
+			// 	let jobDate = new Date(j.date) 
+			// 	let yesterday = null
+			// 	now.setHours(0)
+			// 	now.setMinutes(0)
+			// 	now.setMilliseconds(0)
+			// 	jobDate.setHours(0) 
+			// 	jobDate.setMinutes(0) 
+			// 	jobDate.setMilliseconds(0) 
+			// 	yesterday = now.getDate() - 1
+
+			// 	// self.log('THE DATES') 
+			// 	// self.log(yesterday) 
+			// 	// self.log(jobDate.getDate())
+
+			// 	if(jobDate.getDate() === yesterday) {
+			// 		// await self.log('THE DATES ARE THE SAME') 
+
+			// 		return true
+			// 	}else{
+			// 		// await self.log('THE DATES DONT MATCH')
+			// 	}
+
+				
+			// })
+			// console.log('THE DATE REFINED JOBS')
+			// console.log(refinedJobs)
+			
+			
+			self.getSubscribers('Daily')
+			.then((users)=>{
+				
+				if(!users) return 
+				
+					let sendList = [] 
+				
+					self.logSync('THE CURRENT USERS')
+					self.logSync(users)
+					users.forEach((user,i)=>{
+					
+						if(sendList.length > 0){
+						
+							let email = user.email 
+							let sendUser = null
+							let setUser = sendList.filter((u,p)=>{
+							
+								if(u.email === email) return true
+							
+							}) 
+							
+							if(setUser && setUser.length > 0){ 
+
+								sendUser = self.getMailRecipient(user,refinedJobs,true)  
+							}
+									
+							if(sendUser){
+							
+								console.log('the setuser')
+								console.log(setUser)
+								setUser[0].send.push(sendUser)
+							
+							
+							}else{
+							
+								let sendUser = self.getMailRecipient(user,refinedJobs) 
+								if(sendUser){
+									
+									sendList.push(sendUser)
+								}
+							}
+							
+						}else{
+						
+						
+							let sendUser = self.getMailRecipient(user,refinedJobs) 
+							self.logSync('THE SENDUSER::FIRST ONE')
+							self.logSync(sendUser) 
+
+							if(sendUser){
+							
+								sendList.push(sendUser) 
+							
+							}
+							
+						}
+					
+					
+					})
+					
+					if(sendList.length > 0){
+					
+
+						self.logSync('THE EMAILS TO BE SENT')
+						self.logSync(sendList) 
+
+						let sending = [] 
+						 
+						sendList.forEach((s,i)=>{
+
+							sending.push({message:self.getEmailTemplate(s.email,s.send)})
+							
+						})
+
+						self.emit({type:"send-email",data:{mail:sending,callback:self.alertEmailResponses.bind(this)}})
+					
+					}else{
+
+						self.logSync('THE SENDLIST IS EMPTY')
+					}
+			
+					
+				
+			})
+			.catch((e)=>{
+				
+				self.log('query found no subscribing users')
+				self.log(e)
+				return 
+			})
+				
+			
+				//return                          
+		
+	//return response.json();
+		
+	
+} 
+
+export const getSubscribers = function(frequency){
+
+
+	const self = this 
+
+
+	return new Promise((resolve,reject)=>{
+
+		const self = this 
+		let pao = self.pao 
+		// let uid = pay.ID
+
+		let queries = {
+			returnFields: ['jo_job_alert_subscriber.id','email','frequency'],
+			tables:['jo_job_alert_subscriber','jo_job_alert'],
+			joins: 2,
+			joinPoints: ['jo_job_alert_subscriber.u_id EQUALS jo_job_alert.u_id'],
+			conditions:  [`jo_job_alert_subscriber.id EQUALS KEY::alert_mail_id`,` AND jo_job_alert.frequency EQUALS ${frequency}`],
+			opiks: ['field.job_keyword.as[jobKeyword]'],
+	   }
+	
+
+		
+	
+			
+		self.query(
+				'mysql.SEARCH',
+				queries,
+				self.multiDataRequestHandler.bind(this,resolve,reject)
+			)
+			
+	
+	
+	})
+	
+
+
+}
+
+
+export const getMailRecipient = function(user,jobs,isSetUser=false){
+	
+	const self = this 
+	const FuzzySearch = self.fuzzySearch 
+	//let mailSender = `mashelesepru@gmail.com`
+	// console.log('THE JOBS IN MAIL RECIPIENT')
+	// console.log(jobs)
+	let searchr = new FuzzySearch(jobs,{findAllMatches:true,keys:['jobTitle']}) 
+	let userJobs = searchr.search(user.jobKeyword) 
+	let modifiedUJobs = []
+	self.logSync('THE VALUE OF FUZZYSEARCH')
+	self.logSync(jobs[0])
+
+	self.logSync(user.jobKeyword)
+	self.logSync('GETMAILCLIENTS USERJOBS')
+	self.logSync(userJobs[0])
+	if(userJobs && userJobs.length > 0){
+	
+		  userJobs.forEach((job,i)=>{
+			modifiedUJobs.push(job.item)
+
+		  })
+			if(modifiedUJobs.length > 10){ 
+			
+			    modifiedUJobs = modifiedUJobs.splice(0,10)
+		
+			} 
+	
+			if(isSetUser) return {jobs:modifiedUJobs,title:`${user.jobKeyword} jobs`}
+	
+		return {
+				
+				email: user.email,
+				send: [
+					
+					{
+						jobs:modifiedUJobs,
+						title: `${user.jobKeyword} jobs`
+						
+					}
+				]
+		
+			}
+	
+	
+	}else{
+	
+	  return null
+	}
+	
+	
+}
+
+export const getEmailTemplate = function(email,jobs){
+	
+	const self = this
+	
+	let mailSender = 'mashelesepru@gamil.com' 
+	let jobsInHtml = [] 
+	
+	
+	jobs.forEach((j,i)=>{
+		
+		   let jobsList = '<ul>' 
+		   self.logSync('user list of jobs')
+		   self.logSync(j) 
+		   let jbs = j.jobs
+		   
+		   jbs.forEach((jobf,ji)=>{
+
+			jobsList += `<li> <a href=${jobf.url}> ${jobf.jobTitle} </a></li>` 
+			self.logSync('THEJOBLISTIN IN ALOOOP')
+			self.logSync(jobsList) 
+
+			// if(jobs.length > 2 && ji > 3) return false 
+			// if(jobs.length === 2 && ji >= 4) return false 
+			
+		  
+
+		   })
+
+				
+				//  if(job >= 4) break
+		   
+		  
+		   self.logSync('THE JOBSLIST')
+		   self.logSync(jobsList)
+		  jobsInHtml.push(`
+			 <div> ${jobsList}</u> <a href=https://www.jobbri.herokuapp.com> 
+			 <button> View all ${j.title} </button></a></div>
+		  `)
+	})
+	
+	
+	
+	 return {
+		 
+			to: email,
+			from: mailSender,
+			subject: "Your job alerts subscriptions",
+			html: jobsInHtml.join('')
+		 
+		 }
+   
+
+   
+   
+}
+
+
+export const alertEmailResponses = function(result){
+
+	const self = this 
+
+	console.log('THE EMAILSENDING RESPONSE')
+	console.log(result)
+}
+
+
 export const refineOutsourcedJobs = function(jobs){
 	
 	    
@@ -221,20 +633,39 @@ export const refineOutsourcedJobs = function(jobs){
 	const pao = self.pao
 	const contains = pao.pa_contains   
 	let refinedJobs = []
+	self.log('THE JOBS LENGTH')
+	self.log(jobs.length)
 
 
 	jobs.forEach((job,i)=>{
 		
+		self.logSync('THE CURRENT JOB')
+		self.logSync(job)
 		let newJob = {}
 		
 		newJob.jobType = job.job_type || 'Not-specified' 
 		newJob.date = job.date 
-		newJob.employer = job.company 
+		newJob.employer = job.company ? job.company.trim() != '' ? job.company : 'Unspecified' : 'Unspecified'
 		newJob.jobTitle = job.title 
 		newJob.url = job.url 
 		
 		
-		if(contains(job,['salary_min','salary_max'])) newJob.jobSalary = `${job.salary_min}-${job.salary_max}`  
+		if(contains(job,['salary_min','salary_max'])){ 
+			newJob.jobSalary = `${job.salary_min}-${job.salary_max}`
+		}else{
+
+
+            if(!contains(job,'salary')){
+
+				newJob.jobSalary =  'Market related'
+
+			}else{
+
+				newJob.jobSalary = job.salary.trim() !== '' ? job.salary : 'Market related'
+
+			}
+			
+		}  
 		
 		if(contains(job,'locations')){
 			
@@ -310,12 +741,13 @@ export const getJobsWithThingy = function(pay){
 	
 	const self = this 
 	const pao = self.pao 
+	const contains = pao.pa_contains
 	console.log('THE PAYLOAD IN GETJOBS')
 	console.log(pay)
 	// let u = pay.ID
 	// let catID = pay.catID
 	let range = {}
-	if(pay.skip && pay.limit){
+	if(contains(pay,'skip') && contains(pay,'limit')){
 		range = {offset:pay.skip,count: pay.limit}
 	}
 	
@@ -328,8 +760,8 @@ export const getJobsWithThingy = function(pay){
 
 		console.log('GET JOBS WITH THING REQUEST')
 		console.log(pay)
-		console.log(pay.filters)
-		console.log(pay.filters[0])
+		// console.log(pay.filters)
+		// console.log(pay.filters[0])
 		let conditions = self.generateQueryConditions(pay) 
 		console.log(conditions)
 		// return resolve(conditions)
@@ -445,25 +877,42 @@ export const generateQueryConditions = function(options){
     const self = this 
 	const pao = self.pao
 	const contains = pao.pa_contains
-    let conditions = []
+	let conditions = [] 
+	let filters = [] 
+	let blackList = ['sort','limit','currentPage','skip','jq']
    
     
-    if(contains(options,'keywords')){
-    	   conditions.push(self.getCondition({key:options.keywords},'keywords'))
+    if(contains(options,'jq')){
+    	   conditions.push(self.getCondition({key:options.jq},'jq'))
     }else{
-	
-	
-    conditions.push(self.getCondition({key:202},'location').trim())
+		conditions.push(self.getCondition({key:202},'location').trim())
     }
-    if(contains(options,'filters')){
+    // if(contains(options,'filters') && options.filters.length >= 1){
 		
-		let filters = options.filters.map((f,i)=>{
+	// 	let filters = options.filters.map((f,i)=>{
 
-			return {key:f.key,value:f.value,table:'jo_job',operand: 'ISEQUALS'}
+	// 		return {key:f.key,value:f.value,table:'jo_job',operand: 'ISEQUALS'}
 
-		})
-      	conditions.push(self.getCondition(filters,'AND'))
-	}
+	// 	})
+    //   	conditions.push(self.getCondition(filters,'AND'))
+	// }
+
+
+	Object.entries(options).forEach((f,i)=>{
+
+		self.log('THE ENTRIY VALUE')
+		self.log(f)
+		if(blackList.indexOf(f[0]) < 0){
+
+			filters.push({key:f[0],value:f[1],table:'jo_job',operand: 'ISEQUALS'})
+		}
+	
+
+	})
+
+	console.log('THE VALUE OF THE FILTERS')
+	console.log(filters)
+	if(filters.length >= 1) conditions.push(self.getCondition(filters,'AND'))
 	
 	return conditions
  
@@ -476,7 +925,7 @@ export const getCondition = function(option,id=''){
 	const contains = pao.pa_contains
 	 switch(id){
 	 	
-	 	case 'keywords':
+	 	case 'jq':
 	 	 return `GROUP::2 START GROUP::2 START MATCH [job_title] AGAINST [${option.key}] NATURAL, OR MATCH [position] AGAINST [${option.key}] NATURAL;AND jo_job.country_id EQUALS 202`
 	 	case 'location':
 	 	  return `jo_job.country_id EQUALS 202`
@@ -498,21 +947,31 @@ export const formatQuery = function(options,an=''){
 	const pao = self.pao
 	const contains = pao.pa_contains
 	 let len = options.length 
+	 self.log('THE FORMAT QUERY OPTIONS')
+	 self.log(options) 
+	 self.log(an)
 	 
 	 let stri = ''
 	 
 	  
 	    options.forEach((i,p)=>{
 	    	
-	    	   if(p === 0 && i.key === 'location'){ 
-	    	   
-	    	      stri += `${an.toUpperCase()} GROUP::${len} START GROUP::2 START city_name EQUALS ${i.value}, OR state_name EQUALS ${i.value}; `
+	    	   if(p === 0 && i.key === 'jl'){ 
+			   
+				  if(len === 1){
+
+					stri += `${an.toUpperCase()} GROUP::2 START city_name EQUALS [${i.value}]; OR state_name EQUALS [${i.value}]`
+
+				  }else{
+					stri += `${an.toUpperCase()} GROUP::${len} START GROUP::2 START city_name EQUALS [${i.value}], OR state_name EQUALS [${i.value}]; `
+				  }
+	    	      
 	    	   	
 	    	   }else if(p === 0){
 	    	   	
 	    	   	 let derivedKey = self.getDbKey(i.key) 
 	    	   	 
-	    	   	 	 if(i.key === 'datePosted'){
+	    	   	 	 if(i.key === 'jdp'){
 					
 						let intExp = i.value
 						let intUnit = '' 
@@ -547,7 +1006,7 @@ export const formatQuery = function(options,an=''){
 	    	   }else{
 	    	   	
 	    	   	  let derivedKey = self.getDbKey(i.key)
-	    	   	 if(i.key === 'datePosted'){
+	    	   	 if(i.key === 'jdp'){
 					
 						let intExp = i.value
 						let intUnit = '' 
@@ -586,25 +1045,48 @@ export const formatQuery = function(options,an=''){
 	
 }
 
-export const getDbKey = function(i){
+export const getDbKey = function(i,sors='jobbri'){
 	
 	const self = this 
 	const pao = self.pao
 	const contains = pao.pa_contains
-	    switch(i){
+
+	if(sors === 'jobbri'){
+
+		switch(i){
 	    	   	 	
 	    	 
 	    	   	 
-	    	   	 	case 'jobType': return 'job_type'
-	    	   	 	case 'salaryRange': return 'salary'
-	    	   	 	case 'careerLevel': return 'exp_level' 
-	    	   	 	case  'categories':  return 'job_category_id' 
-	    	   	 	case 'experience': return 'experience_required_years'
-	    	   	 	default: return i
+			case 'jt': return 'job_type'
+			case 'jsr': return 'salary'
+			case 'jcl': return 'exp_level' 
+			case  'jcts':  return 'job_category_id' 
+			case 'je': return 'experience_required_years'
+			default: return i
+			
+			
+		} 
+		
+
+	}else{
+
+		switch(i){
 	    	   	 	
-	    	   	 	
-	    	   	 } 
+	    	 
 	    	   	 
+			case 'jt': return 'contractperiod'
+			case 'jsr': return 'salary'
+			case 'currentPage': return 'page'
+			case 'jcts': return 'exp_level' 
+			case 'je': return 'experience_required_years'
+			case 'jl': return 'location'
+			default: return i
+			
+			
+		} 
+		
+	}
+	    
 	    	   	 
 	    	   	 
 }
@@ -646,7 +1128,7 @@ export const searchBatch = function(options,range){
 					conditions: options,
 					opiks: ['field.job_title.as[jobTitle]','field.company_logo.as[logo]','field.salary.as[jobSalary]',
 					'field.name.as[employer]','field.salary_currency.as[currency]','field.is_main_featured.as[isMainFeatured]',
-					'field.job_type.as[type]','field.approved_at.as[date]','field.is_featured.as[isFeatured]',
+					'field.job_type.as[jobType]','field.approved_at.as[date]','field.is_featured.as[isFeatured]',
 					'field.is_free.as[isFree]','field.is_sponsored.as[isSponsored]','field.city_name.as[jobCity]'],
 					range:`${range.offset},${range.count}`,
 					soundex: true,
@@ -673,6 +1155,18 @@ export const searchBatch = function(options,range){
 		   },
 
 	   ]
+}
+
+export const multiDataRequestHandler = function(resolve=null,reject=null,e=null,result=null){
+	
+	
+	const self = this 
+	let pao = self.pao
+	console.log('THE TYPE OF E IN DATAREQUEST HANDLER')
+	console.log(e)
+	if(e) reject(new Error('An error has occured Inside MYSQL'))
+	resolve(result)
+
 }
 
 export const searchBatchHandler = function(resolve=null,reject=null,withThingy=false,e=null,batchResults=null){

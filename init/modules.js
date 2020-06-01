@@ -13,12 +13,18 @@ import Authentication from '../modules/authentication'
 import FrameTest from '../modules/frametest'
 import Adash from '../modules/adash'
 import Inalerts from '../modules/inalerts'
-import Bookmark from '../modules/bookmark'
+import Bookmark from '../modules/bookmark' 
+import History from '../modules/history'
 import Downloadr from '../modules/downloadr'
 import FileUpload from '../modules/fileupload'
-import Upload from '../modules/upload'
+import Upload from '../modules/upload' 
+import Mailer from '../modules/mailer'
+import Kronjo from  '../modules/kronjo'
 import Asettings from '../modules/asettings'
 export default {
 
-    Test,List,Asettings,FileMan,ImageMan,Upload,Adash,Downloadr,Inalerts,Bookmark,FrameTest,Job,Fetch,Jwt,Hash,Register,Login,Authentication,FileUpload
+    Test,List,Asettings,FileMan,ImageMan,Upload
+    ,Adash,Downloadr,Inalerts,Bookmark,History,FrameTest,
+    Job,Fetch,Jwt,Hash,Register,Login,Authentication,
+    FileUpload,Mailer,Kronjo
 }

@@ -1,4 +1,5 @@
 import routes from './includes/routes'
+import tasks from './includes/tasks'
 import * as middlewares from './includes/globals'
 
 export default  {
@@ -21,6 +22,8 @@ export default  {
         
     },
     router: routes,
+    kronjo: tasks,
+    mailer: '',
     logger: {level: 'info',trans:['file',{path: 'http://www.iiprodakts/logger'}]},
     cluster:{workers: 3,spawn: true,} ,
     server: 'server'

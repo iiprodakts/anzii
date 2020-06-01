@@ -49,6 +49,11 @@ export default  [
         type: 'private'
     },
     {
+        path: '/history',
+        method: 'POST',
+        type: 'private'
+    },
+    {
         path: 'view/:profile',
         method: 'GET',
         type: 'public'

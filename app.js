@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 7);
+/******/ 	return __webpack_require__(__webpack_require__.s = 8);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -253,8 +253,11 @@ var insertOne = function insertOne(insert) {
     try {
       var _handler = insert.outComehandler;
       var _conn = insert.conn;
+      var query = insert.query;
+      self.log('THE INSERT OBJECT');
+      self.log(insert);
       var sql = "INSERT INTO ?? (??) VALUES(?)";
-      var queryAttributes = [insert.table, ['id'].concat(_toConsumableArray(insert.fields)), [null].concat(_toConsumableArray(insert.values))];
+      var queryAttributes = [insert.table, ['id'].concat(_toConsumableArray(query.fields)), [null].concat(_toConsumableArray(query.values))];
       sql = _conn.format(sql, queryAttributes);
       console.log('THE SQL STATEMENT');
       console.log(sql); //  let sql = `INSERT INTO ${data.table} SET ?`
@@ -2322,7 +2325,8 @@ var parseFormatCondition = function parseFormatCondition(con) {
     var cons = con;
     var condition = [];
     cons.forEach(function (kon, i) {
-      var conList = kon.trim().split(' ');
+      // let conList = kon.trim().split(' ')
+      var conList = kon.trim().match(/(\[[^\]]+\]|\S+)/g);
       var operand = '=';
       condition.push("".concat(conList[0], " ").concat(operand, " ").concat(conList[2]));
     });
@@ -2332,9 +2336,10 @@ var parseFormatCondition = function parseFormatCondition(con) {
   } else {
     var _condition3 = '';
     console.log('THE con ITEM');
-    console.log(con);
-    var conList = con.trim().split(' '); // let conList = con.trim().match(/(?:"^\s\[]+|"[^"]*")+/g)
+    console.log(con); // let conList = con.trim().split(' ')
+    // let conList = con.trim().match(/(?:"^\s\[]+|"[^"]*")+/g) 
 
+    var conList = con.trim().match(/(\[[^\]]+\]|\S+)/g);
     console.log('THE CONLIST');
     console.log(conList);
     var operand = '';
@@ -2342,6 +2347,7 @@ var parseFormatCondition = function parseFormatCondition(con) {
     var multiCon = false;
     var match = false;
     var conFuxin = false;
+    var whiteSpace = ' ';
 
     if (conList[0].trim() === 'MATCH' || conList[1].trim() === 'MATCH' || conList[1].trim() === 'FUXIN' || conList[2].trim() === 'FUXIN') {
       if (conList.indexOf('AGAINST') > 0 && conList.length >= 5) {
@@ -2486,15 +2492,19 @@ var parseFormatCondition = function parseFormatCondition(con) {
       // }
 
       leftoperand = multiCon ? conList[3] : conList[2];
+      leftoperand[0] === '[' ? leftoperand = "'".concat(leftoperand.slice(1, leftoperand.length - 1), "'") : leftoperand.indexOf('KEY::') >= 0 ? leftoperand = "".concat(leftoperand.replace('KEY::', '').trim()) : leftoperand = "'".concat(leftoperand, "'");
+      console.log('THE VALUE OF THE LEFFFFFT OPERAND');
+      console.log(leftoperand);
+      console.log(leftoperand.indexOf('KEY::'));
     }
 
     if (!conFuxin) {
-      match ? _condition3 += "".concat(conList[0]) : multiCon ? _condition3 += " ".concat(conList[0], " ").concat(conList[1], " ").concat(operand, " '").concat(leftoperand, "' ") : _condition3 += "".concat(conList[0], " ").concat(operand, " '").concat(leftoperand, "' ");
+      match ? _condition3 += "".concat(conList[0]) : multiCon ? _condition3 += "".concat(whiteSpace, " ").concat(conList[0], " ").concat(conList[1], " ").concat(operand, " ").concat(leftoperand) : _condition3 += "".concat(conList[0], " ").concat(operand, " ").concat(leftoperand);
     }
 
     console.log('THE search FROM CONDITION');
     console.log(_condition3);
-    return _condition3.trim();
+    return _condition3;
   }
 };
 var getOperand = function getOperand(operator) {
@@ -2605,39 +2615,45 @@ var set = function set(_set) {
 /* 6 */
 /***/ (function(module, exports) {
 
-module.exports = require("crypto");
+module.exports = require("axios");
 
 /***/ }),
 /* 7 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-__webpack_require__(8);
-module.exports = __webpack_require__(9);
-
+module.exports = require("crypto");
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = require("@babel/polyfill");
+__webpack_require__(9);
+module.exports = __webpack_require__(10);
+
 
 /***/ }),
 /* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(module, exports) {
 
-"use strict";
-Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server_serverdev__ = __webpack_require__(10);
-
-Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
+module.exports = require("@babel/polyfill");
 
 /***/ }),
 /* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_anzii__ = __webpack_require__(11);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__init_modules__ = __webpack_require__(70);
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server_serverdev__ = __webpack_require__(11);
+
+Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
+
+/***/ }),
+/* 11 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__lib_anzii__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__init_modules__ = __webpack_require__(73);
 
  // import Server from '../shared/modules/server/index'
 
@@ -2654,13 +2670,13 @@ Object(__WEBPACK_IMPORTED_MODULE_0__server_serverdev__["a" /* default */])();
 }); // export default server
 
 /***/ }),
-/* 11 */
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base__ = __webpack_require__(12);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__esm_esm__ = __webpack_require__(20);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_activate__ = __webpack_require__(69);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__base__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__esm_esm__ = __webpack_require__(21);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_activate__ = __webpack_require__(72);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -2682,14 +2698,14 @@ var Anzii = function Anzii() {
 /* harmony default export */ __webpack_exports__["a"] = (new Anzii());
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pillar_pillar__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pillar_pillar__ = __webpack_require__(14);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__pillar_pillar___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0__pillar_pillar__);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__base_core__ = __webpack_require__(18);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_pao__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__base_core__ = __webpack_require__(19);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__base_pao__ = __webpack_require__(20);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -2705,7 +2721,7 @@ var Base = function Base() {
 /* harmony default export */ __webpack_exports__["a"] = (new Base());
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 function _createForOfIteratorHelper(o) { if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (o = _unsupportedIterableToArray(o))) { var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var it, normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
@@ -2719,17 +2735,17 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 // DEPENDECIES 
 var os = __webpack_require__(2);
 
-var util = __webpack_require__(14);
+var util = __webpack_require__(15);
 
-var async = __webpack_require__(15);
+var async = __webpack_require__(16);
 
-var extend = __webpack_require__(16);
+var extend = __webpack_require__(17);
 
 var fs = __webpack_require__(3);
 
 var path = __webpack_require__(0);
 
-var uuid = __webpack_require__(17);
+var uuid = __webpack_require__(18);
 /*@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
@@ -2994,6 +3010,17 @@ module.exports = {
     }
 
     return hash;
+  },
+  p_unikify: function p_unikify(array) {
+    var a = array.concat();
+
+    for (var i = 0; i < a.length; ++i) {
+      for (var j = i + 1; j < a.length; ++j) {
+        if (a[i] === a[j]) a.splice(j--, 1);
+      }
+    }
+
+    return a;
   },
 
   /**
@@ -4014,31 +4041,31 @@ module.exports = {
 };
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports) {
 
 module.exports = require("util");
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports) {
 
 module.exports = require("async");
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 module.exports = require("node.extend");
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports) {
 
 module.exports = require("uuid");
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4205,6 +4232,9 @@ CORE.prototype.util = function () {
     },
     generateUniqueID: function generateUniqueID() {
       return PILLAR.p_generateUniqueID();
+    },
+    unikify: function unikify(a) {
+      return PILLAR.p_unikify(a);
     }
   };
 };
@@ -4362,6 +4392,9 @@ CORE.prototype.sanna = function () {
         log: function log(comp) {
           comp.log = self.sanna().modules.addiks.log.bind(comp);
         },
+        logSync: function logSync(comp) {
+          comp.logSync = self.sanna().modules.addiks.log.bind(comp);
+        },
         query: function query(comp) {
           comp.query = self.sanna().modules.addiks.query.bind(comp);
         }
@@ -4394,6 +4427,22 @@ CORE.prototype.sanna = function () {
             type: type
           };
           data.source = self.constructor.name;
+          self.emit({
+            type: 'anziiloger-log',
+            data: data
+          });
+        },
+        logSync: function logSync() {
+          var message = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 'No message provided';
+          var type = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'console';
+          var self = this;
+          var pao = this.pao;
+          var data = {
+            message: message,
+            type: type
+          };
+          data.source = self.constructor.name;
+          data.sync = true;
           self.emit({
             type: 'anziiloger-log',
             data: data
@@ -4463,7 +4512,7 @@ CORE.prototype.sanna = function () {
 /* harmony default export */ __webpack_exports__["a"] = (CORE);
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4682,22 +4731,22 @@ PAO.prototype.create = function (moduleID, modInstId) {
 /* harmony default export */ __webpack_exports__["a"] = (PAO);
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middleware_index__ = __webpack_require__(21);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__parsers_index__ = __webpack_require__(24);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router_index__ = __webpack_require__(27);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__request_index__ = __webpack_require__(30);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__server_index__ = __webpack_require__(33);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_index__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__anziiloger_index__ = __webpack_require__(46);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__system_index__ = __webpack_require__(51);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mysql_index__ = __webpack_require__(56);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__dao_index__ = __webpack_require__(58);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__dman_index__ = __webpack_require__(61);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__global_index__ = __webpack_require__(66);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middleware_index__ = __webpack_require__(22);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__parsers_index__ = __webpack_require__(25);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__router_index__ = __webpack_require__(28);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__request_index__ = __webpack_require__(31);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__server_index__ = __webpack_require__(34);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__config_index__ = __webpack_require__(38);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__anziiloger_index__ = __webpack_require__(49);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__system_index__ = __webpack_require__(54);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__mysql_index__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__dao_index__ = __webpack_require__(61);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__dman_index__ = __webpack_require__(64);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__global_index__ = __webpack_require__(69);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -4735,20 +4784,20 @@ var Esm = function Esm() {
 /* harmony default export */ __webpack_exports__["a"] = (new Esm());
 
 /***/ }),
-/* 21 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middleware__ = __webpack_require__(22);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__middleware__["a" /* default */]);
-
-/***/ }),
 /* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(23);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middleware__ = __webpack_require__(23);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__middleware__["a" /* default */]);
+
+/***/ }),
+/* 23 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(24);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -4787,7 +4836,7 @@ var Middleware = function Middleware(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Middleware);
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -4958,20 +5007,20 @@ var allWares = function allWares(app, xpress) {
 };
 
 /***/ }),
-/* 24 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__parsers__ = __webpack_require__(25);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__parsers__["a" /* default */]);
-
-/***/ }),
 /* 25 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(26);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__parsers__ = __webpack_require__(26);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__parsers__["a" /* default */]);
+
+/***/ }),
+/* 26 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(27);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -4996,7 +5045,7 @@ var Parsers = function Parsers(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Parsers);
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5027,20 +5076,20 @@ var handleShareMiddleware = function handleShareMiddleware() {
 };
 
 /***/ }),
-/* 27 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(28);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__router__["a" /* default */]);
-
-/***/ }),
 /* 28 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(29);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__router__ = __webpack_require__(29);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__router__["a" /* default */]);
+
+/***/ }),
+/* 29 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(30);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -5069,7 +5118,7 @@ var Router = function Router(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Router);
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5296,20 +5345,20 @@ var filterCallback = function filterCallback(filterType, moduleMiddleware) {
 };
 
 /***/ }),
-/* 30 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__request__ = __webpack_require__(31);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__request__["a" /* default */]);
-
-/***/ }),
 /* 31 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(32);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__request__ = __webpack_require__(32);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__request__["a" /* default */]);
+
+/***/ }),
+/* 32 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(33);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -5342,7 +5391,7 @@ var Request = function Request(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Request);
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5602,25 +5651,25 @@ var failureHandle = function failureHandle(data) {
 };
 
 /***/ }),
-/* 33 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server__ = __webpack_require__(34);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__server__["a" /* default */]);
-
-/***/ }),
 /* 34 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(35);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__server__ = __webpack_require__(35);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__server__["a" /* default */]);
+
+/***/ }),
+/* 35 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(36);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
-var express = __webpack_require__(36),
+var express = __webpack_require__(37),
     // fs = require('fs'),
 // randomstring = require("randomstring"),
 jsonfile = __webpack_require__(4),
@@ -5679,7 +5728,7 @@ var Server = function Server(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Server);
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5918,35 +5967,35 @@ var streamResponse = function streamResponse(data) {
 };
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports) {
 
 module.exports = require("express");
-
-/***/ }),
-/* 37 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(38);
-
-/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */]);
 
 /***/ }),
 /* 38 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(39);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__confy__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__config__ = __webpack_require__(39);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__config__["a" /* default */]);
+
+/***/ }),
+/* 39 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(40);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__confy__ = __webpack_require__(41);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
  // Dependecies 
 
-var envObserver = __webpack_require__(44);
+var envObserver = __webpack_require__(47);
 
-var supportsColor = __webpack_require__(45);
+var supportsColor = __webpack_require__(48);
 
 var Config = function Config(pao) {
   _classCallCheck(this, Config);
@@ -5969,7 +6018,7 @@ var Config = function Config(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Config);
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6090,27 +6139,31 @@ var enviroment = function enviroment() {
 };
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__includes_routes__ = __webpack_require__(41);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__includes_globals__ = __webpack_require__(43);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__includes_routes__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__includes_tasks__ = __webpack_require__(44);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__includes_globals__ = __webpack_require__(46);
+
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   middleware: {
     ppublic: {
-      addMiddleware: __WEBPACK_IMPORTED_MODULE_1__includes_globals__["c" /* ppublic */]
+      addMiddleware: __WEBPACK_IMPORTED_MODULE_2__includes_globals__["c" /* ppublic */]
     },
     pprivate: {
-      addMiddleware: __WEBPACK_IMPORTED_MODULE_1__includes_globals__["b" /* pprivate */]
+      addMiddleware: __WEBPACK_IMPORTED_MODULE_2__includes_globals__["b" /* pprivate */]
     },
     all: {
-      addMiddleware: __WEBPACK_IMPORTED_MODULE_1__includes_globals__["a" /* all */]
+      addMiddleware: __WEBPACK_IMPORTED_MODULE_2__includes_globals__["a" /* all */]
     }
   },
   router: __WEBPACK_IMPORTED_MODULE_0__includes_routes__["a" /* default */],
+  kronjo: __WEBPACK_IMPORTED_MODULE_1__includes_tasks__["a" /* default */],
+  mailer: '',
   logger: {
     level: 'info',
     trans: ['file', {
@@ -6125,11 +6178,11 @@ var enviroment = function enviroment() {
 });
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middlewares__ = __webpack_require__(42);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__middlewares__ = __webpack_require__(43);
 
 /* harmony default export */ __webpack_exports__["a"] = ([{
   path: '/register',
@@ -6165,6 +6218,10 @@ var enviroment = function enviroment() {
   type: 'private'
 }, {
   path: '/bookmark',
+  method: 'POST',
+  type: 'private'
+}, {
+  path: '/history',
   method: 'POST',
   type: 'private'
 }, {
@@ -6218,7 +6275,7 @@ var enviroment = function enviroment() {
 }]);
 
 /***/ }),
-/* 42 */
+/* 43 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6242,7 +6299,59 @@ var list = [{
 }];
 
 /***/ }),
-/* 43 */
+/* 44 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__tasksHandlers__ = __webpack_require__(45);
+
+/* harmony default export */ __webpack_exports__["a"] = ([{
+  taskRule: {
+    dayOfWeek: 0,
+    hour: 17,
+    minute: 19
+  },
+  taskHandler: __WEBPACK_IMPORTED_MODULE_0__tasksHandlers__["a" /* sendJobAlerts */]
+} // {
+//     taskSchedule: 'once every-monday of every-week @5:00:am ',
+//     taskHandler: taskHandlers.sendWeeklyJobAlerts,
+//     type: 'public'
+// },
+// {
+//     taskSchedule: 'once every-first-day of every-month @6:00:am',
+//     method: 'post',
+//     type: 'public'
+// },
+// {
+//     taskSchedule: 'twice every-month @6:30:am',
+//     method: 'GET',
+//     type: 'private'
+// }
+]);
+
+/***/ }),
+/* 45 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return sendJobAlerts; });
+/* unused harmony export sendDailyReports */
+var sendJobAlerts = function sendJobAlerts(frequency) {
+  var self = this;
+  self.emit({
+    type: "get-new-jobs",
+    data: ''
+  });
+};
+var sendDailyReports = function sendDailyReports() {
+  self.emit({
+    type: "get-reports",
+    data: frequency
+  });
+};
+
+/***/ }),
+/* 46 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6289,39 +6398,39 @@ var all = [{
 }];
 
 /***/ }),
-/* 44 */
+/* 47 */
 /***/ (function(module, exports) {
 
 module.exports = require("config");
 
 /***/ }),
-/* 45 */
+/* 48 */
 /***/ (function(module, exports) {
 
 module.exports = require("supports-color");
 
 /***/ }),
-/* 46 */
+/* 49 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__anziiloger__ = __webpack_require__(47);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__anziiloger__ = __webpack_require__(50);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__anziiloger__["a" /* default */]);
 
 /***/ }),
-/* 47 */
+/* 50 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(48);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(51);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
  // Dependecies 
 
-var winston = __webpack_require__(49);
+var winston = __webpack_require__(52);
 
-var debugr = __webpack_require__(50);
+var debugr = __webpack_require__(53);
 
 var Anziiloger = function Anziiloger(pao) {
   _classCallCheck(this, Anziiloger);
@@ -6362,7 +6471,7 @@ var Anziiloger = function Anziiloger(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Anziiloger);
 
 /***/ }),
-/* 48 */
+/* 51 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6374,6 +6483,10 @@ var Anziiloger = function Anziiloger(pao) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return warn; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return error; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return setDebugger; });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 var init = function init() {
   this.setDebugger(this.constructor.name); //   this.handleAnziilogerConfig()
 
@@ -6450,71 +6563,239 @@ var handleAnziilogerConfig = function handleAnziilogerConfig(data) {
     })]
   });
 };
-var info = function info(log) {
-  var self = this; // self.log('THE INFO METHOD RECEIVES A CALL')
-  // self.log(log)
+var info = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(log) {
+    var self, pao, contains;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            self = this;
+            pao = self.pao;
+            contains = pao.pa_contains;
 
-  self.logger.info("".concat(log.source, ": ").concat(log.message));
-};
-var debug = function debug(log) {
-  var self = this;
+            if (!contains(log, 'sync')) {
+              _context.next = 8;
+              break;
+            }
 
-  if (self.debugas.hasOwnProperty(log.source.toLowerCase())) {
-    // console.log('THE DEBUG MODULE IS USED')
-    // console.log(self.debugas)
-    self.debugas[log.source.toLowerCase()](log.message);
-  } else {
-    self.logger.debug("".concat(log.source, ": ").concat(log.message));
-  }
-};
-var warn = function warn(log) {
-  var self = this;
-  self.logger.warn("".concat(log.source, ": ").concat(log.message));
-};
-var error = function error(log) {
-  var self = this;
-  self.logger.error("".concat(log.source, ": ").concat(log.message));
-};
-var setDebugger = function setDebugger(mod) {
-  var self = this;
-  var name = mod.toLowerCase();
-  self.debugas[name] = self.debugr("anzii:".concat(name));
-};
+            _context.next = 6;
+            return self.logger.info("".concat(log.source, ": ").concat(log.message));
+
+          case 6:
+            _context.next = 9;
+            break;
+
+          case 8:
+            self.logger.info("".concat(log.source, ": ").concat(log.message));
+
+          case 9:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function info(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+var debug = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(log) {
+    var self, pao, contains;
+    return regeneratorRuntime.wrap(function _callee2$(_context2) {
+      while (1) {
+        switch (_context2.prev = _context2.next) {
+          case 0:
+            self = this;
+            pao = self.pao;
+            contains = pao.pa_contains;
+
+            if (!contains(log, 'sync')) {
+              _context2.next = 13;
+              break;
+            }
+
+            if (!self.debugas.hasOwnProperty(log.source.toLowerCase())) {
+              _context2.next = 9;
+              break;
+            }
+
+            _context2.next = 7;
+            return self.debugas[log.source.toLowerCase()](log.message);
+
+          case 7:
+            _context2.next = 11;
+            break;
+
+          case 9:
+            _context2.next = 11;
+            return self.logger.debug("".concat(log.source, ": ").concat(log.message));
+
+          case 11:
+            _context2.next = 14;
+            break;
+
+          case 13:
+            if (self.debugas.hasOwnProperty(log.source.toLowerCase())) {
+              // console.log('THE DEBUG MODULE IS USED')
+              // console.log(self.debugas)
+              self.debugas[log.source.toLowerCase()](log.message);
+            } else {
+              self.logger.debug("".concat(log.source, ": ").concat(log.message));
+            }
+
+          case 14:
+          case "end":
+            return _context2.stop();
+        }
+      }
+    }, _callee2, this);
+  }));
+
+  return function debug(_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+var warn = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(log) {
+    var self, pao, contains;
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            //const self = this 
+            //self.logger.warn(`${log.source}: ${log.message}`)
+            self = this;
+            pao = self.pao;
+            contains = pao.pa_contains;
+
+            if (!contains(log, 'sync')) {
+              _context3.next = 8;
+              break;
+            }
+
+            _context3.next = 6;
+            return self.logger.warn("".concat(log.source, ": ").concat(log.message));
+
+          case 6:
+            _context3.next = 9;
+            break;
+
+          case 8:
+            self.logger.warn("".concat(log.source, ": ").concat(log.message));
+
+          case 9:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, this);
+  }));
+
+  return function warn(_x3) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+var error = /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(log) {
+    var self, pao, contains;
+    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            //const self = this 
+            //self.logger.error(`${log.source}: ${log.message}`)  
+            self = this;
+            pao = self.pao;
+            contains = pao.pa_contains;
+
+            if (!contains(log, 'sync')) {
+              _context4.next = 8;
+              break;
+            }
+
+            _context4.next = 6;
+            return self.logger.error("".concat(log.source, ": ").concat(log.message));
+
+          case 6:
+            _context4.next = 9;
+            break;
+
+          case 8:
+            self.logger.error("".concat(log.source, ": ").concat(log.message));
+
+          case 9:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4, this);
+  }));
+
+  return function error(_x4) {
+    return _ref4.apply(this, arguments);
+  };
+}();
+var setDebugger = /*#__PURE__*/function () {
+  var _ref5 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee5(mod) {
+    var self, name;
+    return regeneratorRuntime.wrap(function _callee5$(_context5) {
+      while (1) {
+        switch (_context5.prev = _context5.next) {
+          case 0:
+            self = this;
+            name = mod.toLowerCase();
+            self.debugas[name] = self.debugr("anzii:".concat(name));
+
+          case 3:
+          case "end":
+            return _context5.stop();
+        }
+      }
+    }, _callee5, this);
+  }));
+
+  return function setDebugger(_x5) {
+    return _ref5.apply(this, arguments);
+  };
+}();
 
 /***/ }),
-/* 49 */
+/* 52 */
 /***/ (function(module, exports) {
 
 module.exports = require("winston");
 
 /***/ }),
-/* 50 */
+/* 53 */
 /***/ (function(module, exports) {
 
 module.exports = require("debug");
 
 /***/ }),
-/* 51 */
+/* 54 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__system__ = __webpack_require__(52);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__system__ = __webpack_require__(55);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__system__["a" /* default */]);
 
 /***/ }),
-/* 52 */
+/* 55 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(53);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(56);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
  // Dependecies
 
-var cluster = __webpack_require__(54);
+var cluster = __webpack_require__(57);
 
-var http = __webpack_require__(55);
+var http = __webpack_require__(58);
 
 var os = __webpack_require__(2);
 
@@ -6551,7 +6832,7 @@ var System = function System(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (System);
 
 /***/ }),
-/* 53 */
+/* 56 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6689,23 +6970,60 @@ var masterWorker = function masterWorker(app) {
           }
         }
       }
+
+      self.cluster.on('fork', function (worker) {
+        self.log("cluster forking new worker", worker.id);
+      });
+      var mainWorkerId = null;
+      self.cluster.on('listening', function (worker, address) {
+        self.log("cluster listening new worker", worker.id);
+
+        if (null === mainWorkerId) {
+          self.log("Making worker " + worker.id + " to main worker");
+          mainWorkerId = worker.id;
+          worker.send({
+            singleProcessTasks: "startSingleProcessTasks"
+          });
+        }
+      });
+      self.cluster.on('exit', function (worker, code, signal) {
+        self.log("worker ".concat(worker.process.pid, " died"));
+        console.log('FORKING ANOTHER WORK');
+        console.log('Worker %d died :(', worker.id);
+
+        if (worker.id === mainWorkerId) {
+          console.log("Main Worker is dead...");
+          mainWorkerId = null;
+        }
+
+        console.trace("I am here");
+        self.log(worker);
+        self.log(code);
+        self.log(signal);
+        self.cluster.fork(); // self.cluster.fork()
+      });
     } else {
       self.log('System is running on a single thread/core');
     } // app.listen(self.context.env.PORT || 3000,()=>{
     // 	self.log("The Server is listening via workers",'info')
     //   })
 
-
-    self.cluster.on('exit', function (worker, code, signal) {
-      console.log("worker ".concat(worker.process.pid, " died"));
-      console.log('FORKING ANOTHER WORK'); // self.cluster.fork()
-    });
   } else {
     // console.log('IT IS NOT THE MASTER PROCESS')
     console.log("Worker ".concat(process.pid, " started"));
     app.listen(self.context.env.PORT || 3000, function () {
       self.log("The Server is listening via workers", 'info');
       self.log("THIS WORKER RUNNING IP:");
+    });
+    process.on('message', function (message) {
+      self.log('Worker ' + process.pid + ' received message from master.', message);
+
+      if (message.singleProcessTasks == "startSingleProcessTasks") {
+        self.emit({
+          type: 'start-single-process-tasks',
+          data: ''
+        });
+      }
     });
   }
 };
@@ -6762,28 +7080,28 @@ var handleRegisterShutDownCandidate = function handleRegisterShutDownCandidate(d
 };
 
 /***/ }),
-/* 54 */
+/* 57 */
 /***/ (function(module, exports) {
 
 module.exports = require("cluster");
 
 /***/ }),
-/* 55 */
+/* 58 */
 /***/ (function(module, exports) {
 
 module.exports = require("http");
 
 /***/ }),
-/* 56 */
+/* 59 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mysql__ = __webpack_require__(57);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mysql__ = __webpack_require__(60);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__mysql__["a" /* default */]);
 
 /***/ }),
-/* 57 */
+/* 60 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6848,20 +7166,20 @@ var Mysql = function Mysql(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Mysql);
 
 /***/ }),
-/* 58 */
+/* 61 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dao__ = __webpack_require__(59);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dao__ = __webpack_require__(62);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__dao__["a" /* default */]);
 
 /***/ }),
-/* 59 */
+/* 62 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(60);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(63);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -6879,7 +7197,7 @@ var Dao = function Dao(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Dao);
 
 /***/ }),
-/* 60 */
+/* 63 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6930,20 +7248,20 @@ var handleDaoTakeDbs = function handleDaoTakeDbs(data) {
 };
 
 /***/ }),
-/* 61 */
+/* 64 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dman__ = __webpack_require__(62);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__dman__ = __webpack_require__(65);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__dman__["a" /* default */]);
 
 /***/ }),
-/* 62 */
+/* 65 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(63);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(66);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
  // 
@@ -6982,7 +7300,7 @@ var Dman = function Dman(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Dman);
 
 /***/ }),
-/* 63 */
+/* 66 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7039,8 +7357,7 @@ var handleConfigureDBMan = function handleConfigureDBMan(data) {
 var connectToClient = function connectToClient(client) {
   var self = this;
   self.log("System is about to connect to client: ".concat(client.name));
-  self.getClientDriver(client);
-  self.supportedClients[client.name].connect(client);
+  self.getClientDriver(client); // self.supportedClients[client.name].connect(client)
 };
 var getClientDriver = function getClientDriver(client) {
   var self = this;
@@ -7053,11 +7370,11 @@ var getClientDriver = function getClientDriver(client) {
     var name = client.name;
 
     if (name === 'mysql') {
-      self.supportedClients[client.name].driver = __webpack_require__(64);
+      self.supportedClients[client.name].driver = __webpack_require__(67);
     } else if (name === 'pg') {
       self.supportedClients[client.name].driver = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"pg\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
     } else if (name === 'redis') {
-      self.supportedClients[client.name].driver = __webpack_require__(65);
+      self.supportedClients[client.name].driver = __webpack_require__(68);
     } else if (name === 'mongo') {
       self.supportedClients[client.name].driver = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"mongo\""); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
     } else {
@@ -7140,32 +7457,32 @@ var connect = function connect(client) {
 };
 
 /***/ }),
-/* 64 */
+/* 67 */
 /***/ (function(module, exports) {
 
 module.exports = require("mysql");
 
 /***/ }),
-/* 65 */
+/* 68 */
 /***/ (function(module, exports) {
 
 module.exports = require("redis");
 
 /***/ }),
-/* 66 */
+/* 69 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__global__ = __webpack_require__(67);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__global__ = __webpack_require__(70);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__global__["a" /* default */]);
 
 /***/ }),
-/* 67 */
+/* 70 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(68);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(71);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -7182,7 +7499,7 @@ var Global = function Global(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Global);
 
 /***/ }),
-/* 68 */
+/* 71 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7219,7 +7536,7 @@ var handleRequestGlobalRequest = function handleRequestGlobalRequest(data) {
 };
 
 /***/ }),
-/* 69 */
+/* 72 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7275,29 +7592,35 @@ var Activate = function Activate() {
 };
 
 /***/ }),
-/* 70 */
+/* 73 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_test__ = __webpack_require__(71);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_list__ = __webpack_require__(74);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_fileman__ = __webpack_require__(77);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_imageman__ = __webpack_require__(81);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_job__ = __webpack_require__(85);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_fetch__ = __webpack_require__(89);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_jwt__ = __webpack_require__(92);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modules_hash__ = __webpack_require__(96);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__modules_register__ = __webpack_require__(100);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modules_login__ = __webpack_require__(103);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__modules_authentication__ = __webpack_require__(106);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__modules_frametest__ = __webpack_require__(109);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__modules_adash__ = __webpack_require__(114);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__modules_inalerts__ = __webpack_require__(117);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__modules_bookmark__ = __webpack_require__(121);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__modules_downloadr__ = __webpack_require__(124);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__modules_fileupload__ = __webpack_require__(127);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__modules_upload__ = __webpack_require__(131);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__modules_asettings__ = __webpack_require__(134);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__modules_test__ = __webpack_require__(74);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__modules_list__ = __webpack_require__(77);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__modules_fileman__ = __webpack_require__(80);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__modules_imageman__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__modules_job__ = __webpack_require__(88);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__modules_fetch__ = __webpack_require__(95);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__modules_jwt__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__modules_hash__ = __webpack_require__(102);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__modules_register__ = __webpack_require__(106);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__modules_login__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__modules_authentication__ = __webpack_require__(112);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_11__modules_frametest__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__modules_adash__ = __webpack_require__(119);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__modules_inalerts__ = __webpack_require__(122);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__modules_bookmark__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__modules_history__ = __webpack_require__(129);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__modules_downloadr__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__modules_fileupload__ = __webpack_require__(135);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__modules_upload__ = __webpack_require__(139);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__modules_mailer__ = __webpack_require__(142);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_20__modules_kronjo__ = __webpack_require__(146);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_21__modules_asettings__ = __webpack_require__(150);
+
+
+
 
 
 
@@ -7320,14 +7643,15 @@ var Activate = function Activate() {
 /* harmony default export */ __webpack_exports__["a"] = ({
   Test: __WEBPACK_IMPORTED_MODULE_0__modules_test__["a" /* default */],
   List: __WEBPACK_IMPORTED_MODULE_1__modules_list__["a" /* default */],
-  Asettings: __WEBPACK_IMPORTED_MODULE_18__modules_asettings__["a" /* default */],
+  Asettings: __WEBPACK_IMPORTED_MODULE_21__modules_asettings__["a" /* default */],
   FileMan: __WEBPACK_IMPORTED_MODULE_2__modules_fileman__["a" /* default */],
   ImageMan: __WEBPACK_IMPORTED_MODULE_3__modules_imageman__["a" /* default */],
-  Upload: __WEBPACK_IMPORTED_MODULE_17__modules_upload__["a" /* default */],
+  Upload: __WEBPACK_IMPORTED_MODULE_18__modules_upload__["a" /* default */],
   Adash: __WEBPACK_IMPORTED_MODULE_12__modules_adash__["a" /* default */],
-  Downloadr: __WEBPACK_IMPORTED_MODULE_15__modules_downloadr__["a" /* default */],
+  Downloadr: __WEBPACK_IMPORTED_MODULE_16__modules_downloadr__["a" /* default */],
   Inalerts: __WEBPACK_IMPORTED_MODULE_13__modules_inalerts__["a" /* default */],
   Bookmark: __WEBPACK_IMPORTED_MODULE_14__modules_bookmark__["a" /* default */],
+  History: __WEBPACK_IMPORTED_MODULE_15__modules_history__["a" /* default */],
   FrameTest: __WEBPACK_IMPORTED_MODULE_11__modules_frametest__["a" /* default */],
   Job: __WEBPACK_IMPORTED_MODULE_4__modules_job__["a" /* default */],
   Fetch: __WEBPACK_IMPORTED_MODULE_5__modules_fetch__["a" /* default */],
@@ -7336,24 +7660,26 @@ var Activate = function Activate() {
   Register: __WEBPACK_IMPORTED_MODULE_8__modules_register__["a" /* default */],
   Login: __WEBPACK_IMPORTED_MODULE_9__modules_login__["a" /* default */],
   Authentication: __WEBPACK_IMPORTED_MODULE_10__modules_authentication__["a" /* default */],
-  FileUpload: __WEBPACK_IMPORTED_MODULE_16__modules_fileupload__["a" /* default */]
+  FileUpload: __WEBPACK_IMPORTED_MODULE_17__modules_fileupload__["a" /* default */],
+  Mailer: __WEBPACK_IMPORTED_MODULE_19__modules_mailer__["a" /* default */],
+  Kronjo: __WEBPACK_IMPORTED_MODULE_20__modules_kronjo__["a" /* default */]
 });
 
 /***/ }),
-/* 71 */
+/* 74 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__test__ = __webpack_require__(72);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__test__ = __webpack_require__(75);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__test__["a" /* default */]);
 
 /***/ }),
-/* 72 */
+/* 75 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(73);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(76);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -7371,7 +7697,7 @@ var Test = function Test(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Test);
 
 /***/ }),
-/* 73 */
+/* 76 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7421,20 +7747,20 @@ var test = function test(req, res, next) {
 };
 
 /***/ }),
-/* 74 */
+/* 77 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__list__ = __webpack_require__(75);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__list__ = __webpack_require__(78);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__list__["a" /* default */]);
 
 /***/ }),
-/* 75 */
+/* 78 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(76);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(79);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -7451,7 +7777,7 @@ var List = function List(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (List);
 
 /***/ }),
-/* 76 */
+/* 79 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7486,20 +7812,20 @@ var list = function list(data) {
 };
 
 /***/ }),
-/* 77 */
+/* 80 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fileman__ = __webpack_require__(78);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fileman__ = __webpack_require__(81);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__fileman__["a" /* default */]);
 
 /***/ }),
-/* 78 */
+/* 81 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(79);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(82);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
  // const multer = require('multer')
@@ -7510,7 +7836,7 @@ var path = __webpack_require__(0);
 
 var fs = __webpack_require__(3);
 
-var fileType = __webpack_require__(80);
+var fileType = __webpack_require__(83);
 
 var FileMan = function FileMan(pao) {
   _classCallCheck(this, FileMan);
@@ -7546,7 +7872,7 @@ var FileMan = function FileMan(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (FileMan);
 
 /***/ }),
-/* 79 */
+/* 82 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8177,31 +8503,31 @@ var getFile = /*#__PURE__*/function () {
 }();
 
 /***/ }),
-/* 80 */
+/* 83 */
 /***/ (function(module, exports) {
 
 module.exports = require("file-type");
 
 /***/ }),
-/* 81 */
+/* 84 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__imageman__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__imageman__ = __webpack_require__(85);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__imageman__["a" /* default */]);
 
 /***/ }),
-/* 82 */
+/* 85 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(83);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(86);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
-var jimp = __webpack_require__(84); // const wrStream = require('streamifier')
+var jimp = __webpack_require__(87); // const wrStream = require('streamifier')
 // const rStream = require('concat-stream')
 
 
@@ -8222,7 +8548,7 @@ var Imageman = function Imageman(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Imageman);
 
 /***/ }),
-/* 83 */
+/* 86 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -8358,33 +8684,37 @@ var greyScale = function greyScale(data) {
 };
 
 /***/ }),
-/* 84 */
+/* 87 */
 /***/ (function(module, exports) {
 
 module.exports = require("jimp");
 
 /***/ }),
-/* 85 */
+/* 88 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__job__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__job__ = __webpack_require__(89);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__job__["a" /* default */]);
 
 /***/ }),
-/* 86 */
+/* 89 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(87);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(90);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
-var fetch = __webpack_require__(113);
+var fetch = __webpack_require__(6);
 
-var jobs = __webpack_require__(138);
+var jobs = __webpack_require__(92);
+
+var fuzzySearch = __webpack_require__(93);
+
+var internalIP = __webpack_require__(94);
 
 var Job = function Job(pao) {
   _classCallCheck(this, Job);
@@ -8392,58 +8722,92 @@ var Job = function Job(pao) {
   this.pao = pao;
   this.url = 'http://public.api.careerjet.net/search?locale_code=en_ZA&affid=0e6712acc74087da913e65985433a122';
   this.fetch = fetch;
-  this.jobsJson = jobs; // this.partners = [
+  this.jobsJson = jobs;
+  this.fuzzySearch = fuzzySearch;
+  this.ip = internalIP; // this.partners = [
   //  {
   //  	url: 'https://www.indeed.com'
   //    apiCreds:{uname: 'name'}
   //  }
   // ]
 
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* init */];
-  this.handleJobTask = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* handleJobTask */];
-  this.getJobsWithThingy = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* getJobsWithThingy */];
-  this.getCondition = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* getCondition */];
-  this.formatQuery = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* formatQuery */];
-  this.getDbKey = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* getDbKey */];
-  this.generateQueryConditions = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* generateQueryConditions */];
-  this.refineOutsourcedJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* refineOutsourcedJobs */];
-  this.getJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* getJobs */];
-  this.getJFP = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* getJFP */];
-  this.getNativeJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* getNativeJobs */];
-  this.searchBatch = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* searchBatch */];
-  this.searchBatchHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["m" /* searchBatchHandler */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["p" /* init */];
+  this.handleJobTask = __WEBPACK_IMPORTED_MODULE_0__methods__["o" /* handleJobTask */];
+  this.getJobsWithThingy = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* getJobsWithThingy */];
+  this.getCondition = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* getCondition */];
+  this.formatQuery = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* formatQuery */];
+  this.getDbKey = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* getDbKey */];
+  this.generateQueryConditions = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* generateQueryConditions */];
+  this.refineOutsourcedJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["r" /* refineOutsourcedJobs */];
+  this.getJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* getJobs */];
+  this.getJFP = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* getJFP */];
+  this.getNativeJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* getNativeJobs */];
+  this.searchBatch = __WEBPACK_IMPORTED_MODULE_0__methods__["s" /* searchBatch */];
+  this.getSubscribers = __WEBPACK_IMPORTED_MODULE_0__methods__["m" /* getSubscribers */];
+  this.handleGetNewJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["n" /* handleGetNewJobs */];
+  this.getNewJobs = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* getNewJobs */];
+  this.getMailRecipient = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* getMailRecipient */];
+  this.getEmailTemplate = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* getEmailTemplate */];
+  this.alertEmailResponses = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* alertEmailResponses */];
+  this.searchBatchHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["t" /* searchBatchHandler */];
+  this.multiDataRequestHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["q" /* multiDataRequestHandler */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Job);
 
 /***/ }),
-/* 87 */
+/* 90 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return handleJobTask; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return refineOutsourcedJobs; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getJobs; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return getJobsWithThingy; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return getJFP; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return getNativeJobs; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return handleJobTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return handleGetNewJobs; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return getNewJobs; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return getSubscribers; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return getMailRecipient; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return getEmailTemplate; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return alertEmailResponses; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return refineOutsourcedJobs; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return getJobs; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return getJobsWithThingy; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return getJFP; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return getNativeJobs; });
 /* unused harmony export saveApplication */
 /* unused harmony export getJobDetail */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return generateQueryConditions; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return getCondition; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return formatQuery; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getDbKey; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return searchBatch; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "m", function() { return searchBatchHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return generateQueryConditions; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return getCondition; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return formatQuery; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return getDbKey; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "s", function() { return searchBatch; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return multiDataRequestHandler; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "t", function() { return searchBatchHandler; });
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fuzzy_search__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_fuzzy_search___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_fuzzy_search__);
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function _readOnlyError(name) { throw new Error("\"" + name + "\" is read-only"); }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
 
+
 var init = function init() {
   this.log('Job has been initialised');
   this.listens({
-    'handle-job-task': this.handleJobTask.bind(this)
+    'handle-job-task': this.handleJobTask.bind(this),
+    'get-new-jobs': this.handleGetNewJobs.bind(this)
   });
 };
 var handleJobTask = /*#__PURE__*/function () {
@@ -8527,35 +8891,45 @@ var handleJobTask = /*#__PURE__*/function () {
                 var forwarded = clientRequest.req.headers['x-forwarded-for'];
                 var ip = forwarded ? forwarded.split(/, /)[0] : clientRequest.req.connection.remoteAddress;
                 var uAgent = clientRequest.req.headers['user-agent'];
+                var blackList = ['sort', 'limit', 'currentPage', 'skip', 'jq'];
                 var urlParametersString = '';
-                options.keywords ? urlParametersString += "&keywords=".concat(options.keywords) : '';
-                var urlParameters = options.filters.map(function (para, i) {
-                  if (para.key === 'location') para.value = "Cape Town";
-                  return "&".concat(self.getDbKey(para.key), "=").concat(para.value);
+                var urlParameters = [];
+                options.jq ? urlParametersString += "&keywords=".concat(options.jq) : '';
+                options.sort ? urlParametersString += "&sort=".concat(options.sort) : '';
+                options.currentPage ? urlParametersString += "&page=".concat(options.currentPage) : '';
+                Object.entries(options).forEach(function (para, i) {
+                  var key = para[0];
+
+                  if (blackList.indexOf(key) < 0) {
+                    urlParameters.push("&".concat(self.getDbKey(key, 'source'), "=").concat(para[1]));
+                  }
                 });
                 console.log('THE URL PARAMETERS');
                 console.log(urlParameters);
-                urlParametersString += "".concat(urlParameters.join(''), " &limit=").concat(extraJobsLimit);
+                urlParametersString += "".concat(urlParameters.join(''), " &pagesize=").concat(extraJobsLimit);
                 var url = "".concat(self.url).concat(urlParametersString);
                 url += "&user_ip=".concat(ip, "&user_agent=").concat(uAgent);
+                self.log('THE URL');
+                self.log(url);
+                self.log(options);
                 self.fetch.get(url).then(function (response) {
                   console.log('THE REQUEST HAS SUCCEEDED TO CAREERJET');
                   console.log(response.data); // return resolve({success: response.data}) 
 
-                  var refinedJobs = self.refineOutsourcedJobs(response.data.jobs);
-                  console.log(refinedJobs);
-                  console.log(jobs);
-                  console.log(response.data.hits);
-                  console.log(jobs.totalJobs);
-                  jobs.totalJobs = jobs.totalJobs + response.data.hits;
-                  console.log(jobs.totalJobs);
+                  if (response.data.type.toUpperCase() !== 'JOBS') return self.callback(null, jobs);
+                  var refinedJobs = self.refineOutsourcedJobs(response.data.jobs); // console.log(refinedJobs) 
+                  // console.log(jobs) 
+                  // console.log(response.data.hits) 
+                  // console.log(jobs.totalJobs)
+
+                  jobs.totalJobs = jobs.totalJobs + response.data.hits; // console.log(jobs.totalJobs)
+
                   jobs.posts = jobs.posts.concat(refinedJobs);
                   self.log(refinedJobs.length);
                   return self.callback(null, jobs); //return response.json();
                 })["catch"](function (err) {
-                  self.callback(null, jobs);
-                  console.log('JOBS FROM SOURCE FAILED DUE TO');
-                  return console.log(err);
+                  self.callback(null, jobs); //   console.log('JOBS FROM SOURCE FAILED DUE TO')
+                  //   return console.log(err) 
                 });
               } else {
                 self.callback(null, jobs);
@@ -8579,7 +8953,7 @@ var handleJobTask = /*#__PURE__*/function () {
                 var ip = forwarded ? forwarded.split(/, /)[0] : clientRequest.req.connection.remoteAddress;
                 var uAgent = clientRequest.req.headers['user-agent'];
                 var urlParameters = options.map(function (para, i) {
-                  return "&".concat(para.key, "=").concat(para.value);
+                  return "&".concat(self.getDbKey(para.key, 'source'), "=").concat(para.value);
                 });
                 var urlParametersString = "".concat(urlParameters.split(','), " &limit=").concat(extraJobsLimit);
                 var url = "".concat(self.url).concat(urlParametersString);
@@ -8619,19 +8993,373 @@ var handleJobTask = /*#__PURE__*/function () {
     return _ref.apply(this, arguments);
   };
 }();
+var handleGetNewJobs = function handleGetNewJobs(data) {
+  var self = this;
+  self.logSync('THE NEWJOBS HANDLE REQUEST');
+  self.getNewJobs();
+};
+var getNewJobs = /*#__PURE__*/function () {
+  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(data) {
+    var _this = this;
+
+    var self, ip, uAgent, jobsThreshold, pagesize, callCount, sort, hits, accumulatedJobs, allJobs, filteredJobs, failureCounts, breakOutOfLoop, _loop, i, _ret, refinedJobs;
+
+    return regeneratorRuntime.wrap(function _callee2$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            self = this;
+            ip = self.ip.address();
+            uAgent = "Mozilla/5.0";
+            jobsThreshold = 100;
+            pagesize = 20;
+            callCount = jobsThreshold / pagesize;
+            sort = 'date';
+            hits = 1001;
+            accumulatedJobs = [];
+            allJobs = [];
+            filteredJobs = [];
+            failureCounts = 0;
+            breakOutOfLoop = false;
+            _loop = /*#__PURE__*/regeneratorRuntime.mark(function _loop(i) {
+              var url;
+              return regeneratorRuntime.wrap(function _loop$(_context2) {
+                while (1) {
+                  switch (_context2.prev = _context2.next) {
+                    case 0:
+                      if (!(accumulatedJobs.length >= jobsThreshold)) {
+                        _context2.next = 2;
+                        break;
+                      }
+
+                      return _context2.abrupt("return", "break");
+
+                    case 2:
+                      url = "".concat(self.url, "&page=").concat(i, "&pagesize=").concat(pagesize, "&sort=").concat(sort, "&user_ip=").concat(ip, "&user_agent=").concat(uAgent);
+                      _context2.next = 5;
+                      return self.fetch.get(url).then(function (response) {
+                        if (response.data.type !== 'JOBS') {
+                          if (failureCounts >= 5) {
+                            breakOutOfLoop = true;
+                          } else {
+                            failureCounts++;
+                          }
+                        } else {
+                          self.logSync('we GOT these Many Jobs');
+                          self.logSync(response.data.jobs.length);
+                          var jobs = response.data.jobs;
+                          accumulatedJobs.push(jobs);
+                          accumulatedJobs.length === 1 ? hits = response.data.hits : '';
+                          accumulatedJobs.length === 1 ? hits < jobsThreshold ? jobsThreshold = (_readOnlyError("jobsThreshold"), hits - i) : '' : '';
+                        }
+                      })["catch"](function (e) {
+                        self.logSync('Jobs fetching has bumped into an error');
+                        self.logSync(e);
+                      });
+
+                    case 5:
+                      if (!breakOutOfLoop) {
+                        _context2.next = 7;
+                        break;
+                      }
+
+                      return _context2.abrupt("return", "break");
+
+                    case 7:
+                    case "end":
+                      return _context2.stop();
+                  }
+                }
+              }, _loop);
+            });
+            i = 0;
+
+          case 15:
+            if (!(i <= callCount)) {
+              _context3.next = 23;
+              break;
+            }
+
+            return _context3.delegateYield(_loop(i), "t0", 17);
+
+          case 17:
+            _ret = _context3.t0;
+
+            if (!(_ret === "break")) {
+              _context3.next = 20;
+              break;
+            }
+
+            return _context3.abrupt("break", 23);
+
+          case 20:
+            i++;
+            _context3.next = 15;
+            break;
+
+          case 23:
+            // // console.log('THE REQUEST FOR USER ALERTS HAS SUCCEEDED')
+            // // console.log(response.data)
+            // console.log('THE TOTALJOBS')
+            // console.log(response.data.jobs.length)
+            // // return resolve({success: response.data}) 
+            self.logSync('THE ACCUMULATED JOBS EQUALS');
+            self.logSync(accumulatedJobs.length);
+
+            if (!(accumulatedJobs.length === 0)) {
+              _context3.next = 27;
+              break;
+            }
+
+            return _context3.abrupt("return");
+
+          case 27:
+            accumulatedJobs.forEach(function (jobsGroup, i) {
+              if (i === 0) {
+                self.logSync('tHE FIRST ARRAY');
+                self.log(jobsGroup);
+              }
+
+              allJobs = [].concat(_toConsumableArray(allJobs), _toConsumableArray(jobsGroup));
+              self.logSync('alljobs lengh at this point after concat');
+              self.logSync(allJobs);
+            }); // allJobs = accumulatedJobs[0]
+
+            self.logSync('ALLJOBS');
+            self.logSync(allJobs.length);
+            refinedJobs = self.refineOutsourcedJobs(allJobs);
+
+            if (!(refinedJobs.length < 1)) {
+              _context3.next = 33;
+              break;
+            }
+
+            return _context3.abrupt("return");
+
+          case 33:
+            self.logSync('the RefinedJobs');
+            self.logSync(refinedJobs.length); // refinedJobs = refinedJobs.filter(async(j,i)=>{
+            // 	let now = new Date() 
+            // 	let jobDate = new Date(j.date) 
+            // 	let yesterday = null
+            // 	now.setHours(0)
+            // 	now.setMinutes(0)
+            // 	now.setMilliseconds(0)
+            // 	jobDate.setHours(0) 
+            // 	jobDate.setMinutes(0) 
+            // 	jobDate.setMilliseconds(0) 
+            // 	yesterday = now.getDate() - 1
+            // 	// self.log('THE DATES') 
+            // 	// self.log(yesterday) 
+            // 	// self.log(jobDate.getDate())
+            // 	if(jobDate.getDate() === yesterday) {
+            // 		// await self.log('THE DATES ARE THE SAME') 
+            // 		return true
+            // 	}else{
+            // 		// await self.log('THE DATES DONT MATCH')
+            // 	}
+            // })
+            // console.log('THE DATE REFINED JOBS')
+            // console.log(refinedJobs)
+
+            self.getSubscribers('Daily').then(function (users) {
+              if (!users) return;
+              var sendList = [];
+              self.logSync('THE CURRENT USERS');
+              self.logSync(users);
+              users.forEach(function (user, i) {
+                if (sendList.length > 0) {
+                  var email = user.email;
+                  var sendUser = null;
+                  var setUser = sendList.filter(function (u, p) {
+                    if (u.email === email) return true;
+                  });
+
+                  if (setUser && setUser.length > 0) {
+                    sendUser = self.getMailRecipient(user, refinedJobs, true);
+                  }
+
+                  if (sendUser) {
+                    console.log('the setuser');
+                    console.log(setUser);
+                    setUser[0].send.push(sendUser);
+                  } else {
+                    var _sendUser = self.getMailRecipient(user, refinedJobs);
+
+                    if (_sendUser) {
+                      sendList.push(_sendUser);
+                    }
+                  }
+                } else {
+                  var _sendUser2 = self.getMailRecipient(user, refinedJobs);
+
+                  self.logSync('THE SENDUSER::FIRST ONE');
+                  self.logSync(_sendUser2);
+
+                  if (_sendUser2) {
+                    sendList.push(_sendUser2);
+                  }
+                }
+              });
+
+              if (sendList.length > 0) {
+                self.logSync('THE EMAILS TO BE SENT');
+                self.logSync(sendList);
+                var sending = [];
+                sendList.forEach(function (s, i) {
+                  sending.push({
+                    message: self.getEmailTemplate(s.email, s.send)
+                  });
+                });
+                self.emit({
+                  type: "send-email",
+                  data: {
+                    mail: sending,
+                    callback: self.alertEmailResponses.bind(_this)
+                  }
+                });
+              } else {
+                self.logSync('THE SENDLIST IS EMPTY');
+              }
+            })["catch"](function (e) {
+              self.log('query found no subscribing users');
+              self.log(e);
+              return;
+            }); //return                          
+            //return response.json();
+
+          case 36:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee2, this);
+  }));
+
+  return function getNewJobs(_x2) {
+    return _ref2.apply(this, arguments);
+  };
+}();
+var getSubscribers = function getSubscribers(frequency) {
+  var _this2 = this;
+
+  var self = this;
+  return new Promise(function (resolve, reject) {
+    var self = _this2;
+    var pao = self.pao; // let uid = pay.ID
+
+    var queries = {
+      returnFields: ['jo_job_alert_subscriber.id', 'email', 'frequency'],
+      tables: ['jo_job_alert_subscriber', 'jo_job_alert'],
+      joins: 2,
+      joinPoints: ['jo_job_alert_subscriber.u_id EQUALS jo_job_alert.u_id'],
+      conditions: ["jo_job_alert_subscriber.id EQUALS KEY::alert_mail_id", " AND jo_job_alert.frequency EQUALS ".concat(frequency)],
+      opiks: ['field.job_keyword.as[jobKeyword]']
+    };
+    self.query('mysql.SEARCH', queries, self.multiDataRequestHandler.bind(_this2, resolve, reject));
+  });
+};
+var getMailRecipient = function getMailRecipient(user, jobs) {
+  var isSetUser = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : false;
+  var self = this;
+  var FuzzySearch = self.fuzzySearch; //let mailSender = `mashelesepru@gmail.com`
+  // console.log('THE JOBS IN MAIL RECIPIENT')
+  // console.log(jobs)
+
+  var searchr = new FuzzySearch(jobs, {
+    findAllMatches: true,
+    keys: ['jobTitle']
+  });
+  var userJobs = searchr.search(user.jobKeyword);
+  var modifiedUJobs = [];
+  self.logSync('THE VALUE OF FUZZYSEARCH');
+  self.logSync(jobs[0]);
+  self.logSync(user.jobKeyword);
+  self.logSync('GETMAILCLIENTS USERJOBS');
+  self.logSync(userJobs[0]);
+
+  if (userJobs && userJobs.length > 0) {
+    userJobs.forEach(function (job, i) {
+      modifiedUJobs.push(job.item);
+    });
+
+    if (modifiedUJobs.length > 10) {
+      modifiedUJobs = modifiedUJobs.splice(0, 10);
+    }
+
+    if (isSetUser) return {
+      jobs: modifiedUJobs,
+      title: "".concat(user.jobKeyword, " jobs")
+    };
+    return {
+      email: user.email,
+      send: [{
+        jobs: modifiedUJobs,
+        title: "".concat(user.jobKeyword, " jobs")
+      }]
+    };
+  } else {
+    return null;
+  }
+};
+var getEmailTemplate = function getEmailTemplate(email, jobs) {
+  var self = this;
+  var mailSender = 'mashelesepru@gamil.com';
+  var jobsInHtml = [];
+  jobs.forEach(function (j, i) {
+    var jobsList = '<ul>';
+    self.logSync('user list of jobs');
+    self.logSync(j);
+    var jbs = j.jobs;
+    jbs.forEach(function (jobf, ji) {
+      jobsList += "<li> <a href=".concat(jobf.url, "> ").concat(jobf.jobTitle, " </a></li>");
+      self.logSync('THEJOBLISTIN IN ALOOOP');
+      self.logSync(jobsList); // if(jobs.length > 2 && ji > 3) return false 
+      // if(jobs.length === 2 && ji >= 4) return false 
+    }); //  if(job >= 4) break
+
+    self.logSync('THE JOBSLIST');
+    self.logSync(jobsList);
+    jobsInHtml.push("\n\t\t\t <div> ".concat(jobsList, "</u> <a href=https://www.jobbri.herokuapp.com> \n\t\t\t <button> View all ").concat(j.title, " </button></a></div>\n\t\t  "));
+  });
+  return {
+    to: email,
+    from: mailSender,
+    subject: "Your job alerts subscriptions",
+    html: jobsInHtml.join('')
+  };
+};
+var alertEmailResponses = function alertEmailResponses(result) {
+  var self = this;
+  console.log('THE EMAILSENDING RESPONSE');
+  console.log(result);
+};
 var refineOutsourcedJobs = function refineOutsourcedJobs(jobs) {
   var self = this;
   var pao = self.pao;
   var contains = pao.pa_contains;
   var refinedJobs = [];
+  self.log('THE JOBS LENGTH');
+  self.log(jobs.length);
   jobs.forEach(function (job, i) {
+    self.logSync('THE CURRENT JOB');
+    self.logSync(job);
     var newJob = {};
     newJob.jobType = job.job_type || 'Not-specified';
     newJob.date = job.date;
-    newJob.employer = job.company;
+    newJob.employer = job.company ? job.company.trim() != '' ? job.company : 'Unspecified' : 'Unspecified';
     newJob.jobTitle = job.title;
     newJob.url = job.url;
-    if (contains(job, ['salary_min', 'salary_max'])) newJob.jobSalary = "".concat(job.salary_min, "-").concat(job.salary_max);
+
+    if (contains(job, ['salary_min', 'salary_max'])) {
+      newJob.jobSalary = "".concat(job.salary_min, "-").concat(job.salary_max);
+    } else {
+      if (!contains(job, 'salary')) {
+        newJob.jobSalary = 'Market related';
+      } else {
+        newJob.jobSalary = job.salary.trim() !== '' ? job.salary : 'Market related';
+      }
+    }
 
     if (contains(job, 'locations')) {
       if (job.locations.toLowerCase() === 'south africa') {
@@ -8650,55 +9378,7 @@ var refineOutsourcedJobs = function refineOutsourcedJobs(jobs) {
   return refinedJobs;
 };
 var getJobs = function getJobs(pay) {
-  var _this = this;
-
-  var self = this;
-  var pao = self.pao;
-  console.log('THE PAYLOAD IN GETJOBS');
-  console.log(pay); // let u = pay.ID
-  // let catID = pay.catID
-
-  var range = {};
-
-  if (pay.skip && pay.limit) {
-    range = {
-      offset: pay.skip,
-      count: pay.limit
-    };
-  }
-
-  return new Promise( /*#__PURE__*/function () {
-    var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(resolve, reject) {
-      return regeneratorRuntime.wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              // await self.log('THE BACTCHSEARCH OBJECT')
-              // await self.log(self.searchBatch('office','malamulele','limpopo',range))
-              self.query('mysql.SEARCH', {
-                batch: true,
-                search: self.searchBatch('office', 'malamulele', 'limpopo', range)
-              }, self.searchBatchHandler.bind(_this, resolve, reject)); // self.query(
-              // 	'mysql.SEARCH',
-              // 	 {batch: true,search: self.searchBatch(search.key)},
-              // 	  self.searchBatchHandler.bind(this)
-              // )
-
-            case 1:
-            case "end":
-              return _context2.stop();
-          }
-        }
-      }, _callee2);
-    }));
-
-    return function (_x2, _x3) {
-      return _ref2.apply(this, arguments);
-    };
-  }());
-};
-var getJobsWithThingy = function getJobsWithThingy(pay) {
-  var _this2 = this;
+  var _this3 = this;
 
   var self = this;
   var pao = self.pao;
@@ -8717,39 +9397,88 @@ var getJobsWithThingy = function getJobsWithThingy(pay) {
 
   return new Promise( /*#__PURE__*/function () {
     var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(resolve, reject) {
-      var conditions;
-      return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      return regeneratorRuntime.wrap(function _callee3$(_context4) {
         while (1) {
-          switch (_context3.prev = _context3.next) {
+          switch (_context4.prev = _context4.next) {
+            case 0:
+              // await self.log('THE BACTCHSEARCH OBJECT')
+              // await self.log(self.searchBatch('office','malamulele','limpopo',range))
+              self.query('mysql.SEARCH', {
+                batch: true,
+                search: self.searchBatch('office', 'malamulele', 'limpopo', range)
+              }, self.searchBatchHandler.bind(_this3, resolve, reject)); // self.query(
+              // 	'mysql.SEARCH',
+              // 	 {batch: true,search: self.searchBatch(search.key)},
+              // 	  self.searchBatchHandler.bind(this)
+              // )
+
+            case 1:
+            case "end":
+              return _context4.stop();
+          }
+        }
+      }, _callee3);
+    }));
+
+    return function (_x3, _x4) {
+      return _ref3.apply(this, arguments);
+    };
+  }());
+};
+var getJobsWithThingy = function getJobsWithThingy(pay) {
+  var _this4 = this;
+
+  var self = this;
+  var pao = self.pao;
+  var contains = pao.pa_contains;
+  console.log('THE PAYLOAD IN GETJOBS');
+  console.log(pay); // let u = pay.ID
+  // let catID = pay.catID
+
+  var range = {};
+
+  if (contains(pay, 'skip') && contains(pay, 'limit')) {
+    range = {
+      offset: pay.skip,
+      count: pay.limit
+    };
+  }
+
+  return new Promise( /*#__PURE__*/function () {
+    var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(resolve, reject) {
+      var conditions;
+      return regeneratorRuntime.wrap(function _callee4$(_context5) {
+        while (1) {
+          switch (_context5.prev = _context5.next) {
             case 0:
               // await self.log('THE BACTCHSEARCH OBJECT')
               // await self.log(self.searchBatch('office','malamulele','limpopo',range))
               console.log('GET JOBS WITH THING REQUEST');
-              console.log(pay);
-              console.log(pay.filters);
-              console.log(pay.filters[0]);
+              console.log(pay); // console.log(pay.filters)
+              // console.log(pay.filters[0])
+
               conditions = self.generateQueryConditions(pay);
               console.log(conditions); // return resolve(conditions)
 
               self.query('mysql.SEARCH', {
                 batch: true,
                 search: self.searchBatch(conditions, range)
-              }, self.searchBatchHandler.bind(_this2, resolve, reject, true)); // self.query(
+              }, self.searchBatchHandler.bind(_this4, resolve, reject, true)); // self.query(
               // 	'mysql.SEARCH',
               // 	 {batch: true,search: self.searchBatch(search.key)},
               // 	  self.searchBatchHandler.bind(this)
               // )
 
-            case 7:
+            case 5:
             case "end":
-              return _context3.stop();
+              return _context5.stop();
           }
         }
-      }, _callee3);
+      }, _callee4);
     }));
 
-    return function (_x4, _x5) {
-      return _ref3.apply(this, arguments);
+    return function (_x5, _x6) {
+      return _ref4.apply(this, arguments);
     };
   }());
 };
@@ -8807,29 +9536,41 @@ var generateQueryConditions = function generateQueryConditions(options) {
   var pao = self.pao;
   var contains = pao.pa_contains;
   var conditions = [];
+  var filters = [];
+  var blackList = ['sort', 'limit', 'currentPage', 'skip', 'jq'];
 
-  if (contains(options, 'keywords')) {
+  if (contains(options, 'jq')) {
     conditions.push(self.getCondition({
-      key: options.keywords
-    }, 'keywords'));
+      key: options.jq
+    }, 'jq'));
   } else {
     conditions.push(self.getCondition({
       key: 202
     }, 'location').trim());
-  }
+  } // if(contains(options,'filters') && options.filters.length >= 1){
+  // 	let filters = options.filters.map((f,i)=>{
+  // 		return {key:f.key,value:f.value,table:'jo_job',operand: 'ISEQUALS'}
+  // 	})
+  //   	conditions.push(self.getCondition(filters,'AND'))
+  // }
 
-  if (contains(options, 'filters')) {
-    var filters = options.filters.map(function (f, i) {
-      return {
-        key: f.key,
-        value: f.value,
+
+  Object.entries(options).forEach(function (f, i) {
+    self.log('THE ENTRIY VALUE');
+    self.log(f);
+
+    if (blackList.indexOf(f[0]) < 0) {
+      filters.push({
+        key: f[0],
+        value: f[1],
         table: 'jo_job',
         operand: 'ISEQUALS'
-      };
-    });
-    conditions.push(self.getCondition(filters, 'AND'));
-  }
-
+      });
+    }
+  });
+  console.log('THE VALUE OF THE FILTERS');
+  console.log(filters);
+  if (filters.length >= 1) conditions.push(self.getCondition(filters, 'AND'));
   return conditions;
 };
 var getCondition = function getCondition(option) {
@@ -8839,7 +9580,7 @@ var getCondition = function getCondition(option) {
   var contains = pao.pa_contains;
 
   switch (id) {
-    case 'keywords':
+    case 'jq':
       return "GROUP::2 START GROUP::2 START MATCH [job_title] AGAINST [".concat(option.key, "] NATURAL, OR MATCH [position] AGAINST [").concat(option.key, "] NATURAL;AND jo_job.country_id EQUALS 202");
 
     case 'location':
@@ -8855,14 +9596,21 @@ var formatQuery = function formatQuery(options) {
   var pao = self.pao;
   var contains = pao.pa_contains;
   var len = options.length;
+  self.log('THE FORMAT QUERY OPTIONS');
+  self.log(options);
+  self.log(an);
   var stri = '';
   options.forEach(function (i, p) {
-    if (p === 0 && i.key === 'location') {
-      stri += "".concat(an.toUpperCase(), " GROUP::").concat(len, " START GROUP::2 START city_name EQUALS ").concat(i.value, ", OR state_name EQUALS ").concat(i.value, "; ");
+    if (p === 0 && i.key === 'jl') {
+      if (len === 1) {
+        stri += "".concat(an.toUpperCase(), " GROUP::2 START city_name EQUALS [").concat(i.value, "]; OR state_name EQUALS [").concat(i.value, "]");
+      } else {
+        stri += "".concat(an.toUpperCase(), " GROUP::").concat(len, " START GROUP::2 START city_name EQUALS [").concat(i.value, "], OR state_name EQUALS [").concat(i.value, "]; ");
+      }
     } else if (p === 0) {
       var derivedKey = self.getDbKey(i.key);
 
-      if (i.key === 'datePosted') {
+      if (i.key === 'jdp') {
         var intExp = i.value;
         var intUnit = '';
         self.log('THE OUTCOME OF ');
@@ -8889,7 +9637,7 @@ var formatQuery = function formatQuery(options) {
     } else {
       var _derivedKey = self.getDbKey(i.key);
 
-      if (i.key === 'datePosted') {
+      if (i.key === 'jdp') {
         var _intExp = i.value;
         var _intUnit = '';
 
@@ -8917,28 +9665,54 @@ var formatQuery = function formatQuery(options) {
   return stri.trim();
 };
 var getDbKey = function getDbKey(i) {
+  var sors = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'jobbri';
   var self = this;
   var pao = self.pao;
   var contains = pao.pa_contains;
 
-  switch (i) {
-    case 'jobType':
-      return 'job_type';
+  if (sors === 'jobbri') {
+    switch (i) {
+      case 'jt':
+        return 'job_type';
 
-    case 'salaryRange':
-      return 'salary';
+      case 'jsr':
+        return 'salary';
 
-    case 'careerLevel':
-      return 'exp_level';
+      case 'jcl':
+        return 'exp_level';
 
-    case 'categories':
-      return 'job_category_id';
+      case 'jcts':
+        return 'job_category_id';
 
-    case 'experience':
-      return 'experience_required_years';
+      case 'je':
+        return 'experience_required_years';
 
-    default:
-      return i;
+      default:
+        return i;
+    }
+  } else {
+    switch (i) {
+      case 'jt':
+        return 'contractperiod';
+
+      case 'jsr':
+        return 'salary';
+
+      case 'currentPage':
+        return 'page';
+
+      case 'jcts':
+        return 'exp_level';
+
+      case 'je':
+        return 'experience_required_years';
+
+      case 'jl':
+        return 'location';
+
+      default:
+        return i;
+    }
   }
 };
 var searchBatch = function searchBatch(options, range) {
@@ -8966,7 +9740,7 @@ var searchBatch = function searchBatch(options, range) {
     joinPoints: ['jo_job.u_id EQUALS jo_country.id', 'jo_job.company_id EQUALS jo_company.id'],
     //  
     conditions: options,
-    opiks: ['field.job_title.as[jobTitle]', 'field.company_logo.as[logo]', 'field.salary.as[jobSalary]', 'field.name.as[employer]', 'field.salary_currency.as[currency]', 'field.is_main_featured.as[isMainFeatured]', 'field.job_type.as[type]', 'field.approved_at.as[date]', 'field.is_featured.as[isFeatured]', 'field.is_free.as[isFree]', 'field.is_sponsored.as[isSponsored]', 'field.city_name.as[jobCity]'],
+    opiks: ['field.job_title.as[jobTitle]', 'field.company_logo.as[logo]', 'field.salary.as[jobSalary]', 'field.name.as[employer]', 'field.salary_currency.as[currency]', 'field.is_main_featured.as[isMainFeatured]', 'field.job_type.as[jobType]', 'field.approved_at.as[date]', 'field.is_featured.as[isFeatured]', 'field.is_free.as[isFree]', 'field.is_sponsored.as[isSponsored]', 'field.city_name.as[jobCity]'],
     range: "".concat(range.offset, ",").concat(range.count),
     soundex: true,
     sort: 'order[jobTitle].asc',
@@ -8986,6 +9760,18 @@ var searchBatch = function searchBatch(options, range) {
     conditions: options,
     opiks: ['fuxin.count.options[*].as[totalJobs]']
   }];
+};
+var multiDataRequestHandler = function multiDataRequestHandler() {
+  var resolve = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var reject = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var e = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var result = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var self = this;
+  var pao = self.pao;
+  console.log('THE TYPE OF E IN DATAREQUEST HANDLER');
+  console.log(e);
+  if (e) reject(new Error('An error has occured Inside MYSQL'));
+  resolve(result);
 };
 var searchBatchHandler = function searchBatchHandler() {
   var resolve = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
@@ -9014,21 +9800,44 @@ var searchBatchHandler = function searchBatchHandler() {
 };
 
 /***/ }),
-/* 88 */,
-/* 89 */
+/* 91 */
+/***/ (function(module, exports) {
+
+module.exports = require("fuzzy-search");
+
+/***/ }),
+/* 92 */
+/***/ (function(module, exports) {
+
+module.exports = {"jobs":[{"locations":"South Africa","site":"","date":"Fri, 20 Mar 2020 16:43:53 GMT","url":"http://jobviewtrack.com/en-za/job-1d4d41654805031a4f5463021a046c2f0041181c0153795b584e440503075400222b0d0002130d0032010712444854434a66270b4618540b6a220f150021475f5d4b19/63f4f57ab87a1dc3d800e748090e146d.html?affid=0e6712acc74087da913e65985433a122","title":"Health Care Financing Specialist","description":"Reports to: Director of Technical Assistance Location: Somewhat flexible, but requires considerable travel and significant portion of the year in Bamako. About Muso: Muso is a rapidly growing global health organization, committed that no on...","company":"Muso","salary":""},{"salary_min":"50","locations":"South Africa","salary_type":"H","date":"Thu, 05 Mar 2020 17:47:14 GMT","description":"Annapurna Solutions in currently looking for a Remote Customer service /Project Manager in South Africa to join our growing team. The Project Manager provides direction, coordination, and execution of small to large scope Product definition...","salary_currency_code":"ZAR","salary":"R50 per hour","site":"","url":"http://jobviewtrack.com/en-za/job-1b12417a4216044e41064f0e4829010a0000241a06194f48490d6005010f401152613e081c13104118483e1c58401d4b5f0b024e6f1b4d066a3601150e00121a061e0a6352404844220f491547061a633908174b540e1b1c470b754240016d2d5207540c05041c473645061e00104f0b704c4305080b557513545c595d/63f4f57ab8a159e62109a7510d153f2c.html?affid=0e6712acc74087da913e65985433a122","title":"virtual work from home - Customer service/ Project Manager","salary_max":"50","company":"Annapurna Solutions"},{"salary_min":"9000","locations":"Kroonstad, Free State","salary_type":"M","date":"Wed, 18 Mar 2020 14:02:20 GMT","description":"Need a capable person with Code 8 lisence Must be alble get new clients Must have a P number Must be computer literate and have his/her own computer. Must be able to work with corporate clients   Founded in 2005 Has large national corporate...","salary_currency_code":"ZAR","salary":"R9000 - 12000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1e12417d48171b4e641b4e171a0e024731451700071a49425c432f340a1d5354630c06151c080922370707075844510d79010c06491d430a090f6c3300431c060010434a532f6e0b011a551b4c625a535f565714/63f4f57aa137200750a2f2b934d1fd8f.html?affid=0e6712acc74087da913e65985433a122","title":"pest control technician","salary_max":"12000","company":"A'Africa Pest Prevention"},{"salary_min":"30000","locations":"Johannesburg, Gauteng","salary_type":"M","date":"Thu, 20 Feb 2020 01:46:04 GMT","description":"(Remote, Full Time, Anywhere in the World) We are looking for self-motivated and results-driven software professionals to join our Global Tech Team and help us leverage automation and technology to transform remarkable companies and free pe...","salary_currency_code":"ZAR","salary":"R30000 - 65000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1e1b416e7f294f2a4202450f07110b156772110506074f0b79485b010301571152612d333e472145020d051c5a4e4f2f6901190b4b1b50061a633c02084f000d6841181a0c1a19/63f4f57a61a428f3ef98df2c22d2cc72.html?affid=0e6712acc74087da913e65985433a122","title":"CRM & ERP Developer / Expert - Remote","salary_max":"65000","company":"Deep Consulting Solutions"},{"salary_min":"30000","locations":"Johannesburg, Gauteng","salary_type":"M","date":"Thu, 20 Feb 2020 00:27:52 GMT","description":"(Remote, Full Time, Anywhere in the World) We are looking for self-motivated and results-driven software professionals to join our Global Tech Team and help us leverage automation and technology to transform remarkable companies and free pe...","salary_currency_code":"ZAR","salary":"R30000 - 65000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1e1d416342000a4e6d27223007071a10045211482c1d4d42534848166d2852184c433b150f040e22260d08105e0b777e2f360a03480045433b0e08131241060d6841181a0c1a19/63f4f57ad38298c5280477db106fe23f.html?affid=0e6712acc74087da913e65985433a122","title":"Full Stack Software Engineer (Node.js, React, AWS) - Remote","salary_max":"65000","company":"Deep Consulting Solutions"},{"salary_min":"12000","locations":"Edenvale, Gauteng","salary_type":"M","date":"Fri, 13 Mar 2020 12:57:26 GMT","description":"International company since 1914 expanding needs 20 reps/managers to start immediately OWN CAR A MUST No experience needed full training provided by company appointments set by company Responsibilities: Developing and identifying new sales ...","salary_currency_code":"ZAR","salary":"R12000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1348417e4c080a1d0739410d09060b151622270905165929704c4305080b550721515a505f515d/63f4f57a0176c53dacb64afcf9e45588.html?affid=0e6712acc74087da913e65985433a122","title":"Sales Managers","salary_max":"12000","company":"Dynamic Promotions"},{"salary_min":"15","locations":"Cape Town, Western Cape","salary_type":"H","date":"Fri, 14 Feb 2020 14:41:29 GMT","description":"Wonder is an on-demand research network where bright minds like you come to explore intriguing and intellectually stimulating topics. With Wonder, you can earn while you learn. It's simple. Do research, get paid. The research you'll do serv...","salary_currency_code":"USD","salary":"$15 per hour","site":"","url":"http://jobviewtrack.com/en-za/job-1a1a416b5f010a02461a430648330b140041060b01716c5958484105010d4254771101150b1516223707041e5f45545954443d0b541141110b096c35005311091b1042297b5f4801030f491745625a535f505c14/63f4f57a96ca72c90b06f9ea3bb8a669.html?affid=0e6712acc74087da913e65985433a122","title":"Join Wonder's Community of Freelance Research Writers!","salary_max":"15","company":"Wonder"},{"salary_min":"40000","locations":"East London, Eastern Cape","salary_type":"M","date":"Tue, 10 Mar 2020 07:59:34 GMT","description":"Duties and Responsibilities: 1. Review cashbook processed by the Finance Officer to ensure that expenses are allocated to the correct GL account and project /cost centres; 2. Conduct Monthly Balance Sheet Recons: o Check all Creditors Recon...","salary_currency_code":"ZAR","salary":"R40000 - 45000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1c4a417d5f0b050b440000220b0201120b5415061d716b485e42580a1b0f490022331a0e04020654755a5b4313190c/63f4f57a7404882d6e8f278019416344.html?affid=0e6712acc74087da913e65985433a122","title":"PROJECT ACCOUNTANT","salary_max":"45000","company":"Sibanye Business Group (Pty) Ltd"},{"salary_min":"90000","locations":"East London, Eastern Cape","salary_type":"M","date":"Tue, 10 Mar 2020 07:36:40 GMT","description":"The CFO is accountable for the administrative, financial, and risk management operations on the organization’s Global Fund, including the development of a financial and operational strategy, metrics tied to that strategy, and the ongoing de...","salary_currency_code":"ZAR","salary":"R90000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-4b1c416e450d0a080732490d090f0d0e044c54270f154348585f2f2707074212002c0e0707040052762e001d4b455e444c084f21411249000d136c240d49110e493543455c434e0d0e022532490d090f0d0e044c755a5b4313190c/63f4f57a4eb180963e6166a9383adbe6.html?affid=0e6712acc74087da913e65985433a122","title":"CHIEF FINANCIAL OFFICER","salary_max":"90000","company":"Sibanye Business Group (Pty) Ltd"},{"salary_min":"20000","locations":"Cape Town, Western Cape","salary_type":"M","date":"Mon, 24 Feb 2020 11:52:15 GMT","description":"The financial accountant will provide financial and administrative support to board members, management, colleagues, donors and other stakeholders of HOPE Cape Town Trust and Association. Candidate will be responsible for all financial repo...","salary_currency_code":"ZAR","salary":"R20000 - 24000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-494a416b440a0e00441d410f48200d040a551a1c081d5e297c4e4e0b1a0053154e176a270709044e1701081f2b190f1c1a5d5b/63f4f57a4bc81f11b2d05fc0f7991109.html?affid=0e6712acc74087da913e65985433a122","title":"Financial Accountant","salary_max":"24000","company":"HOPE Cape Town"},{"locations":"Johannesburg, Gauteng","site":"","date":"Fri, 27 Mar 2020 08:04:14 GMT","url":"http://jobviewtrack.com/en-za/job-1d1a417d5f0b0b1b4400002c1f0f0b15677006070d06495f3f625a0a0a1c2646125259565a/9d2595fca8a59ff1047b3d3f5b796a4a.html?affid=0e6712acc74087da913e65985433a122","title":"Product Owner","description":"Nedbank Recruiting   Requisition ID: 103055   Recruitment Consultant: Nomathamsanqa Nonkonyana   Closing Date: 02nd April 2020   Job Family   Information Technology   Career Stream   It Application Development   Leadership Pipeline   Manage...","company":"Nedbank","salary":""},{"locations":"Johannesburg, Gauteng","site":"","date":"Fri, 27 Mar 2020 08:03:15 GMT","url":"http://jobviewtrack.com/en-za/job-1213416c43050317540021515a505f5051/c8219c309d291431b3dc951803a34b74.html?affid=0e6712acc74087da913e65985433a122","title":"FTP Analyst","description":"Nedbank Recruiting   Job Purpose   The FTP function plays an important role in Nedbank in terms of:  Transferring interest rate risk and liquidity risk to a central unit (BSM) for the strategic management thereof.  Rewarding money-in busine...","company":"Nedbank","salary":""},{"locations":"Johannesburg, Gauteng","site":"","date":"Fri, 27 Mar 2020 07:49:52 GMT","url":"http://jobviewtrack.com/en-za/job-1c48416a5f050b1b460045432508000e0b47542d0714434558485f662207491d4e0448261c060155151c0c537a59524a5f0502034276671109051b06114554381b1c4d595c4040014f2b4913490d0d041c652252150c1c125e4e1d7d5f0b081c46194d066a2c07090c4e13482c1d4d42534848166e5c154511545c/b364d3f60d828356ab427836774bbbe7.html?affid=0e6712acc74087da913e65985433a122","title":"Graduate Programme : Graduate Mining Engineer","description":"Requisition ID: 29668   Job Category: Engineering   With over six decades of business and technical experience in the mining, energy, and infrastructure sectors, we understand that challenges are changing rapidly in every industry. We respo...","company":"Hatch","salary":""},{"salary_min":"25000","locations":"Centurion, Gauteng","salary_type":"M","date":"Fri, 14 Feb 2020 05:52:39 GMT","description":"“Customers will never love a company, until the employees love it first” Trendsetters Travel is seeking a Senior Travel Administrator (preferably with Group & MICE experience) to join our dynamic team. This position is responsible for fulfi...","salary_currency_code":"ZAR","salary":"R25000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1c1c417e480a0601555461070508000e165406091d1c5829695f4c120a020735440e010f07141152151c060128785843440b1d4e730641150d0d6c26014d1d0600005e595c5942166d3a5515560604605c555411425d/63f4f57a54903d21c2ccbf99e4d0d60f.html?affid=0e6712acc74087da913e65985433a122","title":"Senior Travel Administrator","salary_max":"25000","company":"Trendsetters Travel"},{"locations":"Johannesburg, Gauteng","site":"","date":"Sun, 22 Mar 2020 02:44:13 GMT","url":"http://jobviewtrack.com/en-za/job-1e1a4168401403015e19450d1c632d08104e070d057218190c1c1a50/96cff2e408db3df9ddae96a021643f5c.html?affid=0e6712acc74087da913e65985433a122","title":"Employment Counsel - MEA","description":"You're seeing information for Paris. To see local features and services for another location, select a different city. Show more   Traveling?   Employment Counsel - MEA   Legal   in Johannesburg, South Africa   EMPLOYMENT COUNSEL - MEA   At...","company":"Uber","salary":""},{"salary_min":"600000","locations":"Johannesburg, Gauteng","salary_type":"Y","date":"Fri, 27 Mar 2020 08:59:54 GMT","description":"Education   CA(SA)    Skills   Candidates coming from the big four will get first preference  Good academics    Please visit our website to submit your CV directly or to view other finance related jobs. If you have not had any response in t...","salary_currency_code":"ZAR","salary":"R600000 per year","site":"","url":"http://jobviewtrack.com/en-za/job-4e1f416348130317072555020408080e0044542b2871696a1d6e6c663e1b4618490501040a47266176260c0446521d7c58050307411d45076a2f0b100959542b287218190c1c1a50/e7c2f69b64b2e69615217e49534d31fb.html?affid=0e6712acc74087da913e65985433a122","title":"Newly Qualified CA (SA)","salary_max":"600000","company":"Communicate Recruitment"},{"locations":"Johannesburg, Gauteng","site":"","date":"Fri, 27 Mar 2020 08:59:35 GMT","url":"http://jobviewtrack.com/en-za/job-1b1e41657f442e0a4a1d4e433f0e1c0c6768264828174742530d681c1f0b551d450d0b046c2f3700350c041a44297c49400d014e701b52086a293c47324f06036841181a0c1a19/428e3c4397b4a20d65e7d885dde63400.html?affid=0e6712acc74087da913e65985433a122","title":"HR Admin (Work Experience Program)","description":"EXTERNAL VACANCY   POSITION:HR ADMIN (WORK EXPIERIENCE PROGRAME)   REFERENCE NO:2020/03/29/HR   LOCATION:GREENSTONE AND FOURWAYS   REPORTING TO:HR MANAGER   CLOSING DATE:2020 MARCH 29   STIPEND:TBC   PURPOSE OF THE JOB   The recommended Can...","company":"Afrika Tikkun Inc","salary":""},{"salary_min":"650000","locations":"Johannesburg, Gauteng","salary_type":"Y","date":"Fri, 27 Mar 2020 08:59:25 GMT","description":"If you''re looking for a role where you can work along-side highly skilled, like-minded individuals, building next-generation systems impacting the company''s future, then this is the role for you.   Job & Company Description:   This is you...","salary_currency_code":"ZAR","salary":"R650000 per year","site":"","url":"http://jobviewtrack.com/en-za/job-1b49417d54100701495464061e0402081545066a390a5e4352432f200a1842184f130d136f555711455f5d/b9ddf280c20ad3ddb4608811fa32f668.html?affid=0e6712acc74087da913e65985433a122","title":"Python Developer","salary_max":"650000","company":"NETWORK IT BRUMA"},{"locations":"Durban, KwaZulu-Natal","site":"","date":"Fri, 27 Mar 2020 08:59:21 GMT","url":"http://jobviewtrack.com/en-za/job-194e416b4216180f5510490d0f412d0b00521f6a2a1f4f59562f6b0b1d194606440a06066f555711465c50/f7fd50a4d91e3b53f0cff800ab176c93.html?affid=0e6712acc74087da913e65985433a122","title":"Forwarding clerk","description":"Forwarding Clerk – R12000 CTC   Coordinating of overseas collections from order placement to delivery (air freight, sea   freight, out of gauge, project and hazardous cargo)   Identifying and arranging best methods of transport according to...","company":"Khulanathi Chartered Alberante","salary":""},{"locations":"Cape Town, Western Cape","site":"","date":"Fri, 27 Mar 2020 08:59:05 GMT","url":"http://jobviewtrack.com/en-za/job-4e4e417e42021b19460645432c041802094f04050c1d5e0b6e48430d001c0759650d0f0800020052763b0c1d43444f0d7e0b091a50155206482400000c4e110d1b7179445b595a051d0b073045150d0d011708451a1c4936444c544348011d6c74114e0a07134e23005611040603474e53590d2101094e1a45061a633d08035403091b160a6e534a440a0a0b5575125159565753/cac381fea9b31251ec8b4a0cc2252cf5.html?affid=0e6712acc74087da913e65985433a122","title":"Senior Software Development Engineer - EC2 Placement","description":"DESCRIPCIÓN   Build the systems that optimize how EC2 matches requests for Instances with the underlying compute capacity. EC2 Placement is seeking talented engineers to build the online and offline optimization systems for compute workload...","company":"Amazon","salary":""}],"hits":77396,"response_time":0.0394449234008789,"type":"JOBS","pages":3870}
+
+/***/ }),
+/* 93 */
+/***/ (function(module, exports) {
+
+module.exports = require("fuse.js");
+
+/***/ }),
+/* 94 */
+/***/ (function(module, exports) {
+
+module.exports = require("ip");
+
+/***/ }),
+/* 95 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fetch__ = __webpack_require__(90);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fetch__ = __webpack_require__(96);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__fetch__["a" /* default */]);
 
 /***/ }),
-/* 90 */
+/* 96 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(91);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(97);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -9045,7 +9854,7 @@ var Fetch = function Fetch(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Fetch);
 
 /***/ }),
-/* 91 */
+/* 97 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9076,25 +9885,25 @@ var list = function list(data) {
 };
 
 /***/ }),
-/* 92 */
+/* 98 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jwt__ = __webpack_require__(93);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__jwt__ = __webpack_require__(99);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__jwt__["a" /* default */]);
 
 /***/ }),
-/* 93 */
+/* 99 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(94);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(100);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
-var jwt = __webpack_require__(95);
+var jwt = __webpack_require__(101);
 
 var Jwt = function Jwt(pao) {
   _classCallCheck(this, Jwt);
@@ -9114,7 +9923,7 @@ var Jwt = function Jwt(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Jwt);
 
 /***/ }),
-/* 94 */
+/* 100 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9244,31 +10053,31 @@ var jwtVerify = /*#__PURE__*/function () {
 }();
 
 /***/ }),
-/* 95 */
+/* 101 */
 /***/ (function(module, exports) {
 
 module.exports = require("jsonwebtoken");
 
 /***/ }),
-/* 96 */
+/* 102 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__hash__ = __webpack_require__(97);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__hash__ = __webpack_require__(103);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__hash__["a" /* default */]);
 
 /***/ }),
-/* 97 */
+/* 103 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(98);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(104);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
-var bcrypt = __webpack_require__(99);
+var bcrypt = __webpack_require__(105);
 
 var Hash = function Hash(pao) {
   _classCallCheck(this, Hash);
@@ -9285,7 +10094,7 @@ var Hash = function Hash(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Hash);
 
 /***/ }),
-/* 98 */
+/* 104 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -9431,31 +10240,31 @@ var compare = function compare(data) {
 };
 
 /***/ }),
-/* 99 */
+/* 105 */
 /***/ (function(module, exports) {
 
 module.exports = require("bcryptjs");
 
 /***/ }),
-/* 100 */
+/* 106 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__register__ = __webpack_require__(101);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__register__ = __webpack_require__(107);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__register__["a" /* default */]);
 
 /***/ }),
-/* 101 */
+/* 107 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(102);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(108);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
  //Dependecies
 
-var crypto = __webpack_require__(6);
+var crypto = __webpack_require__(7);
 
 var Register = function Register(pao) {
   _classCallCheck(this, Register);
@@ -9468,40 +10277,58 @@ var Register = function Register(pao) {
     social: true
   }; // methods
 
-  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* init */];
-  this.handleRegisterTask = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleRegisterTask */];
-  this.registerStrategy = __WEBPACK_IMPORTED_MODULE_0__methods__["j" /* registerStrategy */];
-  this.anzii = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* anzii */];
-  this.social = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* social */];
-  this.isUserExist = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* isUserExist */];
-  this.isCallback = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* isCallback */];
-  this.hash = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* hash */];
-  this.insertHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* insertHandler */];
-  this.findHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* findHandler */];
-  this.procedureDoc = __WEBPACK_IMPORTED_MODULE_0__methods__["i" /* procedureDoc */];
-  this.setTokenHeader = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* setTokenHeader */];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["h" /* init */];
+  this.handleRegisterTask = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* handleRegisterTask */];
+  this.registerUser = __WEBPACK_IMPORTED_MODULE_0__methods__["n" /* registerUser */];
+  this.addUser = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* addUser */];
+  this.saveUser = __WEBPACK_IMPORTED_MODULE_0__methods__["o" /* saveUser */];
+  this.createJwt = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* createJwt */];
+  this.sendEmail = __WEBPACK_IMPORTED_MODULE_0__methods__["p" /* sendEmail */];
+  this.hookFunkToThingy = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* hookFunkToThingy */];
+  this.registerStrategy = __WEBPACK_IMPORTED_MODULE_0__methods__["registerStrategy"];
+  this.anzii = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* anzii */];
+  this.social = __WEBPACK_IMPORTED_MODULE_0__methods__["r" /* social */];
+  this.isUserExist = __WEBPACK_IMPORTED_MODULE_0__methods__["k" /* isUserExist */];
+  this.isCallback = __WEBPACK_IMPORTED_MODULE_0__methods__["isCallback"];
+  this.hash = __WEBPACK_IMPORTED_MODULE_0__methods__["hash"];
+  this.insertHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["insertHandler"];
+  this.findHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["findHandler"];
+  this.procedureDoc = __WEBPACK_IMPORTED_MODULE_0__methods__["l" /* procedureDoc */];
+  this.setTokenHeader = __WEBPACK_IMPORTED_MODULE_0__methods__["q" /* setTokenHeader */];
 };
 
 /* harmony default export */ __webpack_exports__["a"] = (Register);
 
 /***/ }),
-/* 102 */
+/* 108 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return init; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleRegisterTask; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return registerStrategy; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return anzii; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return social; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return isUserExist; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return isCallback; });
-/* unused harmony export processResults */
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return setTokenHeader; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return insertHandler; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return findHandler; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return hash; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "i", function() { return procedureDoc; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "h", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return handleRegisterTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "n", function() { return registerUser; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return anzii; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "r", function() { return social; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "k", function() { return isUserExist; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return addUser; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "q", function() { return setTokenHeader; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "o", function() { return saveUser; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return createJwt; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "p", function() { return sendEmail; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return hookFunkToThingy; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "l", function() { return procedureDoc; });
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(n); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && Symbol.iterator in Object(iter)) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
 
 function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
@@ -9512,245 +10339,116 @@ var init = function init() {
     'handle-register-task': this.handleRegisterTask.bind(this)
   });
 };
-var handleRegisterTask = function handleRegisterTask(data) {
-  var self = this;
-  self.log("Handling Registration task");
-  self.log(data);
-  self.registerStrategy(data);
-};
-var registerStrategy = function registerStrategy(data) {
-  var self = this;
-  var pao = self.pao;
-  var user = data.payload.user;
-  console.log('THE DATA INSIDE STRATEGY');
-  console.log(user);
-
-  if (!pao.pa_contains(user, 'strategy')) {
-    data.callback('Missing required Strategy', null);
-  } else {
-    if (!pao.pa_contains(self.strategies, user.strategy)) {
-      data.callback('Specified strategy not supported');
-    } else {
-      console.log('STRATEGY: CURRENT');
-      console.log(user.strategy);
-      self.tmpd = data;
-      self[user.strategy](data);
-    }
-  }
-};
-var anzii = function anzii(data) {
-  var self = this;
-  var pao = self.pao;
-  self.log("Executing Anzii registration strategy");
-
-  if (!pao.pa_contains(data, 'user')) {} else {
-    var user = data.user.parsed.user;
-
-    if (!pao.pa_contains(user, ['email', 'password'])) {
-      data.callback({
-        message: 'missing required keys for registration'
-      });
-    } else {
-      if (!pao.pa_isValidEmail(user.email) || !pao.pa_isValidPassword(user.password)) {
-        data.callback({
-          message: 'either password or email is invalid'
-        });
-      } else {
-        self.isUserExist(data);
-      }
-    }
-  }
-};
-var social = function social(data) {
-  var self = this;
-  self.log('Executing Social registration strategy');
-};
-var isUserExist = function isUserExist(data) {
-  var self = this;
-  var user = data.payload.user;
-  self.log('Checking if user is taken');
-  self.callback = data.callback;
-  self.query('mysql.jo_user.findOne', {
-    user: {
-      email: user.email
-    }
-  }, self.findHandler.bind(this)); //   {conditions: ['where']}
-};
-var isCallback = function isCallback(data) {
-  var over = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-
-  if (!data.hasOwnProperty('callback')) {
-    self.log('Task handle request me failed', 'warn');
-    self.emit({
-      type: 'request-task-handle-failed',
-      data: {
-        message: 'failed'
-      }
-    });
-  } else {
-    if (over) {
-      data.callback(over);
-    } else {
-      data.callback();
-    }
-  }
-};
-var processResults = function processResults(e, r) {};
-var setTokenHeader = function setTokenHeader() {
-  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  var token = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  var self = this;
-  var pao = self.pao;
-
-  if (e) {
-    console.log('TOKEN CREATION FAILED');
-    console.log(e);
-    self.callback(e);
-  } else {
-    console.log('TOKEN CREATION SUCCESSFULL');
-    console.log('SETTING TOKEN HEADER');
-    console.log(self.tmpd);
-    self.tmpd.user.request.res.set('X-AUTH-TOKEN', token.token);
-    self.callback(null, {
-      user: token.user
-    });
-  }
-};
-var insertHandler = function insertHandler() {
-  var e = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
-  var r = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
-  var self = this;
-  var pao = self.pao;
-
-  if (e) {
-    self.callback(e, null);
-  } else {
-    if (!r) {
-      self.callback({
-        message: 'Insert operation failed'
-      }, null);
-    } else {
-      self.emit({
-        type: 'create-jwt-token',
-        data: {
-          payload: r.user,
-          callback: self.setTokenHeader.bind(self)
-        }
-      });
-    }
-  }
-};
-var findHandler = /*#__PURE__*/function () {
-  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
-    var e,
-        r,
-        self,
-        pao,
-        user,
-        _args = arguments;
-    return regeneratorRuntime.wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            e = _args.length > 0 && _args[0] !== undefined ? _args[0] : null;
-            r = _args.length > 1 && _args[1] !== undefined ? _args[1] : null;
-            self = this;
-            pao = self.pao;
-
-            if (e) {
-              self.callback({
-                message: 'An error occured attempting to find user'
-              }, null);
-            } else {
-              console.log('THE VALUE R');
-              console.log(pao.pa_isArray(r));
-              console.log(r.length);
-              console.log(r.length > 0);
-              console.log('after r has been re-assigned a new value');
-              console.log(r);
-              console.log(!r);
-
-              if (pao.pa_isArray(r) && r.length === 0) {
-                console.log('ANZII USER DOES NOT EXIST, CREATE USER');
-                user = self.tmpd.user.parsed.user;
-                self.emit({
-                  type: "hash-payload",
-                  data: {
-                    payload: user.password,
-                    callback: self.hash.bind(self)
-                  }
-                });
-              } else {
-                console.log('THE TAKEN USER');
-                console.log(r);
-                self.callback({
-                  message: 'User is already taken'
-                }, null);
-              }
-            } // token.res.set('X-AUTH-TOKEN',token.tk)
-
-
-          case 5:
-          case "end":
-            return _context.stop();
-        }
-      }
-    }, _callee, this);
-  }));
-
-  return function findHandler() {
-    return _ref.apply(this, arguments);
-  };
-}();
-var hash = /*#__PURE__*/function () {
-  var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {
-    var e,
-        h,
-        self,
-        user,
-        password,
-        _hash,
-        _args2 = arguments;
-
+var handleRegisterTask = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(data) {
+    var self, pao, contains, isOBject, forOf, user;
     return regeneratorRuntime.wrap(function _callee2$(_context2) {
       while (1) {
         switch (_context2.prev = _context2.next) {
           case 0:
-            e = _args2.length > 0 && _args2[0] !== undefined ? _args2[0] : null;
-            h = _args2.length > 1 && _args2[1] !== undefined ? _args2[1] : null;
+            console.log(data);
             self = this;
+            pao = self.pao;
+            contains = pao.pa_contains;
+            isOBject = pao.pa_isObject;
+            forOf = pao.pa_forOf;
+            user = data.payload.user;
+            self.callback = data.callback;
+            self.tmpd = data; // let uid = user.ID
 
-            if (!e) {
-              _context2.next = 8;
+            _context2.next = 11;
+            return self.log('THE DATA INSIDE ASETTINGS');
+
+          case 11:
+            _context2.next = 13;
+            return self.log(user);
+
+          case 13:
+            if (isOBject(user)) {
+              _context2.next = 15;
               break;
             }
 
-            console.log(e);
-            self.callback({
-              message: 'registration failed due to server error:hash'
-            });
-            _context2.next = 18;
+            return _context2.abrupt("return", self.callback({
+              message: 'User has not been specified'
+            }, null));
+
+          case 15:
+            if (user.action) {
+              _context2.next = 17;
+              break;
+            }
+
+            return _context2.abrupt("return", self.callback({
+              message: 'Invalid request'
+            }, null));
+
+          case 17:
+            if (contains(user, ['payload'])) {
+              _context2.next = 19;
+              break;
+            }
+
+            return _context2.abrupt("return", self.callback({
+              message: 'missing required key'
+            }, null));
+
+          case 19:
+            _context2.t0 = user.action;
+            _context2.next = _context2.t0 === 'registerUser' ? 22 : 24;
             break;
 
-          case 8:
-            console.log('hashed');
-            console.log(h);
-            user = self.tmpd.user.parsed.user;
-            password = h;
-            _context2.next = 14;
-            return self.crypto.randomBytes(35).toString('hex');
+          case 22:
+            self.registerUser(user.payload).then( /*#__PURE__*/function () {
+              var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(userStatus) {
+                return regeneratorRuntime.wrap(function _callee$(_context) {
+                  while (1) {
+                    switch (_context.prev = _context.next) {
+                      case 0:
+                        _context.next = 2;
+                        return self.log('THE Register Status');
 
-          case 14:
-            _hash = _context2.sent;
-            user.password = password;
-            user.hash = _hash;
-            self.query('mysql.PROCEDURE', self.procedureDoc(user), self.insertHandler.bind(this)); // self.query(
-            // 	'mysql.jo_user.insertOne',
-            // 	  {user: {id: null,email: user.email,first_name: user.firstname,last_name: user.lastname,password: password,hash: hash}},
-            // 	  self.insertHandler.bind(this)
-            // )
+                      case 2:
+                        _context.next = 4;
+                        return self.log(userStatus);
 
-          case 18:
+                      case 4:
+                        if (!userStatus) {
+                          _context.next = 6;
+                          break;
+                        }
+
+                        return _context.abrupt("return", self.callback(null, {
+                          message: 'exists'
+                        }));
+
+                      case 6:
+                        self.addUser(user.register).then(function (addedUser) {
+                          self.createJwt(addedUser).then(function (jwt) {
+                            self.sendEmail(addedUser).then(function (mailSent) {})["catch"](function (e) {});
+                          })["catch"](function (e) {});
+                        })["catch"](function (e) {});
+
+                      case 7:
+                      case "end":
+                        return _context.stop();
+                    }
+                  }
+                }, _callee);
+              }));
+
+              return function (_x2) {
+                return _ref2.apply(this, arguments);
+              };
+            }())["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context2.abrupt("break", 25);
+
+          case 24:
+            return _context2.abrupt("return", self.callback(new Error('Unknown data request'), null));
+
+          case 25:
           case "end":
             return _context2.stop();
         }
@@ -9758,10 +10456,249 @@ var hash = /*#__PURE__*/function () {
     }, _callee2, this);
   }));
 
-  return function hash() {
-    return _ref2.apply(this, arguments);
+  return function handleRegisterTask(_x) {
+    return _ref.apply(this, arguments);
   };
 }();
+var registerUser = function registerUser(pay) {
+  var self = this;
+  var pao = self.pao;
+  var user = pay;
+  return new Promise(function (resolve, reject) {
+    if (!pao.pa_contains(user, 'strategy')) return reject(new Error('Missing strategy'));
+    if (!pao.pa_contains(user, 'register')) return reject(new Error('Missing register'));
+    if (!pao.pa_contains(self.strategies, user.strategy)) return reject(new Error('Invalid strategy'));
+    self[user.strategy](user.register).then(function (registerStatus) {
+      return resolve(registerStatus);
+    })["catch"](function (e) {
+      if (e instanceof Errror) return reject(e);
+    });
+  });
+};
+var anzii = function anzii(user) {
+  var self = this;
+  var pao = self.pao;
+  self.log("Executing Anzii registration strategy");
+  return new Promise(function (resolve, reject) {
+    if (!pao.pa_contains(user, ['email', 'password'])) return reject(new Error('Missing required user data'));
+    if (!pao.pa_isValidEmail(user.email) && !pao.pa_isValidPassword(user.password)) return reject(new Error('Invalid register input'));
+    self.isUserExist(resolve, reject, user).then(function (existStatus) {
+      return resolve(existStatus);
+    })["catch"](function (e) {
+      if (e instanceof Errror) return reject(e);
+    });
+  });
+};
+var social = function social(data) {
+  var self = this;
+  self.log('Executing Social registration strategy');
+};
+var isUserExist = function isUserExist(user) {
+  var _this = this;
+
+  var self = this; // let user =  user
+
+  return new Promise(function (resolve, reject) {
+    self.query('mysql.jo_user.findOne', {
+      user: {
+        email: user.email
+      }
+    }, self.dataRequestHandler.bind(_this, resolve, reject));
+  });
+};
+var addUser = function addUser(user) {
+  var self = this;
+  return new Promise(function (resolve, reject) {
+    self.emit({
+      type: "hash-payload",
+      data: {
+        payload: user.password,
+        callback: hash.bind(self, resolve, reject)
+      }
+    });
+  });
+};
+var setTokenHeader = function setTokenHeader(reslve, reject) {
+  var e = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var token = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var self = this;
+  var pao = self.pao;
+
+  if (e) {
+    console.log('TOKEN CREATION FAILED');
+    console.log(e);
+    resolve(e);
+  } else {
+    console.log('TOKEN CREATION SUCCESSFULL');
+    console.log('SETTING TOKEN HEADER');
+    console.log(self.tmpd);
+    self.tmpd.user.request.res.set('X-AUTH-TOKEN', token.token);
+    resolve({
+      user: token.user
+    });
+  }
+};
+
+var hash = /*#__PURE__*/function () {
+  var _ref3 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee3(resolve, reject) {
+    var e,
+        h,
+        self,
+        user,
+        password,
+        _hash,
+        _args3 = arguments;
+
+    return regeneratorRuntime.wrap(function _callee3$(_context3) {
+      while (1) {
+        switch (_context3.prev = _context3.next) {
+          case 0:
+            e = _args3.length > 2 && _args3[2] !== undefined ? _args3[2] : null;
+            h = _args3.length > 3 && _args3[3] !== undefined ? _args3[3] : null;
+            self = this;
+
+            if (!e) {
+              _context3.next = 8;
+              break;
+            }
+
+            console.log(e);
+            reject({
+              message: 'registration failed due to server error:hash'
+            });
+            _context3.next = 18;
+            break;
+
+          case 8:
+            console.log('hashed');
+            console.log(h);
+            user = self.tmpd.user;
+            password = h;
+            _context3.next = 14;
+            return self.crypto.randomBytes(35).toString('hex');
+
+          case 14:
+            _hash = _context3.sent;
+            user.password = password;
+            user.hash = _hash;
+            self.saveUser(user).then(function (savedUser) {
+              resolve(savedUser);
+            })["catch"](function (e) {});
+
+          case 18:
+          case "end":
+            return _context3.stop();
+        }
+      }
+    }, _callee3, this);
+  }));
+
+  return function hash(_x3, _x4) {
+    return _ref3.apply(this, arguments);
+  };
+}();
+
+var handleSentEmail = function handleSentEmail(sendStatus) {};
+
+var getJwt = /*#__PURE__*/function () {
+  var _ref4 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee4(resolve, reject) {
+    var e,
+        h,
+        self,
+        user,
+        password,
+        _hash2,
+        _args4 = arguments;
+
+    return regeneratorRuntime.wrap(function _callee4$(_context4) {
+      while (1) {
+        switch (_context4.prev = _context4.next) {
+          case 0:
+            e = _args4.length > 2 && _args4[2] !== undefined ? _args4[2] : null;
+            h = _args4.length > 3 && _args4[3] !== undefined ? _args4[3] : null;
+            self = this;
+
+            if (!e) {
+              _context4.next = 8;
+              break;
+            }
+
+            console.log(e);
+            reject({
+              message: 'registration failed due to server error:hash'
+            });
+            _context4.next = 18;
+            break;
+
+          case 8:
+            console.log('hashed');
+            console.log(h);
+            user = self.tmpd.user;
+            password = h;
+            _context4.next = 14;
+            return self.crypto.randomBytes(35).toString('hex');
+
+          case 14:
+            _hash2 = _context4.sent;
+            user.password = password;
+            user.hash = _hash2;
+            self.saveUser(user).then(function (savedUser) {
+              resolve(savedUser);
+            })["catch"](function (e) {});
+
+          case 18:
+          case "end":
+            return _context4.stop();
+        }
+      }
+    }, _callee4, this);
+  }));
+
+  return function getJwt(_x5, _x6) {
+    return _ref4.apply(this, arguments);
+  };
+}();
+
+var saveUser = function saveUser(user) {
+  var _this2 = this;
+
+  var self = this;
+  return new Promise(function (resolve, reject) {
+    self.query('mysql.PROCEDURE', self.procedureDoc(user), self.dataRequestHandler.bind(_this2, resolve, reject));
+  });
+};
+var createJwt = function createJwt(user) {
+  var self = this;
+  return new Promise(function (resolve, reject) {
+    self.emit({
+      type: 'create-jwt-token',
+      data: {
+        payload: user,
+        callback: self.setTokenHeader.bind(self, resolve, reject)
+      }
+    });
+  });
+};
+var sendEmail = function sendEmail(user) {
+  var self = this;
+  return new Promise(function (resolve, reject) {
+    self.emit({
+      type: 'send-mail',
+      data: {
+        payload: user,
+        callback: self.hookFunkToThingy(self, function (resolve, reject) {
+          var e = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+          var res = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+          if (e) return reject(e);
+          return resolve(res);
+        }, [resolve, reject])
+      }
+    });
+  });
+};
+var hookFunkToThingy = function hookFunkToThingy(hooky, hook, args) {
+  return hook.bind(hooky, _toConsumableArray(args));
+};
 var procedureDoc = function procedureDoc(data) {
   var fields = {
     jo_user: {
@@ -9818,23 +10755,196 @@ var procedureDoc = function procedureDoc(data) {
     lastInsert: ['jo_user'],
     fields: fields.jo_login
   }];
-};
+}; // export const init = function(){
+//   console.log('Register has been initialised')
+// 	this.listens({
+// 		'handle-register-task': this.handleRegisterTask.bind(this),
+// 	})
+// }
+// export const handleRegisterTask= function(data){
+// 	const self = this 
+// 	self.log("Handling Registration task")
+// 	self.log(data)
+// 	self.registerStrategy(data)
+// } 
+// export const registerStrategy = function(data){
+// 	const self = this 
+// 	const pao = self.pao 
+// 	let user = data.payload.user
+// 	console.log('THE DATA INSIDE STRATEGY')
+// 	console.log(user)
+// 	if(!pao.pa_contains(user,'strategy')){
+// 		data.callback('Missing required Strategy',null)
+// 	}else{
+// 		if(!pao.pa_contains(self.strategies,user.strategy)){
+// 			  data.callback('Specified strategy not supported')
+// 		}else{
+// 			console.log('STRATEGY: CURRENT')
+// 			console.log(user.strategy)
+// 			self.tmpd = data
+// 			self[user.strategy](data)
+// 		}
+// 	}
+// } 
+// export const anzii = function(data){
+// 	const self = this
+// 	const pao = self.pao 
+// 	self.log("Executing Anzii registration strategy")
+//   if(!pao.pa_contains(data,'user')){
+//   }else{
+//   	let user =  data.user.parsed.user
+//   	if(!(pao.pa_contains(user,['email','password']))){
+// 		data.callback({message: 'missing required keys for registration'})
+//   	}else{
+//   		 if(!pao.pa_isValidEmail(user.email) || !pao.pa_isValidPassword(user.password)){ 
+//   		  data.callback({message: 'either password or email is invalid'})
+//   		 }else{
+// 			self.isUserExist(data)
+//   		 }
+//   	}
+//   }
+// } 
+// export const social = function(data){
+// 	  const self = this 
+// 	  self.log('Executing Social registration strategy')
+// } 
+// export const isUserExist  = function(data){
+// 	  const self = this 
+// 	  let user =  data.payload.user
+// 	  self.log('Checking if user is taken') 
+// 	  self.callback = data.callback
+// 	  self.query(
+// 	      'mysql.jo_user.findOne',
+// 			{user: { email: user.email}},
+// 			self.findHandler.bind(this)
+// 	  )
+// 	//   {conditions: ['where']}
+// }
+// export const isCallback = function(data,over=null){
+// 	if(!data.hasOwnProperty('callback')){
+// 			 self.log('Task handle request me failed','warn') 
+// 			 self.emit({
+// 			 	type: 'request-task-handle-failed',
+// 			 	data: {message: 'failed'}
+// 			 })
+// 		}else{
+// 			if(over){
+// 			 data.callback(over)
+// 			}else{
+// 				data.callback()
+// 			}
+// 		}
+// }
+// export const processResults = function(e,r){
+// }
+// export const setTokenHeader = function(e=null,token=null){
+// 	const self = this 
+// 	const pao = self.pao 
+// 	if(e){
+// 		console.log('TOKEN CREATION FAILED')
+// 		console.log(e)
+// 		self.callback(e)
+// 	}else{
+// 		console.log('TOKEN CREATION SUCCESSFULL')
+// 		console.log('SETTING TOKEN HEADER')
+// 		console.log(self.tmpd)
+// 		self.tmpd.user.request.res.set('X-AUTH-TOKEN',token.token) 
+// 		self.callback(null,{user: token.user})
+// 	}
+// }
+// export const insertHandler = function(e =null,r = null){
+// 	const self = this 
+// 	const pao = self.pao 
+// 	if(e){
+// 		self.callback(e,null)
+// 	}else{
+// 		if(!r){
+// 			self.callback({message: 'Insert operation failed'},null)
+// 		}else{
+// 			self.emit({type:'create-jwt-token',data:{payload: r.user,callback: self.setTokenHeader.bind(self)}})
+// 		}
+// 	}
+// }
+// export const findHandler = async function(e =null,r = null){
+// 	const self = this 
+// 	const pao = self.pao 
+// 	if(e){
+// 		self.callback({message: 'An error occured attempting to find user'},null)
+// 	}else{
+//         console.log('THE VALUE R')
+// 		console.log(pao.pa_isArray(r))
+// 		console.log(r.length)
+// 		console.log(r.length > 0)
+// 		console.log('after r has been re-assigned a new value')
+// 		console.log(r)
+// 		console.log(!r)
+// 		if((pao.pa_isArray(r) && r.length === 0)){
+// 			console.log('ANZII USER DOES NOT EXIST, CREATE USER')
+// 			let user = self.tmpd.user.parsed.user
+// 			self.emit({type:"hash-payload",data: {payload: user.password,callback: self.hash.bind(self)}})
+// 		}else{
+// 			console.log('THE TAKEN USER')
+// 			console.log(r)
+// 			self.callback({message: 'User is already taken'},null)
+// 		}
+// 	}
+// 	// token.res.set('X-AUTH-TOKEN',token.tk)
+// }
+// export const hash = async function(e=null,h=null){
+// 	const self = this 
+// 	if(e){
+// 		console.log(e)
+// 		self.callback({message: 'registration failed due to server error:hash'})
+// 	}else{
+// 		console.log('hashed')
+// 		console.log(h)
+// 		let user = self.tmpd.user.parsed.user
+// 		let password = h 
+// 		let hash = await self.crypto.randomBytes(35).toString('hex')
+// 		user.password = password
+// 		user.hash =  hash
+// 		self.query(
+// 			'mysql.PROCEDURE',
+// 			  self.procedureDoc(user),
+// 			  self.insertHandler.bind(this)
+// 		)
+// 		// self.query(
+// 		// 	'mysql.jo_user.insertOne',
+// 		// 	  {user: {id: null,email: user.email,first_name: user.firstname,last_name: user.lastname,password: password,hash: hash}},
+// 		// 	  self.insertHandler.bind(this)
+// 		// )
+// 	}
+// }
+// export const procedureDoc = function(data){
+// 	let fields = {
+// 		jo_user: { id: 'NULL',u_type: data.usertype,first_name: data.firstname,last_name: data.lastname,email: data.email },
+// 		jo_account: {own:{id:'NULL'},tables: [{name:'jo_user',values:['u_type.account_name']}]},
+// 		jo_user_account_join: {own:{id:'NULL'},tables: [{name:'jo_user',values:['id.u_id','email.account_email']},{name:'jo_account',values:['id.account_id']}]},
+// 		jo_login: {own:{id:'NULL',password:data.password},tables: [{name:'jo_user',values:['id.u_id','email.username']}]}
+// 	}
+// 	return [
+// 		{name: 'jo_user',fields: fields.jo_user},
+// 		{name: 'jo_account',fields: fields.jo_account},
+// 		{name: 'jo_user_account_join',lastInsert: ['jo_user','jo_account'],fields: fields.jo_user_account_join},
+// 		{name: 'jo_login',lastInsert: ['jo_user'],fields: fields.jo_login}
+// 	   ]
+// }
 
 /***/ }),
-/* 103 */
+/* 109 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__login__ = __webpack_require__(104);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__login__ = __webpack_require__(110);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__login__["a" /* default */]);
 
 /***/ }),
-/* 104 */
+/* 110 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(105);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(111);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -9862,7 +10972,7 @@ var Login = function Login(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Login);
 
 /***/ }),
-/* 105 */
+/* 111 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10068,20 +11178,20 @@ var compare = function compare() {
 };
 
 /***/ }),
-/* 106 */
+/* 112 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__authentication__ = __webpack_require__(107);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__authentication__ = __webpack_require__(113);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__authentication__["a" /* default */]);
 
 /***/ }),
-/* 107 */
+/* 113 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(108);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(114);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -10100,7 +11210,7 @@ var Authentication = function Authentication(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Authentication);
 
 /***/ }),
-/* 108 */
+/* 114 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10189,27 +11299,27 @@ var token = function token() {
 };
 
 /***/ }),
-/* 109 */
+/* 115 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__frametest__ = __webpack_require__(110);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__frametest__ = __webpack_require__(116);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__frametest__["a" /* default */]);
 
 /***/ }),
-/* 110 */
+/* 116 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(111);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(117);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
  //Dependecies
 
-var crypto = __webpack_require__(6);
+var crypto = __webpack_require__(7);
 
-var fetch = __webpack_require__(113); // const list = require('./json')
+var fetch = __webpack_require__(6); // const list = require('./json')
 
 
 var FrameTest = function FrameTest(pao) {
@@ -10251,7 +11361,7 @@ var FrameTest = function FrameTest(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (FrameTest);
 
 /***/ }),
-/* 111 */
+/* 117 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10377,7 +11487,7 @@ var testy = function testy(data) {
   var clientRequest = data.payload.request;
   self.callback = data.callback;
 
-  var fetch = __webpack_require__(112);
+  var fetch = __webpack_require__(118);
 
   console.log('THE DATA INSIDE TESTY');
   console.log(user);
@@ -10864,32 +11974,26 @@ var procedureDoc = function procedureDoc(data) {
 };
 
 /***/ }),
-/* 112 */
+/* 118 */
 /***/ (function(module, exports) {
 
 module.exports = require("node-fetch");
 
 /***/ }),
-/* 113 */
-/***/ (function(module, exports) {
-
-module.exports = require("axios");
-
-/***/ }),
-/* 114 */
+/* 119 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__adash__ = __webpack_require__(115);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__adash__ = __webpack_require__(120);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__adash__["a" /* default */]);
 
 /***/ }),
-/* 115 */
+/* 120 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(116);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(121);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -10909,7 +12013,7 @@ var Adash = function Adash(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Adash);
 
 /***/ }),
-/* 116 */
+/* 121 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -10993,20 +12097,20 @@ var dataRequestHandler = function dataRequestHandler() {
 };
 
 /***/ }),
-/* 117 */
+/* 122 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__inalerts__ = __webpack_require__(118);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__inalerts__ = __webpack_require__(123);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__inalerts__["a" /* default */]);
 
 /***/ }),
-/* 118 */
+/* 123 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(119);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(124);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -11035,7 +12139,7 @@ var Inalerts = function Inalerts(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Inalerts);
 
 /***/ }),
-/* 119 */
+/* 124 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11056,7 +12160,7 @@ var Inalerts = function Inalerts(pao) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "j", function() { return multiDataRequestHandler; });
 /* unused harmony export searchBatch */
 /* unused harmony export searchBatchHandler */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_joi__ = __webpack_require__(120);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_joi__ = __webpack_require__(125);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_joi___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_joi__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__lib_esm_mysql_methods__ = __webpack_require__(5);
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
@@ -11600,26 +12704,26 @@ var searchBatchHandler = function searchBatchHandler() {
 };
 
 /***/ }),
-/* 120 */
+/* 125 */
 /***/ (function(module, exports) {
 
 module.exports = require("joi");
 
 /***/ }),
-/* 121 */
+/* 126 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bookmark__ = __webpack_require__(122);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__bookmark__ = __webpack_require__(127);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__bookmark__["a" /* default */]);
 
 /***/ }),
-/* 122 */
+/* 127 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(123);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(128);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -11639,7 +12743,7 @@ var Bookmark = function Bookmark(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Bookmark);
 
 /***/ }),
-/* 123 */
+/* 128 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11736,7 +12840,12 @@ var handleBookmarkTask = /*#__PURE__*/function () {
 
           case 25:
             self.bookmark(user.payload).then(function (bookmarkStatus) {
-              return self.callback(null, bookmarkStatus);
+              if (bookmarkStatus.affectedRows >= 1) return self.callback(null, {
+                actionStatus: true
+              });
+              self.callback(null, {
+                actionStatus: false
+              });
             })["catch"](function (e) {
               return self.callback(e, null);
             });
@@ -11766,21 +12875,40 @@ var handleBookmarkTask = /*#__PURE__*/function () {
   };
 }();
 var bookmark = function bookmark(pay) {
-  var self = this;
-  var pao = self.pao;
-  self.query('mysql.jo_job_bookmark.insert', {
-    id: 1,
-    u_id: data.id,
-    job_id: data.jobId,
-    job_category: data.jobCategoryId,
-    created_at: new Date()
-  }, self.dataRequestHandler.bind(this));
-};
-var getSavedBookmarks = function getSavedBookmarks(pay) {
   var _this = this;
 
   return new Promise(function (resolve, reject) {
     var self = _this;
+    var pao = self.pao;
+    var uid = pay.ID;
+    var bookmark = pay.bookmark;
+    var _bookmark$id = bookmark.id,
+        id = _bookmark$id === void 0 ? 0 : _bookmark$id,
+        _bookmark$url = bookmark.url,
+        url = _bookmark$url === void 0 ? 'search' : _bookmark$url,
+        jobTitle = bookmark.jobTitle,
+        jobSalary = bookmark.jobSalary,
+        currency = bookmark.currency,
+        _bookmark$employer = bookmark.employer,
+        employer = _bookmark$employer === void 0 ? 'unspecified' : _bookmark$employer,
+        _bookmark$logo = bookmark.logo,
+        logo = _bookmark$logo === void 0 ? null : _bookmark$logo,
+        _bookmark$jobType = bookmark.jobType,
+        jobType = _bookmark$jobType === void 0 ? 'N/A' : _bookmark$jobType,
+        date = bookmark.date; // let values  = [`${uid}`,`${id}`,`${jobTitle}`,`${jobSalary}`,`${currency}`,`${employer}`,`${logo}`,`${jobType}`,new Date()] 
+
+    var query = {
+      fields: ['u_id', 'job_id', 'job_url', 'job_title', 'salary', 'salary_currency', 'company_name', 'logo_url', 'job_type', 'post_date', 'date_bookmarked'],
+      values: [uid, id, url, jobTitle, jobSalary, currency, employer, logo, jobType, date, new Date()]
+    };
+    self.query('mysql.jo_job_bookmark.insert', query, self.multiDataRequestHandler.bind(_this, resolve, reject));
+  });
+};
+var getSavedBookmarks = function getSavedBookmarks(pay) {
+  var _this2 = this;
+
+  return new Promise(function (resolve, reject) {
+    var self = _this2;
     var pao = self.pao;
     var uid = pay.ID;
     var queries = {
@@ -11790,21 +12918,21 @@ var getSavedBookmarks = function getSavedBookmarks(pay) {
       opiks: ['field.u_id.as[userID]', 'field.job_id.as[jobID]', 'field.job_title.as[jobTitle]', 'field.logo_url.as[logo]', 'field.salary.as[jobSalary]', 'field.company_name.as[employer]', 'field.salary_currency.as[currency]', 'field.job_type.as[type]', 'field.post_date.as[postDate]', 'field.date_bookmarked.as[dateBookmarked]'],
       sort: 'order[jobTitle].asc'
     };
-    self.query('mysql.SEARCH', queries, self.multiDataRequestHandler.bind(_this, resolve, reject));
+    self.query('mysql.SEARCH', queries, self.multiDataRequestHandler.bind(_this2, resolve, reject));
   });
 };
 var deleteBookmark = function deleteBookmark(pay) {
-  var _this2 = this;
+  var _this3 = this;
 
   return new Promise(function (resolve, reject) {
-    var self = _this2;
+    var self = _this3;
     var pao = self.pao;
     var uid = pay.ID;
     var alertID = pay.alertID;
     var queries = {
       conditions: ["u_id EQUALS ".concat(uid, " "), "AND id EQUALS ".concat(alertID)]
     };
-    self.query('mysql.jo_job_bookmark.remove', queries, self.multiDataRequestHandler.bind(_this2, resolve, reject));
+    self.query('mysql.jo_job_bookmark.remove', queries, self.multiDataRequestHandler.bind(_this3, resolve, reject));
   });
 };
 var multiDataRequestHandler = function multiDataRequestHandler() {
@@ -11821,20 +12949,247 @@ var multiDataRequestHandler = function multiDataRequestHandler() {
 };
 
 /***/ }),
-/* 124 */
+/* 129 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__downloadr__ = __webpack_require__(125);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__history__ = __webpack_require__(130);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__history__["a" /* default */]);
+
+/***/ }),
+/* 130 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(131);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var History = function History(pao) {
+  _classCallCheck(this, History);
+
+  this.pao = pao;
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* init */];
+  this.handleHistoryTask = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleHistoryTask */];
+  this.history = __WEBPACK_IMPORTED_MODULE_0__methods__["history"];
+  this.saveHistory = __WEBPACK_IMPORTED_MODULE_0__methods__["g" /* saveHistory */];
+  this.getSavedHistory = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* getSavedHistory */];
+  this.deleteHistory = __WEBPACK_IMPORTED_MODULE_0__methods__["DeleteHistory"];
+  this.multiDataRequestHandler = __WEBPACK_IMPORTED_MODULE_0__methods__["f" /* multiDataRequestHandler */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (History);
+
+/***/ }),
+/* 131 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleHistoryTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "g", function() { return saveHistory; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return getSavedHistory; });
+/* unused harmony export deleteHistory */
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "f", function() { return multiDataRequestHandler; });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var init = function init() {
+  this.log('History has been initialised');
+  this.listens({
+    'handle-history-task': this.handleHistoryTask.bind(this)
+  });
+};
+var handleHistoryTask = /*#__PURE__*/function () {
+  var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(data) {
+    var self, pao, contains, isOBject, user;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            self = this;
+            pao = self.pao;
+            contains = pao.pa_contains;
+            isOBject = pao.pa_isObject;
+            user = data.payload.user;
+            self.callback = data.callback;
+            self.log(data); // let uid = user.ID
+
+            console.log('THE DATA INSIDE Adash');
+            console.log(user);
+            console.log('THE PARSED DATA TEST');
+            console.log(data);
+            console.log(user);
+
+            if (isOBject(user)) {
+              _context.next = 14;
+              break;
+            }
+
+            return _context.abrupt("return", self.callback({
+              message: 'User has not been specified'
+            }, null));
+
+          case 14:
+            if (user.action) {
+              _context.next = 16;
+              break;
+            }
+
+            return _context.abrupt("return", self.callback({
+              message: 'Invalid request'
+            }, null));
+
+          case 16:
+            if (contains(user, ['payload'])) {
+              _context.next = 18;
+              break;
+            }
+
+            return _context.abrupt("return", self.callback({
+              message: 'missing required key'
+            }, null));
+
+          case 18:
+            if (contains(user.payload, ['ID'])) {
+              _context.next = 20;
+              break;
+            }
+
+            return _context.abrupt("return", self.callback({
+              message: 'missing required key'
+            }, null));
+
+          case 20:
+            _context.t0 = user.action;
+            _context.next = _context.t0 === 'getHistory' ? 23 : _context.t0 === 'saveHistory' ? 25 : _context.t0 === 'deleteHistory' ? 27 : 29;
+            break;
+
+          case 23:
+            self.getSavedHistory(user.payload).then(function (history) {
+              self.callback(null, history);
+            })["catch"](function (e) {
+              console.log('Reject error');
+              console.log(e);
+              self.callback(e, null);
+            });
+            return _context.abrupt("break", 30);
+
+          case 25:
+            self.saveHistory(user.payload).then(function (saveStatus) {
+              if (saveStatus.affectedRows >= 1) return self.callback(null, {
+                actionStatus: true
+              });
+              self.callback(null, {
+                actionStatus: false
+              });
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context.abrupt("break", 30);
+
+          case 27:
+            self.deleteHistory(user.payload).then(function (deleted) {
+              return self.callback(null, deleted);
+            })["catch"](function (e) {
+              return self.callback(e, null);
+            });
+            return _context.abrupt("break", 30);
+
+          case 29:
+            self.callback(new Error('Unknown data request'), null);
+
+          case 30:
+          case "end":
+            return _context.stop();
+        }
+      }
+    }, _callee, this);
+  }));
+
+  return function handleHistoryTask(_x) {
+    return _ref.apply(this, arguments);
+  };
+}();
+var saveHistory = function saveHistory(pay) {
+  var _this = this;
+
+  return new Promise(function (resolve, reject) {
+    var self = _this;
+    var pao = self.pao;
+    var uid = pay.ID;
+    var history = pay.history;
+    var keyword = history.keyword,
+        location = history.location;
+    self.log('THE SEARCHED TERM LOCATION');
+    self.log(location);
+    var query = {
+      fields: ['u_id', 'keyword', 'date_searched'],
+      values: [uid, keyword, new Date()]
+    };
+    self.query('mysql.jo_search_history.insert', query, self.multiDataRequestHandler.bind(_this, resolve, reject));
+  });
+};
+var getSavedHistory = function getSavedHistory(pay) {
+  var _this2 = this;
+
+  return new Promise(function (resolve, reject) {
+    var self = _this2;
+    var pao = self.pao;
+    var uid = pay.ID;
+    var queries = {
+      tables: ['jo_search_history'],
+      conditions: ["u_id EQUALS ".concat(uid)],
+      opiks: ['field.u_id.as[userID]', 'field.keyword.as[searchTerm]', 'field.date_searched.as[dateSearched]']
+    };
+    self.query('mysql.SEARCH', queries, self.multiDataRequestHandler.bind(_this2, resolve, reject));
+  });
+};
+var deleteHistory = function deleteHistory(pay) {
+  var _this3 = this;
+
+  return new Promise(function (resolve, reject) {
+    var self = _this3;
+    var pao = self.pao;
+    var uid = pay.ID;
+    var alertID = pay.alertID;
+    var queries = {
+      conditions: ["u_id EQUALS ".concat(uid, " "), "AND id EQUALS ".concat(alertID)]
+    };
+    self.query('mysql.jo_job_history.remove', queries, self.multiDataRequestHandler.bind(_this3, resolve, reject));
+  });
+};
+var multiDataRequestHandler = function multiDataRequestHandler() {
+  var resolve = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
+  var reject = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
+  var e = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : null;
+  var result = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
+  var self = this;
+  var pao = self.pao;
+  console.log('THE TYPE OF E IN DATAREQUEST HANDLER');
+  console.log(e);
+  if (e) reject(new Error('An error has occured Inside MYSQL'));
+  resolve(result);
+};
+
+/***/ }),
+/* 132 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__downloadr__ = __webpack_require__(133);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__downloadr__["a" /* default */]);
 
 /***/ }),
-/* 125 */
+/* 133 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(126);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(134);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
  // const wrStream = require('streamifier')
@@ -11855,7 +13210,7 @@ var Downloadr = function Downloadr(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Downloadr);
 
 /***/ }),
-/* 126 */
+/* 134 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11925,25 +13280,25 @@ var receiveFile = function receiveFile(file) {
 };
 
 /***/ }),
-/* 127 */
+/* 135 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fileupload__ = __webpack_require__(128);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__fileupload__ = __webpack_require__(136);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__fileupload__["a" /* default */]);
 
 /***/ }),
-/* 128 */
+/* 136 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(129);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(137);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
 
-var multiPartFormParser = __webpack_require__(130); // const wrStream = require('streamifier')
+var multiPartFormParser = __webpack_require__(138); // const wrStream = require('streamifier')
 // const rStream = require('concat-stream')
 
 
@@ -11963,7 +13318,7 @@ var FileUpload = function FileUpload(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (FileUpload);
 
 /***/ }),
-/* 129 */
+/* 137 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12121,26 +13476,26 @@ var parseFile = /*#__PURE__*/function () {
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, "/"))
 
 /***/ }),
-/* 130 */
+/* 138 */
 /***/ (function(module, exports) {
 
 module.exports = require("formidable");
 
 /***/ }),
-/* 131 */
+/* 139 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__upload__ = __webpack_require__(132);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__upload__ = __webpack_require__(140);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__upload__["a" /* default */]);
 
 /***/ }),
-/* 132 */
+/* 140 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(133);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(141);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -12165,7 +13520,7 @@ var Upload = function Upload(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Upload);
 
 /***/ }),
-/* 133 */
+/* 141 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -12319,20 +13674,290 @@ var handleImageManipulation = function handleImageManipulation(resolve, reject) 
 };
 
 /***/ }),
-/* 134 */
+/* 142 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__asettings__ = __webpack_require__(135);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__mailer__ = __webpack_require__(143);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__mailer__["a" /* default */]);
+
+/***/ }),
+/* 143 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(144);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var nodemailer = __webpack_require__(145);
+
+var Mailer = function Mailer(pao) {
+  _classCallCheck(this, Mailer);
+
+  this.pao = pao;
+  this.mailer = nodemailer;
+  this.supTrans = ['smtp'];
+  this.transport = null; // // methods
+
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* init */];
+  this.handleConfigMailer = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* handleConfigMailer */];
+  this.handleSendMail = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleSendMail */];
+  this.sendMail = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* sendMail */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Mailer);
+
+/***/ }),
+/* 144 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleConfigMailer; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleSendMail; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return sendMail; });
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
+var init = function init() {
+  console.log('Mailer has been initialised');
+  this.listens({
+    'config-mailer': this.handleConfigMailer.bind(this),
+    'send-email': this.handleSendMail.bind(this)
+  });
+};
+var handleConfigMailer = function handleConfigMailer(data) {
+  var self = this;
+  self.transport = self.mailer.createTransport({
+    host: 'smtp.mailtrap.io',
+    port: 2525,
+    auth: {
+      user: 'bd9ca9c390819c',
+      pass: 'eae12fa48b0f5c'
+    },
+    pool: true,
+    // use pooled connection
+    rateLimit: true,
+    // enable to make sure we are limiting
+    maxConnections: 1,
+    // set limit to 1 connection only
+    maxMessages: 100 // send 3 emails per second
+
+  });
+};
+var handleSendMail = function handleSendMail(data) {
+  var self = this;
+  self.mailSendHandler = data.callback;
+  self.log("Mailer is about to send email"); // console.log(data)
+
+  if (self.transport) {
+    /*if(!pao.pa_contains(data,'message')){
+    	 
+    	 
+      data.callback(new Error('Missing required text property')) 
+     
+    }else{
+    	
+    	if(!pao.pa_contains(data.messages,['to','from','content'])){
+    		
+    		 data.callback(new Error('Missing required text property')) 
+    		 
+    	}else{
+    		
+    		
+    		if(!pao.pa_contains(data.messages.content,['text'])){
+    		
+    		   data.callback(new Error('Missing required text property'))
+    
+    	  }else{
+    	  	
+    	  	  self.sendMail(data.message,data.callback)
+    	  	
+    	  }
+    		
+    	}
+    }*/
+    var mailiks = data.mail;
+    var mailSendResponses = [];
+
+    if (mailiks instanceof Array) {
+      var mailsLen = mailiks.length;
+
+      var handleMultiSend = function handleMultiSend(e, res) {
+        if (e) {
+          self.log('THE EMAIL SENDING ERROR RESPONSE');
+          self.log(e);
+          mailSendResponses.push({
+            errored: true,
+            message: e
+          });
+        } else {
+          self.log('THE EMAIL SENDING SUCCESS RESPONSE');
+          self.log(res);
+          mailSendResponses.push({
+            errored: false,
+            message: res
+          });
+        }
+
+        if (mailSendResponses.length === mailsLen) {
+          self.log('THE MAILRESPONSES'); // self.log(mailSendResponses)
+
+          self.mailSendHandler(mailSendResponses);
+        }
+      };
+
+      mailiks.forEach( /*#__PURE__*/function () {
+        var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(receivr, i) {
+          return regeneratorRuntime.wrap(function _callee$(_context) {
+            while (1) {
+              switch (_context.prev = _context.next) {
+                case 0:
+                  _context.next = 2;
+                  return self.sendMail(receivr.message, handleMultiSend);
+
+                case 2:
+                case "end":
+                  return _context.stop();
+              }
+            }
+          }, _callee);
+        }));
+
+        return function (_x, _x2) {
+          return _ref.apply(this, arguments);
+        };
+      }());
+    } else {
+      self.sendMail(mailiks, self.mailSendHandler);
+    }
+  } else {
+    self.log('No configured email transport,Mailer requires transport to send');
+    self.mailSendHandler(new Error('No configured email transporter'));
+  }
+};
+var sendMail = function sendMail(message, callback) {
+  var self = this;
+  self.transport.sendMail(message, callback);
+};
+
+/***/ }),
+/* 145 */
+/***/ (function(module, exports) {
+
+module.exports = require("nodemailer");
+
+/***/ }),
+/* 146 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__kronjo__ = __webpack_require__(147);
+
+/* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__kronjo__["a" /* default */]);
+
+/***/ }),
+/* 147 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(148);
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+
+
+var nodeSchedule = __webpack_require__(149);
+
+var Kronjo = function Kronjo(pao) {
+  _classCallCheck(this, Kronjo);
+
+  this.pao = pao;
+  this.taskr = nodeSchedule;
+  this.krons = [];
+  this.init = __WEBPACK_IMPORTED_MODULE_0__methods__["d" /* init */];
+  this.handleKronjoTask = __WEBPACK_IMPORTED_MODULE_0__methods__["b" /* handleKronjoTask */];
+  this.handleConfigKronjo = __WEBPACK_IMPORTED_MODULE_0__methods__["a" /* handleConfigKronjo */];
+  this.handleSingleProcessTasks = __WEBPACK_IMPORTED_MODULE_0__methods__["c" /* handleSingleProcessTasks */];
+  this.scheduleTask = __WEBPACK_IMPORTED_MODULE_0__methods__["e" /* scheduleTask */];
+};
+
+/* harmony default export */ __webpack_exports__["a"] = (Kronjo);
+
+/***/ }),
+/* 148 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "d", function() { return init; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return handleConfigKronjo; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return handleSingleProcessTasks; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return handleKronjoTask; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "e", function() { return scheduleTask; });
+var init = function init() {
+  this.log('Kronjo has been initialised');
+  this.listens({
+    'config-kronjo': this.handleConfigKronjo.bind(this),
+    'handle-kronjo-task': this.handleKronjoTask.bind(this),
+    'start-single-process-tasks': this.handleSingleProcessTasks.bind(this) // 'task-run': this.handleTaskRun.bind(this)
+
+  });
+};
+var handleConfigKronjo = function handleConfigKronjo(krons) {
+  var self = this;
+  var pao = self.pao;
+  var unikify = pao.pa_unikify;
+  self.krons = unikify(self.krons.concat(krons)); // krons.forEach((task,i)=>{
+  //   self.scheduleTask(task)
+  // })
+};
+var handleSingleProcessTasks = function handleSingleProcessTasks() {
+  var self = this;
+  self.krons.forEach(function (task, i) {
+    self.scheduleTask(task);
+  });
+};
+var handleKronjoTask = function handleKronjoTask(data) {
+  var self = this;
+  data.forEach(function (task, i) {
+    self.scheduleTask(task);
+  });
+};
+var scheduleTask = function scheduleTask(task) {
+  var self = this;
+  var pao = self.pao;
+  var taskRule = task.taskRule,
+      taskHandler = task.taskHandler;
+  self.log('THE TASK');
+  self.log(task);
+  self.log(taskHandler);
+  var scheduler = self.taskr.scheduleJob(taskRule, taskHandler.bind(self));
+};
+
+/***/ }),
+/* 149 */
+/***/ (function(module, exports) {
+
+module.exports = require("node-schedule");
+
+/***/ }),
+/* 150 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__asettings__ = __webpack_require__(151);
 
 /* harmony default export */ __webpack_exports__["a"] = (__WEBPACK_IMPORTED_MODULE_0__asettings__["a" /* default */]);
 
 /***/ }),
-/* 135 */
+/* 151 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(136);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__methods__ = __webpack_require__(152);
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 
@@ -12362,7 +13987,7 @@ var Asettings = function Asettings(pao) {
 /* harmony default export */ __webpack_exports__["a"] = (Asettings);
 
 /***/ }),
-/* 136 */
+/* 152 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -13028,13 +14653,6 @@ var searchBatchHandler = function searchBatchHandler() {
     batch: batchResults
   });
 };
-
-/***/ }),
-/* 137 */,
-/* 138 */
-/***/ (function(module, exports) {
-
-module.exports = {"jobs":[{"locations":"South Africa","site":"","date":"Fri, 20 Mar 2020 16:43:53 GMT","url":"http://jobviewtrack.com/en-za/job-1d4d41654805031a4f5463021a046c2f0041181c0153795b584e440503075400222b0d0002130d0032010712444854434a66270b4618540b6a220f150021475f5d4b19/63f4f57ab87a1dc3d800e748090e146d.html?affid=0e6712acc74087da913e65985433a122","title":"Health Care Financing Specialist","description":"Reports to: Director of Technical Assistance Location: Somewhat flexible, but requires considerable travel and significant portion of the year in Bamako. About Muso: Muso is a rapidly growing global health organization, committed that no on...","company":"Muso","salary":""},{"salary_min":"50","locations":"South Africa","salary_type":"H","date":"Thu, 05 Mar 2020 17:47:14 GMT","description":"Annapurna Solutions in currently looking for a Remote Customer service /Project Manager in South Africa to join our growing team. The Project Manager provides direction, coordination, and execution of small to large scope Product definition...","salary_currency_code":"ZAR","salary":"R50 per hour","site":"","url":"http://jobviewtrack.com/en-za/job-1b12417a4216044e41064f0e4829010a0000241a06194f48490d6005010f401152613e081c13104118483e1c58401d4b5f0b024e6f1b4d066a3601150e00121a061e0a6352404844220f491547061a633908174b540e1b1c470b754240016d2d5207540c05041c473645061e00104f0b704c4305080b557513545c595d/63f4f57ab8a159e62109a7510d153f2c.html?affid=0e6712acc74087da913e65985433a122","title":"virtual work from home - Customer service/ Project Manager","salary_max":"50","company":"Annapurna Solutions"},{"salary_min":"9000","locations":"Kroonstad, Free State","salary_type":"M","date":"Wed, 18 Mar 2020 14:02:20 GMT","description":"Need a capable person with Code 8 lisence Must be alble get new clients Must have a P number Must be computer literate and have his/her own computer. Must be able to work with corporate clients   Founded in 2005 Has large national corporate...","salary_currency_code":"ZAR","salary":"R9000 - 12000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1e12417d48171b4e641b4e171a0e024731451700071a49425c432f340a1d5354630c06151c080922370707075844510d79010c06491d430a090f6c3300431c060010434a532f6e0b011a551b4c625a535f565714/63f4f57aa137200750a2f2b934d1fd8f.html?affid=0e6712acc74087da913e65985433a122","title":"pest control technician","salary_max":"12000","company":"A'Africa Pest Prevention"},{"salary_min":"30000","locations":"Johannesburg, Gauteng","salary_type":"M","date":"Thu, 20 Feb 2020 01:46:04 GMT","description":"(Remote, Full Time, Anywhere in the World) We are looking for self-motivated and results-driven software professionals to join our Global Tech Team and help us leverage automation and technology to transform remarkable companies and free pe...","salary_currency_code":"ZAR","salary":"R30000 - 65000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1e1b416e7f294f2a4202450f07110b156772110506074f0b79485b010301571152612d333e472145020d051c5a4e4f2f6901190b4b1b50061a633c02084f000d6841181a0c1a19/63f4f57a61a428f3ef98df2c22d2cc72.html?affid=0e6712acc74087da913e65985433a122","title":"CRM & ERP Developer / Expert - Remote","salary_max":"65000","company":"Deep Consulting Solutions"},{"salary_min":"30000","locations":"Johannesburg, Gauteng","salary_type":"M","date":"Thu, 20 Feb 2020 00:27:52 GMT","description":"(Remote, Full Time, Anywhere in the World) We are looking for self-motivated and results-driven software professionals to join our Global Tech Team and help us leverage automation and technology to transform remarkable companies and free pe...","salary_currency_code":"ZAR","salary":"R30000 - 65000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1e1d416342000a4e6d27223007071a10045211482c1d4d42534848166d2852184c433b150f040e22260d08105e0b777e2f360a03480045433b0e08131241060d6841181a0c1a19/63f4f57ad38298c5280477db106fe23f.html?affid=0e6712acc74087da913e65985433a122","title":"Full Stack Software Engineer (Node.js, React, AWS) - Remote","salary_max":"65000","company":"Deep Consulting Solutions"},{"salary_min":"12000","locations":"Edenvale, Gauteng","salary_type":"M","date":"Fri, 13 Mar 2020 12:57:26 GMT","description":"International company since 1914 expanding needs 20 reps/managers to start immediately OWN CAR A MUST No experience needed full training provided by company appointments set by company Responsibilities: Developing and identifying new sales ...","salary_currency_code":"ZAR","salary":"R12000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1348417e4c080a1d0739410d09060b151622270905165929704c4305080b550721515a505f515d/63f4f57a0176c53dacb64afcf9e45588.html?affid=0e6712acc74087da913e65985433a122","title":"Sales Managers","salary_max":"12000","company":"Dynamic Promotions"},{"salary_min":"15","locations":"Cape Town, Western Cape","salary_type":"H","date":"Fri, 14 Feb 2020 14:41:29 GMT","description":"Wonder is an on-demand research network where bright minds like you come to explore intriguing and intellectually stimulating topics. With Wonder, you can earn while you learn. It's simple. Do research, get paid. The research you'll do serv...","salary_currency_code":"USD","salary":"$15 per hour","site":"","url":"http://jobviewtrack.com/en-za/job-1a1a416b5f010a02461a430648330b140041060b01716c5958484105010d4254771101150b1516223707041e5f45545954443d0b541141110b096c35005311091b1042297b5f4801030f491745625a535f505c14/63f4f57a96ca72c90b06f9ea3bb8a669.html?affid=0e6712acc74087da913e65985433a122","title":"Join Wonder's Community of Freelance Research Writers!","salary_max":"15","company":"Wonder"},{"salary_min":"40000","locations":"East London, Eastern Cape","salary_type":"M","date":"Tue, 10 Mar 2020 07:59:34 GMT","description":"Duties and Responsibilities: 1. Review cashbook processed by the Finance Officer to ensure that expenses are allocated to the correct GL account and project /cost centres; 2. Conduct Monthly Balance Sheet Recons: o Check all Creditors Recon...","salary_currency_code":"ZAR","salary":"R40000 - 45000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1c4a417d5f0b050b440000220b0201120b5415061d716b485e42580a1b0f490022331a0e04020654755a5b4313190c/63f4f57a7404882d6e8f278019416344.html?affid=0e6712acc74087da913e65985433a122","title":"PROJECT ACCOUNTANT","salary_max":"45000","company":"Sibanye Business Group (Pty) Ltd"},{"salary_min":"90000","locations":"East London, Eastern Cape","salary_type":"M","date":"Tue, 10 Mar 2020 07:36:40 GMT","description":"The CFO is accountable for the administrative, financial, and risk management operations on the organization’s Global Fund, including the development of a financial and operational strategy, metrics tied to that strategy, and the ongoing de...","salary_currency_code":"ZAR","salary":"R90000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-4b1c416e450d0a080732490d090f0d0e044c54270f154348585f2f2707074212002c0e0707040052762e001d4b455e444c084f21411249000d136c240d49110e493543455c434e0d0e022532490d090f0d0e044c755a5b4313190c/63f4f57a4eb180963e6166a9383adbe6.html?affid=0e6712acc74087da913e65985433a122","title":"CHIEF FINANCIAL OFFICER","salary_max":"90000","company":"Sibanye Business Group (Pty) Ltd"},{"salary_min":"20000","locations":"Cape Town, Western Cape","salary_type":"M","date":"Mon, 24 Feb 2020 11:52:15 GMT","description":"The financial accountant will provide financial and administrative support to board members, management, colleagues, donors and other stakeholders of HOPE Cape Town Trust and Association. Candidate will be responsible for all financial repo...","salary_currency_code":"ZAR","salary":"R20000 - 24000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-494a416b440a0e00441d410f48200d040a551a1c081d5e297c4e4e0b1a0053154e176a270709044e1701081f2b190f1c1a5d5b/63f4f57a4bc81f11b2d05fc0f7991109.html?affid=0e6712acc74087da913e65985433a122","title":"Financial Accountant","salary_max":"24000","company":"HOPE Cape Town"},{"locations":"Johannesburg, Gauteng","site":"","date":"Fri, 27 Mar 2020 08:04:14 GMT","url":"http://jobviewtrack.com/en-za/job-1d1a417d5f0b0b1b4400002c1f0f0b15677006070d06495f3f625a0a0a1c2646125259565a/9d2595fca8a59ff1047b3d3f5b796a4a.html?affid=0e6712acc74087da913e65985433a122","title":"Product Owner","description":"Nedbank Recruiting   Requisition ID: 103055   Recruitment Consultant: Nomathamsanqa Nonkonyana   Closing Date: 02nd April 2020   Job Family   Information Technology   Career Stream   It Application Development   Leadership Pipeline   Manage...","company":"Nedbank","salary":""},{"locations":"Johannesburg, Gauteng","site":"","date":"Fri, 27 Mar 2020 08:03:15 GMT","url":"http://jobviewtrack.com/en-za/job-1213416c43050317540021515a505f5051/c8219c309d291431b3dc951803a34b74.html?affid=0e6712acc74087da913e65985433a122","title":"FTP Analyst","description":"Nedbank Recruiting   Job Purpose   The FTP function plays an important role in Nedbank in terms of:  Transferring interest rate risk and liquidity risk to a central unit (BSM) for the strategic management thereof.  Rewarding money-in busine...","company":"Nedbank","salary":""},{"locations":"Johannesburg, Gauteng","site":"","date":"Fri, 27 Mar 2020 07:49:52 GMT","url":"http://jobviewtrack.com/en-za/job-1c48416a5f050b1b460045432508000e0b47542d0714434558485f662207491d4e0448261c060155151c0c537a59524a5f0502034276671109051b06114554381b1c4d595c4040014f2b4913490d0d041c652252150c1c125e4e1d7d5f0b081c46194d066a2c07090c4e13482c1d4d42534848166e5c154511545c/b364d3f60d828356ab427836774bbbe7.html?affid=0e6712acc74087da913e65985433a122","title":"Graduate Programme : Graduate Mining Engineer","description":"Requisition ID: 29668   Job Category: Engineering   With over six decades of business and technical experience in the mining, energy, and infrastructure sectors, we understand that challenges are changing rapidly in every industry. We respo...","company":"Hatch","salary":""},{"salary_min":"25000","locations":"Centurion, Gauteng","salary_type":"M","date":"Fri, 14 Feb 2020 05:52:39 GMT","description":"“Customers will never love a company, until the employees love it first” Trendsetters Travel is seeking a Senior Travel Administrator (preferably with Group & MICE experience) to join our dynamic team. This position is responsible for fulfi...","salary_currency_code":"ZAR","salary":"R25000 per month","site":"","url":"http://jobviewtrack.com/en-za/job-1c1c417e480a0601555461070508000e165406091d1c5829695f4c120a020735440e010f07141152151c060128785843440b1d4e730641150d0d6c26014d1d0600005e595c5942166d3a5515560604605c555411425d/63f4f57a54903d21c2ccbf99e4d0d60f.html?affid=0e6712acc74087da913e65985433a122","title":"Senior Travel Administrator","salary_max":"25000","company":"Trendsetters Travel"},{"locations":"Johannesburg, Gauteng","site":"","date":"Sun, 22 Mar 2020 02:44:13 GMT","url":"http://jobviewtrack.com/en-za/job-1e1a4168401403015e19450d1c632d08104e070d057218190c1c1a50/96cff2e408db3df9ddae96a021643f5c.html?affid=0e6712acc74087da913e65985433a122","title":"Employment Counsel - MEA","description":"You're seeing information for Paris. To see local features and services for another location, select a different city. Show more   Traveling?   Employment Counsel - MEA   Legal   in Johannesburg, South Africa   EMPLOYMENT COUNSEL - MEA   At...","company":"Uber","salary":""},{"salary_min":"600000","locations":"Johannesburg, Gauteng","salary_type":"Y","date":"Fri, 27 Mar 2020 08:59:54 GMT","description":"Education   CA(SA)    Skills   Candidates coming from the big four will get first preference  Good academics    Please visit our website to submit your CV directly or to view other finance related jobs. If you have not had any response in t...","salary_currency_code":"ZAR","salary":"R600000 per year","site":"","url":"http://jobviewtrack.com/en-za/job-4e1f416348130317072555020408080e0044542b2871696a1d6e6c663e1b4618490501040a47266176260c0446521d7c58050307411d45076a2f0b100959542b287218190c1c1a50/e7c2f69b64b2e69615217e49534d31fb.html?affid=0e6712acc74087da913e65985433a122","title":"Newly Qualified CA (SA)","salary_max":"600000","company":"Communicate Recruitment"},{"locations":"Johannesburg, Gauteng","site":"","date":"Fri, 27 Mar 2020 08:59:35 GMT","url":"http://jobviewtrack.com/en-za/job-1b1e41657f442e0a4a1d4e433f0e1c0c6768264828174742530d681c1f0b551d450d0b046c2f3700350c041a44297c49400d014e701b52086a293c47324f06036841181a0c1a19/428e3c4397b4a20d65e7d885dde63400.html?affid=0e6712acc74087da913e65985433a122","title":"HR Admin (Work Experience Program)","description":"EXTERNAL VACANCY   POSITION:HR ADMIN (WORK EXPIERIENCE PROGRAME)   REFERENCE NO:2020/03/29/HR   LOCATION:GREENSTONE AND FOURWAYS   REPORTING TO:HR MANAGER   CLOSING DATE:2020 MARCH 29   STIPEND:TBC   PURPOSE OF THE JOB   The recommended Can...","company":"Afrika Tikkun Inc","salary":""},{"salary_min":"650000","locations":"Johannesburg, Gauteng","salary_type":"Y","date":"Fri, 27 Mar 2020 08:59:25 GMT","description":"If you''re looking for a role where you can work along-side highly skilled, like-minded individuals, building next-generation systems impacting the company''s future, then this is the role for you.   Job & Company Description:   This is you...","salary_currency_code":"ZAR","salary":"R650000 per year","site":"","url":"http://jobviewtrack.com/en-za/job-1b49417d54100701495464061e0402081545066a390a5e4352432f200a1842184f130d136f555711455f5d/b9ddf280c20ad3ddb4608811fa32f668.html?affid=0e6712acc74087da913e65985433a122","title":"Python Developer","salary_max":"650000","company":"NETWORK IT BRUMA"},{"locations":"Durban, KwaZulu-Natal","site":"","date":"Fri, 27 Mar 2020 08:59:21 GMT","url":"http://jobviewtrack.com/en-za/job-194e416b4216180f5510490d0f412d0b00521f6a2a1f4f59562f6b0b1d194606440a06066f555711465c50/f7fd50a4d91e3b53f0cff800ab176c93.html?affid=0e6712acc74087da913e65985433a122","title":"Forwarding clerk","description":"Forwarding Clerk – R12000 CTC   Coordinating of overseas collections from order placement to delivery (air freight, sea   freight, out of gauge, project and hazardous cargo)   Identifying and arranging best methods of transport according to...","company":"Khulanathi Chartered Alberante","salary":""},{"locations":"Cape Town, Western Cape","site":"","date":"Fri, 27 Mar 2020 08:59:05 GMT","url":"http://jobviewtrack.com/en-za/job-4e4e417e42021b19460645432c041802094f04050c1d5e0b6e48430d001c0759650d0f0800020052763b0c1d43444f0d7e0b091a50155206482400000c4e110d1b7179445b595a051d0b073045150d0d011708451a1c4936444c544348011d6c74114e0a07134e23005611040603474e53590d2101094e1a45061a633d08035403091b160a6e534a440a0a0b5575125159565753/cac381fea9b31251ec8b4a0cc2252cf5.html?affid=0e6712acc74087da913e65985433a122","title":"Senior Software Development Engineer - EC2 Placement","description":"DESCRIPCIÓN   Build the systems that optimize how EC2 matches requests for Instances with the underlying compute capacity. EC2 Placement is seeking talented engineers to build the online and offline optimization systems for compute workload...","company":"Amazon","salary":""}],"hits":77396,"response_time":0.0394449234008789,"type":"JOBS","pages":3870}
 
 /***/ })
 /******/ ]);

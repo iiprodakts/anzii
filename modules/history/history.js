@@ -17,10 +17,11 @@ class History{
     
      this.init = methods.init
      this.handleHistoryTask = methods.handleHistoryTask 
+     this.history = methods.history 
      this.saveHistory = methods.saveHistory
-     this.getHistory = methods.getHistory
+     this.getSavedHistory = methods.getSavedHistory
      this.deleteHistory = methods.DeleteHistory
-
+     this.multiDataRequestHandler = methods.multiDataRequestHandler
     
   }
 

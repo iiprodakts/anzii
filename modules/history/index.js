@@ -1,4 +1,4 @@
 
-import Job from "./job";
+import History from "./history";
 
-export default Job
+export default History

@@ -58,7 +58,11 @@ export const handleBookmarkTask = async function(data){
 		case 'bookmarkItem':{
 			
 			self.bookmark(user.payload)
-			.then((bookmarkStatus)=>self.callback(null,bookmarkStatus))
+			.then((bookmarkStatus)=>{
+
+				if(bookmarkStatus.affectedRows >= 1) return self.callback(null,{actionStatus:true})
+				self.callback(null,{actionStatus:false})
+			})
 			.catch((e)=>self.callback(e,null))
 		}
 		break;
@@ -83,15 +87,37 @@ export const handleBookmarkTask = async function(data){
 export const bookmark = function(pay){
 	
 	
-	const self = this 
-	let pao = self.pao 
+
+
+	return new Promise((resolve,reject)=>{
+
+		const self = this 
+		let pao = self.pao 
+		let uid = pay.ID 
+		let bookmark = pay.bookmark 
+		const {id=0,url='search',jobTitle,jobSalary,currency,employer='unspecified',logo=null,jobType='N/A',date} = bookmark 
+		// let values  = [`${uid}`,`${id}`,`${jobTitle}`,`${jobSalary}`,`${currency}`,`${employer}`,`${logo}`,`${jobType}`,new Date()] 
+
+		let query = {
+					
+					fields: ['u_id','job_id','job_url','job_title','salary','salary_currency','company_name','logo_url','job_type','post_date','date_bookmarked'],
+					values: [uid,id,url,jobTitle,jobSalary,currency,employer,logo,jobType,date,new Date()]
+			}
+		
+	
+	
+		self.query(
+				'mysql.jo_job_bookmark.insert',
+				  query,
+				  self.multiDataRequestHandler.bind(this,resolve,reject)
+			)
+			
+	
+	
+	})
 
 	
-   self.query(
-		'mysql.jo_job_bookmark.insert',
-		  {id:1,u_id:data.id,job_id:data.jobId,job_category:data.jobCategoryId,created_at: new Date()},
-		  self.dataRequestHandler.bind(this)
-	)
+   
 
 
 }
