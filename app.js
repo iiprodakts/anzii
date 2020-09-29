@@ -4813,14 +4813,14 @@ var Middleware = function Middleware(pao) {
     use: 'public'
   }, 'json'];
   this.middlewares = {
-    all: [// {type: 'function',value: (req,res,next)=>{
-      //    console.log('I am the zeenith ware'),
-      //    res.header("Access-Control-Allow-Origin", "*");
-      //    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-      //    next()
-      //   }
-      //   },
-      // {type: 'module',value: 'test'}
+    all: [{
+      type: 'function',
+      value: function value(req, res, next) {
+        console.log('I am the zeenith ware'), res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        next();
+      }
+    } // {type: 'module',value: 'test'}
     ]
   }; // console.log('THE STORE')
   // console.log(this.supubu

@@ -7,9 +7,10 @@ const NodemonPlugin = require('nodemon-webpack-plugin')
 
 
 
-var server = {
+var anzii = {
 
-  entry: ["@babel/polyfill",'./sev'],
+  mode: 'development',
+  entry: ["@babel/polyfill",'./lib/start'],
   target: 'node',
   externals: [
     { express: 'commonjs express' },
@@ -22,21 +23,16 @@ nodeExternals({
     whitelist: ['webpack/hot/poll?1000']
 })],
   output: {
-    path: path.resolve(__dirname),
-    filename: 'app.js',
-    publicPath: '/'
+    path: path.resolve('lib'),
+    filename: 'index.js',
+    libraryTarget: 'commonjs2'
   },
   module: {
     rules: [
       { 
         test: /\.(js)$/, 
         use: 'babel-loader',
-        // exclude: /node_modules/
        
-        // exclude: [
-
-        //   path.resolve(__dirname, './js/sn')
-        // ]
       }
     ]
   },
@@ -48,60 +44,83 @@ nodeExternals({
 }
 
 
-let dev = {
+// var le = {
 
-   
-    entry: './server/serverdev.js',
-    target: 'node',
-    externals: [
-      { express: 'commonjs express' },
-    ],
-    output: {
-
-        path: path.resolve(__dirname,'./server'),
-        filename: 'server.js'
-
-    },
-
-    module:{
-
-        rules:[
-
-            {
-              use: 'babel-loader',
-              test: /\.js$/,
-              exclude: /node_modules/
-
-            }
-
-        ]
-
-
-    }
-
-}
-
-var andziiy = {
-
-    entry: './lib/andziiy',
-    target: 'node',
-    externals: [
-      { express: 'commonjs express' },
-    ],
-    output: {
-      path: path.resolve(__dirname, './lib/an'),
-      filename: 'andziiy.js',
-      publicPath: '/'
-    },
-    
-    module: {
-      rules: [
-        { test: /\.(js)$/, use: 'babel-loader' },
-      ]
-    }
-  } 
+//   mode: 'development',
+//   entry: ["@babel/polyfill",'./list/index'],
+//   target: 'node',
+//   externals: [
+//     { express: 'commonjs express' },
+//   nodeExternals({
+//     modulesDir: path.resolve(__dirname, './node_modules'),
+//     whitelist: ['webpack/hot/poll?1000']
+// }),
+// nodeExternals({
+//     modulesDir: path.resolve(__dirname, './node_modules'),
+//     whitelist: ['webpack/hot/poll?1000']
+// })],
+//   output: {
+//     path: path.resolve('list'),
+//     filename: 'le.js',
+//     libraryTarget: 'commonjs2'
+//   },
+//   module: {
+//     rules: [
+//       { 
+//         test: /\.(js)$/, 
+//         use: 'babel-loader',
+       
+//       }
+//     ]
+//   },
+//   plugins: [
+//     new webpack.DefinePlugin({
+//       __isBrowser__: "false"
+//     })
+//   ]
+// }
 
 
+// var le2 = {
+
+//   mode: 'development',
+//   entry: ["@babel/polyfill",'./list2/index'],
+//   target: 'node',
+//   externals: [
+//     { express: 'commonjs express' },
+//   nodeExternals({
+//     modulesDir: path.resolve(__dirname, './node_modules'),
+//     whitelist: ['webpack/hot/poll?1000']
+// }),
+// nodeExternals({
+//     modulesDir: path.resolve(__dirname, './node_modules'),
+//     whitelist: ['webpack/hot/poll?1000']
+// })],
+//   output: {
+//     path: path.resolve('list2'),
+//     filename: 'le.js',
+//     libraryTarget: 'commonjs2'
+//   },
+//   module: {
+//     rules: [
+//       { 
+//         test: /\.(js)$/, 
+//         use: 'babel-loader',
+       
+//       }
+//     ]
+//   },
+//   plugins: [
+//     new webpack.DefinePlugin({
+//       __isBrowser__: "false"
+//     })
+//   ]
+// }
 
 
-module.exports = [andziiy,server,dev]
+
+
+
+
+
+module.exports = [anzii]

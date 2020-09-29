@@ -1,76 +1,59 @@
 {
-  "name": "smarfoapi",
-  "version": "1.0.0",
-  "description": "",
+  "name": "anzii",
+  "version": "1.0.1",
+  "description": "Anzii.js(pronounced /aa-n-zi/:) is a backend javascript modular and event-driven framework that is simple, quick to learn and build with.",
   "main": "app.js",
-  "scripts": {
-    "startOl": "node app.js",
-    "start": "nodemon app.js",
-    "webpack": "webpack -w & node app.js",
-    "watch:dev:sass": "node-sass resources/sass/main.scss public/css/style.css -w",
-    "prod:compile:sass": "node-sass resources/sass/main.scss public/css/style.comp.css",
-    "prod:nodemon": "nodemon npm start app",
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "directories": {
+    "lib": "lib"
   },
-  "author": "",
-  "license": "ISC",
+  "license": "MIT",
+
+  "scripts": {
+
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "cross-env NODE_ENV=production node app",
+    "start-dev": "concurrently --kill-others \"nodemon app\" \"npm run build-dev\"",
+    "build": "cross-env NODE_ENV=production webpack",
+    "build:dev": "webpack --watch",
+    "postinstall": "patch-package",
+    "prepublishOnly": "npm run build"
+
+  },
+
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/iiprodakts/anzii"
+  },
+
+  "keywords": ["backend framework","api","javascript","anzii"],
+  "author": {
+    "email": "hi@iiprodakts.io",
+    "name": "IIprodakts",
+    "url": "http://iiprodakts.io"
+  },
+
+  "contributors": [
+    {
+      "name": "Surprise Mashele",
+      "email": "mashelesepru@gmail.com",
+      "website": "https://www.nstakosurprise.com"
+
+    }
+    
+  ],
+  "homepage": "https://github.com/iiprodakts/anzii#readme",
+
   "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.0.0",
-    "@babel/preset-env": "^7.3.4",
-    "autoprefixer": "^8.6.5",
-    "babel-loader": "^8.0.6",
-    "concat": "^1.0.3",
-    "node-sass": "^4.12.0",
-    "nodemon-webpack-plugin": "^4.0.8",
-    "npm-run-all": "^4.1.5",
-    "webpack": "^4.29.6",
-    "webpack-cli": "^3.3.0"
+    "cross-env": "^7.0.2",
+    "webpack": "^4.44.2",
+    "webpack-cli": "^3.3.12"
   },
   "dependencies": {
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/polyfill": "^7.7.0",
-    "@babel/preset-env": "^7.0.0",
-    "@babel/preset-react": "^7.0.0",
-    "@babel/register": "^7.4.4",
-    "axios": "^0.19.2",
-    "babel-plugin-transform-remove-strict-mode": "0.0.2",
-    "babel-polyfill": "^6.26.0",
-    "babel-upgrade": "^1.0.1",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.18.3",
-    "config": "^2.0.2",
-    "debug": "^3.2.6",
-    "express": "^4.16.3",
-    "express-async-errors": "^3.1.1",
-    "extend": "^3.0.2",
-    "fakeredis": "^2.0.0",
-    "file-type": "^14.1.4",
-    "formidable": "^1.2.2",
-    "fs": "0.0.1-security",
-    "fuse.js": "^6.0.0",
-    "fuzzy-search": "^3.2.1",
-    "ip": "^1.1.5",
-    "jimp": "^0.9.5",
-    "joi": "^14.3.1",
-    "jsonfile": "^5.0.0",
-    "jsonwebtoken": "^8.5.1",
-    "mysql": "^2.16.0",
-    "node-fetch": "^2.6.0",
-    "node-redis-warlock": "^0.2.0",
-    "node-schedule": "^1.3.2",
-    "node.extend": "^2.0.2",
-    "nodemailer": "^6.4.6",
-    "nodemon": "^1.12.5",
-    "promise-mysql": "^3.3.1",
-    "randomstring": "^1.1.5",
-    "redis": "^2.6.3",
-    "supports-color": "^7.1.0",
-    "tesseract.js": "^2.1.1",
-    "uuid": "^7.0.2",
-    "webpack": "^3.10.0",
-    "webpack-node-externals": "^1.6.0",
-    "winston": "^3.2.1"
+    "patch-package": "^6.2.2"
+  },
+  "readme": "See README file",
+  "readmeFilename": "README.md",
+  "bugs": {
+    "url": "https://github.com/iiprodakts/anzii/issues"
   }
 }
