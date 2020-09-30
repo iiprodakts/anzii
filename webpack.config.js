@@ -3,13 +3,17 @@ var path = require('path')
 var webpack = require('webpack')
 var nodeExternals = require('webpack-node-externals') 
 const NodemonPlugin = require('nodemon-webpack-plugin') 
+const root = path.resolve(__dirname)
+
+console.log('THE ROOT IN WEBPACK')
+console.log(root)
 
 
 
 
 var anzii = {
 
-  mode: 'development',
+  
   entry: ["@babel/polyfill",'./lib/start'],
   target: 'node',
   externals: [
@@ -34,13 +38,20 @@ nodeExternals({
         use: 'babel-loader',
        
       }
-    ]
+    ],
+    
   },
+
   plugins: [
     new webpack.DefinePlugin({
       __isBrowser__: "false"
     })
-  ]
+  ],
+  resolve: {
+    roots: [root]
+  },
+
+ 
 }
 
 
