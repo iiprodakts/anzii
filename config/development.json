@@ -1,0 +1,25 @@
+{
+
+
+	
+	"dev": {
+
+        "database": {
+
+			"mysql": {
+
+				 "connect": {
+
+					 "host": "localhost",
+					 "name": "jobbri"
+					
+
+				 }
+
+			 }
+	 }
+	 
+
+    }
+
+}

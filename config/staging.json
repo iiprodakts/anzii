@@ -1,0 +1,24 @@
+{
+
+
+	"stage": {
+
+		"database": {
+
+			"mysql": {
+
+				 "connect": {
+
+					"host": "localhost",
+					"name": "fledja"
+
+				 }
+
+			 }
+	 }
+	 
+
+    }
+
+
+}

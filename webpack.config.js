@@ -16,11 +16,11 @@ var anzii = {
     { express: 'commonjs express' },
   nodeExternals({
     modulesDir: path.resolve(__dirname, './node_modules'),
-    whitelist: ['webpack/hot/poll?1000']
+    allowlist: ['webpack/hot/poll?1000']
 }),
 nodeExternals({
     modulesDir: path.resolve(__dirname, './node_modules'),
-    whitelist: ['webpack/hot/poll?1000']
+    allowlist: ['webpack/hot/poll?1000']
 })],
   output: {
     path: path.resolve('lib'),

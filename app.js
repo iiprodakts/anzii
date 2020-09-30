@@ -1,0 +1,6 @@
+// const List = require('./list/le')
+// const List2 = require('./list2/le')
+// console.log('THE LIST')
+// console.log(List2)
+require('./lib/index')()
+// console.log(anzii)

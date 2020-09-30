@@ -1,0 +1,69 @@
+{
+
+
+
+	
+    "enviroment": "NODE_ENV",
+    "appOrphic": {
+        
+        "flaDev":"FLA_ORPHIC_DEV",
+        "flaProd": "FLA_ORPHIC_PROD",
+        "flaStage": "FLA_ORPHIC_STAGE"
+    }, 
+	"dev": {
+
+        "database": {
+
+               "mysql": {
+
+                    "connect": {
+
+                        "user": "FLA_DB_USER_DEV",
+                        "pass": "FLA_DB_PASS_DEV"
+
+                    }
+
+                }
+        }
+        
+
+	},
+	"prod": {
+
+        "database": {
+
+            "mysql": {
+
+                 "connect": {
+
+                     "user": "FLA_DB_USER_DEV",
+                     "pass": "FLA_DB_PASS_DEV"
+
+                 }
+
+             }
+     }
+     
+
+	},
+	"stage": {
+
+        "database": {
+
+            "mysql": {
+
+                 "connect": {
+
+                     "user": "FLA_DB_USER_DEV",
+                     "pass": "FLA_DB_PASS_DEV"
+
+                 }
+
+             }
+     }
+     
+
+    }
+
+
+}
