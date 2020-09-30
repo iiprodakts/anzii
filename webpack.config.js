@@ -2,7 +2,7 @@
 var path = require('path')
 var webpack = require('webpack')
 var nodeExternals = require('webpack-node-externals') 
-const NodemonPlugin = require('nodemon-webpack-plugin') 
+// const NodemonPlugin = require('nodemon-webpack-plugin') 
 const root = path.resolve(__dirname)
 
 console.log('THE ROOT IN WEBPACK')
