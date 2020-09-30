@@ -1,8 +1,7 @@
-src
+
 includes
-dist
-list
-list2 
+lib
+config
 logs
 webpack.config.js
 .babelrc 

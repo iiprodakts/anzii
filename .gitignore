@@ -3,7 +3,8 @@ node_modules/
 .idea/
 .vscode/
  dist/ 
- lib/index.js
+ lib/index.js 
+ dist/
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
