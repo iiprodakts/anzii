@@ -2,6 +2,8 @@
 var path = require('path')
 var webpack = require('webpack')
 var nodeExternals = require('webpack-node-externals') 
+const FileManagerPlugin = require('filemanager-webpack-plugin');
+
 // const NodemonPlugin = require('nodemon-webpack-plugin') 
 const root = path.resolve(__dirname)
 
@@ -27,7 +29,7 @@ nodeExternals({
     allowlist: ['webpack/hot/poll?1000']
 })],
   output: {
-    path: path.resolve('lib'),
+    path: path.resolve('dist'),
     filename: 'index.js',
     libraryTarget: 'commonjs2'
   },
@@ -45,7 +47,19 @@ nodeExternals({
   plugins: [
     new webpack.DefinePlugin({
       __isBrowser__: "false"
-    })
+    }),
+    new FileManagerPlugin({
+      onEnd: {
+          copy: [
+              { source:  path.resolve(__dirname, 'dist','index.js'), destination: path.resolve(__dirname, 'lib','index.js') },
+              // { source: '/path/**/*.js', destination: '/path' },
+              // { source: '/path/fromfile.txt', destination: '/path/tofile.txt' },
+              // { source: '/path/**/*.{html,js}', destination: '/path/to' },
+              // { source: '/path/{file1,file2}.js', destination: '/path/to' },
+              // { source: '/path/file-[hash].js', destination: '/path/to' }
+          ]
+        }
+      })
   ],
   resolve: {
     roots: [root]
