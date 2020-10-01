@@ -3,6 +3,8 @@ var path = require('path')
 var webpack = require('webpack')
 var nodeExternals = require('webpack-node-externals') 
 const FileManagerPlugin = require('filemanager-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
+
 
 // const NodemonPlugin = require('nodemon-webpack-plugin') 
 const root = path.resolve(__dirname)
@@ -64,6 +66,12 @@ nodeExternals({
   resolve: {
     roots: [root]
   },
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin({
+      extractComments: false,
+    })],
+  }
 
  
 }
