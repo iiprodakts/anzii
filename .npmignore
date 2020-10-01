@@ -6,5 +6,7 @@ logs
 webpack.config.js
 .babelrc 
 confy.js
-app.js 
-ap.js
+app.js  
+.eslintrc.json 
+.editorConfig 
+.gitignore

@@ -1,8 +1,9 @@
 public/imgs/test/
 node_modules/ 
+dist/
 .idea/
 .vscode/
-dist/
+
 
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
