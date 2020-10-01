@@ -4,6 +4,7 @@ import * as middlewares from './includes/globals'
 
 export default  {
 
+    // domain: [{name: 'view engine',set: 'pug'},{name:'views',set: 'resources/views'},{name: 'static',set: 'public'}],
     middleware: {
 
         ppublic:{
