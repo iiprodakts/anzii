@@ -24,29 +24,36 @@ It was designed with different kinds of users in mind,so it doesn't matter if yo
 #### Single line 
 
 ```js
-require('anzii')() 
+    require('anzii')() 
+```
 
 #### Multilines 
 
-const anzii = require('anzii') 
-anzii() 
+```
+    const anzii = require('anzii') 
+    anzii() 
 
+```
 
 ### With Plugins 
 
 
 #### Single line  
 
-require('anzii')([require("./plugins")]) 
+```js 
+    require('anzii')([require("./plugins")])
+``` 
 
 #### Multilines 
 
-const anzii = require('anzii') 
-const plugins = require('./plugins')
-anzii([plugins]) 
+    ```js
+
+        const anzii = require('anzii') 
+        const plugins = require('./plugins')
+        anzii([plugins]) 
 
 
-```
+    ```
 
 
 #Quick Guide 
@@ -119,7 +126,7 @@ Every route object represents a handler(plugin) whose task is to handle a reques
 ## Anzii plugins 
 
 
-### Example Plugin `Hello`
+### Example Plugin Hello
      
 
 
@@ -135,32 +142,24 @@ class Hello{
 	
 	init(){
   
-  
- 
-	this.listens({
-		
-		'handle-hello-task': this.handleHelloTask.bind(this),
-		
-		
-	})
+        this.listens({
+            
+        'handle-hello-task': this.handleHelloTask.bind(this),
+        
+        })
 	
-	
-	
-}
+	}
 
 
 
 handleHelloTask(data){
 
- 
 	const self = this  
 	self.callback = data.callback 
 	let {name,surname} = data 
 	let message = `Hello ${name} ${surname}, I'm happy to meet you.'`
 	
 	return self.callback(null,{message: message})
-	
-
 } 
 
 	
@@ -175,7 +174,7 @@ export default Hello
 ```
 
 
-And that's it! The thing is done! 
+And that\'s it! The thing is done!
 Now when you navigate to ***http://localhost:3000/hello***
 you should the text > Hello name surname, I'm happy to meet you.
 on your browser.
@@ -194,7 +193,7 @@ we are currently working on our documentation with thw help from our first ever 
 
 # Questions
 
-For questions and support please use the official forum or community chat. The issue list of this repo is exclusively for bug reports and feature requests.
+    For questions and support please use the official forum or community chat. The issue list of this repo is exclusively for bug reports and feature requests.
 
 # Issues
 
@@ -207,7 +206,7 @@ Detailed changes for each release are documented in the relea se notes.
 
 # Stay In Touch
 
-[Twitter @anzii](https://twitter.com/anzii).
+[Twitter @anziijs](https://twitter.com/anziijs).
 
 
 
@@ -219,9 +218,9 @@ Please make sure to read the Contributing Guide before making a pull request. 
 
 # Licence 
 
-MIT(https://.github.com/).
+[MIT](https://.github.com/).
 
 
-copyright (c) 2019-present, iiprodatks. Ntsako (Surprise) Mashele 
+copyright (c) 2019-present, iiprodatks. Ntsako (Surprise) Mashele ()
 
 A Special thanks to Nicholas C. Zakas for the box presentation that help inspire Akii which has inspired anzii.
