@@ -191,7 +191,7 @@ we are currently working on our documentation with thw help from our first ever 
 
 # Questions
 
-    For questions and support please use the official forum or community chat. The issue list of this repo is exclusively for bug reports and feature requests.
+For questions and support please use the official twitter page. The issue list of this repo is exclusively for bug reports and feature requests.
 
 # Issues
 
