@@ -68,7 +68,7 @@ Anzii will look for a `.config.json` configuration in the root of your project. 
 Please note: You can use a directory of your choice to hold your configurtion files, but those files should be imported to this configuration file **.config.json** as a final step.
 
 
-````js
+```js
 
 import routes from './includes/routes'
 import * as middlewares from './includes/globals' 
@@ -109,7 +109,7 @@ export default  {
 
 In Anzii, every route is an object that contains a couple of properties that determine charateristics of that route: 
 
-```
+```js
    {
         path: '/hello', // Route path with request handler(plugin) name(hello)
         method: 'GET', // Use get method for this route
@@ -130,7 +130,7 @@ Every route object represents a handler(plugin) whose task is to handle a reques
      
 
 
-
+```js
 class Hello{
 	
 	
@@ -170,9 +170,9 @@ handleHelloTask(data){
 
 export default Hello 
 
+```
 
-
-And that\'s it! The thing is done!
+And that's it! The thing is done!
 Now when you navigate to ***http://localhost:3000/hello***
 you should see the text > Hello name surname, I'm happy to meet you.
 on your browser.
