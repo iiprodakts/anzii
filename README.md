@@ -130,7 +130,6 @@ Every route object represents a handler(plugin) whose task is to handle a reques
      
 
 
-```js
 
 class Hello{
 	
@@ -171,12 +170,11 @@ handleHelloTask(data){
 
 export default Hello 
 
-```
 
 
 And that\'s it! The thing is done!
 Now when you navigate to ***http://localhost:3000/hello***
-you should the text > Hello name surname, I'm happy to meet you.
+you should see the text > Hello name surname, I'm happy to meet you.
 on your browser.
 
 
