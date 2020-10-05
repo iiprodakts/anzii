@@ -91,6 +91,14 @@
   },
   "readme": "See README file",
   "readmeFilename": "README.md",
+  "files": [
+    "dist",
+    "index.js",
+    "README.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+    "package.json"
+  ],
   "bugs": {
     "url": "https://github.com/iiprodakts/anzii/issues"
   }

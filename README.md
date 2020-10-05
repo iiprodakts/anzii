@@ -52,7 +52,6 @@ It was designed with different kinds of users in mind,so it doesn't matter if yo
         const plugins = require('./plugins')
         anzii([plugins]) 
 
-
     ```
 
 
@@ -110,6 +109,7 @@ export default  {
 In Anzii, every route is an object that contains a couple of properties that determine charateristics of that route: 
 
 ```js
+
    {
         path: '/hello', // Route path with request handler(plugin) name(hello)
         method: 'GET', // Use get method for this route
@@ -143,7 +143,7 @@ class Hello{
   
         this.listens({
             
-        'handle-hello-task': this.handleHelloTask.bind(this),
+            'handle-hello-task': this.handleHelloTask.bind(this),
         
         })
 	
@@ -151,15 +151,15 @@ class Hello{
 
 
 
-handleHelloTask(data){
+    handleHelloTask(data){
 
-	const self = this  
-	self.callback = data.callback 
-	let {name,surname} = data 
-	let message = `Hello ${name} ${surname}, I'm happy to meet you.'`
-	
-	return self.callback(null,{message: message})
-} 
+        const self = this  
+        self.callback = data.callback 
+        let {name,surname} = data // assume name to be "Ntsako" and surname to be "Mashele"
+        let message = `Hello ${name} ${surname}, I'm happy to meet you.'`
+        
+        return self.callback(null,{message: message})
+    } 
 
 	
 	
@@ -174,13 +174,41 @@ export default Hello
 
 And that's it! The thing is done!
 Now when you navigate to ***http://localhost:3000/hello***
-you should see the text > Hello name surname, I'm happy to meet you.
+you should see the text  ***Hello Ntsako Mashele, I'm happy to meet you***.
 on your browser.
 
 
 ## How does it work? 
 
+Every anzii plugin you create should include an `init()` method whose sole purpose is to call `this.listen()` method. The `this.listen()` method takes an object  that contains a list of events that your plugin should listen to. As an An anzii plugin author, you define a list of events that you want to handle when emitters emit them. 
 
+Instead of listening to `events`, sometimes you create plugins that emit those events,in which case your listeners have to know about your events in order to listen to them to perform whatever task they exist to perform. 
+
+The anzii framework is its self made up of plugins building upon its base. These plugins also emit and listen to certain events. 
+
+As authors of these plugins/modules, we have defined specific events that we expect interested consumers(listeners) to listen and handle. One of these events is used in the request/response lifecycle and it takes the form `handle-pluginname-task`. This event is emitted whenever a request is made to a server running anzii.
+
+Any plugin you implement to handle a request should listen to the event of the form `handle-pluginname-task` where `pluginname` refers to the name of your plugin.
+
+In the `Hello` example above,the request is handled by the `Hello` plugin,so the plugin listens to the `handle-hello-task` event.
+
+## Route Alias 
+
+There are cases where you find the use of a `handler` as part of the route object's `path`property is undesired. In such a case, you can use a `route Alias` by adding an `alias` property in the  `route` object with the name of the handler as the value of the property. **See an example below**. 
+
+Using the `Hello` example above,the `route` object with an `alias` will be written this way: 
+
+```js
+
+    {
+
+        path: '/greeting's,
+        type: 'public',
+        alias: 'hello' 
+
+    }
+
+  ```
 
 # Documentation 
 

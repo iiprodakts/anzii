@@ -2,11 +2,12 @@
 includes
 lib
 config
-logs
+logs 
+.vscode
 webpack.config.js
 .babelrc 
-.config.js
-app.js  
+.config.js 
 .eslintrc.json 
 .editorConfig 
-.gitignore
+.gitignore 
+app.js
