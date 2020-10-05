@@ -3,6 +3,7 @@ var path = require('path')
 var webpack = require('webpack')
 var nodeExternals = require('webpack-node-externals') 
 const FileManagerPlugin = require('filemanager-webpack-plugin');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const TerserPlugin = require('terser-webpack-plugin');
 
 
@@ -54,6 +55,7 @@ nodeExternals({
       onEnd: {
           copy: [
               { source:  path.resolve(__dirname, 'dist','index.js'), destination: path.resolve(__dirname, 'lib','index.js') },
+              { source:  path.resolve(__dirname, 'dist','index.js.map'), destination: path.resolve(__dirname, 'lib','index.js.map') }
               // { source: '/path/**/*.js', destination: '/path' },
               // { source: '/path/fromfile.txt', destination: '/path/tofile.txt' },
               // { source: '/path/**/*.{html,js}', destination: '/path/to' },
@@ -67,11 +69,11 @@ nodeExternals({
     roots: [root]
   },
   optimization: {
-    minimize: true,
-    minimizer: [new TerserPlugin({
-      extractComments: false,
+    minimizer: [new UglifyJsPlugin({
+      exclude: /\/lib\/base\/core/,
     })],
-  }
+  },
+  devtool: "source-map"
 
  
 }
