@@ -5,7 +5,7 @@ config
 logs
 webpack.config.js
 .babelrc 
-confy.js
+.config.js
 app.js  
 .eslintrc.json 
 .editorConfig 

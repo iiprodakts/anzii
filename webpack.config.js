@@ -55,7 +55,7 @@ nodeExternals({
       onEnd: {
           copy: [
               { source:  path.resolve(__dirname, 'dist','index.js'), destination: path.resolve(__dirname, 'lib','index.js') },
-              { source:  path.resolve(__dirname, 'dist','index.js.map'), destination: path.resolve(__dirname, 'lib','index.js.map') }
+              // { source:  path.resolve(__dirname, 'dist','index.js.map'), destination: path.resolve(__dirname, 'lib','index.js.map') }
               // { source: '/path/**/*.js', destination: '/path' },
               // { source: '/path/fromfile.txt', destination: '/path/tofile.txt' },
               // { source: '/path/**/*.{html,js}', destination: '/path/to' },
@@ -70,10 +70,14 @@ nodeExternals({
   },
   optimization: {
     minimizer: [new UglifyJsPlugin({
-      exclude: /\/lib\/base\/core/,
+      uglifyOptions:{
+        keep_classnames: true,
+        keep_fnames: true,
+        mangle: false
+      }
     })],
   },
-  devtool: "source-map"
+  // devtool: "source-map"
 
  
 }
