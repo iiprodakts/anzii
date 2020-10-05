@@ -1,8 +1,8 @@
 {
   "name": "anzii",
-  "version": "2.0.4",
+  "version": "2.0.3",
   "description": "Anzii is a backend javascript modular and event-driven framework that is simple, quick to learn and build with.",
-  "main": "app.js",
+  "main": "index.js",
   "directories": {
     "lib": "lib"
   },
@@ -10,9 +10,9 @@
   "scripts": {
     "test": "jest",
     "lint": "eslint .",
-    "start": "cross-env NODE_ENV=production node app",
-    "start:dev": "concurrently --kill-others \"npm run build:dev\" \"cross-env NODE_ENV=production nodemon app \" ",
-    "start:dev:nodemon": "nodemon app",
+    "start": "cross-env NODE_ENV=production node index",
+    "start:dev": "concurrently --kill-others \"npm run build:dev\" \"cross-env NODE_ENV=production nodemon index \" ",
+    "start:dev:nodemon": "nodemon index",
     "build": "cross-env NODE_ENV=production webpack",
     "build:dev": "webpack --mode development --watch",
     "postinstall": "patch-package",
