@@ -71,9 +71,9 @@ nodeExternals({
   optimization: {
     minimizer: [new UglifyJsPlugin({
       uglifyOptions:{
-        keep_classnames: true,
-        keep_fnames: true,
-        mangle: false
+        keep_classnames: false,
+        keep_fnames: false,
+        mangle: true
       }
     })],
   },

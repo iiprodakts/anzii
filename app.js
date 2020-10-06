@@ -2,5 +2,6 @@
 // const List2 = require('./list2/le')
 // console.log('THE LIST')
 // console.log(List2)
-require('./lib/index')()
+// const Hello = require('./hello')
+require('./lib/index')({"Hello":require('./hello')})
 // console.log(anzii)

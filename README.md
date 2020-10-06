@@ -37,11 +37,12 @@ It was designed with different kinds of users in mind,so it doesn't matter if yo
 
 ### With Plugins 
 
+#### with a single plugin
 
-#### Single line  
+##### Single line  
 
 ```js 
-    require('anzii')([require("./plugins")])
+    require('anzii')({Hello: require("./hello")}) // Hello plugin in the same directory
 ``` 
 
 #### Multilines 
@@ -49,8 +50,8 @@ It was designed with different kinds of users in mind,so it doesn't matter if yo
     ```js
 
         const anzii = require('anzii') 
-        const plugins = require('./plugins')
-        anzii([plugins]) 
+        const plugins = require('./plugins') // plugins.js containing plugins in an object
+        anzii(plugins) // anzii takes an object of plugins as an argument
 
     ```
 
@@ -77,21 +78,9 @@ export default  {
 
     middleware: {
 
-        publik:{
-
-            addMiddleware: middlewares.ppublic
-        },
-        privet: {
-
-            addMiddleware: middlewares.pprivate
-
-        },
-        all: {
-
-            addMiddleware: middlewares.all
-        }
-        
-        
+        publik:{addMiddleware: middlewares.ppublic},
+        privet: { addMiddleware: middlewares.pprivate},
+        all: {addMiddleware: middlewares.all}
     }, // Your middlewares configurations
     view: true, // Enable rendering web pages
     router: routes, // Your api routes
@@ -143,27 +132,30 @@ class Hello{
   
         this.listens({
             
-            'handle-hello-task': this.handleHelloTask.bind(this),
+            'handle-hello-task': this.handleHelloTask.bind(this), // Event and handling method
         
-        })
+        }) // Call listens() method (available to every anzii plugin) to set events that this module  listens to
 	
-	}
+	}// Define the required init() method
 
 
 
     handleHelloTask(data){
 
         const self = this  
+    
         self.callback = data.callback 
-        let {name,surname} = data // assume name to be "Ntsako" and surname to be "Mashele"
-        let message = `Hello ${name} ${surname}, I'm happy to meet you.'`
-        
+        const {payload} = data 
+        const {user} = payload 
+        const {name,surname} = user // assume name to be "Ntsako" and surname to be "Mashele"
+        const message = `Hello ${name} ${surname}, I'm happy to meet you.'` 
         return self.callback(null,{message: message})
+
+       
     } 
 
 	
 	
-
 	
 }
  
@@ -176,6 +168,38 @@ And that's it! The thing is done!
 Now when you navigate to ***http://localhost:3000/hello***
 you should see the text  ***Hello Ntsako Mashele, I'm happy to meet you***.
 on your browser.
+
+### The `data` object 
+
+Every `event-handling` method of a plugin receives a `data` argument which contains `data` that the `event-handling` module expects to be able to perform and complete its task. The `data` argument is sent by an `event-emitting` module that is in need of a task that the `event-handling` performs. 
+
+In a request/response lifecycle, your  `request` handling module/plugin is sent a  `data` object that your plugin requires to complete its task. The emitted `data` object contains information needed in a request/response lifecycle. A picture is worth a thousand words, please refer to the `request`  `data` object below: 
+
+```js
+
+    { 
+        payload: { 
+
+                parsed: { 
+                    url: '/greeting/Ntsako/Mashele',
+                    handler: 'greeting' // 
+                }, // Request information directly extracted from the request object
+                user: { name: 'Ntsako', surname: 'Mashele' }, // Parameters or data extracted
+                handler: 'hello', // Request handling plugin name (sometimes refered to as alias)
+                request: {
+
+                    req: [IncomingMessage], 
+                    res: [ServerResponse] 
+                } // Request and Response objects for further manipulation (using express framework)
+            
+        }, // Contains data about the request
+        callback: [Function: bound taskerHandler] // Method to be called when task is completed
+   
+    }// Data object
+
+  ```
+
+
 
 
 ## How does it work? 
@@ -196,13 +220,13 @@ In the `Hello` example above,the request is handled by the `Hello` plugin,so the
 
 There are cases where you find the use of a `handler` as part of the route object's `path`property is undesired. In such a case, you can use a `route Alias` by adding an `alias` property in the  `route` object with the name of the handler as the value of the property. **See an example below**. 
 
-Using the `Hello` example above,the `route` object with an `alias` will be written this way: 
+Using the `Hello` example above, the `route` object with an `alias` will be written this way: 
 
 ```js
 
     {
 
-        path: '/greeting's,
+        path: '/greeting',
         type: 'public',
         alias: 'hello' 
 
@@ -227,7 +251,7 @@ Please make sure to read the Issue Reporting Checklist before opening an issue
 
 # Changelog
 
-Detailed changes for each release are documented in the relea se notes.
+Detailed changes for each release are documented in the release notes.
 
 
 # Stay In Touch
@@ -247,6 +271,6 @@ Please make sure to read the Contributing Guide before making a pull request. 
 [MIT](https://.github.com/).
 
 
-copyright (c) 2019-present, iiprodatks. Ntsako (Surprise) Mashele ()
+copyright (c) 2019-present, iiprodatks. Ntsako (Surprise) Mashele
 
 A Special thanks to Nicholas C. Zakas for the box presentation that help inspire Akii which has inspired anzii.

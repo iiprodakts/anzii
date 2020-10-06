@@ -19,6 +19,7 @@ build
 # misc
 .DS_Store
 .env 
-app.js
+app.js 
+hello.js
 npm-debug.log*
 **/*.log

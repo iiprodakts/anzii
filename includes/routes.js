@@ -19,6 +19,12 @@ export default  [
         method: 'GET',
         type: 'public'
     },
+    {
+        path: '/greeting',
+        alias: 'hello',
+        method: 'GET',
+        type: 'public'
+    },
     
 ]
 
