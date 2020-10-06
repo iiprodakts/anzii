@@ -1,6 +1,6 @@
 {
   "name": "anzii",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "Anzii is a backend javascript modular and event-driven framework that is simple, quick to learn and build with.",
   "main": "index.js",
   "directories": {
