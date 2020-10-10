@@ -3,5 +3,7 @@
 // console.log('THE LIST')
 // console.log(List2)
 // const Hello = require('./hello')
+//!/usr/bin/env node
+process.argv.push('cli')
 require('./lib/index')({"Hello":require('./hello')})
 // console.log(anzii)
