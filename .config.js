@@ -2,6 +2,7 @@
 // import tasks from './includes/tasks'
 // import * as middlewares from './includes/globals'
 
+
 module.exports = {
 
     // domain: [{name: 'view engine',set: 'pug'},{name:'views',set: 'resources/views'},{name: 'static',set: 'public'}],
@@ -29,7 +30,7 @@ module.exports = {
         type: 'public'
     },],
     // kronjo: tasks,
-    logger: {level: 'info'},
+    // logger: {level: 'info'},
     cluster:{workers: 3,spawn: true,} ,
     server: 'server'
 
