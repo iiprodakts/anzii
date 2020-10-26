@@ -10,8 +10,8 @@ const TerserPlugin = require('terser-webpack-plugin');
 // const NodemonPlugin = require('nodemon-webpack-plugin') 
 const root = path.resolve(__dirname)
 
-console.log('THE ROOT IN WEBPACK')
-console.log(root)
+// console.log('THE ROOT IN WEBPACK')
+// console.log(root)
 
 
 
