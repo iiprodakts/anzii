@@ -1,6 +1,7 @@
 public/imgs/test/
 node_modules/ 
 dist/
+public/
 .idea/
 .vscode/
 
