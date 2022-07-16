@@ -11,12 +11,12 @@
     "test": "jest",
     "lint": "eslint .",
     "start": "cross-env NODE_ENV=production node index",
-    "start:dev": "concurrently --kill-others \"npm run build:dev\" \"cross-env NODE_ENV=production nodemon index \" ",
+    "start:dev": "concurrently --kill-others \"yarn run build:dev\" \"cross-env NODE_ENV=production nodemon index \" ",
     "start:dev:nodemon": "nodemon index",
     "build": "cross-env NODE_ENV=production webpack",
     "build:dev": "webpack --mode development --watch",
     "postinstall": "patch-package",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "yarn run build"
   },
   "repository": {
     "type": "git",
@@ -57,9 +57,7 @@
     "eslint": "^7.10.0",
     "filemanager-webpack-plugin": "^2.0.5",
     "jest": "^26.4.2",
-    "node-sass": "^4.12.0",
     "nodemon-webpack-plugin": "^4.0.8",
-    "npm-run-all": "^4.1.5",
     "terser-webpack-plugin": "^4.2.2",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.44.2",
@@ -84,6 +82,7 @@
     "formidable": "^1.2.2",
     "fs": "0.0.1-security",
     "mysql": "^2.16.0",
+    "mysql2": "^2.3.3",
     "node.extend": "^2.0.2",
     "passport": "^0.4.1",
     "patch-package": "^6.2.2",
@@ -91,7 +90,8 @@
     "redis": "^2.6.3",
     "supports-color": "^7.1.0",
     "uuid": "^7.0.2",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "yarn-run-all": "^3.1.1"
   },
   "readme": "See README file",
   "readmeFilename": "README.md",
