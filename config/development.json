@@ -1,0 +1,26 @@
+{
+
+
+	
+	"dev": {
+
+        "database": {
+
+			"mysql": {
+
+				 "connect": {
+
+					 "host": "localhost",
+					 "name": "anzii",
+					 "connectionLimit": 10
+					
+
+				 }
+
+			 }
+	 }
+	 
+
+    }
+
+}
