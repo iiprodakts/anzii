@@ -9,8 +9,9 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "lint": "eslint .",
+    "lint": "eslint",
     "start": "cross-env NODE_ENV=production node index",
+    "start:test": "node app.js",
     "start:dev": "concurrently --kill-others \"yarn run build:dev\" \"cross-env NODE_ENV=production nodemon index \" ",
     "start:dev:nodemon": "nodemon index",
     "build": "cross-env NODE_ENV=production webpack",
