@@ -10,7 +10,7 @@
 
 				 "connect": {
 
-					 "host": "localhost",
+					 "host": "127.0.0.1",
 					 "name": "anzii",
 					 "connectionLimit": 10
 					
