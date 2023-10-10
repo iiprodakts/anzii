@@ -13,9 +13,9 @@ export default  {
                 connect: {
 
                     host: "localhost",
-                    user: "fledjaa",
-                    name: "fledja",
-                    pass: "19900323rose@59"
+                    user: "anzii",
+                    name: "anzii",
+                    pass: "19900323"
 
                 }
 
