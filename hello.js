@@ -27,9 +27,61 @@ class Hello{
         let {name,surname} = user // assume name to be "Ntsako" and surname to be "Mashele"
         let message = `Hello ${name} ${surname}, I'm happy to meet you.'` 
         self.logSync(payload.parsed.user)
-        
-        return self.callback(null,{message: message})
+        self.getSavedHistory().then((saved)=>{
+            console.log('the saved;;;',saved)
+            return self.callback(null,{message: message})
+        }).catch((err)=>{
+            console.log('savedError;;;',err)
+            return self.callback(null,{message: message})
+        })
+        //return self.callback(null,{message: message})
 
+
+    }
+
+    getSavedHistory(){
+	  
+	  
+  
+	  
+        return new Promise((resolve,reject)=>{
+    
+            const self = this 
+            let pao = self.pao 
+            //let uid = pay.ID
+    
+            let queries = 
+                    {
+                        returnFields: ['*'],
+                        tables:['users'],
+                        conditions: [`id EQUALS 2`],
+                        //opiks: ['field.id.as[userID]']
+                }
+            
+            self.query(
+                    'mysql.SEARCH',
+                    queries,
+                    self.multiDataRequestHandler.bind(this,resolve,reject)
+                )
+                
+        
+        
+        })
+        
+    
+    }
+
+
+  
+    multiDataRequestHandler(resolve=null,reject=null,e=null,result=null){
+        
+        
+        const self = this 
+        let pao = self.pao
+        self.pao.pa_wiLog('THE TYPE OF E IN DATAREQUEST HANDLER')
+        self.pao.pa_wiLog(e)
+        if(e) reject(new Error('An error has occured Inside MYSQL'))
+        resolve(result)
 
     }
   

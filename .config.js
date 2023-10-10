@@ -30,8 +30,8 @@ module.exports = {
         type: 'public'
     },],
     // kronjo: tasks,
-    // logger: {level: 'info'},
-    cluster:{workers: 3,spawn: true,} ,
+    logger: {level: 'info'},
+    cluster:{workers: 1,spawn:false,} ,
     server: 'server'
 
 

@@ -1,6 +1,6 @@
 {
   "name": "anzii",
-  "version": "2.2.11",
+  "version": "6.0.0",
   "description": "Anzii is a backend javascript modular and event-driven framework that is simple, quick to learn and build with.",
   "main": "index.js",
   "directories": {
@@ -9,14 +9,15 @@
   "license": "MIT",
   "scripts": {
     "test": "jest",
-    "lint": "eslint .",
-    "start": "cross-env NODE_ENV=production node index",
-    "start:dev": "concurrently --kill-others \"npm run build:dev\" \"cross-env NODE_ENV=production nodemon index \" ",
+    "lint": "eslint",
+    "start:cross": "cross-env NODE_ENV=production node index",
+    "start": "nodemon app.js",
+    "start:dev": "concurrently --kill-others \"yarn run build:dev\" \"cross-env NODE_ENV=production nodemon index \" ",
     "start:dev:nodemon": "nodemon index",
     "build": "cross-env NODE_ENV=production webpack",
     "build:dev": "webpack --mode development --watch",
     "postinstall": "patch-package",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "yarn run build"
   },
   "repository": {
     "type": "git",
@@ -48,7 +49,6 @@
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
     "@babel/plugin-transform-strict-mode": "^7.10.4",
     "@babel/preset-env": "^7.3.4",
-    "@babel/register": "^7.4.4",
     "autoprefixer": "^8.6.5",
     "babel-loader": "^8.0.6",
     "babel-plugin-transform-remove-strict-mode": "0.0.2",
@@ -58,9 +58,7 @@
     "eslint": "^7.10.0",
     "filemanager-webpack-plugin": "^2.0.5",
     "jest": "^26.4.2",
-    "node-sass": "^4.12.0",
     "nodemon-webpack-plugin": "^4.0.8",
-    "npm-run-all": "^4.1.5",
     "terser-webpack-plugin": "^4.2.2",
     "uglifyjs-webpack-plugin": "^2.2.0",
     "webpack": "^4.44.2",
@@ -69,12 +67,14 @@
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
+    "@babel/register": "^7.12.13",
     "app-root-path": "^3.0.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
     "config": "^2.0.2",
     "cors": "^2.8.5",
     "debug": "^3.2.6",
+    "esm": "^3.2.25",
     "express": "^4.16.3",
     "express-async-errors": "^3.1.1",
     "extend": "^3.0.2",
@@ -83,13 +83,16 @@
     "formidable": "^1.2.2",
     "fs": "0.0.1-security",
     "mysql": "^2.16.0",
+    "mysql2": "^2.3.3",
     "node.extend": "^2.0.2",
+    "passport": "^0.4.1",
     "patch-package": "^6.2.2",
     "promise-mysql": "^3.3.1",
     "redis": "^2.6.3",
     "supports-color": "^7.1.0",
     "uuid": "^7.0.2",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "yarn-run-all": "^3.1.1"
   },
   "readme": "See README file",
   "readmeFilename": "README.md",

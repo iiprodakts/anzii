@@ -1,0 +1,24 @@
+{
+
+
+	"prod": {
+
+		"database": {
+
+			"mysql": {
+
+				 "connect": {
+
+					"host": "pei17y9c5bpuh987.chr7pe7iynqr.eu-west-1.rds.amazonaws.com",
+					"name": "xy25tqn2n95ugz5j",
+					"connectionLimit": 10
+
+				 }
+
+			 }
+	 }
+	 
+    }
+
+
+}

@@ -5,5 +5,9 @@
 // const Hello = require('./hello')
 //!/usr/bin/env node
 // process.argv.push('cli')
-require('./lib/index')({"Hello":require('./hello')})
+const an = require('./lib/index')
+require("@babel/register");
+require = require("esm")(module/*, options*/)
+const plugins = require('./plugins')
+an({...plugins,"Hello":require('./hello')})
 // console.log(anzii)
