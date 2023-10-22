@@ -1,7 +1,7 @@
 import path from "path";
 import fs from "fs";
 import fileType from "file-type";
-import * as methods from "./methods";
+import * as methods from "./methods.js";
 class FileMan {
     constructor(pao) {
         this.pao = pao;

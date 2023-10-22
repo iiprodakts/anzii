@@ -1,4 +1,4 @@
-import an from "./lib/index.js";
+import an from "./lib/start.js";
 import plugins from "./plugins/index.js";
 import hello from "./hello.js";
 // require = require("esm")(module /*, options*/);

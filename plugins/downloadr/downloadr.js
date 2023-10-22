@@ -1,4 +1,4 @@
-import * as methods from "./methods";
+import * as methods from "./methods.js";
 // const wrStream = require('streamifier')
 // const rStream = require('concat-stream')
 class Downloadr {
