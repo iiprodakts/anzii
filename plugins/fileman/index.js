@@ -1,4 +1,2 @@
-
 import FileMan from "./fileman";
-
-export default FileMan
+export default FileMan;

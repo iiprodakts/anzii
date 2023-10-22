@@ -1,4 +1,2 @@
-
 import Downloadr from "./downloadr";
-
-export default Downloadr
+export default Downloadr;

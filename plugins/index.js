@@ -1,14 +1,9 @@
-
-
-import FileMan from './fileman'
+import FileMan from './fileman';
 //import ImageMan from './imageman'
-
-import Downloadr from './downloadr'
-
-
-
-
-module.exports = {
-
-    FileMan,Downloadr
-}
+import Downloadr from './downloadr';
+export { FileMan };
+export { Downloadr };
+export default {
+    FileMan,
+    Downloadr
+};
