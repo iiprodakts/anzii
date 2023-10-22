@@ -9,7 +9,7 @@ const root = path.resolve(__dirname);
 // console.log('THE ROOT IN WEBPACK')
 // console.log(root)
 var anzii = {
-    entry: ["@babel/polyfill", './lib/start'],
+    entry: ['./lib/start'],
     target: 'node',
     externals: [
         { express: 'commonjs express' },
