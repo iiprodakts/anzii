@@ -85,6 +85,7 @@
     "mysql": "^2.16.0",
     "mysql2": "^2.3.3",
     "node.extend": "^2.0.2",
+    "open": "8.4.1",
     "passport": "^0.4.1",
     "patch-package": "^6.2.2",
     "promise-mysql": "^3.3.1",
