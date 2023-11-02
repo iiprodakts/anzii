@@ -1,2 +1,3 @@
+import {anzii} from './dist/index.cjs'
 
-module.exports = require('./dist/index')
+export default anzii

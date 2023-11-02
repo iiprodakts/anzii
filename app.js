@@ -1,5 +1,9 @@
-import an from "./lib/start.js";
+// import {createRequire} from 'module'
+// const require = createRequire(import.meta.url)
+import anzii from "anzii"
 import plugins from "./plugins/index.js";
 import hello from "./hello.js";
 // require = require("esm")(module /*, options*/);
-an({ ...plugins, "Hello": hello });
+anzii({ ...plugins, "Hello": hello });
+
+
