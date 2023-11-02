@@ -1,9 +1,16 @@
 import path from "path";
-import * as webpack from "webpack";
+import * as webpacks from "webpack";
 import nodeExternals from "webpack-node-externals";
 import FileManagerPlugin from "filemanager-webpack-plugin";
 import UglifyJsPlugin from "uglifyjs-webpack-plugin";
-import TerserPlugin from "terser-webpack-plugin";
+import { fileURLToPath } from "url";
+const webpack = webpacks.default
+const __filename = fileURLToPath(import.meta.url);
+
+const __dirname = path.dirname(__filename);
+console.log("Webpack dir name", __dirname);
+console.log("Webpack",webpack)
+// import TerserPlugin from "terser-webpack-plugin";
 // const NodemonPlugin = require('nodemon-webpack-plugin') 
 const root = path.resolve(__dirname);
 // console.log('THE ROOT IN WEBPACK')
@@ -24,15 +31,18 @@ var anzii = {
     ],
     output: {
         path: path.resolve('dist'),
-        filename: 'index.js',
+        filename: 'index.cjs',
         libraryTarget: 'commonjs2'
     },
     module: {
         rules: [
             {
-                test: /\.(js)$/,
+                test: /\.(js|jsx)$/,
+                exclude: /(node_modules|bower_components)/,
                 use: 'babel-loader',
-            }
+               
+              },
+           
         ],
     },
     plugins: [
@@ -42,7 +52,7 @@ var anzii = {
         new FileManagerPlugin({
             onEnd: {
                 copy: [
-                    { source: path.resolve(__dirname, 'dist', 'index.js'), destination: path.resolve(__dirname, 'lib', 'index.js') },
+                    { source: path.resolve(__dirname, 'dist', 'index.cjs'), destination: path.resolve(__dirname, 'lib', 'index.cjs') },
                     // { source:  path.resolve(__dirname, 'dist','index.js.map'), destination: path.resolve(__dirname, 'lib','index.js.map') }
                     // { source: '/path/**/*.js', destination: '/path' },
                     // { source: '/path/fromfile.txt', destination: '/path/tofile.txt' },
@@ -54,17 +64,18 @@ var anzii = {
         })
     ],
     resolve: {
-        roots: [root]
+        roots: [root],
+        extensions:['.js','.jsx']
     },
-    optimization: {
-        minimizer: [new UglifyJsPlugin({
-                uglifyOptions: {
-                    keep_classnames: false,
-                    keep_fnames: false,
-                    mangle: true
-                }
-            })],
-    },
+    // optimization: {
+    //     minimizer: [new UglifyJsPlugin({
+    //             uglifyOptions: {
+    //                 keep_classnames: false,
+    //                 keep_fnames: false,
+    //                 mangle: true
+    //             }
+    //         })],
+    // },
     // devtool: "source-map"
 };
 export default [anzii];
