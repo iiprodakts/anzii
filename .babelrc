@@ -4,7 +4,8 @@
 	"plugins": [
 		["transform-strict-mode", {
 		  "strict": false
-		}],"@babel/plugin-syntax-import-assertions"
+		}],"@babel/plugin-syntax-import-assertions","@babel/plugin-syntax-jsx"
+
 		
 	  ]
 	  
