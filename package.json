@@ -98,6 +98,7 @@
     "passport": "^0.4.1",
     "patch-package": "^6.2.2",
     "promise-mysql": "^3.3.1",
+    "react": "^18.2.0",
     "redis": "^2.6.3",
     "supports-color": "^7.1.0",
     "typescript": "<4.8",
