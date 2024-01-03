@@ -1,12 +1,8 @@
-
-import * as tasksHandlers from './tasksHandlers'
-
-export default  [
-
+import * as tasksHandlers from './tasksHandlers';
+export default [
     {
-        taskRule: {dayOfWeek: 0,hour: 17,minute: 19},
+        taskRule: { dayOfWeek: 0, hour: 17, minute: 19 },
         taskHandler: tasksHandlers.sendJobAlerts,
-       
     },
     // {
     //     taskSchedule: 'once every-monday of every-week @5:00:am ',
@@ -23,5 +19,4 @@ export default  [
     //     method: 'GET',
     //     type: 'private'
     // }
-   
-]
+];

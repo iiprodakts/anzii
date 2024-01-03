@@ -1,9 +1,5 @@
-
 // import * as middlewares from './middlewares'
-
-export default  [
-
-    
+export default [
     {
         path: '/test',
         method: 'POST',
@@ -25,7 +21,4 @@ export default  [
         method: 'GET',
         type: 'public'
     },
-    
-]
-
-
+];

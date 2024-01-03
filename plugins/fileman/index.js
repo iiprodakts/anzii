@@ -1,4 +1,2 @@
-
-import FileMan from "./fileman";
-
-export default FileMan
+import FileMan from "./fileman.js";
+export default FileMan;

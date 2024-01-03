@@ -1,4 +1,2 @@
-
-import Downloadr from "./downloadr";
-
-export default Downloadr
+import Downloadr from "./downloadr.js";
+export default Downloadr;
