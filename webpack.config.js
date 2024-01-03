@@ -10,8 +10,8 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 // const NodemonPlugin = require('nodemon-webpack-plugin') 
 const root = path.resolve(__dirname)
-const outsideDir = `${path.resolve(root,`..${path.sep}`)}${path.sep}test.jsx`
-console.log("THE ROOT",outsideDir)
+// const outsideDir = `${path.resolve(root,`..${path.sep}`)}${path.sep}test.jsx`
+// console.log("THE ROOT",outsideDir)
 
 // console.log('THE ROOT IN WEBPACK')
 // console.log(root)
@@ -43,7 +43,7 @@ nodeExternals({
     rules: [
       { 
         test: /\.(js|jsx)$/, 
-        include: [root,outsideDir],
+        include: [root],
         use: 'babel-loader',
        
       }
