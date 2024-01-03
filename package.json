@@ -5,7 +5,12 @@
   "main": "index.js",
   "type": "module",
   "exports": {
-    "default": "./lib/start.js"
+    ".": {
+      "import": "./lib/start.js",
+      "require": "./lib/index.cjs",
+      "default": "./lib/start.js"
+    }
+  
   },
   "directories": {
     "lib": "lib"
