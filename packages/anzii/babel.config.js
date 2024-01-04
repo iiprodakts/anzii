@@ -1,5 +1,5 @@
 export default function (api) {
-    //api.cache(true); // this tells babel to cache it's transformations, it's pretty good at checking file hashes and invalidating it's cache, but if you have problems with changes not being reflected you can set false here.
+    api.cache(true); // this tells babel to cache it's transformations, it's pretty good at checking file hashes and invalidating it's cache, but if you have problems with changes not being reflected you can set false here.
     const isESM = process.env.NODE_ENV === 'esm' ? true : false
     console.log("THE BABEL CACHE",api)
     const presets = [

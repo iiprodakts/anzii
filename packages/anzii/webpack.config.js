@@ -2,7 +2,7 @@
 
 import path from 'path'
 import webpack from 'webpack'
-import nodeExternals from 'webpack-node-externals'
+//import nodeExternals from 'webpack-node-externals'
 //import FileManagerPlugin from 'filemanager-webpack-plugin';
 //import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 import { fileURLToPath } from 'url';
