@@ -1,6 +1,7 @@
-export default function () {
+export default function (api) {
     //api.cache(true); // this tells babel to cache it's transformations, it's pretty good at checking file hashes and invalidating it's cache, but if you have problems with changes not being reflected you can set false here.
-    // const isESM = process.env.NODE_ENV === 'esm' ? true : false
+    const isESM = process.env.NODE_ENV === 'esm' ? true : false
+    console.log("THE BABEL CACHE",api)
     const presets = [
         
         ['@babel/preset-env',
@@ -9,7 +10,7 @@ export default function () {
         targets: {
             node: '14.17.0', // this means transpile everything that node 14.17 (the version you get in lambda with node14) doesn't support
         },
-        //modules: isESM ? false : 'cjs', // this means imports/exports will not be transformed
+        modules: isESM ? false : 'cjs', // this means imports/exports will not be transformed
         }, ]
     ];
     const plugins = [ 
