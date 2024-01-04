@@ -6,9 +6,9 @@
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
+      "import": "./lib/start.js",
       "require": "./dist/index.cjs",
-      "default": "./dist/index.mjs"
+      "default": "./lib/start.js"
     }
   },
   "directories": {
@@ -22,9 +22,9 @@
     "start": "nodemon app.js",
     "start:dev": "concurrently --kill-others \"yarn run build:dev\" \"cross-env NODE_ENV=production nodemon index \" ",
     "start:dev:nodemon": "nodemon index",
-    "compile": "yarn run compile:esm && yarn run compile:cjs",
-    "compile:esm": "cross-env NODE_ENV=production NODE_MODE=esm webpack",
-    "compile:cjs": "cross-env NODE_ENV=production NODE_MODE=cjs webpack",
+    "compile": "yarn run compile:esm ",
+    "compile:esm": "cross-env NODE_ENV=development NODE_MODE=esm webpack",
+    "compile:cjs": "cross-env NODE_ENV=development NODE_MODE=cjs webpack",
     "build:dev": "webpack --mode development --watch",
     "postinstall": "patch-package",
     "prepublishOnly": "yarn run build"

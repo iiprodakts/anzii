@@ -4,7 +4,7 @@ import path from 'path'
 import webpack from 'webpack'
 import nodeExternals from 'webpack-node-externals'
 //import FileManagerPlugin from 'filemanager-webpack-plugin';
-import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
+//import UglifyJsPlugin from 'uglifyjs-webpack-plugin';
 import { fileURLToPath } from 'url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -28,34 +28,32 @@ const anzii = function(){
   
   console.log("THE PROCESS MODE IS", process.env.NODE_MODE)
   console.log("THE ENV IS", process.env.NODE_ENV)
+  console.log("OUR ROOT",root)
   const isESM = process.env.NODE_MODE === 'esm' ? true : false
+  console.log("isESM",isESM)
 
-  return{
+  const config = {
 
   
   entry: ['./lib/start'],
-  target: 'node',
+  target: isESM ? false : 'node',
+  // mode: 'development',
+  // devtool: 'source-map',
   experiments:{
-    outputModule: isESM ? isESM : !isESM
+    outputModule: isESM ? isESM : false
   },
-  externals: [
-    { express: 'commonjs express' },
-  nodeExternals({
-    modulesDir: path.resolve(__dirname, './node_modules'),
-    allowlist: ['webpack/hot/poll?1000']
-}),
-nodeExternals({
-    modulesDir: path.resolve(__dirname, './node_modules'),
-    allowlist: ['webpack/hot/poll?1000']
-})],
+  cache:false,
+  // externals: [nodeExternals()],
+  externalsPresets: {
+    node: true // in order to ignore built-in modules like path, fs, etc. 
+  },
+  
   output: {
     path: path.resolve('dist'),
     filename: isESM ? "index.mjs" : 'index.cjs',
     libraryTarget: isESM  ? "module" : 'commonjs2',
     chunkFormat: isESM  ? "module" : 'commonjs',
-    clean: {
-      dry: true, // Log the assets that should be removed instead of deleting them.
-    },
+    // clean: true
   },
   module: {
     rules: [
@@ -66,6 +64,7 @@ nodeExternals({
        
       }
     ],
+   
     
   },
 
@@ -90,19 +89,22 @@ nodeExternals({
   resolve: {
     roots: [root]
   },
-  optimization: {
-    minimizer: [new UglifyJsPlugin({
-      uglifyOptions:{
-        keep_classnames: false,
-        keep_fnames: false,
-        mangle: true
-      }
-    })],
-  },
+  // optimization: {
+  //   minimizer:[]
+    // minimizer: [new UglifyJsPlugin({
+    //   uglifyOptions:{
+    //     keep_classnames: false,
+    //     keep_fnames: false,
+    //     mangle: true
+    //   }
+    // })],
+  //},
   // devtool: "source-map"
 
  
-}
+            }
+console.log("THE CONFIG", config)
+return config
 }
 
 
