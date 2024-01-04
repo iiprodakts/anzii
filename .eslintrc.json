@@ -3,11 +3,19 @@
         "node": true,
         "es2021": true
     },
-    "extends": "eslint:recommended",
+    "extends": [
+      "eslint:recommended",
+      "plugin:react/recommended",
+      "plugin:jest/recommended"
+    ],
     "parserOptions": {
-        "ecmaVersion": 12,
-        "sourceType": "module"
+      "ecmaFeatures": {
+        "jsx": true
+      },
+      "ecmaVersion": "latest",
+      "sourceType": "module"
     },
-    "rules": {
-    }
-}
+    "plugins": ["react", "jest"],
+    "rules": { "no-unreachable": "off", "sort-imports": "off" }
+  }
+  
