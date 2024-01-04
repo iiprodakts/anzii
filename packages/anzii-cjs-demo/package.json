@@ -1,0 +1,19 @@
+{
+  "name": "anzii-cjs-demo",
+  "version": "0.0.0",
+  "description": "> TODO: description",
+  "author": "ntsakosurprise <mashelesepru@gmail.com>",
+  "homepage": "https://github.com/iiprodakts/anzii/tree/main/packages/anzii-cjs-demo#readme",
+  "license": "ISC",
+  "main": "lib/anzii-cjs-demo.js",
+  "directories": {
+    "lib": "lib",
+    "test": "__tests__"
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "test": "echo \"Error: run tests from root\" && exit 1"
+  }
+}
