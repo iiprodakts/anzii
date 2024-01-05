@@ -3,7 +3,11 @@
 		"node": true,
 		"es2021": true
 	},
-	"extends": ["eslint:recommended", "plugin:react/recommended", "plugin:jest/recommended"],
+	"extends": [
+		"eslint:recommended",
+		"plugin:react/recommended",
+		"plugin:jest/recommended"
+	],
 	"parserOptions": {
 		"ecmaFeatures": {
 			"jsx": true
@@ -15,7 +19,8 @@
 	"rules": {
 		"no-unreachable": "off",
 		"sort-imports": "off",
-		"max-len": ["off"]
+		"max-len": ["off"],
+		"no-prototype-builtins": ["off"]
 		// "@stylistic/js/operator-linebreak": ["error", "after"]
 
 		// "@stylistic/js/lines-around-comment": [
