@@ -1,21 +1,26 @@
 {
-    "env": {
-        "node": true,
-        "es2021": true
-    },
-    "extends": [
-      "eslint:recommended",
-      "plugin:react/recommended",
-      "plugin:jest/recommended"
-    ],
-    "parserOptions": {
-      "ecmaFeatures": {
-        "jsx": true
-      },
-      "ecmaVersion": "latest",
-      "sourceType": "module"
-    },
-    "plugins": ["react", "jest"],
-    "rules": { "no-unreachable": "off", "sort-imports": "off" }
-  }
-  
+	"env": {
+		"node": true,
+		"es2021": true
+	},
+	"extends": ["eslint:recommended", "plugin:react/recommended", "plugin:jest/recommended"],
+	"parserOptions": {
+		"ecmaFeatures": {
+			"jsx": true
+		},
+		"ecmaVersion": "latest",
+		"sourceType": "module"
+	},
+	"plugins": ["react", "jest", "@stylistic/js"],
+	"rules": {
+		"no-unreachable": "off",
+		"sort-imports": "off",
+		"max-len": ["off"]
+		// "@stylistic/js/operator-linebreak": ["error", "after"]
+
+		// "@stylistic/js/lines-around-comment": [
+		//   "error",
+		//   { "beforeBlockComment": true }
+		// ]
+	}
+}
