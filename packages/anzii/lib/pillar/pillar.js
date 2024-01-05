@@ -29,7 +29,7 @@ export const p_deepMerge = function (from, to) {
 	return extend(true, to, from);
 };
 export const p_ane = function (obj) {
-	if (util.isError(obj)) {
+	if (util.types.isNativeError(obj)) {
 		throw obj;
 	}
 };
