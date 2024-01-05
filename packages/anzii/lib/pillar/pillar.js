@@ -196,7 +196,6 @@ export const p_generateUniqueID = function () {
 };
 
 export const p_getMainFileName = function () {
-	const self = this;
 	// let filename = __non_webpack_require__.main.filename
 	// let dir = path.resolve(path.dirname(filename))
 	// let dirIndex = filename.indexOf(dir)
@@ -207,13 +206,12 @@ export const p_getMainFileName = function () {
 	return null;
 };
 export const p_getRootDir = function () {
-	const self = this;
 	// let filename = __filename;
 	let dir = path.dirname(__filename);
 	return dir;
 };
 
-export const p_mkdirs = function (absoluteDirPath, isFileName, cb) {
+export const p_mkdirs = function (absoluteDirPath, isFileName) {
 	const that = this;
 	return new Promise((resolve, reject) => {
 		if (that.p_isFunction(isFileName)) {
@@ -367,11 +365,11 @@ export const p_inherits = function (Type1, Type2) {
 	util.inherits(Type1, Type2);
 	p_merge(Type2, Type1);
 };
-export const js_to_json = function (jsObject, filter, indent) {
+export const js_to_json = function (jsObject) {
 	var jsonString = JSON.stringify(jsObject);
 	return jsonString;
 };
-export const json_to_js = function (jsonString, options) {
+export const json_to_js = function (jsonString) {
 	var jsObject = JSON.parse(jsonString);
 	return jsObject;
 };
@@ -380,7 +378,7 @@ export const json_to_js = function (jsonString, options) {
 // export const array_to_object = moduleExports.array_to_object;
 // export const string_to_array = moduleExports.string_to_array;
 // export const set_deeply = moduleExports.set_deeply;
-export const get_deeply = function (path) {};
+export const get_deeply = function () {};
 export const is_function = function (x) {
 	return Object.prototype.toString.call(x) === "[object Function]";
 };
@@ -407,10 +405,10 @@ export const trim_spaces = function (x) {
 };
 // export const compare_values = moduleExports.compare_values;
 // export const is_equal_ab = moduleExports.is_equal_ab;
-export const is_valid_email = function (email) {
+export const is_valid_email = function () {
 	return true;
 };
-export const is_valid_password = function (password) {
+export const is_valid_password = function () {
 	return true;
 };
 // export const is_same_value = moduleExports.is_same_value;
@@ -621,7 +619,7 @@ export const p_getDirectories = function (dirPath) {
 					});
 				};
 			});
-			async.parallel(tasks, function (err /*, results*/) {
+			async.parallel(tasks, function (/*, results*/) {
 				resolve(dirs);
 			});
 		});
@@ -773,8 +771,7 @@ export const p_getFiles = function (dirPath, options, fileName) {
 	});
 };
 export const p_getFile = function (filePath) {
-	const that = this;
-	return new Promise((resolve, reject) => {
+	return new Promise((resolve) => {
 		this.p_wiLog("The directory path");
 		this.p_wiLog(filePath);
 		//read files from dir
@@ -1082,7 +1079,6 @@ export const is_equal_ab = function (a, b, flag = "values") {
 		return false;
 	}
 	if (flag.trim() === "keys") {
-		var akeys = Object.keys(a).sort();
 		var bKeys = Object.keys(b).sort();
 		return JSON.stringify(aKeys) === JSON.stringify(bKeys);
 		// var akeys = Object.keys(a)
@@ -1163,7 +1159,7 @@ export const add_values_to = function (x, keys, values) {
 	if (this.is_array(x)) {
 		x.forEach(action);
 	} else if (this.is_object(x)) {
-		keys.forEach((k, i) => {
+		keys.forEach((k) => {
 			let vItemKeys = Object.keys(values[k]);
 			if (x[k]) {
 				vItemKeys.forEach((v) => {
