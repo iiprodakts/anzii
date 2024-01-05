@@ -1082,6 +1082,7 @@ export const is_equal_ab = function (a, b, flag = "values") {
 	}
 	if (flag.trim() === "keys") {
 		var bKeys = Object.keys(b).sort();
+		var aKeys = Object.keys(a).sort();
 		return JSON.stringify(aKeys) === JSON.stringify(bKeys);
 		// var akeys = Object.keys(a)
 		// for (let k of akeys) {
@@ -1157,7 +1158,7 @@ export const for_of = function (x, action, y = null) {
 		this.throwErrors("Object of for_of() must be an Array or pure object");
 	}
 };
-export const add_values_to = function (x, keys, values) {
+export const add_values_to = function (x, keys, values, action = () => {}) {
 	if (this.is_array(x)) {
 		x.forEach(action);
 	} else if (this.is_object(x)) {
@@ -1185,7 +1186,7 @@ export const find_in = function (x, id, f) {
 			return x.indexOf(f) > -1 ? x[f] : false;
 		} else if (this.is_object(x[0])) {
 			for (let i = 0; i < x.length; i++) {
-				if (sb.sb_contains(x[i], id) && x[i][id] === f) {
+				if (contains(x[i], id) && x[i][id] === f) {
 					return x[i];
 				}
 			}
