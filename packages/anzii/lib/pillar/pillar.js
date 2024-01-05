@@ -57,7 +57,7 @@ export const p_getTasks = function (iterable, getTaskFunction) {
 	return tasks;
 };
 export const p_wrapTask = function (context, func, argArray) {
-	if (!util.isArray(argArray)) {
+	if (!Array.isArray(argArray)) {
 		argArray = [];
 	}
 	return function (callback) {
@@ -86,7 +86,7 @@ export const p_wrapTimedTask = function (context, func, name, argArray) {
 export const p_forEach = function (iterable, handler) {
 	var internalHandler;
 	var internalIterable;
-	if (util.isArray(iterable)) {
+	if (Array.isArray(iterable)) {
 		internalHandler = handler;
 		internalIterable = iterable;
 	} else if (p_isObject(iterable)) {
@@ -112,7 +112,7 @@ export const p_unikify = function (array) {
 };
 // export const p_arrayToObj = moduleExports.p_arrayToObj;
 export const p_objArrayToHash = function (array, hashProp) {
-	if (!util.isArray(array)) {
+	if (!Array.isArray(array)) {
 		return null;
 	}
 	var hash = {};
@@ -170,7 +170,7 @@ export const p_invertHash = function (obj) {
 	return new_obj;
 };
 export const p_copyArray = function (array) {
-	if (!util.isArray(array)) {
+	if (!Array.isArray(array)) {
 		return null;
 	}
 	var clone = [];
@@ -184,7 +184,7 @@ export const p_dedupeArray = function (array) {
 	return Object.keys(hash);
 };
 export const p_arrayPushAll = function (from, to) {
-	if (!util.isArray(from) || !util.isArray(to)) {
+	if (!Array.isArray(from) || !Array.isArray(to)) {
 		return false;
 	}
 	for (var i = 0; i < from.length; i++) {
@@ -481,7 +481,7 @@ export const p_initArray = function (cnt, val) {
  * @return {Object} Hash
  */
 export const p_arrayToHash = function (array, defaultVal) {
-	if (!util.isArray(array)) {
+	if (!Array.isArray(array)) {
 		return null;
 	}
 	//set the default value
@@ -525,7 +525,7 @@ export const p_arrayToObj = function (
 	keyFieldOrTransform,
 	valFieldOrTransform,
 ) {
-	if (!util.isArray(array)) {
+	if (!Array.isArray(array)) {
 		return null;
 	}
 	var keyIsString = p_isString(keyFieldOrTransform);
@@ -599,14 +599,14 @@ export const p_getDirectories = function (dirPath) {
 	return new Promise((resolve, reject) => {
 		var dirs = [];
 		fs.readdir(dirPath, function (err, files) {
-			if (util.isError(err)) {
+			if (util.types.isNativeError(err)) {
 				return reject(err);
 			}
 			var tasks = that.p_getTasks(files, function (files, index) {
 				return function (callback) {
 					var fullPath = path.join(dirPath, files[index]);
 					fs.stat(fullPath, function (err, stat) {
-						if (util.isError(err)) {
+						if (util.types.isNativeError(err)) {
 							return reject(err);
 						}
 						if (that.p_isNullOrUndefined(stat)) {
@@ -827,7 +827,7 @@ export const p_createFolderContent = function (
 	});
 };
 export const p_loadFile = function (filepath) {
-	return new Promise(async (resolve, reject) => {
+	return new Promise((resolve, reject) => {
 		console.log("THE FILEPATH load", filepath);
 		if (!p_isExistingDir(filepath))
 			return reject({
