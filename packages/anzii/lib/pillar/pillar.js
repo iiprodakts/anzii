@@ -211,7 +211,8 @@ export const p_getRootDir = function () {
 	return dir;
 };
 
-export const p_mkdirs = function (absoluteDirPath, isFileName) {
+// eslint-disable-next-line no-unused-vars
+export const p_mkdirs = function (absoluteDirPath, isFileName, cb) {
 	const that = this;
 	return new Promise((resolve, reject) => {
 		if (that.p_isFunction(isFileName)) {
@@ -428,6 +429,7 @@ export const unlike_props = function (a, b) {
 		}
 		return unlike;
 	} else {
+		let unlike = null;
 		for (let k of bkeys) {
 			if (b[k] !== a[k]) {
 				if (unlike) {
