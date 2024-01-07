@@ -7,7 +7,7 @@ export default function (api) {
 			"@babel/preset-env",
 			{
 				targets: {
-					esmodules: true,
+					esmodules: false,
 					node: true,
 				},
 			},
