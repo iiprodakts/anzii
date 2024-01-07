@@ -59,5 +59,8 @@
 	"bugs": {
 		"url": "https://github.com/iiprodakts/anzii/issues"
 	},
-	"packageManager": "npm@10.2.4"
+	"packageManager": "npm@10.2.4",
+	"dependencies": {
+		"chalk": "^5.3.0"
+	}
 }
