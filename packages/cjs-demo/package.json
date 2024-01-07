@@ -1,0 +1,15 @@
+{
+	"name": "anzii-cjs-demo",
+	"version": "0.0.0",
+	"description": "> TODO: description",
+	"author": "ntsakosurprise <mashelesepru@gmail.com>",
+	"homepage": "https://github.com/iiprodakts/anzii/tree/main/packages/anzii-cjs-demo#readme",
+	"license": "ISC",
+	"main": "app.js",
+	"scripts": {
+		"start": "node app.js"
+	},
+	"dependencies": {
+		"anzii": "file:../anzii/anzii-6.2.0.tgz"
+	}
+}
