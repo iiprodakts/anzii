@@ -2,7 +2,6 @@
 	"name": "anzii-project",
 	"version": "1.0.0",
 	"description": "Anzii is a backend javascript modular and event-driven framework that is simple, quick to learn and build with.",
-	"main": "./dist/index.cjs",
 	"type": "module",
 	"workspaces": {
 		"packages": [
@@ -17,12 +16,9 @@
 			"default": "./lib/start.js"
 		}
 	},
-	"directories": {
-		"lib": "lib"
-	},
 	"license": "MIT",
 	"scripts": {
-		"test": "jest",
+		"test": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
 		"lint": "eslint",
 		"tarball": "node local-builds/runCli.js"
 	},
@@ -63,5 +59,8 @@
 	"bugs": {
 		"url": "https://github.com/iiprodakts/anzii/issues"
 	},
-	"packageManager": "yarn@4.0.2"
+	"packageManager": "npm@10.2.4",
+	"dependencies": {
+		"chalk": "^5.3.0"
+	}
 }
