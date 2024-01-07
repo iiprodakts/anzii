@@ -1,2 +1,4 @@
 
-packages/anzii/dist/*
+
+.github/
+packages/**/dist/
