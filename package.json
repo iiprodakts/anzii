@@ -1,5 +1,5 @@
 {
-	"name": "root",
+	"name": "anzii-project",
 	"version": "1.0.0",
 	"description": "Anzii is a backend javascript modular and event-driven framework that is simple, quick to learn and build with.",
 	"main": "./dist/index.cjs",
@@ -23,7 +23,8 @@
 	"license": "MIT",
 	"scripts": {
 		"test": "jest",
-		"lint": "eslint"
+		"lint": "eslint",
+		"tarball": "node local-builds/runCli.js"
 	},
 	"repository": {
 		"type": "git",
