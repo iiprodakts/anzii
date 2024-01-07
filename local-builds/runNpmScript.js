@@ -7,7 +7,9 @@ export default function (
 	cwd = process.cwd(),
 ) {
 	return new Promise((resolve, reject) => {
-		let commandToRun = `npm ${npmCommand} ${scriptToRun} ${options.toString}`;
+		let terminalOptions =
+			options instanceof Array ? options.join(" ") : options.trim();
+		let commandToRun = `npm ${npmCommand} ${scriptToRun} ${terminalOptions}`;
 		exec(`${commandToRun}`, { stdio: "inherit", cwd: cwd }, (err) => {
 			if (err)
 				console.log(chalk.redBright.bold("Tarball Creation Test Error:"), err);
