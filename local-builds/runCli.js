@@ -1,28 +1,31 @@
 import path from "path";
 import { fileURLToPath } from "url";
 import createTarball from "./createTarball.js";
-import parseContextArguments from "./parseContextArguments.js";
 import parseScriptArguments from "./parseScriptArguments.js";
-import runNodeScript from "./runNodeScript.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const scriptPath = __dirname;
-const contextScriptRoot = path.join(scriptPath, "..");
+const thisFolder = __dirname;
+console.log("scripts path", thisFolder);
+const contextScriptRoot = path.resolve(thisFolder, "..");
+console.log("THE SCRIPTS PATH", contextScriptRoot);
+console.log("PROCESS ARG", parseScriptArguments());
 //const workingDir = process.cwd();
+const tarballPackageName = parseScriptArguments()[0];
 const packagesPath = path.join(contextScriptRoot, "packages");
-const kotiiScriptsPath = path.join(packagesPath, "kotii-scripts");
-console.log("Packages PATH", kotiiScriptsPath);
-const madeTarball = createTarball(kotiiScriptsPath, "kotii-scripts");
-const nodeScriptPath = path.join(packagesPath, "kotii-cli");
-runNodeScript(
-	nodeScriptPath,
-	"app.js",
-	contextScriptRoot,
-	[parseScriptArguments(), madeTarball, parseContextArguments()],
-	path.join(kotiiScriptsPath, madeTarball),
-);
+const toBeTarballedPath = path.join(packagesPath, tarballPackageName);
+console.log("PackageToBeTarballed", toBeTarballedPath);
+const madeTarball = createTarball(toBeTarballedPath, tarballPackageName);
+console.log("madeTARBALL", madeTarball);
+// const nodeScriptPath = path.join(packagesPath, "kotii-cli");
+// runNodeScript(
+// 	nodeScriptPath,
+// 	"app.js",
+// 	contextScriptRoot,
+// 	[parseScriptArguments(), madeTarball, parseContextArguments()],
+// 	path.join(toBeTarballedPath, madeTarball),
+// );
 // console.log("Made TARBALL", madeTarball);
 // console.log("CONTEXT ARGUMENTS", parseContextArguments());
 // console.log("WORKING DIR", process.cwd());
