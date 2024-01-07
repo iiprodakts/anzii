@@ -1,8 +1,12 @@
 import path from "path";
+import { fileURLToPath } from "url";
 import createTarball from "./createTarball.js";
 import parseContextArguments from "./parseContextArguments.js";
 import parseScriptArguments from "./parseScriptArguments.js";
 import runNodeScript from "./runNodeScript.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const scriptPath = __dirname;
 const contextScriptRoot = path.join(scriptPath, "..");
