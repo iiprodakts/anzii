@@ -22,12 +22,12 @@ jobs:
       - name: Install Root dependencies
         run: | # Install and link dependencies
           npm ci
-          npm i --workspaces=false
+          npm i --prefer-offline --workspaces=false
 
       - name: Install Workspaces dependencies
         run: | # Install and link dependencies
           npm ci
-          npm i --workspaces
+          npm i --prefer-offline --workspaces
 
       - name: Run tests # Run tests of root
         run: npm run test --workspaces
