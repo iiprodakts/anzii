@@ -19,15 +19,18 @@ jobs:
         with:
           node-version: "18"
 
-      - name: "Setup npm"
-        run: |
-          npm set @xcanchal:registry=https://npm.pkg.github.com/xcanchal
-          npm set "//npm.pkg.github.com/:_authToken=${{ secrets.GITHUB_TOKEN }}"
-
-      - name: Install dependencies
+      - name: Install Root dependencies
         run: | # Install and link dependencies
           npm ci
-          npx lerna bootstrap
+          npm i --workspaces=false
+
+      - name: Install Workspaces dependencies
+        run: | # Install and link dependencies
+          npm ci
+          npm i --workspaces
+
+      - name: Run tests # Run tests of root
+        run: npm run test --workspaces
 
       - name: Run tests # Run tests of all packages
-        run: npm run test --workspaces
+        run: npm run test --workspaces --if-present
