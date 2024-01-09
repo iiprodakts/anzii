@@ -19,8 +19,8 @@ jobs:
         with:
           node-version: "18"
 
-      - name: Clear NPM CACHE # Run tests of root
-        run: npm cache clean
+      - name: Run npm cache verify # Run tests of root
+        run: npm cache verify
 
       - name: Install Root dependencies
         run: | # Install and link dependencies
