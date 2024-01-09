@@ -19,6 +19,9 @@ jobs:
         with:
           node-version: "18"
 
+      - name: Clear NPM CACHE # Run tests of root
+        run: npm cache clean --force
+
       - name: Install Root dependencies
         run: | # Install and link dependencies
           npm ci
@@ -29,8 +32,8 @@ jobs:
           npm ci
           npm i --prefer-offline --workspaces
 
-      - name: Run tests # Run tests of root
-        run: npm run test --workspaces
+      - name: Run root workpace tests # Run tests of root
+        run: npm run test --workspaces=false
 
-      - name: Run tests # Run tests of all packages
+      - name: Run workspaces tests # Run tests of all packages
         run: npm run test --workspaces --if-present
