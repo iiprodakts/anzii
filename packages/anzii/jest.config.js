@@ -6,8 +6,8 @@ export default {
 			"<rootDir>/assetsTransformer.js",
 		"\\.(css|less)$": "<rootDir>/assetsTransformer.js",
 	},
-	// collectCoverage: true,
-	// collectCoverageFrom: ["lib/**/*.{js,jsx}"],
-	// coverageDirectory: "coverage",
+	collectCoverage: false,
+	collectCoverageFrom: ["lib/**/*.{js,jsx}"],
+	coverageDirectory: "coverage",
 	testEnvironment: "node",
 };
