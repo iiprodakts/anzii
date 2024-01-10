@@ -1,6 +1,5 @@
 import async from "async";
 import fs from "fs";
-import * as extend from "node.extend";
 import { createRequire } from "node:module";
 import os from "os";
 import path from "path";
@@ -14,6 +13,8 @@ const __filename = fileURLToPath(import.meta.url);
 export const EMAIL = "";
 export const PASSWORD = "";
 export const PROMPT = process.argv || [];
+
+/** Get the current work directory */
 export const p_getWorkingFolder = function () {
 	return process.cwd();
 };
@@ -25,8 +26,9 @@ export const p_clone = function (o) {
 	if (!(o instanceof Object)) return null;
 	return JSON.parse(JSON.stringify(o));
 };
-export const p_deepMerge = function (from, to) {
-	return extend(true, to, from);
+export const p_deepMerge = function (from = null, to = null) {
+	if (!(from instanceof Object) || !(to instanceof Object)) return null;
+	return { ...from, ...to };
 };
 export const p_ane = function (obj) {
 	if (util.types.isNativeError(obj)) {
@@ -83,7 +85,10 @@ export const p_wrapTimedTask = function (context, func, name, argArray) {
 		});
 	};
 };
-export const p_forEach = function (iterable, handler) {
+export const p_forEach = function (iterable = null, handler = null) {
+	if (!iterable || !handler) return false;
+	if (!(iterable instanceof Object) || !(handler instanceof Object))
+		return false;
 	var internalHandler;
 	var internalIterable;
 	if (Array.isArray(iterable)) {
@@ -99,6 +104,7 @@ export const p_forEach = function (iterable, handler) {
 	}
 	//execute native foreach on interable
 	internalIterable.forEach(internalHandler);
+	return true;
 };
 // export const p_arrayToHash = moduleExports.p_arrayToHash;
 export const p_unikify = function (array) {
@@ -563,8 +569,7 @@ export const p_arrayToObj = function (
  * @return {Boolean}
  */
 export const p_isObject = function (value) {
-	const that = this;
-	return !that.p_isNullOrUndefined(value) && typeof value === "object";
+	return !p_isNullOrUndefined(value) && typeof value === "object";
 };
 /**
  * Tests if a value is an string

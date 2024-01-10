@@ -1,0 +1,39 @@
+name: Check source code complise
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: "Checkout" # Download code from the repository
+        uses: actions/checkout@v4 # Public action
+        with:
+          fetch-depth: 0 # Checkout all branches and tags
+
+      - name: "Use NodeJS 18" # Setup node using version 14
+        uses: actions/setup-node@v4 # Public action
+        with:
+          node-version: "18"
+
+      - name: Run npm cache verify # Run tests of root
+        run: npm cache verify
+
+      - name: Install Root dependencies
+        run: | # Install and link dependencies
+          npm ci
+          npm i --prefer-offline --workspaces=false
+
+      - name: Install Workspaces dependencies
+        run: | # Install and link dependencies
+          npm ci
+          npm i --prefer-offline --workspaces
+
+      - name: Run root workpace tests # Run tests of root
+        run: npm run test --workspaces=false
+
+      - name: Run workspaces tests # Run tests of all packages
+        run: npm run test --workspaces --if-present
