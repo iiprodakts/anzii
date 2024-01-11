@@ -16,17 +16,16 @@ body:
       placeholder: ex. email@example.com
     validations:
       required: false
-
-   - type: dropdown
-     id: affected-packages
-     attributes:
-        label: Which anzii package(s) are the source of the bug?
+  - type: dropdown
+    id: affected-packages
+    attributes:
+      label: Which anzii package(s) are the source of the bug?
       options:
         - core
         - Don't know / other
       multiple: true
-    validations:
-      required: true
+     validations:
+        required: true
 
 
   
