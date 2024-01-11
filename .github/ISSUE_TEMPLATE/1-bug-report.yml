@@ -28,14 +28,14 @@ body:
       required: true
 
   - type: dropdown
-     id: anzii-package
-     attributes:
-       label: Anzii package
-       description: Which package of anzii are you having an issue on?
-       options:
+    id: anzii-package
+    attributes:
+      label: Anzii package
+      description: Which package of anzii are you having an issue on?
+      options:
          - 6.0.2 (latest)
          - 6.1.0
-       default: 0
+      default: 0
      validations:
        required: true
 
