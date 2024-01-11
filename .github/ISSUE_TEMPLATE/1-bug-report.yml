@@ -13,7 +13,7 @@ body:
     attributes:
       label: Contact Details
       description: How can we get in touch with you if we need more info?
-      placeholder: ex. email@example.com
+      placeholder: ex.email@example.com
     validations:
       required: false
 
@@ -31,11 +31,12 @@ body:
     id: anzii
     attributes:
       label: Anzii package
-      description: Which package of anzii are you having an issue on?
+      description: Which anzii package(s) are the source of the bug?
       options:
         - Core
         - Dman
         - Anzii-logger
+        - "Don't know / other"
      
 
   - type: dropdown
