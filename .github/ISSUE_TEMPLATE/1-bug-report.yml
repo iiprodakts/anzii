@@ -28,7 +28,7 @@ body:
       required: true
 
   - type: dropdown
-    id: anzii-package
+    id: anzii
     attributes:
       label: Anzii package
       description: Which package of anzii are you having an issue on?
