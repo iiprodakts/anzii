@@ -8,7 +8,7 @@ body:
     attributes:
       value: |
          Thanks for taking the time to fill out this bug report. We highly appreciate your effort.
-   - type: checkboxes
+  - type: checkboxes
     attributes:
       label: Latest version
       description: We roll bug fixes, performance enhancements, and other improvements into new releases.
