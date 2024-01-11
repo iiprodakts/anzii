@@ -12,7 +12,11 @@ const contextScriptRoot = path.resolve(thisFolder, "..");
 console.log("THE SCRIPTS PATH", contextScriptRoot);
 console.log("PROCESS ARG", parseScriptArguments());
 //const workingDir = process.cwd();
-const tarballPackageName = parseScriptArguments()[0];
+const possibleArgs = parseScriptArguments();
+if (possibleArgs.length === 0) {
+	throw new Error("RUNCLI requires the package name for tarball");
+}
+const tarballPackageName = possibleArgs[0];
 const packagesPath = path.join(contextScriptRoot, "packages");
 const toBeTarballedPath = path.join(packagesPath, tarballPackageName);
 console.log("PackageToBeTarballed", toBeTarballedPath);
