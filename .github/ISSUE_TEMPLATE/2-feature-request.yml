@@ -7,7 +7,7 @@ body:
       value: |
         Please provide a searchable summary of the issue in the title above ⬆️.
 
-        Thanks for contributing by creating an issue.  We highly appreciate your effort ❤️
+        Thanks for contributing by creating an issue.  We highly appreciate your effort. ❤️
   - type: checkboxes
     attributes:
       label: Duplicates
