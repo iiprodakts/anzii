@@ -38,6 +38,9 @@ body:
         - Anzii-logger
         - "Don't know / other"
       multiple: true
+      validation:
+        required: true
+  
      
 
   - type: dropdown
