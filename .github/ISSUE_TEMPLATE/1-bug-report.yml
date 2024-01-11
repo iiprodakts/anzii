@@ -40,7 +40,7 @@ body:
       required: true
 
   - type: dropdown
-    id: Operating Systems
+    id: operating-system
     attributes:
       label: What OS are you seeing the problem on?
       multiple: true
