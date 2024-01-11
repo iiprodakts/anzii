@@ -1,4 +1,13 @@
 <p align="center">
+
+<a href="https://github.com/iiprodakts/anzii/pulse">
+    <img src="https://img.shields.io/github/issues/detail/age/iiprodakts/anzii/6?style=for-the-badge" alt="anzii age" />
+</a>&nbsp;
+
+ <a href="https://www.npmjs.com/package/anzii?activeTab=versions">
+    <img src="https://img.shields.io/npm/v/anzii?style=for-the-badge" alt="anzii version" />
+  </a>&nbsp;
+
   <a href="https://github.com/iiprodakts/anzii/blob/development/README.md">
     <img src="https://img.shields.io/badge/license-MIT-orange?style=for-the-badge" alt="anzii license" />
   </a>&nbsp;
@@ -7,14 +16,6 @@
     <img src="https://img.shields.io/github/actions/workflow/status/iiprodakts/anzii/checks.yaml?style=for-the-badge" alt="anzii license" />
   </a>&nbsp;
 
-  <a href="https://github.com/iiprodakts/anzii/pulse">
-    <img src="https://img.shields.io/github/issues/detail/age/iiprodakts/anzii/6?style=for-the-badge" alt="anzii age" />
-  </a>&nbsp;
-
-<a href="https://www.npmjs.com/package/anzii?activeTab=versions">
-    <img src="https://img.shields.io/npm/v/anzii?style=for-the-badge" alt="anzii version" />
-  </a>&nbsp;
-  
 </p>
 
 # Introduction
