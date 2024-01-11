@@ -36,8 +36,7 @@ body:
         - Core
         - Dman
         - Anzii-logger
-      default: 0
-
+     
 
   - type: dropdown
     id: version
@@ -47,7 +46,7 @@ body:
       options:
         - 6.0.2 (latest)
         - 6.1.0
-      default: 0
+      
     validations:
       required: true
 
