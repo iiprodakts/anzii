@@ -27,7 +27,7 @@ body:
     validations:
       required: true
 
-   - type: dropdown
+  - type: dropdown
      id: anzii-package
      attributes:
        label: Anzii package
