@@ -78,6 +78,18 @@ body:
       label: Relevant log output
       description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
 
+  - type: textarea
+    attributes:
+      label: Steps to reproduce
+      description: |
+        **⚠️ Issues that we can't reproduce can't be fixed. Apologies**
+
+      value: |
+
+        Steps:
+        1.
+        2.
+
   - type: input
     id: reproduction
     attributes:
