@@ -1,0 +1,75 @@
+name: 😔 No Response
+
+on:
+  schedule:
+    # Schedule for five minutes after the hour, every hour
+    - cron: "5 * * * *"
+
+permissions:
+  issues: write
+  pull-requests: write
+
+jobs:
+  stale:
+    # if: github.repository == 'anzii/anzii'
+    runs-on: ubuntu-latest
+    steps:
+      - name: 😔 Handle Ghosting
+        uses: actions/stale@v9
+        with:
+          days-before-stale: 1
+          days-before-pr-stale: -1
+          days-before-close: 2
+          exempt-all-assignees: true
+          stale-issue-message: |
+
+            Howdy!
+
+            This issue has gone quiet for some time now.
+
+            We currently close issues that have been quiet for some time, this issue hasn't
+            had any activity in the last 20 days. If you still wish to discuss the issue, please
+            reply here, we will be happy to assist where we can.
+
+            Thanking you for your involvment with Anzii. You are highly appreciated. ❤️
+
+          close-issue-message: |
+
+            Howdy again!
+
+            This issue hasn't had any activity in the last 60 days.
+
+            This issue has been automatically closed because we haven't received a
+            response from the original author 🙈. This automation helps keep the issue
+            tracker clean from issues that aren't actionable. Please reach out if you wish to
+            take further actions on the issue. 
+
+            Thanking you for your involvment with Anzii. You are highly appreciated. ❤️
+
+          stale-pr-message: |
+
+            Howdy!
+
+            This PR has gone quiet for some time now.
+
+            We currently close PRs that have been quiet for some time, this PR hasn't
+            had any activity in the last 20 days. If you still wish to handle the PR, please
+            reply here, we will be happy to assist where we can.
+
+            Thanking you for your involvment with Anzii. You are highly appreciated. ❤️
+
+          close-pr-message: |
+
+            Howdy again!
+
+            This PR hasn't had any activity in the last 60 days.
+
+            This PR has been automatically closed because we haven't received a
+            response from the original author 🙈. This automation helps keep our pull requests clean
+            and up-to-date from PRs that aren't actionable. Please reach out if you wish to
+            take further actions on the PR. 
+
+            Thanking you for your involvment with Anzii. You are highly appreciated. ❤️
+
+          stale-issue-label: needs-response
+          stale-pr-label: needs-response

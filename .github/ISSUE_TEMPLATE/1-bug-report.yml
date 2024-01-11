@@ -98,7 +98,6 @@ body:
     id: exception-or-error
     attributes:
       label: Please provide the exception or error you saw
-      render: true
 
   - type: checkboxes
     id: terms
