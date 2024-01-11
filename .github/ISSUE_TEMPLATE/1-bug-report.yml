@@ -1,34 +1,23 @@
 name: Bug Report
-description: Report a bug in Anzii framework
+description: File a bug report
 title: "[Bug]: "
-labels: ["bug"]
+labels: ["bug", "triage"]
+projects: ["octo-org/1", "octo-org/44"]
 assignees:
-  - anzii
+  - octocat
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to fill out this bug report. We highly appreciate your effort.
+        Thanks for taking the time to fill out this bug report!
   - type: input
     id: contact
     attributes:
       label: Contact Details
       description: How can we get in touch with you if we need more info?
-      placeholder: ex.email@example.com
+      placeholder: ex. email@example.com
     validations:
       required: false
-
-   - type: dropdown
-     id: affected-packages
-     attributes:
-        label: Which anzii package(s) are the source of the bug?
-      options:
-        - core
-        - Don't know / other
-      multiple: true
-    validations:
-      required: true
-
   - type: textarea
     id: what-happened
     attributes:
@@ -38,51 +27,38 @@ body:
       value: "A bug happened!"
     validations:
       required: true
-
   - type: dropdown
     id: version
     attributes:
       label: Version
-      description: What version of Anzii are you running?
+      description: What version of our software are you running?
       options:
-        - 6.0.2 (latest)
-        - 6.1.0
+        - 1.0.2 (Default)
+        - 1.0.3 (Edge)
       default: 0
     validations:
       required: true
-
   - type: dropdown
-    id: Operating Systems
+    id: browsers
     attributes:
-      label: What OS are you seeing the problem on?
+      label: What browsers are you seeing the problem on?
       multiple: true
       options:
-        - Ubuntu/Linux
-        - Windows
-        - Mac
-
+        - Firefox
+        - Chrome
+        - Safari
+        - Microsoft Edge
   - type: textarea
     id: logs
     attributes:
       label: Relevant log output
       description: Please copy and paste any relevant log output. This will be automatically formatted into code, so no need for backticks.
-
-  - type: input
-    id: reproduction
-    attributes:
-      label: Please provide a link to a minimal reproduction of the bug
-  - type: textarea
-    id: exception-or-error
-    attributes:
-      label: Please provide the exception or error you saw
-      render: true
-
-
+      render: shell
   - type: checkboxes
     id: terms
     attributes:
       label: Code of Conduct
-      description: By submitting this issue, you agree to follow our [Code of Conduct]
+      description: By submitting this issue, you agree to follow our [Code of Conduct](https://example.com)
       options:
         - label: I agree to follow this project's Code of Conduct
           required: true
