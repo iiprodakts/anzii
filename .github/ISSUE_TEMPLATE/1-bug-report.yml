@@ -1,4 +1,4 @@
-name: Bug Report
+name: Bug Report 🐛
 description: Report a bug in Anzii framework
 title: "[Bug]:"
 labels: ["bug"]
@@ -7,15 +7,16 @@ body:
   - type: markdown
     attributes:
       value: |
-         Thanks for taking the time to fill out this bug report. We highly appreciate your effort.
+        Thanks for taking the time to fill out this bug report. We highly appreciate your effort. ❤️
+
   - type: checkboxes
     attributes:
       label: Latest version
-      description: We roll bug fixes, performance enhancements, and other improvements into new releases.
+      description: Did you test the latest version? It's possible your issue might have been fixed in the latest version.
       options:
         - label: I have tested the latest version
           required: true
-          
+
   - type: input
     id: contact
     attributes:
@@ -48,8 +49,6 @@ body:
       multiple: true
     validations:
       required: true
-  
-     
 
   - type: dropdown
     id: version
@@ -59,7 +58,7 @@ body:
       options:
         - 6.0.2 (latest)
         - 6.1.0
-      
+
     validations:
       required: true
 
@@ -89,7 +88,6 @@ body:
       label: Please provide the exception or error you saw
       render: true
 
-
   - type: checkboxes
     id: terms
     attributes:
@@ -98,7 +96,3 @@ body:
       options:
         - label: I agree to follow this project's Code of Conduct
           required: true
-
-  
-
-  
