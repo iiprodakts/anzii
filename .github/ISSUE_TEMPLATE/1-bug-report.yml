@@ -37,6 +37,7 @@ body:
         - Dman
         - Anzii-logger
         - "Don't know / other"
+      multiple: true
      
 
   - type: dropdown
