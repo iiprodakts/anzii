@@ -1,7 +1,7 @@
 name: Docs bug/feedback
 description: Improve Anzii framework documentation.
 labels: ["docs-bug"]
-title: "[docs] "
+title: "[docs]"
 
 body:
   - type: markdown
