@@ -33,8 +33,9 @@ body:
       label: Anzii package
       description: Which package of anzii are you having an issue on?
       options:
-        - 6.0.2 (latest)
-        - 6.1.0
+        - Core
+        - Dman
+        - Anzii-logger
       default: 0
 
 
