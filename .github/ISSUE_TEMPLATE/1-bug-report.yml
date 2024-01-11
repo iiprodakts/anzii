@@ -8,6 +8,14 @@ body:
     attributes:
       value: |
          Thanks for taking the time to fill out this bug report. We highly appreciate your effort.
+   - type: checkboxes
+    attributes:
+      label: Latest version
+      description: We roll bug fixes, performance enhancements, and other improvements into new releases.
+      options:
+        - label: I have tested the latest version
+          required: true
+          
   - type: input
     id: contact
     attributes:
