@@ -8,9 +8,9 @@
 	"main": "app.js",
 	"scripts": {
 		"start": "node app.js",
-		"installTarball": "npm i file:../anzii/anzii-6.2.0.tgz"
+		"installTarball": "npm i file:../anzii/anzii-6.2.1.tgz"
 	},
 	"dependencies": {
-		"anzii": "file:../anzii/anzii-6.2.0.tgz"
+		"anzii": "file:../anzii/anzii-6.2.1.tgz"
 	}
 }
