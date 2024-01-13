@@ -1,4 +1,5 @@
 import chalk from "chalk";
+import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 import createTarball from "./createTarball.js";
@@ -34,6 +35,23 @@ if (shouldInstallOnDeps) {
 		console.info("System will install tarball package on dependecies next"),
 	);
 	dependecies.forEach(async (dep) => {
+		let packagePath = `${path.join(
+			process.cwd(),
+			`packages/${dep}/package.json`,
+		)}`;
+		let packageJSON = JSON.parse(
+			fs.readFileSync(packagePath, { encoding: "utf-8" }),
+		);
+
+		let packageJSONScripts = packageJSON.scripts;
+
+		packageJSONScripts = {
+			...packageJSONScripts,
+			installTarball: `npm i file:../anzii/${madeTarball}`,
+		};
+
+		packageJSON = { ...packageJSON, scripts: { ...packageJSONScripts } };
+		fs.writeFileSync(`${packagePath}`, JSON.stringify(packageJSON, null, 2));
 		let runResult = await runNpmScript(
 			"run",
 			`--prefix ${path.join(process.cwd(), `packages/${dep}`)} installTarball`,
