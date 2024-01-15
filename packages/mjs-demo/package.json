@@ -9,10 +9,9 @@
 	"main": "app.js",
 	"scripts": {
 		"start": "node app.js",
-		"installTarball": "npm i file:../anzii/anzii-6.2.1.tgz",
-		"uninstallTarball": "npm uninstall file:../anzii/anzii-6.2.1.tgz"
+		"yalc:add": "yalc add anzii"
 	},
 	"dependencies": {
-		"anzii": "file:../anzii/anzii-6.2.1.tgz"
+		"anzii": "file:.yalc/anzii"
 	}
 }
