@@ -147,59 +147,64 @@ export const handleManualConfig = function (data = null) {
 };
 export const runAppConfig = function (manualConfig = null) {
 	const self = this;
-	let config = manualConfig?.payload?.configs
-		? self.mergeConfigs(manualConfig?.payload?.configs)
-		: self.config;
-	let { payload } = manualConfig;
-	let { compiler, wepackMiddlewares, webpackConfig } = payload;
-	const { webpackDevMiddleware, webpackHotMiddleware } = wepackMiddlewares;
+	let config = null;
+	if (!manualConfig) {
+		config = self.config;
+	} else {
+		config = manualConfig?.payload?.configs
+			? self.mergeConfigs(manualConfig?.payload?.configs)
+			: self.config;
+		let { payload } = manualConfig;
+		let { compiler, wepackMiddlewares, webpackConfig } = payload;
+		const { webpackDevMiddleware, webpackHotMiddleware } = wepackMiddlewares;
 
-	self.pao.pa_wiLog("THE CONFIG");
-	self.pao.pa_wiLog(config);
-	console.log("runAPPcoNFIG", manualConfig);
-	console.log("THE APP CONFIG", self.config);
-	console.log("THE COMPILEr", manualConfig?.payload?.webpackConfig);
+		self.pao.pa_wiLog("THE CONFIG");
+		self.pao.pa_wiLog(config);
+		console.log("runAPPcoNFIG", manualConfig);
+		console.log("THE APP CONFIG", self.config);
+		console.log("THE COMPILEr", manualConfig?.payload?.webpackConfig);
 
-	/* The code immediately after this comment should be re-organized 
+		/* The code immediately after this comment should be re-organized 
       it's just using a quick dirty approach to test some logic
     */
 
-	self.config["middleware"] = {
-		ppublic: {
-			addMiddleware: [
-				{
-					type: "function",
-					value: webpackDevMiddleware(compiler, {
-						publicPath: webpackConfig.output.path,
-						writeToDisk: true,
-						serverSideRender: true,
-					}),
-				},
-				// {
-				//     type:"function",
-				//     value: webpackHotMiddleware(compiler,{
-				//         log: true,
-				//         path: "/__kotii",
-				//         heartbeat: 2000
-				//     })
+		self.config["middleware"] = {
+			ppublic: {
+				addMiddleware: [
+					{
+						type: "function",
+						value: webpackDevMiddleware(compiler, {
+							publicPath: webpackConfig.output.path,
+							writeToDisk: true,
+							serverSideRender: true,
+						}),
+					},
+					// {
+					//     type:"function",
+					//     value: webpackHotMiddleware(compiler,{
+					//         log: true,
+					//         path: "/__kotii",
+					//         heartbeat: 2000
+					//     })
 
-				// }
-			],
-		},
-		all: {
-			addMiddleware: [
-				{
-					type: "function",
-					value: webpackHotMiddleware(compiler, {
-						log: console.log,
-						path: "/__kotii",
-						heartbeat: 2000,
-					}),
-					extra: "hotModule",
-				},
-			],
-		},
-	};
+					// }
+				],
+			},
+			all: {
+				addMiddleware: [
+					{
+						type: "function",
+						value: webpackHotMiddleware(compiler, {
+							log: console.log,
+							path: "/__kotii",
+							heartbeat: 2000,
+						}),
+						extra: "hotModule",
+					},
+				],
+			},
+		};
+	}
 
 	//if (dumain.name === "webpackDevMiddleware")
 	//     return data.app.use(dumain.use(data.custom.compiler, {
