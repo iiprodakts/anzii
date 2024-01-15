@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "anzii": {
+      "signature": "5a97dd43a10841746a624f611df43b91",
+      "file": true
+    }
+  }
+}

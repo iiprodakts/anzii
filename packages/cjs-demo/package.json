@@ -7,9 +7,10 @@
 	"license": "ISC",
 	"main": "app.js",
 	"scripts": {
-		"start": "node app.js"
+		"start": "node app.js",
+		"yalc:add": "yalc add anzii"
 	},
 	"dependencies": {
-		"anzii": "file:../anzii/anzii-6.2.0.tgz"
+		"anzii": "file:.yalc/anzii"
 	}
 }

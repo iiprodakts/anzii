@@ -1,6 +1,6 @@
 {
 	"name": "anzii",
-	"version": "6.2.0",
+	"version": "6.2.1",
 	"description": "Anzii is a backend javascript modular and event-driven framework that is simple, quick to learn and build with.",
 	"main": "./dist/index.cjs",
 	"type": "module",
@@ -26,8 +26,8 @@
 		"compile:esm": "cross-env NODE_ENV=development NODE_MODE=esm webpack",
 		"compile:cjs": "cross-env NODE_ENV=development NODE_MODE=cjs webpack",
 		"build:dev": "webpack --mode development --watch",
-		"postinstall": "patch-package",
-		"prepublishOnly": "yarn run build"
+		"yalc:publish": "yalc publish",
+		"yalc:push:publish": "yalc publish --push"
 	},
 	"repository": {
 		"type": "git",

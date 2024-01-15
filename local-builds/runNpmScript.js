@@ -10,7 +10,8 @@ export default function (
 		let terminalOptions =
 			options instanceof Array ? options.join(" ") : options.trim();
 		let commandToRun = `npm ${npmCommand} ${scriptToRun} ${terminalOptions}`;
-		exec(`${commandToRun}`, { stdio: "inherit", cwd: cwd }, (err) => {
+		console.log("command to run", commandToRun);
+		exec(`${commandToRun}`, { cwd: cwd }, (err) => {
 			if (err)
 				console.log(chalk.redBright.bold("Tarball Creation Test Error:"), err);
 			if (err) reject(false);

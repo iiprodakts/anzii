@@ -1,3 +1,4 @@
-const anzii = require("anzii");
+const { anzii } = require("anzii");
 const hello = require("./hello");
-anzii.default({ Hello: hello });
+console.log("ANZII", anzii);
+anzii({ Hello: hello });

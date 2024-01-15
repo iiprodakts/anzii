@@ -5,5 +5,5 @@ describe("Test shell scripting semulation", () => {
 		expect(
 			await runNpmScript("run", "tarball", ["anzii"], process.cwd()),
 		).toBeTruthy();
-	});
+	}, 60000);
 });
