@@ -146,7 +146,7 @@ export const masterWorker = function (app) {
 			app.listen(self.context.env.PORT || 9000, () => {
 				self.infoSync("The Server is listening via workers");
 				self.adLog("THIS WORKER RUNNING IP:");
-				self.openBrowserApp();
+				//self.openBrowserApp();
 			});
 			//   process.on('message', function(message) {
 			// 	self.pao.pa_wiLog('Worker ' + process.pid + ' received message from master.', message);
