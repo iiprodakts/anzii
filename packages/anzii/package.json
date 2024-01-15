@@ -26,8 +26,8 @@
 		"compile:esm": "cross-env NODE_ENV=development NODE_MODE=esm webpack",
 		"compile:cjs": "cross-env NODE_ENV=development NODE_MODE=cjs webpack",
 		"build:dev": "webpack --mode development --watch",
-		"postinstall": "patch-package",
-		"prepublishOnly": "yarn run build"
+		"yalc:publish": "yalc publish",
+		"yalc:push:publish": "yalc publish --push"
 	},
 	"repository": {
 		"type": "git",
