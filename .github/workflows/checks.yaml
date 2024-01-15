@@ -24,12 +24,14 @@ jobs:
 
       - name: Install Root dependencies
         run: | # Install and link dependencies
-          npm ci
+
+
           npm i --prefer-offline --workspaces=false
 
       - name: Install Workspaces dependencies
         run: | # Install and link dependencies
-          npm ci
+
+
           npm i --prefer-offline --workspaces
 
       - name: Run root workpace tests # Run tests of root
