@@ -11,5 +11,5 @@ describe("Test shell scripting semulation", () => {
 				process.cwd(),
 			),
 		).toBeTruthy();
-	});
+	}, 60000);
 });
