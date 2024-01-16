@@ -148,6 +148,7 @@ export const handleManualConfig = function (data = null) {
 export const runAppConfig = function (manualConfig = null) {
 	const self = this;
 	let config = null;
+	let isServerConfig = false;
 	if (!manualConfig) {
 		config = self.config;
 	} else {
@@ -239,6 +240,7 @@ export const runAppConfig = function (manualConfig = null) {
 			console.log("THE C IN CONFIG", c);
 			self.pao.pa_wiLog("The module in Config");
 			self.pao.pa_wiLog(c);
+			if (c === "server") isServerConfig = true;
 			c === "router"
 				? config.views
 					? (self.emit({ type: "config-request", data: config[c] }),
@@ -261,10 +263,14 @@ export const runAppConfig = function (manualConfig = null) {
 		}
 
 		self.emit({ type: "config-domain-resources", data: null }); // to be re-organized
-		self.emit({
-			type: `config-server`,
-			data: `server`,
-		}); // TO be re-organized
+		console.log("isServer Value", isServerConfig);
+		// if (!isServerConfig) {
+
+		// 	self.emit({
+		// 		type: `config-server`,
+		// 		data: `server`,
+		// 	}); // TO be re-organized
+		// }
 	}
 
 	// const theWatcher = manualConfig?.payload?.compiler.watch(
