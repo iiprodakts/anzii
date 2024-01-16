@@ -21,7 +21,7 @@ export const handleConfigureSystem = function (data) {
 	// self.pao.pa_wiLog(cwd.substr(0, cwd.indexOf(path.sep+'includes')) >= 0)
 	self.pao.pa_wiLog(self.systemBase?.DOCUMENT_ROOT);
 	self.handleShutDowns();
-	self.clusterCustomConfig = null;
+	self.clusterCustomConfig = data;
 	self.adLog("The system is about to emit system resources to premier modules");
 	self.emit({
 		type: "take-premier-system-base",
@@ -92,94 +92,105 @@ export const shutDown = function (type, code) {
 };
 export const masterWorker = function (app) {
 	const self = this;
-	self.pao.pa_wiLog(`THE STATUS OF isMaster: ${self.cluster.isMaster}`);
-	console.log("THE cluster", self.cluster);
-	console.log("THE CLUSTERS", self.clusterCustomConfig);
-	if (self.cluster.isMaster) {
-		self.pao.pa_wiLog(`Master ${self.context.pid} is running`);
-		if (self.clusterCustomConfig && self.clusterCustomConfig.spawn) {
-			let slaves = self.clusterCustomConfig.workers
-				? self.clusterCustomConfig.workers
-				: "auto";
-			if (slaves === "auto") {
-				slaves = self.os.cpus().length;
-				for (let s = 0; slaves < slaves; s++) {
-					self.cluster.fork();
+	const portToUse = self?.context?.env?.PORT ? self?.context?.env?.PORT : 3000;
+	self
+		.getServerPort(portToUse)
+		.then((availablePort) => {
+			console.log("THE AVAILABLE PORT", availablePort);
+			self.pao.pa_wiLog(`THE STATUS OF isMaster: ${self.cluster.isMaster}`);
+			console.log("THE cluster", self.cluster);
+			console.log("THE CLUSTERS", self.clusterCustomConfig);
+			if (self.cluster.isMaster) {
+				self.pao.pa_wiLog(`Master ${self.context.pid} is running`);
+				if (self.clusterCustomConfig && self.clusterCustomConfig.spawn) {
+					let slaves = self.clusterCustomConfig.workers
+						? self.clusterCustomConfig.workers
+						: "auto";
+					if (slaves === "auto") {
+						slaves = self.os.cpus().length;
+						for (let s = 0; slaves < slaves; s++) {
+							self.cluster.fork();
+						}
+					} else {
+						if (typeof slaves === "number") {
+							for (let s = 0; s < slaves; s++) {
+								self.pao.pa_wiLog(`Forking slave number: ${s}`);
+								self.cluster.fork();
+							}
+						}
+					}
+					self.cluster.on("fork", (worker) => {
+						self.pao.pa_wiLog("cluster forking new worker", worker.id);
+					});
+					let mainWorkerId = null;
+					self.cluster.on("listening", (worker, address) => {
+						self.pao.pa_wiLog("cluster listening new worker", worker.id);
+						if (null === mainWorkerId) {
+							self.pao.pa_wiLog(
+								"Making worker " + worker.id + " to main worker",
+							);
+							mainWorkerId = worker.id;
+							worker.send({ singleProcessTasks: "startSingleProcessTasks" });
+						}
+					});
+					self.cluster.on("exit", (worker, code, signal) => {
+						self.pao.pa_wiLog(`worker ${worker.process.pid} died`);
+						self.pao.pa_wiLog("FORKING ANOTHER WORK");
+						self.pao.pa_wiLog("Worker %d died :(", worker.id);
+						if (worker.id === mainWorkerId) {
+							self.pao.pa_wiLog("Main Worker is dead...");
+							mainWorkerId = null;
+						}
+						self.pao.pa_wiLog("I am here");
+						self.pao.pa_wiLog(worker);
+						self.pao.pa_wiLog(code);
+						self.pao.pa_wiLog(signal);
+						self.cluster.fork();
+						// self.cluster.fork()
+					});
+				} else {
+					self.adLog("System is running on a single thread/core");
+					app.listen(self.context.env.PORT || 9000, () => {
+						self.infoSync("The Server is listening via workers");
+						self.adLog("THIS WORKER RUNNING IP:");
+						//self.openBrowserApp();
+					});
+					//   process.on('message', function(message) {
+					// 	self.pao.pa_wiLog('Worker ' + process.pid + ' received message from master.', message);
+					// 	if(message.singleProcessTasks == "startSingleProcessTasks") {
+					// 		self.emit({type:'start-single-process-tasks',data:''})
+					// 	}
+					// });
 				}
 			} else {
-				if (typeof slaves === "number") {
-					for (let s = 0; s < slaves; s++) {
-						self.pao.pa_wiLog(`Forking slave number: ${s}`);
-						self.cluster.fork();
+				// self.pao.pa_wiLog('IT IS NOT THE MASTER PROCESS')
+				self.pao.pa_wiLog(`Worker ${process.pid} started`);
+				let serv = app.listen(self.context.env.PORT || 9000, () => {
+					let PORT = self.context.env.PORT || 9000;
+					self.infoSync(
+						`The Application is running on PID:: ${process.pid} and listening on port: ${PORT}`,
+					);
+					self.adLog("The Application is listening via workers");
+					self.pao.pa_wiLog("THIS WORKER RUNNING IP:");
+					//self.openBrowserApp();
+				});
+				process.on("message", function (message) {
+					self.pao.pa_wiLog(
+						"Worker " + process.pid + " received message from master.",
+						message,
+					);
+					if (message.singleProcessTasks == "startSingleProcessTasks") {
+						self.emit({ type: "start-single-process-tasks", data: "" });
 					}
-				}
+				});
+				serv.timeout = 1000 * 60 * 3;
+				self.infoSync("THE TIMEOUT VALUE");
+				self.infoSync(serv.timeout);
 			}
-			self.cluster.on("fork", (worker) => {
-				self.pao.pa_wiLog("cluster forking new worker", worker.id);
-			});
-			let mainWorkerId = null;
-			self.cluster.on("listening", (worker, address) => {
-				self.pao.pa_wiLog("cluster listening new worker", worker.id);
-				if (null === mainWorkerId) {
-					self.pao.pa_wiLog("Making worker " + worker.id + " to main worker");
-					mainWorkerId = worker.id;
-					worker.send({ singleProcessTasks: "startSingleProcessTasks" });
-				}
-			});
-			self.cluster.on("exit", (worker, code, signal) => {
-				self.pao.pa_wiLog(`worker ${worker.process.pid} died`);
-				self.pao.pa_wiLog("FORKING ANOTHER WORK");
-				self.pao.pa_wiLog("Worker %d died :(", worker.id);
-				if (worker.id === mainWorkerId) {
-					self.pao.pa_wiLog("Main Worker is dead...");
-					mainWorkerId = null;
-				}
-				self.pao.pa_wiLog("I am here");
-				self.pao.pa_wiLog(worker);
-				self.pao.pa_wiLog(code);
-				self.pao.pa_wiLog(signal);
-				self.cluster.fork();
-				// self.cluster.fork()
-			});
-		} else {
-			self.adLog("System is running on a single thread/core");
-			app.listen(self.context.env.PORT || 9000, () => {
-				self.infoSync("The Server is listening via workers");
-				self.adLog("THIS WORKER RUNNING IP:");
-				//self.openBrowserApp();
-			});
-			//   process.on('message', function(message) {
-			// 	self.pao.pa_wiLog('Worker ' + process.pid + ' received message from master.', message);
-			// 	if(message.singleProcessTasks == "startSingleProcessTasks") {
-			// 		self.emit({type:'start-single-process-tasks',data:''})
-			// 	}
-			// });
-		}
-	} else {
-		// self.pao.pa_wiLog('IT IS NOT THE MASTER PROCESS')
-		self.pao.pa_wiLog(`Worker ${process.pid} started`);
-		let serv = app.listen(self.context.env.PORT || 9000, () => {
-			let PORT = self.context.env.PORT || 9000;
-			self.infoSync(
-				`The Application is running on PID:: ${process.pid} and listening on port: ${PORT}`,
-			);
-			self.adLog("The Application is listening via workers");
-			self.pao.pa_wiLog("THIS WORKER RUNNING IP:");
-			//self.openBrowserApp();
+		})
+		.catch((err) => {
+			console.log("Server could not be started due to a port isssue", err);
 		});
-		process.on("message", function (message) {
-			self.pao.pa_wiLog(
-				"Worker " + process.pid + " received message from master.",
-				message,
-			);
-			if (message.singleProcessTasks == "startSingleProcessTasks") {
-				self.emit({ type: "start-single-process-tasks", data: "" });
-			}
-		});
-		serv.timeout = 1000 * 60 * 3;
-		self.infoSync("THE TIMEOUT VALUE");
-		self.infoSync(serv.timeout);
-	}
 };
 // export const folkSlaveWorkers = function(mainWorker){
 // }
@@ -244,4 +255,20 @@ export const openBrowserApp = async function () {
 	console.log("THE BROWSER OPENED");
 	// const openBrowser = () => import('open').then(({default: open}) => open("http://localhost:3000"));
 	// openBrowser()
+};
+
+export const getServerPort = function (port = 3000) {
+	const self = this;
+	return new Promise((resolve, reject) => {
+		self
+			.getPort({ port: port })
+			.then((gotPort) => {
+				console.log("THE GOT PORT", gotPort);
+				resolve(gotPort);
+			})
+			.catch((err) => {
+				console.log("Therw was an error trying to get a port", err);
+				reject(err);
+			});
+	});
 };
