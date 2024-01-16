@@ -98,6 +98,7 @@
 		"file-type": "^14.1.4",
 		"formidable": "^1.2.2",
 		"fs": "0.0.1-security",
+		"get-port": "^7.0.0",
 		"glob": "^10.3.10",
 		"mysql": "^2.16.0",
 		"mysql2": "^2.3.3",
