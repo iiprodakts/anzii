@@ -137,7 +137,7 @@ export const info = async function (log) {
 				? (self.debugas[log.source.toLowerCase()].useColors = true)
 				: "";
 			!self.debugas[log.source.toLowerCase()].enabled &&
-			process.env.NODE_ENV.toLowerCase() === "production"
+			process?.env?.NODE_ENV?.toLowerCase() === "production"
 				? (self.debugas[log.source.toLowerCase()].enabled = true)
 				: "";
 			await self.debugas[log.source.toLowerCase()](log.message);

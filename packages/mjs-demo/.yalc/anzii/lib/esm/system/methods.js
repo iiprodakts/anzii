@@ -218,6 +218,7 @@ export const handleShutDowns = function () {
 };
 export const handleServerAttachWorkers = function (data) {
 	const self = this;
+	console.log("HANDLING SERVER ATTACH WORKERS", data);
 	self.masterWorker(data.app);
 };
 export const handleRegisterShutDownCandidate = function (data) {
