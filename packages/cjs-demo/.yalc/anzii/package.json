@@ -71,6 +71,7 @@
 		"file-type": "^14.1.4",
 		"formidable": "^1.2.2",
 		"fs": "0.0.1-security",
+		"get-port": "^7.0.0",
 		"glob": "^10.3.10",
 		"mysql": "^2.16.0",
 		"mysql2": "^2.3.3",
@@ -101,5 +102,5 @@
 	"bugs": {
 		"url": "https://github.com/iiprodakts/anzii/issues"
 	},
-	"yalcSig": "3da0f4ad65ee430a03a276a17b535bd0"
+	"yalcSig": "c3a164ba000952a15cf1194d154d2073"
 }

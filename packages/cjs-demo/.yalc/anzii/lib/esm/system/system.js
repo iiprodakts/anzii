@@ -1,4 +1,5 @@
 import cluster from "cluster";
+import getPort from "get-port";
 import open from "open";
 import os from "os";
 import path from "path";
@@ -18,6 +19,7 @@ class System {
 		this.shutDownOrder = [];
 		this.systemBase = { DOCUMENT_ROOT: process.cwd() };
 		this.open = open;
+		this.getPort = getPort;
 		this.init = methods.init;
 		this.handleConfigureSystem = methods.handleConfigureSystem;
 		this.handleRegisterShutDownCandidate =
@@ -30,6 +32,7 @@ class System {
 		this.handleShutDowns = methods.handleShutDowns;
 		this.shutDown = methods.shutDown;
 		this.openBrowserApp = methods.openBrowserApp;
+		this.getServerPort = methods.getServerPort;
 	}
 }
 export default System;

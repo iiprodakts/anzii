@@ -350,8 +350,14 @@ export const p_saveToFile = function (fileToSaveTo, contents) {
 	fs.writeFileSync(writePath, contents, "utf8");
 };
 export function p_wiLog(message) {
+	console.log("WILD LOGS MESSAGE", process.env.SHOW_WILD_LOGS);
 	if (!process.env.SHOW_WILD_LOGS) return;
+	console.log(
+		"SHOW WILD LOGS IS SET",
+		process.env.SHOW_WILD_LOGS.trim().toLowerCase(),
+	);
 	if (process.env.SHOW_WILD_LOGS.trim().toLowerCase() === "false") return;
+	console.log("message to show", message);
 	console.log(message);
 }
 // export const p_getMainFileName = moduleExports.p_getMainFileName;

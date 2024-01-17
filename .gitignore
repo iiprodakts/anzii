@@ -5,7 +5,7 @@ public/
 .idea/
 .vscode/
 .yalc/
-/.yalc
+.yalc-lock
 packages/cjs-demo/.yalc/
 packages/mjs-demo/.yalc/
 lib/index.js

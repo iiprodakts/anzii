@@ -127,9 +127,11 @@ export const info = async function (log) {
 	// 	self.logger.info(`${log.source}: ${log.message}`)
 	// }
 	if (contains(log, "sync")) {
+		console.log("LOG CONTAINS SYNC", log);
 		if (self.debugas.hasOwnProperty(log.source.toLowerCase())) {
 			// self.pao.pa_wiLog('THE DEBUG MODULE IS USED')
 			// self.pao.pa_wiLog(self.debugas)
+			console.log("Debugga has", self.debugas);
 			self.iLog({ message: "Logging info sync with debugas" });
 			self.iLog({ message: log.message });
 			self.iLog({ message: self.debugas[log.source.toLowerCase()] });
