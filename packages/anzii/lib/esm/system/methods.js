@@ -150,7 +150,7 @@ export const masterWorker = function (app) {
 					});
 				} else {
 					self.adLog("System is running on a single thread/core");
-					app.listen(self.context.env.PORT || 9000, () => {
+					app.listen(availablePort, () => {
 						self.infoSync("The Server is listening via workers");
 						self.adLog("THIS WORKER RUNNING IP:");
 						//self.openBrowserApp();
@@ -165,8 +165,8 @@ export const masterWorker = function (app) {
 			} else {
 				// self.pao.pa_wiLog('IT IS NOT THE MASTER PROCESS')
 				self.pao.pa_wiLog(`Worker ${process.pid} started`);
-				let serv = app.listen(self.context.env.PORT || 9000, () => {
-					let PORT = self.context.env.PORT || 9000;
+				let serv = app.listen(availablePort, () => {
+					let PORT = availablePort;
 					self.infoSync(
 						`The Application is running on PID:: ${process.pid} and listening on port: ${PORT}`,
 					);
