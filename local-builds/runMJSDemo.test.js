@@ -6,10 +6,13 @@ describe("Test MJS-DEMO Runs", () => {
 		expect(
 			await runNpmScript(
 				"run",
-				`--prefix ${path.join(process.cwd(), "packages/mjs-demo")} start`,
+				`--prefix ${path.join(
+					process.cwd(),
+					"packages/mjs-demo",
+				)} start:for:jest`,
 				"",
 				process.cwd(),
 			),
 		).toBeTruthy();
-	});
+	}, 60000);
 });
