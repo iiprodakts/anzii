@@ -8,5 +8,8 @@
 	"main": "lib/docs-website.js",
 	"files": [
 		"lib"
-	]
+	],
+	"devDependencies": {
+		"cross-env": "^7.0.3"
+	}
 }
