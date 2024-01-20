@@ -4,10 +4,6 @@ dist/
 public/
 .idea/
 .vscode/
-.yalc/
-.yalc-lock
-packages/cjs-demo/.yalc/
-packages/mjs-demo/.yalc/
 lib/index.js
 
 
