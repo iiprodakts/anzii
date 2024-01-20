@@ -9,9 +9,13 @@
 	"main": "app.js",
 	"scripts": {
 		"start": "node app.js",
+		"start:for:jest": "cross-env ANZII_STOP_SERVER=true node app.js",
 		"yalc:add": "yalc add anzii"
 	},
 	"dependencies": {
 		"anzii": "file:.yalc/anzii"
+	},
+	"devDependencies": {
+		"cross-env": "^7.0.3"
 	}
 }

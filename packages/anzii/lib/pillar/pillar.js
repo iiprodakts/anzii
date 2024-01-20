@@ -350,8 +350,8 @@ export const p_saveToFile = function (fileToSaveTo, contents) {
 	fs.writeFileSync(writePath, contents, "utf8");
 };
 export function p_wiLog(message) {
-	if (!process.env.SHOW_WILD_LOGS) return;
-	if (process.env.SHOW_WILD_LOGS.trim().toLowerCase() === "false") return;
+	if (!process.env.ANZII_SHOW_WILD_LOGS) return;
+	if (process.env.ANZII_SHOW_WILD_LOGS.trim().toLowerCase() === "false") return;
 	console.log(message);
 }
 // export const p_getMainFileName = moduleExports.p_getMainFileName;

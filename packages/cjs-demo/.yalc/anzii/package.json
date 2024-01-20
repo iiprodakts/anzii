@@ -63,6 +63,7 @@
 		"config": "^2.0.2",
 		"cors": "^2.8.5",
 		"debug": "^3.2.6",
+		"detect-port": "^1.5.1",
 		"esm": "^3.2.25",
 		"express": "^4.16.3",
 		"express-async-errors": "^3.1.1",
@@ -78,6 +79,7 @@
 		"open": "8.4.1",
 		"passport": "^0.4.1",
 		"patch-package": "^6.2.2",
+		"portfinder": "^1.0.32",
 		"promise-mysql": "^3.3.1",
 		"react": "^18.2.0",
 		"redis": "^2.6.3",
@@ -101,5 +103,5 @@
 	"bugs": {
 		"url": "https://github.com/iiprodakts/anzii/issues"
 	},
-	"yalcSig": "5a97dd43a10841746a624f611df43b91"
+	"yalcSig": "85675274b52a5965672259abbada98dc"
 }
