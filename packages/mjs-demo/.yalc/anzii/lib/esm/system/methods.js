@@ -92,7 +92,14 @@ export const shutDown = function (type, code) {
 };
 export const masterWorker = function (app) {
 	const self = this;
+	console.log("ENV PORT", self?.context?.env?.PORT);
+	const serverTimeout = self.serverTimeout;
 	const portToUse = self?.context?.env?.PORT ? self?.context?.env?.PORT : 3000;
+	const shouldOpenBrowser = self?.context?.env?.ANZII_OPEN_BROWSER
+		? true
+		: false;
+	const shouldStopServer = self?.context?.env?.ANZII_STOP_SERVER ? true : false;
+
 	self
 		.getServerPort(portToUse)
 		.then((availablePort) => {
@@ -137,24 +144,43 @@ export const masterWorker = function (app) {
 						self.pao.pa_wiLog(`worker ${worker.process.pid} died`);
 						self.pao.pa_wiLog("FORKING ANOTHER WORK");
 						self.pao.pa_wiLog("Worker %d died :(", worker.id);
-						if (worker.id === mainWorkerId) {
-							self.pao.pa_wiLog("Main Worker is dead...");
-							mainWorkerId = null;
+						if (!shouldStopServer) {
+							if (worker.id === mainWorkerId) {
+								self.pao.pa_wiLog("Main Worker is dead...");
+								mainWorkerId = null;
+							}
+							self.pao.pa_wiLog("I am here");
+							self.pao.pa_wiLog(worker);
+							self.pao.pa_wiLog(code);
+							self.pao.pa_wiLog(signal);
+							self.cluster.fork();
+							// self.cluster.fork()
+						} else {
+							console.log("Server has been shutdown");
 						}
-						self.pao.pa_wiLog("I am here");
-						self.pao.pa_wiLog(worker);
-						self.pao.pa_wiLog(code);
-						self.pao.pa_wiLog(signal);
-						self.cluster.fork();
-						// self.cluster.fork()
 					});
 				} else {
 					self.adLog("System is running on a single thread/core");
-					app.listen(availablePort, () => {
-						self.infoSync("The Server is listening via workers");
+					const serv = app.listen(availablePort, () => {
+						self.infoSync(
+							`The Server is listening via a worker on port:${availablePort}`,
+						);
 						self.adLog("THIS WORKER RUNNING IP:");
+
+						if (shouldOpenBrowser) self.openBrowserApp(availablePort);
+
 						//self.openBrowserApp();
 					});
+
+					serv.timeout = serverTimeout;
+					setTimeout(function () {
+						if (shouldStopServer) {
+							console.log("Closing server");
+							process.exit(0);
+							//serv.close();
+						}
+					}, 3000);
+
 					//   process.on('message', function(message) {
 					// 	self.pao.pa_wiLog('Worker ' + process.pid + ' received message from master.', message);
 					// 	if(message.singleProcessTasks == "startSingleProcessTasks") {
@@ -170,9 +196,10 @@ export const masterWorker = function (app) {
 					self.infoSync(
 						`The Application is running on PID:: ${process.pid} and listening on port: ${PORT}`,
 					);
-					self.adLog("The Application is listening via workers");
-					self.pao.pa_wiLog("THIS WORKER RUNNING IP:");
-					//self.openBrowserApp();
+					// self.adLog("The Application is listening via workers");
+					// self.pao.pa_wiLog("THIS WORKER RUNNING IP:");
+
+					if (shouldOpenBrowser) self.openBrowserApp(availablePort);
 				});
 				process.on("message", function (message) {
 					self.pao.pa_wiLog(
@@ -183,9 +210,17 @@ export const masterWorker = function (app) {
 						self.emit({ type: "start-single-process-tasks", data: "" });
 					}
 				});
-				serv.timeout = 1000 * 60 * 3;
+
+				serv.timeout = serverTimeout;
 				self.infoSync("THE TIMEOUT VALUE");
 				self.infoSync(serv.timeout);
+				setTimeout(function () {
+					if (shouldStopServer) {
+						console.log("CLOSING SERVER");
+						process.exit(0);
+						//serv.close();
+					}
+				}, 3000);
 			}
 		})
 		.catch((err) => {
@@ -248,23 +283,37 @@ export const handleRegisterShutDownCandidate = function (data) {
 		self.pao.pa_wiLog("Candidate could not be registered for shutdown", "warn");
 	}
 };
-export const openBrowserApp = async function () {
+export const openBrowserApp = async function (portToOpenTo) {
 	const self = this;
 	const open = self.open;
-	await open("http://localhost:9000");
-	console.log("THE BROWSER OPENED");
+	await open(`http://localhost:${portToOpenTo}`);
+	// console.log("THE BROWSER OPENED");
 	// const openBrowser = () => import('open').then(({default: open}) => open("http://localhost:3000"));
 	// openBrowser()
 };
 
 export const getServerPort = function (port = 3000) {
 	const self = this;
+	console.log("THE PORT PASSED", port);
 	return new Promise((resolve, reject) => {
 		self
-			.getPort({ port: port })
+			.detectPort(port)
 			.then((gotPort) => {
-				console.log("THE GOT PORT", gotPort);
-				resolve(gotPort);
+				if (gotPort === port) {
+					resolve(gotPort);
+				} else {
+					self.portFinder
+						.getPortPromise()
+						.then((openPort) => {
+							console.log(
+								`Specified port: ${port} is in use, anzii will resort to port:${openPort}`,
+							);
+							resolve(openPort);
+						})
+						.catch((err) => {
+							reject(err);
+						});
+				}
 			})
 			.catch((err) => {
 				console.log("Therw was an error trying to get a port", err);

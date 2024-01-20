@@ -1,8 +1,9 @@
 import cluster from "cluster";
-import getPort from "get-port";
+import detectPort from "detect-port";
 import open from "open";
 import os from "os";
 import path from "path";
+import portFinder from "portfinder";
 import * as methods from "./methods.js";
 class System {
 	constructor(pao) {
@@ -15,11 +16,13 @@ class System {
 		this.shutDownServices = [];
 		this.numOfDBSD = 3;
 		this.allowedDBSTR = 10000;
+		this.serverTimeout = 3000;
 		this.systemIsShuttingDown = false;
 		this.shutDownOrder = [];
 		this.systemBase = { DOCUMENT_ROOT: process.cwd() };
 		this.open = open;
-		this.getPort = getPort;
+		this.detectPort = detectPort;
+		this.portFinder = portFinder;
 		this.init = methods.init;
 		this.handleConfigureSystem = methods.handleConfigureSystem;
 		this.handleRegisterShutDownCandidate =

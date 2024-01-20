@@ -11,7 +11,7 @@ export const init = function () {
 export const handleLogRequest = function (data) {
 	const self = this;
 	const pao = self.pao;
-	const cliLogsSet = process.env.SHOW_ANZII_CLI_LOGS || "false";
+	const cliLogsSet = process.env.ANZII_SHOW_CLI_LOGS || "false";
 	const shouldShowCliLogs = cliLogsSet === "true" ? true : false;
 	// self.pao.pa_wiLog('HANDLELOGREQUEST')
 	// self.pao.pa_wiLog(data)
@@ -127,11 +127,9 @@ export const info = async function (log) {
 	// 	self.logger.info(`${log.source}: ${log.message}`)
 	// }
 	if (contains(log, "sync")) {
-		console.log("LOG CONTAINS SYNC", log);
 		if (self.debugas.hasOwnProperty(log.source.toLowerCase())) {
 			// self.pao.pa_wiLog('THE DEBUG MODULE IS USED')
 			// self.pao.pa_wiLog(self.debugas)
-			console.log("Debugga has", self.debugas);
 			self.iLog({ message: "Logging info sync with debugas" });
 			self.iLog({ message: log.message });
 			self.iLog({ message: self.debugas[log.source.toLowerCase()] });
@@ -275,11 +273,11 @@ export const aLog = async function (log) {
 	const self = this;
 	//self.logger.error(`${log.source}: ${log.message}`)
 	// self.pao.pa_wiLog(process.env)
-	// if(process.env.SHOW_ANZII_DEBUG_LOGS && process.env.SHOW_ANZII_DEBUG_LOGS.trim().toLowerCase() === 'true') console.log(log.message)
-	if (!process.env.SHOW_ANZII_DEBUG_LOGS) return;
-	if (process.env.SHOW_ANZII_DEBUG_LOGS.trim().toLowerCase() !== "true") return;
+	// if(process.env.ANZII_SHOW_DEBUG_LOGS && process.env.ANZII_SHOW_DEBUG_LOGS.trim().toLowerCase() === 'true') console.log(log.message)
+	if (!process.env.ANZII_SHOW_DEBUG_LOGS) return;
+	if (process.env.ANZII_SHOW_DEBUG_LOGS.trim().toLowerCase() !== "true") return;
 	self.pao.pa_wiLog("aLog:ANZIILOGER");
-	self.pao.pa_wiLog(process.env.SHOW_ANZII_DEBUG_LOGS);
+	self.pao.pa_wiLog(process.env.ANZII_SHOW_DEBUG_LOGS);
 	console.log(log.message);
 	// const self = this
 	// const pao = self.pao
@@ -289,7 +287,7 @@ export const iLog = async function (log) {
 	const self = this;
 	//self.logger.error(`${log.source}: ${log.message}`)
 	// self.pao.pa_wiLog(process.env)
-	// if(process.env.SHOW_ANZII_DEBUG_LOGS && process.env.SHOW_ANZII_DEBUG_LOGS.trim().toLowerCase() === 'true') console.log(log.message)
+	// if(process.env.ANZII_SHOW_DEBUG_LOGS && process.env.ANZII_SHOW_DEBUG_LOGS.trim().toLowerCase() === 'true') console.log(log.message)
 	if (!process.env.SHOW_ANZII_WI_LOGS) return;
 	if (process.env.SHOW_ANZII_WI_LOGS.trim().toLowerCase() !== "true") return;
 	self.pao.pa_wiLog("iLog:ANZIILOGER");
