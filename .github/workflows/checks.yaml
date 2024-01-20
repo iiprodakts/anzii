@@ -1,4 +1,4 @@
-name: Check source code complise
+name: Check source code compliance
 
 on:
   pull_request:
@@ -26,10 +26,12 @@ jobs:
         run: | # Install and link dependencies
 
 
+
           npm i --prefer-offline --workspaces=false
 
       - name: Install Workspaces dependencies
         run: | # Install and link dependencies
+
 
 
           npm i --prefer-offline --workspaces
