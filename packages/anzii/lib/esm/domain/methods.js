@@ -10,10 +10,13 @@ export const handleSetDomainDefaults = function (data) {
 	const self = this;
 	const domains = self.domainCandidates;
 	const passport = self.passport;
+
 	const path = self.path;
 	self.infoSync("SETTING DOMAIN DEFAULTS");
 	console.log("Domain resources data", data);
 	console.log("THE DOMAINS", domains);
+	console.log("THE DOMAINS PASSPORT", passport);
+	console.log("THE PASSPORT", self.passportInitialize);
 	// self.pao.pa_wiLog(data)
 	self.pao.pa_wiLog(self.system);
 	// self.pao.pa_wiLog(data)
