@@ -23,18 +23,13 @@ export const handleAttachRoutes = function (data) {
 };
 export const attachRoutes = function (data) {
 	const self = this;
-	console.log("ATTACHING ROUTES");
+	console.log("ATTACHING ROUTES", data);
 	if (data.app) {
 		let aliasList = [];
 		let aliatikHandlers = [];
-		// var corsOption = {
-		// 	origin: true,
-		// 	methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-		// 	credentials: true,
-		// 	exposedHeaders: ['x-auth-token']
-		//   };
 		data.app.use(self.cors());
 		data.app.use("/", data.router);
+
 		if (!self.routes) {
 			self.warn("NO_CONFIGURED_ROUTES, ANZII WILL RESOLVE TO DEFAULT ROUTES");
 			// self.warn('Anzii is rendering default routes::')
@@ -67,6 +62,7 @@ export const attachRoutes = function (data) {
 				r["router"] = data.router;
 				self.renderRoute(r);
 			});
+			data.router.use(self.outOfRouterContext.bind(this));
 			aliasList.length > 0
 				? self.emit({
 						type: "router-alias-list",
@@ -86,6 +82,7 @@ export const attachRoutes = function (data) {
 			res.set("Content-Type", "text/javascript");
 			next();
 		});
+
 		data.router.use(self.outOfRouterContext.bind(this));
 		aliasList.length > 0
 			? self.emit({
@@ -207,13 +204,32 @@ export const outOfRouterContext = async function (req, res) {
 			message: "Resource was not found: OutOfContext",
 		};
 	} else if (req.accepts(["html", "json"]) === "html") {
-		data = {
-			error: true,
-			accepts: "html",
-			type: "NotFound",
-			code: 404,
-			message: "Resource was not found: OutOfContext",
-		};
+		let folderPath = `${self.pao.pa_getWorkingFolder()}/views/index.html`;
+		self.pao.pa_wiLog(`folder path: ${folderPath}`);
+		self.pao.pa_wiLog(`working folder: ${self.pao.pa_getWorkingFolder()}`);
+		self.pao.pa_wiLog(
+			`IS EXISTING FOLDER VIEWS: ${self.pao.pa_isExistingDir(
+				folderPath.trim(),
+			)}`,
+		);
+		if (self.pao.pa_isExistingDir(folderPath.trim())) {
+			data = {
+				error: false,
+				accepts: "html",
+				type: "StaticServe",
+				code: 200,
+				sendFile: true,
+				fileSource: folderPath,
+			};
+		} else {
+			data = {
+				error: true,
+				accepts: "html",
+				type: "NotFound",
+				code: 404,
+				message: "Resource was not found: OutOfContext",
+			};
+		}
 	} else {
 		data = {
 			error: true,

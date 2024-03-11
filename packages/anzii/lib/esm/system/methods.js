@@ -103,10 +103,10 @@ export const masterWorker = function (app) {
 	self
 		.getServerPort(portToUse)
 		.then((availablePort) => {
-			console.log("THE AVAILABLE PORT", availablePort);
+			self.pao.pa_wiLog(`THE AVAILABLE PORT, ${availablePort}`);
 			self.pao.pa_wiLog(`THE STATUS OF isMaster: ${self.cluster.isMaster}`);
-			console.log("THE cluster", self.cluster);
-			console.log("THE CLUSTERS", self.clusterCustomConfig);
+			self.pao.pa_wiLog(`THE cluster, ${self.cluster}`);
+			self.pao.pa_wiLog(`THE CLUSTERS, ${self.clusterCustomConfig}`);
 			if (self.cluster.isMaster) {
 				self.pao.pa_wiLog(`Master ${self.context.pid} is running`);
 				if (self.clusterCustomConfig && self.clusterCustomConfig.spawn) {
@@ -294,7 +294,7 @@ export const openBrowserApp = async function (portToOpenTo) {
 
 export const getServerPort = function (port = 3000) {
 	const self = this;
-	console.log("THE PORT PASSED", port);
+	self.infoSync(`User preffered port: ${port}`);
 	return new Promise((resolve, reject) => {
 		self
 			.detectPort(port)
@@ -305,7 +305,7 @@ export const getServerPort = function (port = 3000) {
 					self.portFinder
 						.getPortPromise()
 						.then((openPort) => {
-							console.log(
+							self.infoSync(
 								`Specified port: ${port} is in use, anzii will resort to port:${openPort}`,
 							);
 							resolve(openPort);

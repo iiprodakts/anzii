@@ -10,11 +10,11 @@ export const Activate = function (libs = []) {
 	const anziiCliWithServer = process.env?.ANZII_CLI_WITH_SERVER || null;
 	const isAnziiCliWithServer =
 		anziiCliWithServer && anziiCliWithServer === "true" ? true : false;
-	console.log("isAppCLi", isAppCli);
-	console.log("isAnziiCliWithServer", isAnziiCliWithServer);
-	console.log(
-		"isInitiliazeCliWithServer check",
-		isAppCli && isAnziiCliWithServer,
+	logInitializations(`isAppCLi", ${isAppCli}`);
+	logInitializations(`isAnziiCliWithServer", ${isAnziiCliWithServer}`);
+	logInitializations(
+		`isInitiliazeCliWithServer check",
+		${isAppCli && isAnziiCliWithServer}`,
 	);
 	const initializeCliWithServer = isAppCli && isAnziiCliWithServer;
 	let anziiloger = { Anziiloger: this.ESM.Esm.Anziiloger };
@@ -25,9 +25,9 @@ export const Activate = function (libs = []) {
 	let isPush = true;
 	// logInitializations('ANZII PILLAR PROMPT')
 	// logInitializations(pao.PROMPT)
-	console.log("ANZII CLI WITH SERVER", anziiCliWithServer);
-	console.log("IS ANZII CLI WITH SERVER", isAnziiCliWithServer);
-	console.log("Initialize CLI WITH SERVER", initializeCliWithServer);
+	logInitializations(`ANZII CLI WITH SERVER", ${anziiCliWithServer}`);
+	logInitializations(`IS ANZII CLI WITH SERVER", ${isAnziiCliWithServer}`);
+	logInitializations(`Initialize CLI WITH SERVER", ${initializeCliWithServer}`);
 	if (isAppCli) {
 		// logInitializations('This should be a cli app')
 		//  process.env.SUPPRESS_NO_CONFIG_WARNING = true

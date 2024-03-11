@@ -4,7 +4,7 @@ export const init = function () {
 	this.adLog("Config has been initialised");
 	this.setLogNamespaces();
 	this.getConfigFile().then((resolvedValue) => {
-		console.log("THE resolved ", resolvedValue);
+		this.adLog(`THE resolved ${resolvedValue}`);
 		this.doBefore();
 	});
 	this.listens({
@@ -29,12 +29,12 @@ export const getConfigFile = function () {
 	return new Promise((resolve) => {
 		loadFile(path.resolve("./", ".config.js"))
 			.then((foundFile) => {
-				console.log("Console.log fOUNDfiLE", foundFile);
+				self.pao.pa_wiLog(`Console.log fOUNDfiLE", ${foundFile}`);
 				self.config = foundFile.default;
 				resolve(true);
 			})
 			.catch((err) => {
-				console.log("The Call Is NOT FOUND", err);
+				self.pao.pa_wiLog(`The Call Is NOT FOUND", ${JSON.stringify(err)}`);
 				self.config = null;
 				resolve(true);
 			});
@@ -65,8 +65,8 @@ export const configure = function () {
 		anziiCliWithServer && anziiCliWithServer === "true" ? true : false;
 	const initializeCliWithServer = isAppCli && isAnziiCliWithServer;
 
-	console.log("THE CONFIG IS APP CLI", isAppCli);
-	console.log("THE CONFIG initi", initializeCliWithServer);
+	self.pao.pa_wiLog(`THE CONFIG IS APP CLI: ${isAppCli}`);
+	self.pao.pa_wiLog(`THE CONFIG initi ${initializeCliWithServer}`);
 
 	if (initializeCliWithServer) return self.configLogger();
 	self.configLogger();
@@ -141,7 +141,10 @@ export const enviroment = function () {
 };
 export const handleManualConfig = function (data = null) {
 	const self = this;
-	console.log("MANUAL SERVER TRIGGER ACTIVATED", data?.payload?.configs);
+	self.pao.pa_wiLog.log(
+		`MANUAL SERVER TRIGGER ACTIVATED,
+		${data?.payload?.configs}`,
+	);
 	// if()
 	self.runAppConfig(data);
 };
@@ -160,10 +163,10 @@ export const runAppConfig = function (manualConfig = null) {
 		const { webpackDevMiddleware, webpackHotMiddleware } = wepackMiddlewares;
 
 		self.pao.pa_wiLog("THE CONFIG");
-		self.pao.pa_wiLog(config);
-		console.log("runAPPcoNFIG", manualConfig);
-		console.log("THE APP CONFIG", self.config);
-		console.log("THE COMPILEr", manualConfig?.payload?.webpackConfig);
+		self.pao.pa_wiLog(JSON.stringify(config));
+		self.pao.pa_wiLog(`runAPPcoNFIG", ${JSON.stringify(manualConfig)}`);
+		self.pao.pa_wiLog(`THE APP CONFIG", ${JSON.stringify(self.config)}`);
+		self.pao.pa_wiLog(`THE COMPILEr", ${manualConfig?.payload?.webpackConfig}`);
 
 		/* The code immediately after this comment should be re-organized 
       it's just using a quick dirty approach to test some logic
@@ -223,7 +226,7 @@ export const runAppConfig = function (manualConfig = null) {
 		//     self.emit({ type: 'config-domain-resources', data: manualConfig });// To be re-organized
 		if (manualConfig)
 			self.emit({ type: "config-domain-resources", data: null });
-		console.log("ABOUT TO ");
+
 		self.emit({
 			type: `config-server`,
 			data: `server`,
@@ -237,7 +240,7 @@ export const runAppConfig = function (manualConfig = null) {
 			: self.emit({ type: "config-system", data: { workers: 1, spawn: true } });
 
 		for (let c in config) {
-			console.log("THE C IN CONFIG", c);
+			self.pao.pa_wiLog(`THE C IN CONFIG", ${c}`);
 			self.pao.pa_wiLog("The module in Config");
 			self.pao.pa_wiLog(c);
 			if (c === "server") isServerConfig = true;
@@ -263,7 +266,7 @@ export const runAppConfig = function (manualConfig = null) {
 		}
 
 		self.emit({ type: "config-domain-resources", data: null }); // to be re-organized
-		console.log("isServer Value", isServerConfig);
+		self.pao.pa_wiLog(`isServer Value", ${isServerConfig}`);
 		// if (!isServerConfig) {
 
 		// 	self.emit({
@@ -313,11 +316,11 @@ export const doBefore = function () {
 	loadFile(path.resolve("./", "package.json"))
 		.then((foundFile) => {
 			let packageJSON = foundFile;
-			console.log("THE package.json", packageJSON);
+			self.pao.pa_wiLog(`THE package.json", ${JSON.stringify(packageJSON)}`);
 			self.configure();
 		})
 		.catch((err) => {
-			console.log("No pACKAGE.JSON WAS FOUND", err);
+			self.pao.pa_wiLog(`No pACKAGE.JSON WAS FOUND", ${JSON.stringify(err)}`);
 			self.configure();
 		});
 	// console.log("DoBefore in action")
