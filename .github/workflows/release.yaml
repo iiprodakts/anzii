@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - master
+      - staging
 
 jobs:
   changelog:
@@ -14,7 +15,7 @@ jobs:
         id: changelog
         uses: TriPSs/conventional-changelog-action@v5.2.1
         with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.PA_TOKEN }}
           version-file: "./package.json,./package-lock.json"
           git-message: "chore(release): {version}"
           git-user-name: "ntsakosurprise"
@@ -23,7 +24,7 @@ jobs:
         uses: actions/create-release@v1
         if: ${{ steps.changelog.outputs.skipped == 'false' }}
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.PA_TOKEN }}
         with:
           tag_name: ${{ steps.changelog.outputs.tag }}
           release_name: ${{ steps.changelog.outputs.tag }}
