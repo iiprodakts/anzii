@@ -1,7 +1,7 @@
 const methods = {};
 const pathMatchPattern = /^\.|index|\.[t|j][sx|s]$/g;
 methods.init = function () {
-	console.log("DoBefores has been initialised");
+	this.adLog("DoBefores has been initialised");
 
 	this.listens({
 		"do-befores": this.handleDobefores.bind(this),
@@ -13,7 +13,7 @@ methods.handleDoFileRoutes = async function (data) {
 	// console.log("HANDLE FILE ROUTES DATA", data);
 	const { payload } = data;
 	const { path: filePaths } = payload;
-	console.log("FILE PATHS", filePaths);
+	self.pao.pa_wiLogs("FILE PATHS", filePaths);
 	const pagesPaths = self.getPages(`${filePaths.appPagesFolder}/**/*.jsx`);
 	console.log("PAGES PATHS", pagesPaths);
 	console.log(

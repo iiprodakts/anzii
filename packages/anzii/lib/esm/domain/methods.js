@@ -13,15 +13,15 @@ export const handleSetDomainDefaults = function (data) {
 
 	const path = self.path;
 	self.infoSync("SETTING DOMAIN DEFAULTS");
-	console.log("Domain resources data", data);
-	console.log("THE DOMAINS", domains);
-	console.log("THE DOMAINS PASSPORT", passport);
-	console.log("THE PASSPORT", self.passportInitialize);
+	self.pao.pa_wiLog(`Domain resources data, ${data}`);
+	self.pao.pa_wiLog(`THE DOMAINS, ${domains}`);
+	self.pao.pa_wiLog(`THE DOMAINS PASSPORT, ${passport}`);
+	self.pao.pa_wiLog(`THE PASSPORT, ${self.passportInitialize}`);
 	// self.pao.pa_wiLog(data)
 	self.pao.pa_wiLog(self.system);
 	// self.pao.pa_wiLog(data)
-	// console.log("OUTPUT PATH", data.custom.webpackConfig.output);
-	// console.log("PATH", data.custom.webpackConfig.output.path);
+	// self.pao.pa_wiLog(`OUTPUT PATH", ${data.custom.webpackConfig.output}`);
+	// self.pao.pa_wiLog(`PATH", ${data.custom.webpackConfig.output.path}`);
 	if (!domains) return;
 	domains.forEach((dumain) => {
 		self.pao.pa_wiLog("THE DOMAIN SETTInGS");
@@ -33,10 +33,12 @@ export const handleSetDomainDefaults = function (data) {
 			);
 		if (dumain.name === "static") {
 			self.pao.pa_wiLog("DOMAIN IS STATIC");
-			self.pao.pa_wiLog(path.join(self.system?.DOCUMENT_ROOT, dumain.set));
-			console.log("DOMAIN IS STATIC", dumain);
-			console.log("DOCUMENT ROOT", self.system?.DOCUMENT_ROOT);
-			console.log(
+			self.pao.pa_wiLog(
+				`${path.join(self.system?.DOCUMENT_ROOT)}, ${dumain.set}`,
+			);
+			self.pao.pa_wiLog(`DOMAIN IS STATIC", ${dumain}`);
+			self.pao.pa_wiLog(`DOCUMENT ROOT", ${self.system?.DOCUMENT_ROOT}`);
+			self.pao.pa_wiLog(
 				"JOINED PATH",
 				path.join(self.system?.DOCUMENT_ROOT, dumain.set),
 			);
@@ -71,11 +73,13 @@ export const handleTakeSystemBase = function (data) {
 };
 export const hookIntoWebpackCompilation = async function (compiler) {
 	compiler.hooks.invalid.tap("invalid", () => {
-		console.log("wEBPACK is compiling....");
+		self.pao.pa_wiLog("wEBPACK is compiling....");
 	});
 	compiler.hooks.done.tap("done", (stats) => {
-		console.log("WEBPACK IS DONE COMPILING");
-		console.log(stats.toJson({ all: false, errors: true, warnings: true }));
+		self.pao.pa_wiLog("WEBPACK IS DONE COMPILING");
+		self.pao.pa_wiLog(
+			`${stats.toJson({ all: false, errors: true, warnings: true })}`,
+		);
 	});
 	return true;
 };

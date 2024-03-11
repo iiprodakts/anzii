@@ -833,7 +833,7 @@ export const p_createFolderContent = function (
 };
 export const p_loadFile = function (filepath) {
 	return new Promise((resolve, reject) => {
-		console.log("THE FILEPATH load", filepath);
+		this.p_wiLog(`THE FILEPATH load,${filepath}`);
 		if (!p_isExistingDir(filepath))
 			return reject({
 				code: "FILE_PATH_ERROR",
@@ -841,12 +841,12 @@ export const p_loadFile = function (filepath) {
 				filePath: filepath,
 			});
 		const ext = path.extname(filepath);
-		console.log("FILE EXTENSION", ext);
+		this.p_wiLog(`FILE EXTENSION, ${ext}`);
 
 		if (ext === ".json") {
 			try {
 				const readJson = p_readFileSync(filepath);
-				console.log("THE READ JSON", readJson);
+				this.p_wiLog(`THE READ JSON, ${readJson}`);
 				return resolve(readJson);
 			} catch (err) {
 				console.log("failed to findJSON", err.code);
@@ -876,8 +876,16 @@ export const p_loadFile = function (filepath) {
 				resolve(moduleFound);
 			})
 			.catch((err) => {
-				console.log("MODULE FETCH ERROR", err);
-				reject(err);
+				try {
+					const readFile = p_loadFileSync(filepath);
+					this.p_wiLog(`THE READ FILE, ${JSON.stringify(readFile)}`);
+					return resolve({ default: readFile });
+				} catch (err) {
+					this.p_wiLog(`MODULE FETCH ERROR, ${err.code}`);
+					return reject(err);
+				}
+				// console.log("MODULE FETCH ERROR", err);
+				// reject(err);
 			});
 	});
 
@@ -890,6 +898,7 @@ export const p_loadFileSync = function (filepath) {
 	//if(!p_isExistingDir(filepath) || filepath !== "@babel/register" || filepath !== "babel-register") return ({code:"FILE_PATH_ERROR",message:"File path does not exist",filePath:filepath})
 	console.log("REQUIRE'S");
 	const foundFile = require(filepath);
+	console.log("THE FILE FOUND FROM REQUIRE", foundFile);
 	return foundFile;
 };
 

@@ -68,7 +68,8 @@ export const getClientDriver = function (client) {
 	try {
 		let name = client.name;
 		if (name === "mysql") {
-			self.supportedClients[client.name].driver = require("mysql2");
+			// self.supportedClients[client.name].driver = require("mysql2");
+			self.supportedClients[client.name].driver = self.mysql2;
 		}
 		// }else if(name === 'pg'){
 		// 	self.supportedClients[client.name].driver = require('pg')

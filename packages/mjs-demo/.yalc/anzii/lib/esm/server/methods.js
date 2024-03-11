@@ -168,19 +168,37 @@ export const handleWriteServerRequestResponse = async function (data) {
 		if (data.data.accepts) {
 			switch (data.data.accepts) {
 				case "json":
-					data.res.status(200).send(data.data);
+					data.res.status(data.data.code).send(data.data);
 					break;
 				case "html":
+					if (data.data.sendFile) {
+						console.log("Request should sendFILE", data.data);
+						return data.res
+							.status(data.data.code)
+							.sendFile(data.data.fileSource);
+					}
 					self
 						.getHtml(data.res, {
 							view: "main/404",
 							title: "Page could not be found",
 						})
 						.then((html) => {
-							return data.res.status(200).send(html.html);
+							console.log("THE HTML BEING SENT");
+							return data.res.status(data.data.code).send(
+								self.getHtmlSkeleton(html.html, {
+									title: "Page could not be found",
+								}),
+							);
 						})
 						.catch((e) => {
-							return data.res.status(200).send(e.html);
+							return data.res.status(data.data.code).send(
+								self.getHtmlSkeleton(
+									"<h1>404 Resource could not be found</h1>",
+									{
+										title: "Page Could not be found",
+									},
+								),
+							);
 						});
 					break;
 				default:
@@ -264,4 +282,25 @@ export const getHtml = function (res, view) {
 			}
 		});
 	});
+};
+
+export const getHtmlSkeleton = function (html, head = null, scripts = []) {
+	const self = this;
+	const { serialize } = self;
+
+	return `
+		<!doctype html>
+		<html>
+
+    <head>
+		  <title>${head?.title}</title>
+   
+    </head>
+		<body>
+			<div id="root">${html}</div>
+			
+
+		</body>
+		</html>
+    `;
 };
