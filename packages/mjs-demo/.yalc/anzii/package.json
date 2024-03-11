@@ -1,0 +1,107 @@
+{
+	"name": "anzii",
+	"version": "6.2.1",
+	"description": "Anzii is a backend javascript modular and event-driven framework that is simple, quick to learn and build with.",
+	"main": "./dist/index.cjs",
+	"type": "module",
+	"exports": {
+		".": {
+			"import": "./lib/start.js",
+			"require": "./dist/index.cjs",
+			"default": "./lib/start.js"
+		}
+	},
+	"directories": {
+		"lib": "lib"
+	},
+	"license": "MIT",
+	"scripts": {
+		"test": "node --experimental-vm-modules ../../node_modules/jest/bin/jest.js",
+		"lint": "eslint",
+		"start:cross": "cross-env NODE_ENV=production node index",
+		"start": "nodemon app.js",
+		"start:dev": "concurrently --kill-others \"yarn run build:dev\" \"cross-env NODE_ENV=production nodemon index \" ",
+		"start:dev:nodemon": "nodemon index",
+		"compile": "npm run compile:cjs",
+		"compile:esm": "cross-env NODE_ENV=development NODE_MODE=esm webpack",
+		"compile:cjs": "cross-env NODE_ENV=development NODE_MODE=cjs webpack",
+		"build:dev": "webpack --mode development --watch",
+		"yalc:publish": "yalc publish",
+		"yalc:push:publish": "yalc publish --push"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/iiprodakts/anzii"
+	},
+	"keywords": [
+		"backend",
+		"framework",
+		"api",
+		"javascript",
+		"anzii"
+	],
+	"author": {
+		"email": "hi@iiprodakts.io",
+		"name": "IIprodakts",
+		"url": "http://iiprodakts.io"
+	},
+	"contributors": [
+		{
+			"name": "Surprise Mashele",
+			"email": "mashelesepru@gmail.com",
+			"website": "https://www.nstakosurprise.com"
+		}
+	],
+	"homepage": "https://github.com/iiprodakts/anzii#readme",
+	"dependencies": {
+		"@babel/polyfill": "^7.12.1",
+		"@babel/register": "^7.12.13",
+		"app-root-path": "^3.0.0",
+		"bcryptjs": "^2.4.3",
+		"body-parser": "^1.18.3",
+		"cjstoesm": "^2.1.2",
+		"config": "^2.0.2",
+		"cors": "^2.8.5",
+		"debug": "^3.2.6",
+		"detect-port": "^1.5.1",
+		"esm": "^3.2.25",
+		"express": "^4.16.3",
+		"express-async-errors": "^3.1.1",
+		"extend": "^3.0.2",
+		"fakeredis": "^2.0.0",
+		"file-type": "^14.1.4",
+		"formidable": "^1.2.2",
+		"fs": "0.0.1-security",
+		"glob": "^10.3.10",
+		"mysql": "^2.16.0",
+		"mysql2": "^2.3.3",
+		"node.extend": "^2.0.2",
+		"open": "8.4.1",
+		"passport": "^0.4.1",
+		"patch-package": "^6.2.2",
+		"portfinder": "^1.0.32",
+		"promise-mysql": "^3.3.1",
+		"react": "^18.2.0",
+		"redis": "^2.6.3",
+		"supports-color": "^7.1.0",
+		"typescript": "<4.8",
+		"uuid": "^7.0.2",
+		"winston": "^3.2.1",
+		"yarn-run-all": "^3.1.1"
+	},
+	"readme": "See README file",
+	"readmeFilename": "README.md",
+	"files": [
+		"dist",
+		"lib",
+		"index.js",
+		"README.md",
+		"CONTRIBUTING.md",
+		"LICENSE",
+		"package.json"
+	],
+	"bugs": {
+		"url": "https://github.com/iiprodakts/anzii/issues"
+	},
+	"yalcSig": "eebf61ddf8a860ee1e11c0d10a5b5273"
+}

@@ -1,110 +1,70 @@
 {
-  "name": "anzii",
-  "version": "6.0.0",
-  "description": "Anzii is a backend javascript modular and event-driven framework that is simple, quick to learn and build with.",
-  "main": "index.js",
-  "directories": {
-    "lib": "lib"
-  },
-  "license": "MIT",
-  "scripts": {
-    "test": "jest",
-    "lint": "eslint",
-    "start:cross": "cross-env NODE_ENV=production node index",
-    "start": "nodemon app.js",
-    "start:dev": "concurrently --kill-others \"yarn run build:dev\" \"cross-env NODE_ENV=production nodemon index \" ",
-    "start:dev:nodemon": "nodemon index",
-    "build": "cross-env NODE_ENV=production webpack",
-    "build:dev": "webpack --mode development --watch",
-    "postinstall": "patch-package",
-    "prepublishOnly": "yarn run build"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/iiprodakts/anzii"
-  },
-  "keywords": [
-    "backend",
-    "framework",
-    "api",
-    "javascript",
-    "anzii"
-  ],
-  "author": {
-    "email": "hi@iiprodakts.io",
-    "name": "IIprodakts",
-    "url": "http://iiprodakts.io"
-  },
-  "contributors": [
-    {
-      "name": "Surprise Mashele",
-      "email": "mashelesepru@gmail.com",
-      "website": "https://www.nstakosurprise.com"
-    }
-  ],
-  "homepage": "https://github.com/iiprodakts/anzii#readme",
-  "devDependencies": {
-    "@babel/cli": "^7.2.3",
-    "@babel/core": "^7.0.0",
-    "@babel/plugin-proposal-object-rest-spread": "^7.0.0",
-    "@babel/plugin-transform-strict-mode": "^7.10.4",
-    "@babel/preset-env": "^7.3.4",
-    "autoprefixer": "^8.6.5",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-transform-remove-strict-mode": "0.0.2",
-    "babel-plugin-transform-strict-mode": "^6.24.1",
-    "concat": "^1.0.3",
-    "cross-env": "^7.0.2",
-    "eslint": "^7.10.0",
-    "filemanager-webpack-plugin": "^2.0.5",
-    "jest": "^26.4.2",
-    "nodemon-webpack-plugin": "^4.0.8",
-    "terser-webpack-plugin": "^4.2.2",
-    "uglifyjs-webpack-plugin": "^2.2.0",
-    "webpack": "^4.44.2",
-    "webpack-cli": "^3.3.12",
-    "webpack-node-externals": "^2.5.2"
-  },
-  "dependencies": {
-    "@babel/polyfill": "^7.12.1",
-    "@babel/register": "^7.12.13",
-    "app-root-path": "^3.0.0",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.18.3",
-    "config": "^2.0.2",
-    "cors": "^2.8.5",
-    "debug": "^3.2.6",
-    "esm": "^3.2.25",
-    "express": "^4.16.3",
-    "express-async-errors": "^3.1.1",
-    "extend": "^3.0.2",
-    "fakeredis": "^2.0.0",
-    "file-type": "^14.1.4",
-    "formidable": "^1.2.2",
-    "fs": "0.0.1-security",
-    "mysql": "^2.16.0",
-    "mysql2": "^2.3.3",
-    "node.extend": "^2.0.2",
-    "passport": "^0.4.1",
-    "patch-package": "^6.2.2",
-    "promise-mysql": "^3.3.1",
-    "redis": "^2.6.3",
-    "supports-color": "^7.1.0",
-    "uuid": "^7.0.2",
-    "winston": "^3.2.1",
-    "yarn-run-all": "^3.1.1"
-  },
-  "readme": "See README file",
-  "readmeFilename": "README.md",
-  "files": [
-    "dist",
-    "index.js",
-    "README.md",
-    "CONTRIBUTING.md",
-    "LICENSE",
-    "package.json"
-  ],
-  "bugs": {
-    "url": "https://github.com/iiprodakts/anzii/issues"
-  }
+	"name": "anzii-project",
+	"version": "1.0.0",
+	"description": "Anzii is a backend javascript modular and event-driven framework that is simple, quick to learn and build with.",
+	"type": "module",
+	"workspaces": {
+		"packages": [
+			"packages/*"
+		]
+	},
+	"private": true,
+	"exports": {
+		".": {
+			"import": "./lib/start.js",
+			"require": "./dist/index.cjs",
+			"default": "./lib/start.js"
+		}
+	},
+	"license": "MIT",
+	"scripts": {
+		"test": "npm run root:tests && npm run test --workspaces --if-present",
+		"root:tests": "node --experimental-vm-modules node_modules/jest/bin/jest.js",
+		"lint": "eslint",
+		"tarball": "node local-builds/runCli.js tarball",
+		"local:publish": "node local-builds/runCli.js publish",
+		"local:co:pub:in": "node local-builds/runCli.js copubin"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/iiprodakts/anzii"
+	},
+	"author": {
+		"email": "hi@iiprodakts.io",
+		"name": "IIprodakts",
+		"url": "http://iiprodakts.io"
+	},
+	"contributors": [
+		{
+			"name": "Surprise Mashele",
+			"email": "mashelesepru@gmail.com",
+			"website": "https://www.nstakosurprise.com"
+		}
+	],
+	"homepage": "https://github.com/iiprodakts/anzii#readme",
+	"devDependencies": {
+		"@commitlint/cli": "^18.4.3",
+		"@commitlint/config-conventional": "^18.4.3",
+		"@commitlint/prompt-cli": "^18.4.3",
+		"@stylistic/eslint-plugin": "^1.5.3",
+		"cross-env": "^7.0.3",
+		"eslint": "^8.19.0",
+		"eslint-plugin-jest": "^27.2.1",
+		"eslint-plugin-react": "^7.30.1",
+		"gh-pages": "^3.2.3",
+		"husky": "^8.0.3",
+		"jest": "^29.7.0",
+		"lerna": "^8.0.1",
+		"nx": "^14.4.2",
+		"prettier": "^2.7.1"
+	},
+	"readme": "See README file",
+	"readmeFilename": "README.md",
+	"bugs": {
+		"url": "https://github.com/iiprodakts/anzii/issues"
+	},
+	"packageManager": "npm@10.2.4",
+	"dependencies": {
+		"chalk": "^5.3.0"
+	}
 }

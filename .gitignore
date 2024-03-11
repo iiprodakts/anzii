@@ -1,6 +1,5 @@
 public/imgs/test/
 node_modules/ 
-dist/
 public/
 .idea/
 .vscode/
@@ -21,7 +20,5 @@ build
 # misc
 .DS_Store
 .env 
-app.js 
-hello.js
 npm-debug.log*
 **/*.log
