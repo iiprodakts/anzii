@@ -11,8 +11,7 @@ export const handleConfigView = function (data) {
 	const self = this;
 	let routes = [];
 	let handlers = null;
-	self.debug("views data from config");
-	self.debug(data);
+
 	data instanceof Array
 		? (routes = data)
 		: ((routes = data.routes), (handlers = data.handlers));
@@ -23,11 +22,10 @@ export const handleConfigView = function (data) {
 				route.viewso.indexOf("/") >= 0
 					? (handlerView = route.viewso.split("/")[1])
 					: (handlerView = route.viewso);
-				self.debug("THE VIEW HANDLER");
-				self.debug(route.viewso.indexOf("/"));
+
 				// self.debug(route.viewso.indexOf('/'))
 				// self.debug(handlers[handlerView])
-				self.debug(handlerView);
+
 				if (route.viewty === "template") {
 					if (!self.views) {
 						handlers &&

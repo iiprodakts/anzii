@@ -63,9 +63,6 @@ export const configure = function () {
 	const isAnziiInitiateManually =
 		(anziiKickoffManually && anziiKickoffManually === "true") || null;
 
-	self.debug(`THE CONFIG IS APP CLI: ${isAppCli}`);
-	self.debug(`THE CONFIG initi ${initializeCliWithServer}`);
-
 	if (initializeCliWithServer || (isAnziiInitiateManually && !self.config)) {
 		self.configLogger();
 		return self.configReady();
@@ -134,7 +131,7 @@ export const enviroment = function () {
 				});
 			}
 		} else {
-			self.log("Enviroment config invalid, resorting to default", "warn");
+			self.warn("Enviroment config invalid, resorting to default");
 		}
 	}
 	// let db = self.envObserver.get('dev')
@@ -219,6 +216,8 @@ export const runAppConfig = function (manualConfig = null) {
 	 *
 	 *
 	 */
+
+	console.log("THE SELF.CONFIG", self.config, config);
 	if (!self.config) {
 		self.emit({ type: "config-system", data: { workers: 1, spawn: true } });
 		// if (manualConfig)
@@ -240,9 +239,9 @@ export const runAppConfig = function (manualConfig = null) {
 			: self.emit({ type: "config-system", data: { workers: 1, spawn: true } });
 
 		for (let c in config) {
-			self.debug(`THE C IN CONFIG", ${c}`);
-			self.debug("The module in Config");
-			self.debug(c);
+			// self.debug(`THE C IN CONFIG", ${c}`);
+			// self.debug("The module in Config");
+			// self.debug(c);
 			/*
 			 This section of the code should be refactoured such so that server event should be the last to be
 			 sent out. This starts kicks off the server operations such as listening to server requests
@@ -291,7 +290,7 @@ export const runAppConfig = function (manualConfig = null) {
 		 * This section of the code along with the server section above should be refactored
 		 */
 		self.emit({ type: "config-domain-resources", data: null }); // to be re-organized
-		self.debug(`isServer Value", ${isServerConfig}`);
+
 		if (isServerConfig) {
 			self.emit({
 				type: `config-server`,
