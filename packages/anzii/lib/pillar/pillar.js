@@ -8,16 +8,15 @@ import { fileURLToPath } from "url";
 import util from "util";
 import * as uuid from "uuid";
 
-const pillarDebug = debug("anzii:pillar");
-pillarDebug.enabled = true;
-pillarDebug.useColors = true;
 const require = createRequire(import.meta.url);
 
 const __filename = fileURLToPath(import.meta.url);
 
 export const EMAIL = "";
 export const PASSWORD = "";
-export const PROMPT = process.argv || [];
+export var PROMPT = process.argv || [];
+export var LogIndicators = createLoggingIndicators();
+var logger = createLogger();
 
 /** Get the current work directory */
 export const p_getWorkingFolder = function () {
@@ -355,7 +354,7 @@ export const p_saveToFile = function (fileToSaveTo, contents) {
 	fs.writeFileSync(writePath, contents, "utf8");
 };
 export function p_wiLog(...message) {
-	pillarDebug(message);
+	console.log(message);
 }
 // export const p_getMainFileName = moduleExports.p_getMainFileName;
 // export const p_getRootDir = moduleExports.p_getRootDir;
@@ -618,7 +617,7 @@ export const p_getDirectories = function (dirPath) {
 							return reject(err);
 						}
 						if (that.p_isNullOrUndefined(stat)) {
-							this.p_wiLog(
+							logger.debug(
 								"WARN: Util: unstatable file encountered: %s",
 								fullPath,
 							);
@@ -671,22 +670,22 @@ export const p_getFiles = function (dirPath, options, fileName) {
 		//         filter: function(/*fullPath, stat*/) { return true; }
 		//     }
 		// }
-		that.p_wiLog("The directory path");
-		that.p_wiLog(dirPath);
-		that.p_wiLog(fileName);
+		logger.debug("The directory path");
+		logger.debug(dirPath);
+		logger.debug(fileName);
 		// console.log(fileName)
 		//read files from dir
 		fs.readdir(dirPath, function (err, q) {
 			if (util.types.isNativeError(err)) {
 				return reject(err);
 			}
-			that.p_wiLog("The readdir results q");
-			that.p_wiLog(q);
+			logger.debug("The readdir results q");
+			logger.debug(q);
 			// console.log(q)
 			let filePaths = [];
 			//seed the queue with the absolute paths not just the file names
 			for (var i = 0; i < q.length; i++) {
-				// that.p_wiLog(q[i])
+				// logger.debug(q[i])
 				// q[i] = path.join(dirPath, q[i]);
 				filePaths.push(path.join(dirPath, q[i]));
 			}
@@ -694,11 +693,11 @@ export const p_getFiles = function (dirPath, options, fileName) {
 			// console.log(q)
 			// console.log(filePaths)
 			if (filePaths.indexOf(path.join(dirPath, fileName)) !== -1) {
-				that.p_wiLog("THE IS A NEED FOR A SPECIFIC FILE");
+				logger.debug("THE IS A NEED FOR A SPECIFIC FILE");
 				// let filePathCont = filePaths[filePaths.indexOf(filePath)]
 				// let file = filePathCont.substr(filePath.indexOf(fileName),filePathCont.length - 1)
-				// that.p_wiLog(filePathCont)
-				// that.p_wiLog(file)
+				// logger.debug(filePathCont)
+				// logger.debug(file)
 				let file = filePaths[filePaths.indexOf(path.join(dirPath, fileName))];
 				// console.log('THE FILE')
 				// console.log(file)
@@ -708,11 +707,11 @@ export const p_getFiles = function (dirPath, options, fileName) {
 			}
 			// for(let p =0; p < filePaths.length; p++){
 			//     if(filePaths.indexOf(filePath) !== -1){
-			//         that.p_wiLog('THE IS A NEED FOR A SPECIFIC FILE')
+			//         logger.debug('THE IS A NEED FOR A SPECIFIC FILE')
 			//         let filePathCont = filePaths[filePaths.indexOf(filePath)]
 			//         let file = filePathCont.substr(filePath.indexOf(fileName),filePathCont.length - 1)
-			//         that.p_wiLog(filePathCont)
-			//         that.p_wiLog(file)
+			//         logger.debug(filePathCont)
+			//         logger.debug(file)
 			//         resolve(file)
 			//     }else{
 			//         resolve(filePaths);
@@ -762,15 +761,15 @@ export const p_getFiles = function (dirPath, options, fileName) {
 			//     function(err) {
 			//         console.log('THE FILES ARRAY')
 			//         console.log(err)
-			//         that.p_wiLog('THE FILES ARRay')
+			//         logger.debug('THE FILES ARRay')
 			//         let filePath = dirPath+path.sep+fileName
-			//         that.p_wiLog(filePath)
+			//         logger.debug(filePath)
 			//         if(filePaths.indexOf(filePath) !== -1){
-			//             that.p_wiLog('THE IS A NEED FOR A SPECIFIC FILE')
+			//             logger.debug('THE IS A NEED FOR A SPECIFIC FILE')
 			//             let filePathCont = filePaths[filePaths.indexOf(filePath)]
 			//             let file = filePathCont.substr(filePath.indexOf(fileName),filePathCont.length - 1)
-			//             that.p_wiLog(filePathCont)
-			//             that.p_wiLog(file)
+			//             logger.debug(filePathCont)
+			//             logger.debug(file)
 			//             resolve(file)
 			//         }else{
 			//             resolve(filePaths);
@@ -782,8 +781,8 @@ export const p_getFiles = function (dirPath, options, fileName) {
 };
 export const p_getFile = function (filePath) {
 	return new Promise((resolve) => {
-		this.p_wiLog("The directory path");
-		this.p_wiLog(filePath);
+		logger.debug("The directory path");
+		logger.debug(filePath);
 		//read files from dir
 		var s = fs.createReadStream(filePath);
 		if (s) {
@@ -836,7 +835,6 @@ export const p_createFolderContent = function (
 };
 export const p_loadFile = function (filepath, all = false, checkExist = true) {
 	return new Promise((resolve, reject) => {
-		this.p_wiLog(`THE FILEPATH load`, filepath);
 		if (checkExist && !p_isExistingDir(filepath))
 			return reject({
 				code: "FILE_PATH_ERROR",
@@ -844,12 +842,12 @@ export const p_loadFile = function (filepath, all = false, checkExist = true) {
 				filePath: filepath,
 			});
 		const ext = path.extname(filepath);
-		this.p_wiLog(`FILE EXTENSION, ${ext}`);
+		logger.debug(`FILE EXTENSION, ${ext}`);
 
 		if (ext === ".json") {
 			try {
 				const readJson = p_readFileSync(filepath);
-				this.p_wiLog(`THE READ JSON, ${readJson}`);
+				logger.debug(`THE READ JSON, ${readJson}`);
 				return resolve(readJson);
 			} catch (err) {
 				console.log("failed to findJSON", err.code);
@@ -887,10 +885,10 @@ export const p_loadFile = function (filepath, all = false, checkExist = true) {
 				console.log("IMPORT ERROR", importERR);
 				try {
 					const readFile = p_loadFileSync(filepath);
-					this.p_wiLog(`THE READ FILE, ${JSON.stringify(readFile)}`);
+					logger.debug(`THE READ FILE, ${JSON.stringify(readFile)}`);
 					return resolve({ default: readFile });
 				} catch (err) {
-					this.p_wiLog(`MODULE FETCH ERROR, ${err.code}`);
+					logger.debug(`MODULE FETCH ERROR, ${err.code}`);
 					return reject(err);
 				}
 				// console.log("MODULE FETCH ERROR", err);
@@ -975,7 +973,7 @@ export const clone = function (o) {
 				n[p] = this.clone(o[p]);
 			} else {
 				if (p === "callback") {
-					this.p_wiLog("The current property is callback");
+					logger.debug("The current property is callback");
 				}
 				n[p] = o[p];
 			}
@@ -985,8 +983,8 @@ export const clone = function (o) {
 };
 /*********************************** OBJECT AND ARRAY CASTING ************************************************************/
 export const object_to_array = function (castObj, keys = false) {
-	// this.p_wiLog('THE CAST OBJECT')
-	// this.p_wiLog(castObj)
+	// logger.debug('THE CAST OBJECT')
+	// logger.debug(castObj)
 	if (castObj instanceof Object) {
 		if (!(castObj instanceof Array)) {
 			var arr = [];
@@ -1002,8 +1000,8 @@ export const object_to_array = function (castObj, keys = false) {
 					++count;
 				}
 			}
-			//    this.p_wiLog('THE RETURN OF CONVERTED OBJECT')
-			//    this.p_wiLog(arr)
+			//    logger.debug('THE RETURN OF CONVERTED OBJECT')
+			//    logger.debug(arr)
 			return arr;
 		} else {
 			return castObj;
@@ -1025,46 +1023,46 @@ export const array_to_object = function (castArr) {
 	}
 };
 export const string_to_array = function (string, sep) {
-	// this.p_wiLog('STRING TO ARRAY')
-	// this.p_wiLog(string)
-	// this.p_wiLog(sep)
+	// logger.debug('STRING TO ARRAY')
+	// logger.debug(string)
+	// logger.debug(sep)
 	if (this.is_string(string)) {
-		// this.p_wiLog('THE STRING IS AN INSTANCE OF STRING')
+		// logger.debug('THE STRING IS AN INSTANCE OF STRING')
 		return string.split(sep);
 	}
 };
 export const set_deeply = function (path, deep, value = null, type = null) {
-	//  this.p_wiLog('TYPEOF AC')
-	//  this.p_wiLog(ac)
+	//  logger.debug('TYPEOF AC')
+	//  logger.debug(ac)
 	// if(!(ac)){
-	// 	this.p_wiLog('AC IS NULL')
+	// 	logger.debug('AC IS NULL')
 	// 	var a = deep
 	// }
-	// this.p_wiLog('THE VALUE OF A')
-	// this.p_wiLog(a)
+	// logger.debug('THE VALUE OF A')
+	// logger.debug(a)
 	if (path.length === 1) {
-		this.p_wiLog("ABOUT TO SET DEEPLY NESTED PROP");
-		this.p_wiLog("THE DEEP");
-		this.p_wiLog(deep);
+		logger.debug("ABOUT TO SET DEEPLY NESTED PROP");
+		logger.debug("THE DEEP");
+		logger.debug(deep);
 		if (!value) {
-			this.p_wiLog("THIS DEEP ARRAY");
-			this.p_wiLog(this.js_to_json(deep));
-			this.p_wiLog("THE DEEP I,i");
+			logger.debug("THIS DEEP ARRAY");
+			logger.debug(this.js_to_json(deep));
+			logger.debug("THE DEEP I,i");
 			deep.splice(path[0], 1);
-			this.p_wiLog(deep);
+			logger.debug(deep);
 		} else {
 			deep[path[0]] = value;
 		}
-		this.p_wiLog(path);
-		this.p_wiLog(path[0]);
-		this.p_wiLog(deep[path]);
+		logger.debug(path);
+		logger.debug(path[0]);
+		logger.debug(deep[path]);
 		return true;
 	}
 	if (!deep[path[0]]) {
-		this.p_wiLog("THE PROPERTY BELOW DOES NOT EXIST");
-		this.p_wiLog(path);
-		this.p_wiLog(path[0]);
-		//  this.p_wiLog(deep[path[0]])
+		logger.debug("THE PROPERTY BELOW DOES NOT EXIST");
+		logger.debug(path);
+		logger.debug(path[0]);
+		//  logger.debug(deep[path[0]])
 		return false;
 	}
 	return this.set_deeply(path.slice(1), deep[path[0]], value, type);
@@ -1134,8 +1132,8 @@ export const contains = function (o, v) {
 		return o.indexOf(v) > -1 ? true : false;
 	} else if (this.is_object(o)) {
 		if (this.is_array(v)) {
-			this.p_wiLog("THE SPECIFED VALUE TO CHECK IS AN ARRAY");
-			this.p_wiLog(v);
+			logger.debug("THE SPECIFED VALUE TO CHECK IS AN ARRAY");
+			logger.debug(v);
 			let outcome = "";
 			for (let i = 0; i < v.length; i++) {
 				if (!o.hasOwnProperty(v[i])) {
@@ -1145,8 +1143,8 @@ export const contains = function (o, v) {
 					outcome = true;
 				}
 			}
-			this.p_wiLog("THE OUTCOME");
-			this.p_wiLog(outcome);
+			logger.debug("THE OUTCOME");
+			logger.debug(outcome);
 			return outcome;
 		} else {
 			return o.hasOwnProperty(v) ? true : false;
@@ -1161,16 +1159,16 @@ export const for_of = function (x, action, y = null) {
 		x.forEach(action);
 	} else if (this.is_object(x)) {
 		if (!y) {
-			// this.p_wiLog('THE FOROF Y IS NULL')
-			// this.p_wiLog(x)
-			// this.p_wiLog('THE Y IS DEFINED')
+			// logger.debug('THE FOROF Y IS NULL')
+			// logger.debug(x)
+			// logger.debug('THE Y IS DEFINED')
 			let newX = {};
 			for (let p in x) {
 				let prop = action(p, x[p]);
 				newX[prop.p] = prop.v;
 			}
-			// this.p_wiLog('THE NEWX')
-			// this.p_wiLog(newX)
+			// logger.debug('THE NEWX')
+			// logger.debug(newX)
 			return newX;
 		} else {
 			for (let p in x) {
@@ -1216,3 +1214,53 @@ export const find_in = function (x, id, f) {
 		}
 	}
 };
+function createLoggingIndicators() {
+	const isEnvDev =
+		process.env?.NODE_ENV && process.env.NODE_ENV === "development"
+			? true
+			: false;
+	const showAllLogsSet = process.env.ANZII_SHOW_ALL_LOGS || "true";
+	const cliLogsSet = process.env.ANZII_SHOW_CLI_LOGS || "false";
+	const debugLogsSet = process.env.ANZII_SHOW_DEBUG_LOGS || "false";
+	const warningLogsSet = process.env.ANZII_SHOW_WARNING_LOGS || "true";
+	const errorLogsSet = process.env.ANZII_SHOW_ERROR_LOGS || "true";
+	const showStandardLogsSet = process.env.ANZII_SHOW_LOGS || "true";
+	const shouldShowAllLogs = showAllLogsSet === "true" ? true : false;
+	const shouldShowCliLogs =
+		cliLogsSet === "true" && shouldShowAllLogs ? true : false;
+	const shouldShowDebugLogs =
+		debugLogsSet === "true" && shouldShowAllLogs ? true : false;
+	const shouldShowWarningLogs =
+		warningLogsSet === "true" && shouldShowAllLogs ? true : false;
+	const shouldShowErrorLogs =
+		errorLogsSet === "true" && shouldShowAllLogs ? true : false;
+	const shouldShowStandardLogs =
+		showStandardLogsSet && isEnvDev && shouldShowAllLogs ? true : false;
+
+	return {
+		shouldShowStandardLogs,
+		shouldShowStandardLogs,
+		shouldShowCliLogs: PROMPT.indexOf("cli") >= 0 && shouldShowCliLogs === true,
+		shouldShowDebugLogs,
+		shouldShowWarningLogs,
+		shouldShowErrorLogs,
+	};
+}
+function createLogger() {
+	const debugLogger = debug("anzii:pillar");
+	debugLogger.enabled = true;
+	debugLogger.useColors = true;
+	return {
+		info: function (...message) {
+			debugLogger(...message);
+		},
+		debug: function (...message) {
+			if (!LogIndicators.shouldShowDebugLogs) return;
+			debugLogger(...message);
+		},
+		log: function (...message) {
+			if (!LogIndicators.shouldShowStandardLogs) return;
+			debugLogger(...message);
+		},
+	};
+}
