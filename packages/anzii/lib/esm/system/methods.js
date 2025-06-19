@@ -13,13 +13,13 @@ export const init = function () {
 		"distribute-system-resources":
 			this.handleDistributeSystemResources.bind(this),
 		"attach-workers-to-server": this.handleServerAttachWorkers.bind(this),
+		"open-browser-signal": this.handleOpenBrowserSignal.bind(this),
 	});
 	// self.debug(this.env)
 };
 export const handleConfigureSystem = function (data) {
 	const self = this;
-	self.debug(`System ENVIROMENT IS: ${self.env}`, process.env);
-	self.debug(self.systemBase?.DOCUMENT_ROOT);
+
 	self.handleShutDowns();
 	self.clusterCustomConfig = data;
 
@@ -65,6 +65,20 @@ export const handleDistributeSystemResources = async function (data) {
 	});
 	// self.masterWorker(data)
 };
+export const handleOpenBrowserSignal = function (data) {
+	const self = this;
+
+	const {
+		availablePort,
+		protocol,
+		domainToUse,
+		pageToOpen,
+		runningServerMessage,
+	} = self.openBrowserTools;
+	self.infoSync(runningServerMessage);
+	self.openBrowserApp(availablePort, protocol, domainToUse, pageToOpen);
+	// self.masterWorker(data)
+};
 export const shutDown = function (type, code) {
 	const self = this;
 	self.infoSync(`SHUTDOWN TYPE: ${type},code: ${code}`);
@@ -92,11 +106,13 @@ export const shutDown = function (type, code) {
 };
 export const masterWorker = function (app, system) {
 	const self = this;
-
 	const serverTimeout = self.serverTimeout;
 	const portToUse = self?.context?.env?.PORT ? self?.context?.env?.PORT : 3000;
 	const shouldOpenBrowser = self?.context?.env?.ANZII_OPEN_BROWSER
 		? true
+		: false;
+	const shouldWaitForSignal = system?.shouldWaitForSignal
+		? system.shouldWaitForSignal
 		: false;
 	const shouldStopServer = self?.context?.env?.ANZII_STOP_SERVER ? true : false;
 	const useHttps =
@@ -106,10 +122,15 @@ export const masterWorker = function (app, system) {
 			? true
 			: false;
 	const appProtocol = useHttps ? "https" : "http";
-	const useAvailablePort = system.useAvailablePort
+	const useAvailablePort = system?.useAvailablePort
 		? system.useAvailablePort
 		: true;
 	const appDomain = useCustomDomain ? system?.domainName : "localhost";
+	const pageToOpen = system?.pageToOpen
+		? system.pageToOpen === "/"
+			? ""
+			: system.pageToOpen
+		: "";
 	let serverSettings = {
 		useHttps,
 		useCustomDomain,
@@ -120,17 +141,15 @@ export const masterWorker = function (app, system) {
 		serverTimeout,
 		appOpts: system?.appOpts,
 		shouldStopServer,
+		pageToOpen,
+		shouldWaitForSignal,
 	};
 
 	self
 		.getServerPort(portToUse, useAvailablePort)
 		.then((availablePort) => {
-			self.debug(`THE STATUS OF isMaster: ${self.cluster.isMaster}`);
-			self.debug(`THE cluster`, self.cluster);
-			self.debug(`THE CLUSTERS`, self.clusterCustomConfig);
 			serverSettings["availablePort"] = availablePort;
 			if (self.cluster.isMaster) {
-				self.debug(`Master ${self.context.pid} is running`);
 				if (self.clusterCustomConfig && self.clusterCustomConfig.spawn) {
 					let slaves = self.clusterCustomConfig.workers
 						? self.clusterCustomConfig.workers
@@ -277,10 +296,11 @@ export const openBrowserApp = async function (
 	portToOpenTo,
 	protocol = "http",
 	domain = "localhost",
+	pageToOpen,
 ) {
 	const self = this;
 	const open = self.open;
-	await open(`${protocol}://${domain}:${portToOpenTo}`);
+	await open(`${protocol}://${domain}:${portToOpenTo}/${pageToOpen}`);
 	// console.log("THE BROWSER OPENED");
 	// const openBrowser = () => import('open').then(({default: open}) => open("http://localhost:3000"));
 	// openBrowser()
@@ -325,7 +345,7 @@ export const getSslCerts = function (pathOrSets) {
 
 export const runServer = function (app, serverSettings) {
 	const self = this;
-	self.debug("THE SERVER OPTIONS", serverSettings);
+
 	return new Promise((resolve, reject) => {
 		const { shouldStopServer, serverTimeout, useHttps } = serverSettings;
 		if (useHttps) {
@@ -344,7 +364,7 @@ export const runServer = function (app, serverSettings) {
 
 export const runHttps = function (app, settings) {
 	const self = this;
-	const { appOpts, availablePort } = settings;
+	const { appOpts, availablePort, useSocket = false } = settings;
 	// const { sslOpts } = appOpts;
 
 	return new Promise((resolve, reject) => {
@@ -356,7 +376,7 @@ export const runHttps = function (app, settings) {
 };
 export const runHttp = function (app, settings) {
 	const self = this;
-	const { availablePort } = settings;
+	const { availablePort, useSocket = false } = settings;
 
 	return new Promise((resolve, reject) => {
 		const serv = app.listen(availablePort, () => {
@@ -368,20 +388,36 @@ export const runHttp = function (app, settings) {
 
 export const appListener = function (settings) {
 	const self = this;
-	const { availablePort, shouldOpenBrowser, protocol, domainToUse } = settings;
+	const {
+		availablePort,
+		shouldOpenBrowser,
+		protocol,
+		domainToUse,
+		pageToOpen,
+		shouldWaitForSignal,
+	} = settings;
 	process.env[
 		"ANZII_APP_URL"
 	] = `${protocol}://${domainToUse}:${availablePort}`;
-	self.infoSync(
-		`The Application is running on PID:: ${process.pid} and listening on port: ${availablePort} with domain: ${domainToUse} and Protocol: ${protocol}`,
-	);
-	self.infoSync(
-		`The formed url is ${protocol}://${domainToUse}:${availablePort}`,
-	);
-	self.infoSync(`The app full url: ${process.env.ANZII_APP_URL}`);
+
+	// self.infoSync(
+	// 	`The formed url is ${protocol}://${domainToUse}:${availablePort}`,
+	// );
+	// self.infoSync(`The app full url: ${process.env.ANZII_APP_URL}`);
+	let runningServerMessage = `The Application is running on PID:: ${process.pid} and listening on port: ${availablePort} with domain: ${domainToUse} and Protocol: ${protocol}`;
 
 	if (shouldOpenBrowser) {
-		self.openBrowserApp(availablePort, protocol, domainToUse);
+		if (!shouldWaitForSignal) {
+			self.infoSync(runningServerMessage);
+			return self.openBrowserApp(
+				availablePort,
+				protocol,
+				domainToUse,
+				pageToOpen,
+			);
+		}
+		settings["runningServerMessage"] = runningServerMessage;
+		self.openBrowserTools = settings;
 	}
 };
 

@@ -44,6 +44,7 @@ class System {
 		this.runHttp = methods.runHttp;
 		this.appListener = methods.appListener;
 		this.setServerOptions = methods.setServerOptions;
+		this.handleOpenBrowserSignal = methods.handleOpenBrowserSignal;
 	}
 }
 export default System;
