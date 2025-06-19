@@ -1,8 +1,6 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable no-unused-vars */
 export const init = function () {
-	this.adLog("Server has been initialised");
-
 	this.listens({
 		"config-server": this.handleConfigServer.bind(this),
 		"config-domain-resources": this.handleDomainResources.bind(this),
@@ -104,7 +102,7 @@ export const handleWriteServerRequestResponse = async function (data) {
 			: self.infoSync(
 					`SERVER IS ABOUT TO SEND RESPONSE BACK TO CLIENT WITH RESPONSE`,
 			  );
-		await self.adLog(data.data);
+
 		await data.res.set("Connection", "close");
 		if (data.data.accepts) {
 			switch (data.data.accepts) {
@@ -144,7 +142,6 @@ export const streamResponse = function (data) {
 	if (withAttachment) data.res["withAttachment"] = { ...withAttachment };
 
 	rStream.on("open", async function () {
-		self.infoSync("THE STREAM IS OPENED");
 		data.res.set("Content-Type", type);
 		data.res.set("Connection", "close");
 		return rStream.pipe(data.res);

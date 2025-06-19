@@ -121,6 +121,10 @@ export const masterWorker = function (app, system) {
 		system?.useCustomDomain || self?.context?.evn?.ANZII_USE_CUSTOM_DOMAIN
 			? true
 			: false;
+	const useSockets =
+		system?.useSockets || self?.context?.evn?.ANZII_USE_SOCKETS
+			? system.useSockets
+			: false;
 	const appProtocol = useHttps ? "https" : "http";
 	const useAvailablePort = system?.useAvailablePort
 		? system.useAvailablePort
@@ -143,6 +147,7 @@ export const masterWorker = function (app, system) {
 		shouldStopServer,
 		pageToOpen,
 		shouldWaitForSignal,
+		useSockets,
 	};
 
 	self
@@ -364,15 +369,30 @@ export const runServer = function (app, serverSettings) {
 
 export const runHttps = function (app, settings) {
 	const self = this;
-	const { appOpts, availablePort, useSocket = false } = settings;
+	const { appOpts, availablePort, useSockets = false } = settings;
 	// const { sslOpts } = appOpts;
+	console.log("USE SOCKETS", useSockets);
 
 	return new Promise((resolve, reject) => {
-		let serv = https.createServer(appOpts, app).listen(availablePort, () => {
+		let serv = https.createServer(appOpts, app);
+		if (useSockets && useSockets?.hookSocketToServer)
+			useSockets.hookSocketToServer(serv);
+		serv.listen(availablePort, () => {
 			self.appListener(settings);
 		});
 		resolve(serv);
 	});
+
+	// const self = this;
+	// const { appOpts, availablePort, useSocket = false } = settings;
+	// // const { sslOpts } = appOpts;
+
+	// return new Promise((resolve, reject) => {
+	// 	let serv = https.createServer(appOpts, app).listen(availablePort, () => {
+	// 		self.appListener(settings);
+	// 	});
+	// 	resolve(serv);
+	// });
 };
 export const runHttp = function (app, settings) {
 	const self = this;
