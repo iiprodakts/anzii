@@ -12,6 +12,11 @@ export const handleConfigServer = function (data) {
 	const self = this;
 
 	self.emit({
+		type: "share-middleware",
+		data: "",
+	});
+
+	self.emit({
 		type: "set-domain-defaults",
 		data: { app: self.http, xpress: self.xpress },
 	});
