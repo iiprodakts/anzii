@@ -95,6 +95,8 @@ export const handleConfigView = function (data) {
 									match: route.path,
 									vHandler: route.viewso,
 									title: route.title,
+									isRoutePrivate:
+										route?.type && route.type === "private" ? true : false,
 								},
 							],
 						};
@@ -104,6 +106,8 @@ export const handleConfigView = function (data) {
 								match: route.path,
 								vHandler: route.viewso,
 								title: route.title,
+								isRoutePrivate:
+									route?.type && route.type === "private" ? true : false,
 							});
 						} else {
 							self.views["modular"] = [
@@ -111,6 +115,8 @@ export const handleConfigView = function (data) {
 									match: route.path,
 									vHandler: route.viewso,
 									title: route.title,
+									isRoutePrivate:
+										route?.type && route.type === "private" ? true : false,
 								},
 							];
 						}
@@ -120,7 +126,13 @@ export const handleConfigView = function (data) {
 				if (!self.views) {
 					self.views = {
 						modular: [
-							{ match: route.path, vHandler: route.viewso, title: route.title },
+							{
+								match: route.path,
+								vHandler: route.viewso,
+								title: route.title,
+								isRoutePrivate:
+									route?.type && route.type === "private" ? true : false,
+							},
 						],
 					};
 				} else {
@@ -129,10 +141,18 @@ export const handleConfigView = function (data) {
 							match: route.path,
 							vHandler: route.viewso,
 							title: route.title,
+							isRoutePrivate:
+								route?.type && route.type === "private" ? true : false,
 						});
 					} else {
 						self.views["modular"] = [
-							{ match: route.path, vHandler: route.viewso, title: route.title },
+							{
+								match: route.path,
+								vHandler: route.viewso,
+								title: route.title,
+								isRoutePrivate:
+									route?.type && route.type === "private" ? true : false,
+							},
 						];
 					}
 				}
