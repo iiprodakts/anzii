@@ -180,11 +180,9 @@ export const handleViewTask = async function (data) {
 				return self.callback(
 					null,
 					{
-						data: {
-							type: "template",
-							view: self.validView.tempPath,
-							viewData: viewData,
-						},
+						type: "template",
+						view: self.validView.tempPath,
+						viewData: viewData,
 					},
 					"renderView",
 				);
@@ -192,11 +190,9 @@ export const handleViewTask = async function (data) {
 				return self.callback(
 					null,
 					{
-						data: {
-							type: "template",
-							view: self.validView.tempPath,
-							title: self.validView.title,
-						},
+						type: "template",
+						view: self.validView.tempPath,
+						title: self.validView.title,
 					},
 					"renderView",
 				);
@@ -268,10 +264,6 @@ export const viewHandler = function (err = null, data = null) {
 			"renderView",
 		);
 	} else {
-		return self.callback(
-			null,
-			{ data: { type: "modular", view: data } },
-			"renderView",
-		);
+		return self.callback(null, { type: "modular", view: data }, "renderView");
 	}
 };
