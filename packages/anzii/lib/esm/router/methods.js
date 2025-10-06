@@ -323,6 +323,12 @@ export const getRequestAccepts = function (req) {
 		return "html";
 	} else if (req.accepts("txt")) {
 		return "txt";
+	} else if (req.accepts("image/webp")) {
+		return "image/webp";
+	} else if (req.accepts("image/png")) {
+		return "image/png";
+	} else if (req.accepts("image/jpeg")) {
+		return "image/jpeg";
 	} else {
 		("not-acceptable");
 	}
