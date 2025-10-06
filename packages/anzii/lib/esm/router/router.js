@@ -21,6 +21,7 @@ class Router {
 		this.outOfRouterContext = methods.outOfRouterContext;
 		this.handOver = methods.handOver;
 		this.filterCallback = methods.filterCallback;
+		this.getRequestAccepts = methods.getRequestAccepts;
 	}
 }
 export default Router;

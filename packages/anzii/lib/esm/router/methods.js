@@ -295,6 +295,7 @@ export async function handOver(req, res, next) {
 	let reqresID = self.pao.pa_generateUniqueID();
 	req.R_ID = reqresID;
 	res.R_ID = reqresID;
+	res.ACCEPTS = self.getRequestAccepts(req);
 	self.infoSync(
 		`HANDLING REQUEST OF ID: ${req.R_ID.split("-")[0]} WITH METHOD: ${
 			req.method
@@ -313,5 +314,16 @@ export const filterCallback = function (filterType, moduleMiddleware) {
 		self.filteredpublicMiddlewares.push(moduleMiddleware);
 	} else {
 		self.filteredprivateMiddlewares.push(moduleMiddleware);
+	}
+};
+export const getRequestAccepts = function (req) {
+	if (req.accepts("json")) {
+		return "json";
+	} else if (req.accepts("html")) {
+		return "html";
+	} else if (req.accepts("txt")) {
+		return "txt";
+	} else {
+		("not-acceptable");
 	}
 };

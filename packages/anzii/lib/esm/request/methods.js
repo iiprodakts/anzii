@@ -286,6 +286,7 @@ export const taskerHandler = function (handlerFeedback) {
 					data: success,
 					method,
 					res: handlerFeedback.res,
+					// eslint-disable-next-line no-mixed-spaces-and-tabs
 			  })
 			: self.successfullHandle({ data: success, res: handlerFeedback.res });
 	}
@@ -296,5 +297,6 @@ export const successfullHandle = function (successResponseData) {
 };
 export const failureHandle = function (errorResponseData) {
 	const self = this;
+
 	self.writeResponse(errorResponseData);
 };
