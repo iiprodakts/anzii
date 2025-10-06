@@ -78,10 +78,10 @@ export const handleWriteServerRequestResponse = async function (response) {
 								// eslint-disable-next-line no-mixed-spaces-and-tabs
 							);
 					} else {
-						data.res.status(404).send(html.html),
+						res.status(404).send(html.html),
 							self.infoSync(
 								`SERVER HAS SENT A FAILED RESPONSE BACK TO CLIENT WITH RESPONSE ID::${
-									data.res.R_ID.split("-")[0]
+									res.R_ID.split("-")[0]
 								}`,
 							);
 					}
@@ -91,7 +91,7 @@ export const handleWriteServerRequestResponse = async function (response) {
 				});
 			return;
 		} else if (view.type === "modular") {
-			res.status(200).send(view.view);
+			res.type(res.ACCEPTS).status(code).send(view.view);
 			return self.infoSync(
 				`SERVER HAS SUCCESSFULLY SENT RESPONSE TO CLIENT WITH RESPONSE ID::${
 					res.R_ID.split("-")[0]
@@ -113,7 +113,7 @@ export const handleWriteServerRequestResponse = async function (response) {
 
 		switch (res.ACCEPTS) {
 			case "json":
-				res.status(code).send(toCLientPayload);
+				res.type(res.ACCEPTS).status(code).send(toCLientPayload);
 				break;
 			case "html":
 				self
@@ -122,14 +122,14 @@ export const handleWriteServerRequestResponse = async function (response) {
 						title: "Page could not be found",
 					})
 					.then((html) => {
-						return res.status(400).send(html.html);
+						return res.type(res.ACCEPTS).status(400).send(html.html);
 					})
 					.catch((e) => {
-						return res.status(500).send(e.html);
+						return res.type(res.ACCEPTS).status(500).send(e.html);
 					});
 				break;
 			case "txt":
-				res.type("txt").status(404).send("Text not found");
+				res.type(res.ACCEPTS).status(404).send("Text not found");
 				break;
 			default:
 				res.status(406).send("Not acceptable");
