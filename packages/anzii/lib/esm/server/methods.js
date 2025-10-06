@@ -57,15 +57,16 @@ export const handleWriteServerRequestResponse = async function (response) {
 	const self = this;
 
 	const { method, payload, res, code = 200 } = response;
-	const { view = null, toCLientPayload = null } = payload;
+	self.debug("THE HANDLE TASK PAYLOAD", method, payload, code);
+
 	if (method === "stream") {
 		return self.streamResponse(response);
 	} else if (method === "renderView") {
 		res.set("Connection", "close");
 
-		if (view.type.trim() === "template") {
+		if (payload?.type.trim() === "template") {
 			self
-				.getHtml(res, view)
+				.getHtml(res, payload)
 				.then(async (html) => {
 					if (html.success) {
 						res.status(200).send(html.html),
@@ -90,8 +91,8 @@ export const handleWriteServerRequestResponse = async function (response) {
 					res.status(500).send(e.html);
 				});
 			return;
-		} else if (view.type === "modular") {
-			res.type(res.ACCEPTS).status(code).send(view.view);
+		} else if (payload?.type === "modular") {
+			res.type(res.ACCEPTS).status(code).send(payload.view);
 			return self.infoSync(
 				`SERVER HAS SUCCESSFULLY SENT RESPONSE TO CLIENT WITH RESPONSE ID::${
 					res.R_ID.split("-")[0]
@@ -113,7 +114,7 @@ export const handleWriteServerRequestResponse = async function (response) {
 
 		switch (res.ACCEPTS) {
 			case "json":
-				res.type(res.ACCEPTS).status(code).send(toCLientPayload);
+				res.type(res.ACCEPTS).status(code).send(payload);
 				break;
 			case "html":
 				self
