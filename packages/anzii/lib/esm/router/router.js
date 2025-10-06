@@ -10,6 +10,18 @@ class Router {
 		this.filteredprivateMiddlewares = [];
 		this.path = path;
 		this.cors = cors;
+		this.supportedMimeTypes = [
+			"application/json",
+			"application/pdf",
+			"text/html",
+			"image/png",
+			"video/mp4",
+			"font/woff2",
+			"audio/mpeg",
+			"multipart/form-data",
+			"application/vnd.ms-excel",
+			"application/vnd.api+json",
+		];
 		this.init = methods.init;
 		this.handleConfigRouter = methods.handleConfigRouter;
 		this.handleAttachRoutes = methods.handleAttachRoutes;
