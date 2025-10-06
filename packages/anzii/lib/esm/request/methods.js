@@ -259,15 +259,17 @@ export const writeResponse = function (response) {
 	const pao = self.pao;
 	// self.debug('THE DATA IN WRITERESPONSE')
 	// self.debug(data)
-	let { data, method = "regular" } = response;
+	// 	const { method, payload, res, code = 200 } = response;
+	// const { view = null, toCLientPayload = null } = payload;
+	let { data = "", method = "regular" } = response;
 	if (method === "regular") {
-		pao.pa_isString()
+		pao.pa_isString(data)
 			? (data = pao.pa_jsToJson({ text: data }))
 			: (data = pao.pa_jsToJson(data));
 	}
 	self.emit({
 		type: "write-server-request-response",
-		data: { data: data, res: response.res, method: method },
+		data: { payload: data, res: response.res, method: method },
 	});
 };
 export const taskerHandler = function (handlerFeedback) {
@@ -276,8 +278,7 @@ export const taskerHandler = function (handlerFeedback) {
 
 	if (fail) {
 		self.failureHandle({
-			error: true,
-			message: fail,
+			data: fail,
 			res: handlerFeedback.res,
 		});
 	} else if (success) {
