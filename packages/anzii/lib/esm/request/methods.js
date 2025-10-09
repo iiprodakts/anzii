@@ -263,33 +263,49 @@ export const writeResponse = function (response) {
 	// const { view = null, toCLientPayload = null } = payload;
 	let { data = "", method = "regular" } = response;
 	if (method === "regular") {
-		pao.pa_isString(data)
-			? (data = pao.pa_jsToJson({ text: data }))
-			: (data = pao.pa_jsToJson(data));
+		if (!data?.redirect) {
+			pao.pa_isString(data)
+				? (data = pao.pa_jsToJson({ text: data }))
+				: (data = pao.pa_jsToJson(data));
+		}
 	}
 	self.emit({
 		type: "write-server-request-response",
-		data: { payload: data, res: response.res, method: method },
+		data: {
+			payload: data,
+			res: response.res,
+			method: method,
+			code: response.code,
+		},
 	});
 };
 export const taskerHandler = function (handlerFeedback) {
 	const self = this;
 	const { fail = null, success = null, method = null } = handlerFeedback;
+	self.debug("THE HANDLER FEEDBACK", handlerFeedback);
 
 	if (fail) {
+		let code = fail?.code || 400;
 		self.failureHandle({
 			data: fail,
 			res: handlerFeedback.res,
+			code,
 		});
 	} else if (success) {
+		let code = success?.code || 200;
 		method
 			? self.successfullHandle({
 					data: success,
 					method,
 					res: handlerFeedback.res,
+					code,
 					// eslint-disable-next-line no-mixed-spaces-and-tabs
 			  })
-			: self.successfullHandle({ data: success, res: handlerFeedback.res });
+			: self.successfullHandle({
+					data: success,
+					res: handlerFeedback.res,
+					code,
+			  });
 	}
 };
 export const successfullHandle = function (successResponseData) {
