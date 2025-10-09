@@ -225,7 +225,7 @@ export const middlewareType = function (type, middlewares) {
 };
 export const outOfRouterContext = async function (req, res, next) {
 	const self = this;
-	let data = null;
+
 	let reqresID = self.pao.pa_generateUniqueID();
 	req.R_ID = reqresID;
 	res.R_ID = reqresID;
