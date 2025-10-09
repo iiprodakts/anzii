@@ -264,6 +264,7 @@ export const viewHandler = function (err = null, data = null) {
 			"renderView",
 		);
 	} else {
+		if (data?.redirect) return self.callback(null, data);
 		return self.callback(null, { type: "modular", view: data }, "renderView");
 	}
 };
