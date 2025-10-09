@@ -43,7 +43,7 @@ export const handleConfigMiddleware = function (data) {
 export const handleAddExternalMiddleware = function (data) {
 	const self = this;
 	const pao = self.pao;
-	self.debug("ADD EXTERNAL MIDDLEWARE EVENT HAS OCCURED");
+	self.debug("ADD EXTERNAL MIDDLEWARE EVENT HAS OCCURED", data);
 	if (data.type) {
 		if (data.type === "private") {
 			if (data.level === "top") {
@@ -57,8 +57,12 @@ export const handleAddExternalMiddleware = function (data) {
 						});
 					});
 				} else {
-					self.debug("THE MIDDLEWARES BEFORE");
-					self.debug(self.middlewares);
+					self.debug(
+						"THE MIDDLEWARES BEFORE",
+						self.middlewares,
+						self.middlewares.pprivate,
+					);
+
 					if (self.middlewares.pprivate) {
 						let len = Object.keys(self.middlewares.pprivate).length;
 						self.middlewares.pprivate[len] = {
@@ -66,9 +70,17 @@ export const handleAddExternalMiddleware = function (data) {
 							value: data.middleware.funk,
 							ext: true,
 						};
-						self.debug("Middlewares");
-						self.debug(self.middlewares);
+					} else {
+						self.middlewares["pprivate"] = [
+							{
+								type: "function",
+								value: data.middleware.funk,
+								ext: true,
+							},
+						];
 					}
+
+					self.debug("AFTER Middlewares", self.middlewares);
 				}
 				// eslint-disable-next-line no-empty
 			} else {
