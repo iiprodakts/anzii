@@ -57,8 +57,9 @@ export const handleWriteServerRequestResponse = async function (response) {
 	const self = this;
 
 	const { method, payload, res, code = 200 } = response;
-	self.debug("THE HANDLE TASK PAYLOAD", method, payload, code);
+	self.debug("THE HANDLE TASK PAYLOAD", payload, code, payload?.redirect);
 
+	if (payload?.redirect) return res.redirect(code, payload.to);
 	if (method === "stream") {
 		return self.streamResponse(response);
 	} else if (method === "renderView") {
@@ -92,7 +93,7 @@ export const handleWriteServerRequestResponse = async function (response) {
 				});
 			return;
 		} else if (payload?.type === "modular") {
-			res.type(res.ACCEPTS).status(code).send(payload.view);
+			res.type("html").status(code).send(payload.view);
 			return self.infoSync(
 				`SERVER HAS SUCCESSFULLY SENT RESPONSE TO CLIENT WITH RESPONSE ID::${
 					res.R_ID.split("-")[0]
