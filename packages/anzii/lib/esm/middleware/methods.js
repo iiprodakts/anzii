@@ -10,35 +10,29 @@ export const handleAttachMiddleware = function (data) {
 	this.attachMiddleware(data);
 };
 export const handleConfigMiddleware = function (data) {
-	// console.log("CONFIG MIDDLEWARE", data);
 	const self = this;
-	//  self.debug('THE HANDLE CONFIG MIDDLEWARE')
+	self.debug("THE HANDLE CONFIG MIDDLEWARE", data);
 	//  self.debug(data)
 	//  self.debug(data)
 	let middlewares = data;
 	//  self.debug(middlewares)
-	for (let p in middlewares) {
-		// self.debug('THE P')
-		// self.debug(p)
-		if (self.middlewares[p]) {
-			if (middlewares[p].addMiddleware) {
-				// self.debug('INSIDE EXISTENT MIDDLEWARE ITEM')
-				// self.debug(middlewares[p])
-				// eslint-disable-next-line no-unused-vars
-				middlewares[p].addMiddleware.forEach((m, i) => {
-					self.middlewares[p].push(m);
-				});
-				// eslint-disable-next-line no-empty
-			} else if (p === "removeMiddleware") {
-			}
-		} else {
-			// console.log("CONFIG MIDDLEWALRES", middlewares, p);
-			if (middlewares[p].addMiddleware) {
-				self.middlewares[p] = [...middlewares[p].addMiddleware];
-				// console.log("CONFIG MIDDLEWARES SELF", self.middlewares);
-			}
+	let middlewaresIDS = Object.keys(middlewares);
+	middlewaresIDS.forEach((middlewareGroup) => {
+		let currentMiddlewaresGroup = [...middlewares[middlewareGroup]];
+		switch (middlewareGroup) {
+			case "public":
+				self.public = currentMiddlewaresGroup;
+				break;
+			case "private":
+				self.private = currentMiddlewaresGroup;
+				break;
+			case "all":
+				self.all = currentMiddlewaresGroup;
+				break;
+			default:
+				throw new Error("Invalid middleware type");
 		}
-	}
+	});
 };
 export const handleAddExternalMiddleware = function (data) {
 	const self = this;
