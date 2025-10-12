@@ -175,40 +175,37 @@ export const runAppConfig = function (manualConfig = null) {
     */
 
 		self.config["middleware"] = {
-			ppublic: {
-				addMiddleware: [
-					{
-						type: "function",
-						value: webpackDevMiddleware(compiler, {
-							publicPath: webpackConfig.output.path,
-							writeToDisk: true,
-							serverSideRender: true,
-						}),
-					},
-					// {
-					//     type:"function",
-					//     value: webpackHotMiddleware(compiler,{
-					//         log: true,
-					//         path: "/__kotii",
-					//         heartbeat: 2000
-					//     })
+			public: [
+				{
+					type: "function",
+					value: webpackDevMiddleware(compiler, {
+						publicPath: webpackConfig.output.path,
+						writeToDisk: true,
+						serverSideRender: true,
+					}),
+				},
+				// {
+				//     type:"function",
+				//     value: webpackHotMiddleware(compiler,{
+				//         log: true,
+				//         path: "/__kotii",
+				//         heartbeat: 2000
+				//     })
 
-					// }
-				],
-			},
-			all: {
-				addMiddleware: [
-					{
-						type: "function",
-						value: webpackHotMiddleware(compiler, {
-							log: console.log,
-							path: "/__kotii",
-							heartbeat: 2000,
-						}),
-						extra: "hotModule",
-					},
-				],
-			},
+				// }
+			],
+
+			all: [
+				{
+					type: "function",
+					value: webpackHotMiddleware(compiler, {
+						log: console.log,
+						path: "/__kotii",
+						heartbeat: 2000,
+					}),
+					extra: "hotModule",
+				},
+			],
 		};
 	}
 
