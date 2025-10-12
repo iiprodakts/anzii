@@ -67,10 +67,10 @@ export const handleConfigDomain = function (data) {
 };
 export const handleTakeSystemBase = function (data) {
 	const self = this;
-
 	self.system = data.systemBase;
 };
 export const hookIntoWebpackCompilation = async function (compiler) {
+	const self = this;
 	compiler.hooks.invalid.tap("invalid", () => {
 		self.debug("wEBPACK is compiling....");
 	});

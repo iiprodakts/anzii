@@ -120,8 +120,8 @@ export const attachMiddleware = function (data) {
 				type: "router-middleware",
 				data: {
 					middlewares: {
-						public: self.middlewares.public,
-						private: self.middlewares.private,
+						public: self.public,
+						private: self.private,
 					},
 				},
 			});
