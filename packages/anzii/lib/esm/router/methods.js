@@ -14,7 +14,7 @@ export const handleConfigRouter = function (data) {
 export const handleRouterMiddleware = function (data) {
 	const self = this;
 
-	self.routerMiddleware = data.middleware;
+	self.routerMiddlewares = data.middlewares;
 };
 export const handleAttachRoutes = function (data) {
 	this.attachRoutes(data);
@@ -148,11 +148,11 @@ export const renderRoute = function (r) {
 	// self.debug('THE ROUTE MIDDLEWARE')
 	// self.debug(self.routerMiddleware.public)
 	if (r.middlewares) {
-		if (self.routerMiddleware && self.routerMiddleware[r.type]) {
+		if (self.routerMiddlewares && self.routerMiddlewares[r.type]) {
 			self.middlewareType(r.type, r.middlewares);
 			self.middlewareType(
 				r.type,
-				pao.pa_objectToArray(self.routerMiddleware[r.type]),
+				pao.pa_objectToArray(self.routerMiddlewares[r.type]),
 			);
 			self.appendRouter({
 				middleware: self[`filtered${r.type}Middlewares`],
@@ -167,10 +167,10 @@ export const renderRoute = function (r) {
 			});
 			self[`filtered${r.type}Middlewares`] = [];
 		}
-	} else if (self.routerMiddleware && self.routerMiddleware[r.type]) {
+	} else if (self.routerMiddlewares && self.routerMiddlewares[r.type]) {
 		self.middlewareType(
 			r.type,
-			pao.pa_objectToArray(self.routerMiddleware[r.type]),
+			pao.pa_objectToArray(self.routerMiddlewares[r.type]),
 		);
 		self.appendRouter({
 			middleware: self[`filtered${r.type}Middlewares`],
