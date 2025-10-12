@@ -5,7 +5,7 @@ class Router {
 	constructor(pao) {
 		this.pao = pao;
 		this.routes = null;
-		this.routerMiddleware = null;
+		this.routerMiddlewares = null;
 		this.filteredpublicMiddlewares = [];
 		this.filteredprivateMiddlewares = [];
 		this.path = path;
