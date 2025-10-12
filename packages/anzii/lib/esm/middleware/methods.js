@@ -12,8 +12,7 @@ export const handleAttachMiddleware = function (data) {
 export const handleConfigMiddleware = function (data) {
 	const self = this;
 	self.debug("THE HANDLE CONFIG MIDDLEWARE", data);
-	//  self.debug(data)
-	//  self.debug(data)
+
 	let middlewares = data;
 	//  self.debug(middlewares)
 	let middlewaresIDS = Object.keys(middlewares);
@@ -37,111 +36,124 @@ export const handleConfigMiddleware = function (data) {
 export const handleAddExternalMiddleware = function (data) {
 	const self = this;
 	const pao = self.pao;
-	self.debug("ADD EXTERNAL MIDDLEWARE EVENT HAS OCCURED", data);
-	if (data.type) {
-		if (data.type === "private") {
-			if (data.level === "top") {
-				if (pao.pa_isArray(data.middleware.funk)) {
-					// eslint-disable-next-line no-unused-vars
-					data.middleware.forEach((m, i) => {
-						self.middleware.unshift({
-							type: "function",
-							value: m.funk,
-							ext: true,
-						});
-					});
-				} else {
-					self.debug(
-						"THE MIDDLEWARES BEFORE",
-						self.middlewares,
-						self.middlewares.pprivate,
-					);
+	const contains = pao.pa_contains;
+	const { payload } = data;
 
-					if (self.middlewares.pprivate) {
-						let len = Object.keys(self.middlewares.pprivate).length;
-						self.middlewares.pprivate[len] = {
-							type: "function",
-							value: data.middleware.funk,
-							ext: true,
-						};
-					} else {
-						self.middlewares["pprivate"] = [
-							{
-								type: "function",
-								value: data.middleware.funk,
-								ext: true,
-							},
-						];
-					}
+	self.info("ADD EXTERNAL MIDDLEWARE EVENT HAS OCCURED", data);
+	self.info("THE SELF.TYPES", self.MiddlewareTypes);
 
-					self.debug("AFTER Middlewares", self.middlewares);
-				}
-				// eslint-disable-next-line no-empty
-			} else {
-			}
-			// eslint-disable-next-line no-empty
-		} else if (data.type === "public") {
-		} else if (data.type === "all") {
-			// eslint-disable-next-line no-empty
-			if (data.level === "top") {
-			}
-		}
-	}
+	payload.forEach((middleware) => {
+		self.info("THE CURRENT ADD EXTERNAL MIDDLEWARE", middleware);
+		self.info("THE MIDDLEWARE TYPE", middleware.type);
+		self.info(
+			"THE CONTAINS",
+			contains(self.MiddlewareTypes, [`${middleware.type}`]),
+		);
+		// if (contains(self.MiddlewareTypes, [`${middleware.type}`]))
+		// 	throw new Error("Invalid middleware type");
+		self.setMiddleware(middleware.type, middleware);
+	});
+
+	// if (data.type) {
+	// 	if (data.type === "private") {
+	// 		if (data.level === "top") {
+	// 			if (pao.pa_isArray(data.middleware.funk)) {
+	// 				// eslint-disable-next-line no-unused-vars
+	// 				data.middleware.forEach((m, i) => {
+	// 					self.middleware.unshift({
+	// 						type: "function",
+	// 						value: m.funk,
+	// 						ext: true,
+	// 					});
+	// 				});
+	// 			} else {
+	// 				self.debug(
+	// 					"THE MIDDLEWARES BEFORE",
+	// 					self.middlewares,
+	// 					self.middlewares.pprivate,
+	// 				);
+
+	// 				if (self.middlewares.pprivate) {
+	// 					let len = Object.keys(self.middlewares.pprivate).length;
+	// 					self.middlewares.pprivate[len] = {
+	// 						type: "function",
+	// 						value: data.middleware.funk,
+	// 						ext: true,
+	// 					};
+	// 				} else {
+	// 					self.middlewares["pprivate"] = [
+	// 						{
+	// 							type: "function",
+	// 							value: data.middleware.funk,
+	// 							ext: true,
+	// 						},
+	// 					];
+	// 				}
+
+	// 				self.debug("AFTER Middlewares", self.middlewares);
+	// 			}
+	// 			// eslint-disable-next-line no-empty
+	// 		} else {
+	// 		}
+	// 		// eslint-disable-next-line no-empty
+	// 	} else if (data.type === "public") {
+	// 	} else if (data.type === "all") {
+	// 		// eslint-disable-next-line no-empty
+	// 		if (data.level === "top") {
+	// 		}
+	// 	}
+	// }
 };
 export const attachMiddleware = function (data) {
 	const self = this;
 	if (data.app) {
 		// self.debug('SELF.MIDDLEWARES')
 		// self.debug(self.middlewares)
-		if (self.all.length > 0) {
-			self.debug("THE Allwares is greater than zero");
-			if (data.xpress) {
-				self.allWares(data.app, data.xpress);
-			}
-		}
-		if (self.middlewares.pprivate && self.middlewares.ppublic) {
+		// if (self.all.length > 0) {
+		// 	self.debug("THE Allwares is greater than zero");
+		// 	if (data.xpress) {
+		// 		self.allWares(data.app, data.xpress);
+		// 	}
+		// }
+		if (self?.private && self?.public) {
 			self.emit({
 				type: "router-middleware",
 				data: {
-					middleware: {
-						public: self.middlewares.ppublic,
-						private: self.middlewares.pprivate,
+					middlewares: {
+						public: self.middlewares.public,
+						private: self.middlewares.private,
 					},
 				},
 			});
-		} else if (self.middlewares.pprivate) {
+		} else if (self?.private) {
 			self.emit({
 				type: "router-middleware",
-				data: { middleware: { private: self.middlewares.pprivate } },
+				data: { middlewares: { private: self.private } },
 			});
-		} else if (self.middlewares.ppublic) {
-			// console.log("CONFIG MIDDLEWARE public");
+		} else if (self?.public) {
 			self.emit({
 				type: "router-middleware",
-				data: { middleware: { public: self.middlewares.ppublic } },
+				data: { middlewares: { public: self.public } },
 			});
 		}
-		if (self.middlewares.all) {
-			// console.log(
-			// 	"CONFIG MIDDLEWARE PROCESSING ALL MIDDLEWARE",
-			// 	self.middlewares.all,
-			// );
-
-			// self.debug('FOR EVERY REQUEST MIDDLEWARES')
-			// self.debug(self.middlewares.all)
-			// eslint-disable-next-line no-unused-vars
-			self.middlewares.all.forEach((m, i) => {
-				// console.log("MIDDLEWARE ALL", m);
+		if (self?.all) {
+			self.all.forEach((m) => {
+				self.info("MIDDLEWARE ALL", m);
+				self.debug("CURRENT M AND OTPIONS", m.type, m?.options);
 				if (m.type === "function") {
 					if (m?.options) {
+						self.debug("CURRENT ME HAS OPTIONS");
 						data.app.use(m.value(m.options));
 					} else {
 						data.app.use(m.value);
 					}
 				} else if (m.type === "module") {
-					// self.emit({type: `add-${m.value}-middleware`,data: data.app})
+					self.emit({ type: `add-${m.value}-middleware`, data: data.app });
 				}
 			});
+			data.app.use(data.xpress.json());
+		} else {
+			data.app.use(data.xpress.json());
 		}
 	}
 };
@@ -164,4 +176,37 @@ export const allWares = function (app, xpress) {
 			app.use(xpress[w]());
 		}
 	});
+};
+export const setMiddleware = function (type, middlewareInstance) {
+	const self = this;
+	const { middleware } = middlewareInstance;
+	self.info("SET MIDDLEWARE", type, middlewareInstance);
+
+	if (self[type]) {
+		if (middlewareInstance?.level) {
+			if (middlewareInstance.level === "top") {
+				self[type] = [
+					self.formatMiddlewareStructure(middleware),
+					...self[type],
+				];
+			} else {
+				self[type] = [
+					...self[type],
+					self.formatMiddlewareStructure(middleware),
+				];
+			}
+		} else {
+			self[type].push(self.formatMiddlewareStructure(middleware));
+		}
+	} else {
+		self[type] = [self.formatMiddlewareStructure(middleware)];
+	}
+};
+export const formatMiddlewareStructure = function (middleware) {
+	const self = this;
+	self.info("The Middleware format ", middleware);
+	let formated = { type: "function", value: middleware.funk, ext: true };
+	if (middleware?.options) formated["options"] = middleware.options;
+
+	return formated;
 };
