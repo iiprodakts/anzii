@@ -67,6 +67,7 @@ export const handleDistributeSystemResources = async function (data) {
 };
 export const handleOpenBrowserSignal = function (data) {
 	const self = this;
+	self.debug("ANZII JS: HANDLING OPEN SIGNAL", self.openBrowserTools);
 
 	const {
 		availablePort,
@@ -75,7 +76,7 @@ export const handleOpenBrowserSignal = function (data) {
 		pageToOpen,
 		runningServerMessage,
 	} = self.openBrowserTools;
-	self.infoSync(runningServerMessage);
+	self.info(runningServerMessage);
 	self.openBrowserApp(availablePort, protocol, domainToUse, pageToOpen);
 	// self.masterWorker(data)
 };
@@ -87,30 +88,39 @@ export const shutDown = function (type, code) {
 	if (self.shutDownServices.length > 0) {
 		self.shutDownServices.forEach((sd, i) => {
 			if (typeof sd !== "function") {
-				self.logSync(
+				self.warn(
 					`Service: ${self.shutDownOrder[i]} must be a function,shutdown attempt failed`,
-					"warn",
 				);
 			} else {
-				self.logSync(
-					`Service: ${self.shutDownOrder[i]} is shutting down`,
-					"info",
-				);
+				self.info(`Service: ${self.shutDownOrder[i]} is shutting down`);
+				sd();
+				self.info(`Service: ${self.shutDownOrder[i]} has shut down`);
 			}
 		});
 	}
 	self.logSync(
 		`System is shutting down through: ${type},with code: ${code.stack}`,
 	);
-	type === "uncaughtException" ? self.context.kill(1) : self.context[type]();
+	// type === "uncaughtException" ? self.context.kill(1) : self.context[type]();
+	process.exit(0);
 };
 export const masterWorker = function (app, system) {
 	const self = this;
+	self.debug("ANZII JS SYSTEM", system);
 	const serverTimeout = self.serverTimeout;
 	const portToUse = self?.context?.env?.PORT ? self?.context?.env?.PORT : 3000;
 	const shouldOpenBrowser = self?.context?.env?.ANZII_OPEN_BROWSER
-		? true
+		? typeof self.context.env.ANZII_OPEN_BROWSER === "string" &&
+		  self.context.env.ANZII_OPEN_BROWSER === "true"
+			? true
+			: false
 		: false;
+	self.debug(
+		"ANZII JS OPEN BROWSER",
+		self?.context?.env?.ANZII_OPEN_BROWSER,
+		self.context.env.ANZII_OPEN_BROWSER,
+		typeof self.context.env.ANZII_OPEN_BROWSER,
+	);
 	const shouldWaitForSignal = system?.shouldWaitForSignal
 		? system.shouldWaitForSignal
 		: false;
@@ -246,14 +256,16 @@ export const masterWorker = function (app, system) {
 export const handleShutDowns = function () {
 	const self = this;
 	self.debug("Shutdowns are being handled");
-	self.context.on("INT", function (code) {
+	self.context.on("SIGINT", function (code) {
+		self.debug("ANZII JS: INT", code);
 		if (!self.systemIsShuttingDown) {
 			self.shutDown("kill", code);
 		} else {
 			self.infoSync("System is already ShuttingDown:: INT EXIT");
 		}
 	});
-	self.context.on("SIGTEM", function (code) {
+	self.context.on("SIGTERM", function (code) {
+		self.debug("ANZII JS: SIGTEM", code);
 		if (!self.systemIsShuttingDown) {
 			self.shutDown("exit", code);
 		} else {
@@ -261,6 +273,7 @@ export const handleShutDowns = function () {
 		}
 	});
 	self.context.on("uncaughtException", function (code) {
+		self.debug("ANZII JS: UNHANDLE EXCEPTION", code);
 		if (!self.systemIsShuttingDown) {
 			self.shutDown("uncaughtException", code);
 		} else {
@@ -268,6 +281,7 @@ export const handleShutDowns = function () {
 		}
 	});
 	self.context.on("unhandledRejection", function (code) {
+		self.debug("ANZII JS: UNHANDLE REJECTION", code);
 		self.infoSync(code.stack);
 		if (!self.systemIsShuttingDown) {
 			self.shutDown("uncaughtException", code);
@@ -278,20 +292,26 @@ export const handleShutDowns = function () {
 };
 export const handleServerAttachWorkers = function (data) {
 	const self = this;
+	self.debug("ANZII JS: System Attaching");
 	self.masterWorker(data.app, data.system);
 };
 export const handleRegisterShutDownCandidate = function (data) {
 	const self = this;
 	const pao = self.pao;
+	self.debug("HANDLING SHUTDOWN REGISTRATION", data);
+	const { payload } = data;
 	if (
-		data.hasOwnProperty("candidate") &&
-		pao.pa_isFunction(data.candidate) &&
-		data.hasOwnProperty("name") &&
-		pao.pa_isString(data.name)
+		payload.hasOwnProperty("candidate") &&
+		pao.pa_isFunction(payload.candidate) &&
+		payload.hasOwnProperty("name") &&
+		pao.pa_isString(payload.name)
 	) {
-		if (!(self.shutDownServices.indexOf(data.name) > -1)) {
-			self.shutDownServices.push(data.candidate);
-			self.shutDownOrder.push(data.name);
+		if (!(self.shutDownServices.indexOf(payload.name) > -1)) {
+			self.shutDownServices.push(payload.candidate);
+			self.shutDownOrder.push(payload.name);
+			data.callback({
+				message: "Service successfully registered for shutdown",
+			});
 		}
 	} else {
 		self.debug("Candidate could not be registered for shutdown", "warn");
@@ -437,6 +457,7 @@ export const appListener = function (settings) {
 			);
 		}
 		settings["runningServerMessage"] = runningServerMessage;
+		self.debug("ANZII JS SETTINGS ASIGN", settings);
 		self.openBrowserTools = settings;
 	}
 };
