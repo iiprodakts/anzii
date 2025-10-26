@@ -178,7 +178,7 @@ export const runAppConfig = function (manualConfig = null) {
     */
 
 		self.config["middleware"] = {
-			ppublic: {
+			public: {
 				addMiddleware: [
 					{
 						type: "function",
