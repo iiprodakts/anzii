@@ -143,6 +143,7 @@ export const enviroment = function () {
 };
 export const handleManualConfig = function (data = null) {
 	const self = this;
+	self.callback = data?.callback || function () {};
 	self.debug(
 		`MANUAL SERVER TRIGGER ACTIVATED,
 		${data?.payload?.configs}`,
@@ -164,7 +165,7 @@ export const runAppConfig = function (manualConfig = null) {
 			? self.mergeConfigs(manualConfig?.payload?.configs)
 			: self.config;
 		let { payload } = manualConfig;
-		let { compiler, wepackMiddlewares, webpackConfig } = payload;
+		let { wepackMiddlewares } = payload;
 		const { webpackDevMiddleware, webpackHotMiddleware } = wepackMiddlewares;
 
 		// self.debug("THE CONFIG");
@@ -178,36 +179,15 @@ export const runAppConfig = function (manualConfig = null) {
     */
 
 		self.config["middleware"] = {
-			ppublic: {
-				addMiddleware: [
-					{
-						type: "function",
-						value: webpackDevMiddleware(compiler, {
-							publicPath: webpackConfig.output.path,
-							writeToDisk: true,
-							serverSideRender: true,
-						}),
-					},
-					// {
-					//     type:"function",
-					//     value: webpackHotMiddleware(compiler,{
-					//         log: true,
-					//         path: "/__kotii",
-					//         heartbeat: 2000
-					//     })
-
-					// }
-				],
-			},
 			all: {
 				addMiddleware: [
 					{
 						type: "function",
-						value: webpackHotMiddleware(compiler, {
-							log: console.log,
-							path: "/__kotii",
-							heartbeat: 2000,
-						}),
+						value: webpackDevMiddleware,
+					},
+					{
+						type: "function",
+						value: webpackHotMiddleware,
 						extra: "hotModule",
 					},
 				],
