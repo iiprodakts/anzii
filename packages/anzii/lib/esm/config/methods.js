@@ -216,7 +216,13 @@ export const runAppConfig = function (manualConfig = null) {
 
 	console.log("THE SELF.CONFIG", self.config, config);
 	if (!self.config) {
-		self.emit({ type: "config-system", data: { workers: 1, spawn: true } });
+		self.emit({
+			type: "config-system",
+			data: {
+				payload: { workers: 1, spawn: true },
+				callback: self.callback,
+			},
+		});
 		// if (manualConfig)
 		//     self.emit({ type: 'config-domain-resources', data: manualConfig });// To be re-organized
 		if (manualConfig)
@@ -232,8 +238,20 @@ export const runAppConfig = function (manualConfig = null) {
 		let serverConfig = null;
 		self.enviroment();
 		self.config?.cluster
-			? self.emit({ type: "config-system", data: self.config.cluster })
-			: self.emit({ type: "config-system", data: { workers: 1, spawn: true } });
+			? self.emit({
+					type: "config-system",
+					data: {
+						payload: { ...self.config.cluster },
+						callback: self.callback,
+					},
+			  })
+			: self.emit({
+					type: "config-system",
+					data: {
+						payload: { workers: 1, spawn: true },
+						callback: self.callback,
+					},
+			  });
 
 		for (let c in config) {
 			// self.debug(`THE C IN CONFIG", ${c}`);
