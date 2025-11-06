@@ -20,8 +20,10 @@ export const init = function () {
 export const handleConfigureSystem = function (data) {
 	const self = this;
 
+	if (data.callback) self.ON_SERVER_START_LISTENERS.push(data.callback);
+
 	self.handleShutDowns();
-	self.clusterCustomConfig = data;
+	self.clusterCustomConfig = data.payload;
 
 	self.emit({
 		type: "take-premier-system-base",
@@ -80,30 +82,70 @@ export const handleOpenBrowserSignal = function (data) {
 	self.openBrowserApp(availablePort, protocol, domainToUse, pageToOpen);
 	// self.masterWorker(data)
 };
-export const shutDown = function (type, code) {
+export const shutDown = async function (type, code) {
 	const self = this;
-	self.infoSync(`SHUTDOWN TYPE: ${type},code: ${code}`);
+	self.infoSync(`SHUTDOWN TYPE: ${type}, code: ${code}`);
 	self.error(code);
 	self.systemIsShuttingDown = true;
-	if (self.shutDownServices.length > 0) {
-		self.shutDownServices.forEach((sd, i) => {
-			if (typeof sd !== "function") {
-				self.warn(
-					`Service: ${self.shutDownOrder[i]} must be a function,shutdown attempt failed`,
-				);
-			} else {
-				self.info(`Service: ${self.shutDownOrder[i]} is shutting down`);
-				sd();
-				self.info(`Service: ${self.shutDownOrder[i]} has shut down`);
-			}
-		});
+
+	const shutdownPromises = [];
+
+	for (let i = 0; i < self.shutDownServices.length; i++) {
+		const sd = self.shutDownServices[i];
+		if (typeof sd !== "function") {
+			self.warn(
+				`Service: ${self.shutDownOrder[i]} must be a function, shutdown attempt failed`,
+			);
+			continue;
+		}
+
+		self.info(`Service: ${self.shutDownOrder[i]} is shutting down`);
+		try {
+			const result = sd();
+			shutdownPromises.push(Promise.resolve(result));
+		} catch (err) {
+			self.warn("Error during shutdown:", err);
+		}
+		self.info(`Service: ${self.shutDownOrder[i]} shutdown triggered`);
 	}
-	self.logSync(
-		`System is shutting down through: ${type},with code: ${code.stack}`,
-	);
-	// type === "uncaughtException" ? self.context.kill(1) : self.context[type]();
-	process.exit(0);
+
+	self.debug("ALL PROMISES", shutdownPromises);
+	Promise.all(shutdownPromises)
+		.then((settled) => {
+			self.debug("All Promises settled", settled);
+			self.infoSync(
+				`System is shutting down through: ${type}, with code: ${code?.stack}`,
+			);
+			const handles = process._getActiveHandles();
+
+			handles.forEach((h) => {
+				try {
+					if (h.close) h.close(); // e.g., servers, watchers
+					else if (h.destroy) h.destroy(); // e.g., sockets
+				} catch (e) {}
+			});
+
+			const requests = process._getActiveRequests();
+			requests.forEach((r) => {
+				try {
+					if (r.abort) r.abort();
+				} catch (e) {}
+			});
+
+			process.exit(0);
+
+			// setTimeout(() => {
+			// 	// process.removeAllListeners('SIGINT'); // remove other Ctrl+C handlers
+			//     self.logSync("ANZII JS SYSTEM IS SHUTTING DOWN")
+			// 	process.exit(0), 10
+			// });
+		})
+		.catch((err) => {
+			self.debug("SHUTDOWN PROMISES ERROR", err);
+			setTimeout(() => process.exit(0), 10); // allow event loop to flush
+		});
 };
+
 export const masterWorker = function (app, system) {
 	const self = this;
 	self.debug("ANZII JS SYSTEM", system);
@@ -218,6 +260,13 @@ export const masterWorker = function (app, system) {
 					self
 						.runServer(app, serverSettings)
 						.then((started) => {
+							if (self.ON_SERVER_START_LISTENERS) {
+								self.ON_SERVER_START_LISTENERS.forEach(
+									(serverStartListener) => {
+										serverStartListener({ data: "Server has been started" });
+									},
+								);
+							}
 							self.debug("The server has been started", started);
 						})
 						.catch((err) => {
@@ -230,6 +279,11 @@ export const masterWorker = function (app, system) {
 				self
 					.runServer(app, serverSettings)
 					.then((started) => {
+						if (self.ON_SERVER_START_LISTENERS) {
+							self.ON_SERVER_START_LISTENERS.forEach((serverStartListener) => {
+								serverStartListener({ data: "Server has been started" });
+							});
+						}
 						self.debug("The server has been started", started);
 					})
 					.catch((err) => {
@@ -265,7 +319,7 @@ export const handleShutDowns = function () {
 		}
 	});
 	self.context.on("SIGTERM", function (code) {
-		self.debug("ANZII JS: SIGTEM", code);
+		self.debug("ANZII JS: SIGTREM", code);
 		if (!self.systemIsShuttingDown) {
 			self.shutDown("exit", code);
 		} else {
