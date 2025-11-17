@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import async from "async";
 import debug from "debug";
 import fs from "fs";
@@ -145,17 +146,14 @@ export const p_hashToArray = function (obj, hashKeyProp) {
 	}, []);
 };
 export const p_capitalizeFirstLetter = function (text) {
-	// console.log("The text Uppercasing;;;", text);
 	return `${text.slice(0, 1).toUpperCase()}${text.slice(1)}`;
 };
 export const p_capitalizeLastLetter = function (text) {
-	// console.log("The text Lowercasing;;;", text);
 	return `${text.slice(0, text.length - 1)}${text
 		.slice(text.length - 1)
 		.toLowerCase()}`;
 };
 export const p_camelCase = function (text, sep = "-") {
-	// console.log("The camelCasing;;;", text);
 	if (!sep) return text;
 	if (text.indexOf(sep) < 0) return text;
 
@@ -337,9 +335,8 @@ export const p_isBoolean = function (value) {
 export function // p_isDirectory(item){
 // },
 p_isExistingDir(filePath) {
-	// console.log("THE EXISTANCE PATH", filePath);
 	const checkResults = fs.existsSync(filePath);
-	// console.log("existence results", checkResults);
+
 	return checkResults;
 }
 export const p_makeFolderSync = function (absolutePath) {
@@ -350,7 +347,7 @@ export const p_makeFolderSync = function (absolutePath) {
 export const p_saveToFile = function (fileToSaveTo, contents) {
 	// const contents = fs.readFileSync(origFilePath, 'utf8');
 	const writePath = `${fileToSaveTo}`;
-	// console.log("saveToFile", writePath);
+
 	fs.writeFileSync(writePath, contents, "utf8");
 };
 export function p_wiLog(...message) {
@@ -652,138 +649,30 @@ export const p_getDirectories = function (dirPath) {
  * function.
  */
 export const p_getFiles = function (dirPath, options, fileName) {
-	let that = this;
-	// console.log('gETTING FILES')
-	// console.log(dirPath)
-	// console.log(options)
 	return new Promise((resolve, reject) => {
-		// if (this.p_isFunction(options)) {
-		//     cb      = options;
-		//     options = {
-		//         recursive: false,
-		//         filter: function(/*fullPath, stat*/) { return true; }
-		//     }
-		// }
-		// if(!options){
-		//     options = {
-		//         recursive: false,
-		//         filter: function(/*fullPath, stat*/) { return true; }
-		//     }
-		// }
-		logger.debug("The directory path");
-		logger.debug(dirPath);
-		logger.debug(fileName);
-		// console.log(fileName)
-		//read files from dir
 		fs.readdir(dirPath, function (err, q) {
 			if (util.types.isNativeError(err)) {
 				return reject(err);
 			}
-			logger.debug("The readdir results q");
-			logger.debug(q);
-			// console.log(q)
+
 			let filePaths = [];
 			//seed the queue with the absolute paths not just the file names
 			for (var i = 0; i < q.length; i++) {
-				// logger.debug(q[i])
-				// q[i] = path.join(dirPath, q[i]);
 				filePaths.push(path.join(dirPath, q[i]));
 			}
-			//process the q
-			// console.log(q)
-			// console.log(filePaths)
+
 			if (filePaths.indexOf(path.join(dirPath, fileName)) !== -1) {
-				logger.debug("THE IS A NEED FOR A SPECIFIC FILE");
-				// let filePathCont = filePaths[filePaths.indexOf(filePath)]
-				// let file = filePathCont.substr(filePath.indexOf(fileName),filePathCont.length - 1)
-				// logger.debug(filePathCont)
-				// logger.debug(file)
 				let file = filePaths[filePaths.indexOf(path.join(dirPath, fileName))];
-				// console.log('THE FILE')
-				// console.log(file)
+
 				return resolve(file);
 			} else {
 				return resolve(null);
 			}
-			// for(let p =0; p < filePaths.length; p++){
-			//     if(filePaths.indexOf(filePath) !== -1){
-			//         logger.debug('THE IS A NEED FOR A SPECIFIC FILE')
-			//         let filePathCont = filePaths[filePaths.indexOf(filePath)]
-			//         let file = filePathCont.substr(filePath.indexOf(fileName),filePathCont.length - 1)
-			//         logger.debug(filePathCont)
-			//         logger.debug(file)
-			//         resolve(file)
-			//     }else{
-			//         resolve(filePaths);
-			//     }
-			// }
-			//  var filePaths = [];
-			// async.whilst(
-			//     function() {
-			//         console.log('THE Q LENGTH')
-			//         console.log(q.length)
-			//         console.log(q.length)
-			//         return q.length > 0; }
-			//     function(callback) {
-			//         console.log('The second with ca')
-			//         console.log(callback)
-			//         var fullPath = q.shift();
-			//         fs.stat(fullPath, function(err, stat) {
-			//             if (util.types.isNativeError(err)) {
-			//                 console.log('THERE ERROR')
-			//                 return callback(err);
-			//             }
-			//             //apply filter
-			//             var meetsCriteria = true;
-			//             if (that.p_isFunction(options.filter)) {
-			//                 meetsCriteria = options.filter(fullPath, stat);
-			//             }
-			//             //examine result and add it when criteria is met
-			//             if (meetsCriteria) {
-			//                 filePaths.push(fullPath);
-			//             }
-			//             //when recursive queue up directory's for processing
-			//             if (!options.recursive || !stat.isDirectory()) {
-			//                 return callback(null);
-			//             }
-			//             //read the directory contents and append it to the queue
-			//             fs.readdir(fullPath, function(err, childFiles) {
-			//                 if (util.types.isNativeError(err)) {
-			//                     return callback(err);
-			//                 }
-			//                 childFiles.forEach(function(item) {
-			//                     q.push(path.join(fullPath, item));
-			//                 });
-			//                 callback(null);
-			//             });
-			//         });
-			//     }
-			//     function(err) {
-			//         console.log('THE FILES ARRAY')
-			//         console.log(err)
-			//         logger.debug('THE FILES ARRay')
-			//         let filePath = dirPath+path.sep+fileName
-			//         logger.debug(filePath)
-			//         if(filePaths.indexOf(filePath) !== -1){
-			//             logger.debug('THE IS A NEED FOR A SPECIFIC FILE')
-			//             let filePathCont = filePaths[filePaths.indexOf(filePath)]
-			//             let file = filePathCont.substr(filePath.indexOf(fileName),filePathCont.length - 1)
-			//             logger.debug(filePathCont)
-			//             logger.debug(file)
-			//             resolve(file)
-			//         }else{
-			//             resolve(filePaths);
-			//         }
-			//     }
-			// );
 		});
 	});
 };
 export const p_getFile = function (filePath) {
 	return new Promise((resolve) => {
-		logger.debug("The directory path");
-		logger.debug(filePath);
-		//read files from dir
 		var s = fs.createReadStream(filePath);
 		if (s) {
 			resolve(s);
@@ -795,32 +684,27 @@ export const p_createFolderContent = function (
 	savePath,
 	ignore = null,
 ) {
-	// console.log("CREATE FOLDER CONTENT SOURCE", sourcePath)
 	const self = this;
 	const CURR_DIR = self.p_getWorkingFolder();
 	const filesToCreate = fs.readdirSync(sourcePath);
-	// console.log("CREATE FOLDER CONTENT CURR_DI",CURR_DIR)
-	// console.log("CREATE FOLDER CONTENT FILES TO CREATE", filesToCreate)
-	// console.log("CREATE FOLDER CONTENT FILES TO IGNORE", ignore)
+
 	filesToCreate.forEach((file) => {
 		const origFilePath = `${sourcePath}/${file}`;
-		// console.log("CREATE FOLDER CONTENT Original File pATH", origFilePath)
+
 		// Get file statitics
 		const stats = fs.statSync(origFilePath);
 		let skip = false;
 		if (stats.isFile()) {
 			// let fileBaseName = path.basename(origFilePath)
-			// console.log("CREATE FOLDER CONTENT writepath pATH", fileBaseName)
-			// console.log("CREATE FOLDER CONTENT file", file)
+
 			if (ignore && this.contains(ignore, file)) skip = true;
 			if (!skip) {
 				const contents = fs.readFileSync(origFilePath, "utf8");
 				const writePath = `${CURR_DIR}/${savePath}/${file}`;
-				// console.log("CREATE FOLDER CONTENT writepath pATH", origFilePath)
+
 				fs.writeFileSync(writePath, contents, "utf8");
 			}
 		} else if (stats.isDirectory()) {
-			// console.log("THE FOLDER", file)
 			if (ignore && this.contains(ignore, file)) skip = true;
 			if (!skip) {
 				fs.mkdirSync(`${CURR_DIR}/${savePath}/${file}`);
@@ -842,39 +726,18 @@ export const p_loadFile = function (filepath, all = false, checkExist = true) {
 				filePath: filepath,
 			});
 		const ext = path.extname(filepath);
-		logger.debug(`FILE EXTENSION, ${ext}`);
 
 		if (ext === ".json") {
 			try {
 				const readJson = p_readFileSync(filepath);
-				logger.debug(`THE READ JSON, ${readJson}`);
+
 				return resolve(readJson);
 			} catch (err) {
-				console.log("failed to findJSON", err.code);
 				return reject(err);
 			}
-			// import(`${filepath}`, {
-			//     with: { type: 'json' }
-			//   }).then((foundJson)=>{
-			//     console.log("JSON WAS FOUND")
-			//     return resolve(foundJson)
-			//   }).catch((err)=>{
-			//     try{
-			//         const readJson = p_readFileSync(filepath)
-			//         console.log("THE READ JSON",readJson)
-			//         return resolve(readJson)
-			//     }
-			//     catch(err){
-			//         console.log("failed to findJSON",err.code)
-			//         return reject(err)
-			//     }
-
-			//   });
 		}
 		import(filepath)
 			.then((moduleFound) => {
-				// console.log("THE FOUND MODULE", moduleFound);
-				// let foundFileContent = moduleFound?.default || moduleFound;
 				let foundFileContent = all
 					? moduleFound
 					: moduleFound?.default || moduleFound;
@@ -882,30 +745,21 @@ export const p_loadFile = function (filepath, all = false, checkExist = true) {
 				// resolve(foundFileContent);
 			})
 			.catch((importERR) => {
-				console.log("IMPORT ERROR", importERR);
 				try {
 					const readFile = p_loadFileSync(filepath);
-					logger.debug(`THE READ FILE, ${JSON.stringify(readFile)}`);
+
 					return resolve({ default: readFile });
 				} catch (err) {
-					logger.debug(`MODULE FETCH ERROR, ${err.code}`);
 					return reject(err);
 				}
-				// console.log("MODULE FETCH ERROR", err);
-				// reject(err);
 			});
 	});
 
-	// console.log('THE FILEPATH')
-	// console.log(filepath)
-	// console.log(__non_webpack_require__.main)
 	// eslint-disable-next-line no-undef
 };
 export const p_loadFileSync = function (filepath) {
-	//if(!p_isExistingDir(filepath) || filepath !== "@babel/register" || filepath !== "babel-register") return ({code:"FILE_PATH_ERROR",message:"File path does not exist",filePath:filepath})
-	// console.log("REQUIRE'S");
 	const foundFile = require(filepath);
-	// console.log("THE FILE FOUND FROM REQUIRE", foundFile);
+
 	return foundFile;
 };
 
@@ -972,9 +826,6 @@ export const clone = function (o) {
 			} else if (o[p] instanceof Object && typeof o[p] !== "function") {
 				n[p] = this.clone(o[p]);
 			} else {
-				if (p === "callback") {
-					logger.debug("The current property is callback");
-				}
 				n[p] = o[p];
 			}
 		}
@@ -983,8 +834,6 @@ export const clone = function (o) {
 };
 /*********************************** OBJECT AND ARRAY CASTING ************************************************************/
 export const object_to_array = function (castObj, keys = false) {
-	// logger.debug('THE CAST OBJECT')
-	// logger.debug(castObj)
 	if (castObj instanceof Object) {
 		if (!(castObj instanceof Array)) {
 			var arr = [];
@@ -1000,8 +849,7 @@ export const object_to_array = function (castObj, keys = false) {
 					++count;
 				}
 			}
-			//    logger.debug('THE RETURN OF CONVERTED OBJECT')
-			//    logger.debug(arr)
+
 			return arr;
 		} else {
 			return castObj;
@@ -1023,46 +871,21 @@ export const array_to_object = function (castArr) {
 	}
 };
 export const string_to_array = function (string, sep) {
-	// logger.debug('STRING TO ARRAY')
-	// logger.debug(string)
-	// logger.debug(sep)
 	if (this.is_string(string)) {
-		// logger.debug('THE STRING IS AN INSTANCE OF STRING')
 		return string.split(sep);
 	}
 };
 export const set_deeply = function (path, deep, value = null, type = null) {
-	//  logger.debug('TYPEOF AC')
-	//  logger.debug(ac)
-	// if(!(ac)){
-	// 	logger.debug('AC IS NULL')
-	// 	var a = deep
-	// }
-	// logger.debug('THE VALUE OF A')
-	// logger.debug(a)
 	if (path.length === 1) {
-		logger.debug("ABOUT TO SET DEEPLY NESTED PROP");
-		logger.debug("THE DEEP");
-		logger.debug(deep);
 		if (!value) {
-			logger.debug("THIS DEEP ARRAY");
-			logger.debug(this.js_to_json(deep));
-			logger.debug("THE DEEP I,i");
 			deep.splice(path[0], 1);
-			logger.debug(deep);
 		} else {
 			deep[path[0]] = value;
 		}
-		logger.debug(path);
-		logger.debug(path[0]);
-		logger.debug(deep[path]);
+
 		return true;
 	}
 	if (!deep[path[0]]) {
-		logger.debug("THE PROPERTY BELOW DOES NOT EXIST");
-		logger.debug(path);
-		logger.debug(path[0]);
-		//  logger.debug(deep[path[0]])
 		return false;
 	}
 	return this.set_deeply(path.slice(1), deep[path[0]], value, type);
@@ -1132,8 +955,6 @@ export const contains = function (o, v) {
 		return o.indexOf(v) > -1 ? true : false;
 	} else if (this.is_object(o)) {
 		if (this.is_array(v)) {
-			logger.debug("THE SPECIFED VALUE TO CHECK IS AN ARRAY");
-			logger.debug(v);
 			let outcome = "";
 			for (let i = 0; i < v.length; i++) {
 				if (!o.hasOwnProperty(v[i])) {
@@ -1143,8 +964,7 @@ export const contains = function (o, v) {
 					outcome = true;
 				}
 			}
-			logger.debug("THE OUTCOME");
-			logger.debug(outcome);
+
 			return outcome;
 		} else {
 			return o.hasOwnProperty(v) ? true : false;
@@ -1159,16 +979,12 @@ export const for_of = function (x, action, y = null) {
 		x.forEach(action);
 	} else if (this.is_object(x)) {
 		if (!y) {
-			// logger.debug('THE FOROF Y IS NULL')
-			// logger.debug(x)
-			// logger.debug('THE Y IS DEFINED')
 			let newX = {};
 			for (let p in x) {
 				let prop = action(p, x[p]);
 				newX[prop.p] = prop.v;
 			}
-			// logger.debug('THE NEWX')
-			// logger.debug(newX)
+
 			return newX;
 		} else {
 			for (let p in x) {
