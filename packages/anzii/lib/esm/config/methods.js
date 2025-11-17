@@ -176,19 +176,17 @@ export const runAppConfig = function (manualConfig = null) {
     */
 
 		self.config["middleware"] = {
-			all: {
-				addMiddleware: [
-					{
-						type: "function",
-						value: webpackDevMiddleware,
-					},
-					{
-						type: "function",
-						value: webpackHotMiddleware,
-						extra: "hotModule",
-					},
-				],
-			},
+			all: [
+				{
+					type: "function",
+					value: webpackDevMiddleware,
+				},
+				{
+					type: "function",
+					value: webpackHotMiddleware,
+					extra: "hotModule",
+				},
+			],
 		};
 	}
 

@@ -1,3 +1,5 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable no-empty */
 /* eslint-disable no-unused-vars */
 import fs from "node:fs";
 import https from "node:https";
@@ -69,7 +71,6 @@ export const handleDistributeSystemResources = async function (data) {
 };
 export const handleOpenBrowserSignal = function (data) {
 	const self = this;
-	self.debug("ANZII JS: HANDLING OPEN SIGNAL", self.openBrowserTools);
 
 	const {
 		availablePort,
@@ -84,8 +85,7 @@ export const handleOpenBrowserSignal = function (data) {
 };
 export const shutDown = async function (type, code) {
 	const self = this;
-	self.infoSync(`SHUTDOWN TYPE: ${type}, code: ${code}`);
-	self.error(code);
+
 	self.systemIsShuttingDown = true;
 
 	const shutdownPromises = [];
@@ -109,10 +109,8 @@ export const shutDown = async function (type, code) {
 		self.info(`Service: ${self.shutDownOrder[i]} shutdown triggered`);
 	}
 
-	self.debug("ALL PROMISES", shutdownPromises);
 	Promise.all(shutdownPromises)
 		.then((settled) => {
-			self.debug("All Promises settled", settled);
 			self.infoSync(
 				`System is shutting down through: ${type}, with code: ${code?.stack}`,
 			);
@@ -148,7 +146,7 @@ export const shutDown = async function (type, code) {
 
 export const masterWorker = function (app, system) {
 	const self = this;
-	self.debug("ANZII JS SYSTEM", system);
+
 	const serverTimeout = self.serverTimeout;
 	const portToUse = self?.context?.env?.PORT ? self?.context?.env?.PORT : 3000;
 	const shouldOpenBrowser = self?.context?.env?.ANZII_OPEN_BROWSER
@@ -157,12 +155,7 @@ export const masterWorker = function (app, system) {
 			? true
 			: false
 		: false;
-	self.debug(
-		"ANZII JS OPEN BROWSER",
-		self?.context?.env?.ANZII_OPEN_BROWSER,
-		self.context.env.ANZII_OPEN_BROWSER,
-		typeof self.context.env.ANZII_OPEN_BROWSER,
-	);
+
 	const shouldWaitForSignal = system?.shouldWaitForSignal
 		? system.shouldWaitForSignal
 		: false;
@@ -229,26 +222,19 @@ export const masterWorker = function (app, system) {
 					});
 					let mainWorkerId = null;
 					self.cluster.on("listening", (worker, address) => {
-						self.debug("cluster listening new worker", worker.id);
 						if (null === mainWorkerId) {
-							self.debug("Making worker " + worker.id + " to main worker");
 							mainWorkerId = worker.id;
 							worker.send({ singleProcessTasks: "startSingleProcessTasks" });
 						}
 					});
 					self.cluster.on("exit", (worker, code, signal) => {
-						self.debug(`worker ${worker.process.pid} died`);
-						self.debug("FORKING ANOTHER WORK");
 						self.debug("Worker %d died :(", worker.id);
 						if (!shouldStopServer) {
 							if (worker.id === mainWorkerId) {
 								self.debug("Main Worker is dead...");
 								mainWorkerId = null;
 							}
-							self.debug("I am here");
-							self.debug(worker);
-							self.debug(code);
-							self.debug(signal);
+
 							self.cluster.fork();
 							// self.cluster.fork()
 						} else {
@@ -256,7 +242,7 @@ export const masterWorker = function (app, system) {
 						}
 					});
 				} else {
-					self.logSync("System is running on a single thread/core");
+					self.debug("System is running on a single thread/core");
 					self
 						.runServer(app, serverSettings)
 						.then((started) => {
@@ -309,7 +295,7 @@ export const masterWorker = function (app, system) {
 // }
 export const handleShutDowns = function () {
 	const self = this;
-	self.debug("Shutdowns are being handled");
+
 	self.context.on("SIGINT", function (code) {
 		self.debug("ANZII JS: INT", code);
 		if (!self.systemIsShuttingDown) {
@@ -335,7 +321,6 @@ export const handleShutDowns = function () {
 		}
 	});
 	self.context.on("unhandledRejection", function (code) {
-		self.debug("ANZII JS: UNHANDLE REJECTION", code);
 		self.infoSync(code.stack);
 		if (!self.systemIsShuttingDown) {
 			self.shutDown("uncaughtException", code);
@@ -346,13 +331,13 @@ export const handleShutDowns = function () {
 };
 export const handleServerAttachWorkers = function (data) {
 	const self = this;
-	self.debug("ANZII JS: System Attaching");
+
 	self.masterWorker(data.app, data.system);
 };
 export const handleRegisterShutDownCandidate = function (data) {
 	const self = this;
 	const pao = self.pao;
-	self.debug("HANDLING SHUTDOWN REGISTRATION", data);
+
 	const { payload } = data;
 	if (
 		payload.hasOwnProperty("candidate") &&
@@ -445,7 +430,6 @@ export const runHttps = function (app, settings) {
 	const self = this;
 	const { appOpts, availablePort, useSockets = false } = settings;
 	// const { sslOpts } = appOpts;
-	console.log("USE SOCKETS", useSockets);
 
 	return new Promise((resolve, reject) => {
 		let serv = https.createServer(appOpts, app);
@@ -511,7 +495,7 @@ export const appListener = function (settings) {
 			);
 		}
 		settings["runningServerMessage"] = runningServerMessage;
-		self.debug("ANZII JS SETTINGS ASIGN", settings);
+
 		self.openBrowserTools = settings;
 	}
 };
@@ -525,7 +509,6 @@ export const setServerOptions = function (
 	serv.timeout = serverTimeout;
 	setTimeout(function () {
 		if (shouldStopServer) {
-			self.infoSync("ANZII is shutting down server");
 			process.exit(0);
 			//serv.close();
 		}
@@ -537,7 +520,6 @@ export const createCustomDomain = function () {
 	const pao = self.pao;
 	const loadFile = pao.pa_loadFile;
 
-	self.infoSync(`CreateCustomDomain: `);
 	// self.emit({
 	// 	type: `add-host-domain`,
 	// 	data: {
