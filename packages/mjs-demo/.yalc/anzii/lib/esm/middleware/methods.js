@@ -59,9 +59,9 @@ export const handleAddExternalMiddleware = function (data) {
 				} else {
 					self.debug("THE MIDDLEWARES BEFORE");
 					self.debug(self.middlewares);
-					if (self.middlewares.pprivate) {
-						let len = Object.keys(self.middlewares.pprivate).length;
-						self.middlewares.pprivate[len] = {
+					if (self.middlewares.private) {
+						let len = Object.keys(self.middlewares.private).length;
+						self.middlewares.private[len] = {
 							type: "function",
 							value: data.middleware.funk,
 							ext: true,
@@ -93,26 +93,26 @@ export const attachMiddleware = function (data) {
 				self.allWares(data.app, data.xpress);
 			}
 		}
-		if (self.middlewares.pprivate && self.middlewares.ppublic) {
+		if (self.middlewares.private && self.middlewares.public) {
 			self.emit({
 				type: "router-middleware",
 				data: {
 					middleware: {
-						public: self.middlewares.ppublic,
-						private: self.middlewares.pprivate,
+						public: self.middlewares.public,
+						private: self.middlewares.private,
 					},
 				},
 			});
-		} else if (self.middlewares.pprivate) {
+		} else if (self.middlewares.private) {
 			self.emit({
 				type: "router-middleware",
-				data: { middleware: { private: self.middlewares.pprivate } },
+				data: { middleware: { private: self.middlewares.private } },
 			});
-		} else if (self.middlewares.ppublic) {
+		} else if (self.middlewares.public) {
 			// console.log("CONFIG MIDDLEWARE public");
 			self.emit({
 				type: "router-middleware",
-				data: { middleware: { public: self.middlewares.ppublic } },
+				data: { middleware: { public: self.middlewares.public } },
 			});
 		}
 		if (self.middlewares.all) {

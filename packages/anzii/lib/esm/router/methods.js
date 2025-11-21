@@ -8,22 +8,20 @@ export const init = function () {
 };
 export const handleConfigRouter = function (data) {
 	const self = this;
-	self.debug("THE HANDLE CONFIG ROUTER MODULE");
-	self.debug(data);
+
 	self.routes = data;
 };
 export const handleRouterMiddleware = function (data) {
 	const self = this;
-	self.debug("THE ROUTER MIDDLEWARE");
-	self.debug(data);
-	self.routerMiddleware = data.middleware;
+
+	self.routerMiddlewares = data.middlewares;
 };
 export const handleAttachRoutes = function (data) {
 	this.attachRoutes(data);
 };
 export const attachRoutes = function (data) {
 	const self = this;
-
+	console.log("ATTACHING ROUTES", self.routes);
 	if (data.app) {
 		let aliasList = [];
 		let aliatikHandlers = [];
@@ -73,10 +71,15 @@ export const attachRoutes = function (data) {
 			return;
 		}
 		self.routes.forEach((r) => {
-			if (r.alias)
-				aliasList.push(r.path.split("/")[1]), aliatikHandlers.push(r.alias);
-			r["router"] = data.router;
-			self.renderRoute(r);
+			if (!r?.catchAll) {
+				if (r.alias)
+					aliasList.push(r.path.split("/")[1]), aliatikHandlers.push(r.alias);
+				r["router"] = data.router;
+				self.renderRoute(r);
+			} else {
+				r["router"] = data.router;
+				self.catchAll = r;
+			}
 		});
 		// data.router.use("*.js", (req, res, next) => {
 		// 	res.set("Content-Type", "text/javascript");
@@ -120,6 +123,7 @@ export const attachRoutes = function (data) {
 		// 	return res.status(200);
 		// });
 
+		// if (self.catchAll) data.app.get("/*", self.catchAll);
 		data.router.use(self.outOfRouterContext.bind(this));
 		// data.app.get("/*", self.outOfRouterContext.bind(this));
 		aliasList.length > 0
@@ -144,11 +148,11 @@ export const renderRoute = function (r) {
 	// self.debug('THE ROUTE MIDDLEWARE')
 	// self.debug(self.routerMiddleware.public)
 	if (r.middlewares) {
-		if (self.routerMiddleware && self.routerMiddleware[r.type]) {
+		if (self.routerMiddlewares && self.routerMiddlewares[r.type]) {
 			self.middlewareType(r.type, r.middlewares);
 			self.middlewareType(
 				r.type,
-				pao.pa_objectToArray(self.routerMiddleware[r.type]),
+				pao.pa_objectToArray(self.routerMiddlewares[r.type]),
 			);
 			self.appendRouter({
 				middleware: self[`filtered${r.type}Middlewares`],
@@ -163,10 +167,10 @@ export const renderRoute = function (r) {
 			});
 			self[`filtered${r.type}Middlewares`] = [];
 		}
-	} else if (self.routerMiddleware && self.routerMiddleware[r.type]) {
+	} else if (self.routerMiddlewares && self.routerMiddlewares[r.type]) {
 		self.middlewareType(
 			r.type,
-			pao.pa_objectToArray(self.routerMiddleware[r.type]),
+			pao.pa_objectToArray(self.routerMiddlewares[r.type]),
 		);
 		self.appendRouter({
 			middleware: self[`filtered${r.type}Middlewares`],
@@ -219,118 +223,85 @@ export const middlewareType = function (type, middlewares) {
 		}
 	});
 };
-export const outOfRouterContext = async function (req, res) {
+export const outOfRouterContext = async function (req, res, next) {
 	const self = this;
-	let data = null;
+
 	let reqresID = self.pao.pa_generateUniqueID();
 	req.R_ID = reqresID;
 	res.R_ID = reqresID;
-	self.infoSync("Handling out of context route");
-	self.infoSync(req.originalUrl);
-	self.adLog("THE OUTOFROUTERCONTEXT REQUESTS");
-	// let folderPatH = `${self.pao.pa_getWorkingFolder()}${self.path.sep}build${
-	// 	self.path.sep
-	// }index.html`;
 
-	// data = {
-	// 	error: false,
-	// 	accepts: "html",
-	// 	type: "StaticServe",
-	// 	code: 200,
-	// 	sendFile: true,
-	// 	fileSource: folderPatH,
-	// };
-	// if (self) {
-	// 	return res.sendFile(folderPatH);
-	// 	// return self.emit({
-	// 	// 	type: "write-server-request-response",
-	// 	// 	data: { data: data, res: res },
-	// 	// });
-	// }
+	self.debug("Handling out of context route", req.originalUrl);
+	if (self.catchAll && req.originalUrl === "/") {
+		// self.requestData = {
+		// 	parsed: parsed,
+		// 	handler: handler,
+		// 	request: { req: data.req, res: data.res, next: data.next },
+		// };
+		return self.emit({
+			type: `catch-all`,
+			data: {
+				payload: "self.requestData",
+				callback: (response) => {
+					self.debug("THE CATCH-ALL RESPONSE", response);
 
-	// self.logSync(req.is)
-	// self.logSync(req.get)
-	// self.logSync(req.is('text'))
-	self.adLog(req.accepts(["html", "json"]));
-
-	// self.logSync(req.accepts())
-	if (req.accepts(["html", "json"]) === "json") {
-		data = {
-			error: false,
-			accepts: "html",
-			type: "StaticServe",
-			code: 200,
-			sendFile: true,
-			fileSource: folderPath,
-		};
-	} else if (req.accepts(["html", "json"]) === "html") {
-		// console.log("REQUEST ACCEPTS IN HTML", req.accepts(["html", "json"]));
-		// let folderPath = `${self.pao.pa_getWorkingFolder()}${self.path.sep}views${
-		// 	self.path.sep
-		// }index.html`;
-		// self.debug(`folder path: ${folderPath}`);
-		// self.debug(`working folder: ${self.pao.pa_getWorkingFolder()}`);
-		// self.debug(
-		// 	`IS EXISTING FOLDER VIEWS: ${self.pao.pa_isExistingDir(
-		// 		folderPath.trim(),
-		// 	)}`,
-		// );
-		// if (self.pao.pa_isExistingDir(folderPath.trim())) {
-		// 	data = {
-		// 		error: false,
-		// 		accepts: "html",
-		// 		type: "StaticServe",
-		// 		code: 200,
-		// 		sendFile: true,
-		// 		fileSource: folderPath,
-		// 	};
-		// } else {
-		// 	data = {
-		// 		error: true,
-		// 		accepts: "html",
-		// 		type: "NotFound",
-		// 		code: 404,
-		// 		message: "Resource was not found: OutOfContext",
-		// 	};
-		// }
-
-		data = {
-			error: true,
-			accepts: "html",
-			type: "NotFound",
-			code: 404,
-			message: "Resource was not found: OutOfContext",
-		};
-	} else {
-		data = {
-			error: true,
-			accepts: "txt",
-			type: "NotFound",
-			code: 404,
-			message: "Resource was not found: OutOfContext",
-		};
+					return self.emit({
+						type: "write-server-request-response",
+						data: {
+							data: { data: { type: "modular", view: response.html } },
+							res,
+							method: "renderView",
+						},
+					});
+				},
+			},
+		});
 	}
-	return self.emit({
-		type: "write-server-request-response",
-		data: { data: data, res: res },
-	});
+	next();
+	// if (req.accepts(["html", "json"]) === "json") {
+	// 	data = {
+	// 		error: false,
+	// 		accepts: "html",
+	// 		type: "StaticServe",
+	// 		code: 200,
+	// 		sendFile: true,
+	// 		fileSource: folderPath,
+	// 	};
+	// } else if (req.accepts(["html", "json"]) === "html") {
+
+	// 	data = {
+	// 		error: true,
+	// 		accepts: "html",
+	// 		type: "NotFound",
+	// 		code: 404,
+	// 		message: "Resource was not found: OutOfContext",
+	// 	};
+	// } else {
+	// 	data = {
+	// 		error: true,
+	// 		accepts: "txt",
+	// 		type: "NotFound",
+	// 		code: 404,
+	// 		message: "Resource was not found: OutOfContext",
+	// 	};
+	// }
+	// return self.emit({
+	// 	type: "write-server-request-response",
+	// 	data: { data: data, res: res },
+	// });
 };
 export async function handOver(req, res, next) {
 	const self = this;
 
-	await self.debug("THE CAUGHT REQUEST INSIDE ROUTER::END POINT HIT");
-	self.infoSync(next);
 	let reqresID = self.pao.pa_generateUniqueID();
 	req.R_ID = reqresID;
 	res.R_ID = reqresID;
+	res.ACCEPTS = self.getRequestAccepts(req);
 	self.infoSync(
 		`HANDLING REQUEST OF ID: ${req.R_ID.split("-")[0]} WITH METHOD: ${
 			req.method
 		} AND URL OF: ${req.originalUrl}`,
 	);
-	await self.debug(req.originalUrl);
-	await self.debug(req.params);
-	await self.debug(req.body);
+
 	return self.emit({
 		type: "request-handover",
 		data: { req: req, res: res, next: next },
@@ -343,5 +314,22 @@ export const filterCallback = function (filterType, moduleMiddleware) {
 		self.filteredpublicMiddlewares.push(moduleMiddleware);
 	} else {
 		self.filteredprivateMiddlewares.push(moduleMiddleware);
+	}
+};
+export const getRequestAccepts = function (req) {
+	if (req.accepts("json")) {
+		return "json";
+	} else if (req.accepts("html")) {
+		return "html";
+	} else if (req.accepts("txt")) {
+		return "txt";
+	} else if (req.accepts("image/webp")) {
+		return "image/webp";
+	} else if (req.accepts("image/png")) {
+		return "image/png";
+	} else if (req.accepts("image/jpeg")) {
+		return "image/jpeg";
+	} else {
+		("not-acceptable");
 	}
 };

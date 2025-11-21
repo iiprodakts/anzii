@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import async from "async";
 import debug from "debug";
 import fs from "fs";
@@ -8,16 +9,15 @@ import { fileURLToPath } from "url";
 import util from "util";
 import * as uuid from "uuid";
 
-const pillarDebug = debug("anzii:pillar");
-pillarDebug.enabled = true;
-pillarDebug.useColors = true;
 const require = createRequire(import.meta.url);
 
 const __filename = fileURLToPath(import.meta.url);
 
 export const EMAIL = "";
 export const PASSWORD = "";
-export const PROMPT = process.argv || [];
+export var PROMPT = process.argv || [];
+export var LogIndicators = createLoggingIndicators();
+var logger = createLogger();
 
 /** Get the current work directory */
 export const p_getWorkingFolder = function () {
@@ -146,17 +146,14 @@ export const p_hashToArray = function (obj, hashKeyProp) {
 	}, []);
 };
 export const p_capitalizeFirstLetter = function (text) {
-	// console.log("The text Uppercasing;;;", text);
 	return `${text.slice(0, 1).toUpperCase()}${text.slice(1)}`;
 };
 export const p_capitalizeLastLetter = function (text) {
-	// console.log("The text Lowercasing;;;", text);
 	return `${text.slice(0, text.length - 1)}${text
 		.slice(text.length - 1)
 		.toLowerCase()}`;
 };
 export const p_camelCase = function (text, sep = "-") {
-	// console.log("The camelCasing;;;", text);
 	if (!sep) return text;
 	if (text.indexOf(sep) < 0) return text;
 
@@ -338,9 +335,8 @@ export const p_isBoolean = function (value) {
 export function // p_isDirectory(item){
 // },
 p_isExistingDir(filePath) {
-	// console.log("THE EXISTANCE PATH", filePath);
 	const checkResults = fs.existsSync(filePath);
-	// console.log("existence results", checkResults);
+
 	return checkResults;
 }
 export const p_makeFolderSync = function (absolutePath) {
@@ -351,11 +347,11 @@ export const p_makeFolderSync = function (absolutePath) {
 export const p_saveToFile = function (fileToSaveTo, contents) {
 	// const contents = fs.readFileSync(origFilePath, 'utf8');
 	const writePath = `${fileToSaveTo}`;
-	// console.log("saveToFile", writePath);
+
 	fs.writeFileSync(writePath, contents, "utf8");
 };
 export function p_wiLog(...message) {
-	pillarDebug(message);
+	console.log(message);
 }
 // export const p_getMainFileName = moduleExports.p_getMainFileName;
 // export const p_getRootDir = moduleExports.p_getRootDir;
@@ -618,7 +614,7 @@ export const p_getDirectories = function (dirPath) {
 							return reject(err);
 						}
 						if (that.p_isNullOrUndefined(stat)) {
-							this.p_wiLog(
+							logger.debug(
 								"WARN: Util: unstatable file encountered: %s",
 								fullPath,
 							);
@@ -653,138 +649,30 @@ export const p_getDirectories = function (dirPath) {
  * function.
  */
 export const p_getFiles = function (dirPath, options, fileName) {
-	let that = this;
-	// console.log('gETTING FILES')
-	// console.log(dirPath)
-	// console.log(options)
 	return new Promise((resolve, reject) => {
-		// if (this.p_isFunction(options)) {
-		//     cb      = options;
-		//     options = {
-		//         recursive: false,
-		//         filter: function(/*fullPath, stat*/) { return true; }
-		//     }
-		// }
-		// if(!options){
-		//     options = {
-		//         recursive: false,
-		//         filter: function(/*fullPath, stat*/) { return true; }
-		//     }
-		// }
-		that.p_wiLog("The directory path");
-		that.p_wiLog(dirPath);
-		that.p_wiLog(fileName);
-		// console.log(fileName)
-		//read files from dir
 		fs.readdir(dirPath, function (err, q) {
 			if (util.types.isNativeError(err)) {
 				return reject(err);
 			}
-			that.p_wiLog("The readdir results q");
-			that.p_wiLog(q);
-			// console.log(q)
+
 			let filePaths = [];
 			//seed the queue with the absolute paths not just the file names
 			for (var i = 0; i < q.length; i++) {
-				// that.p_wiLog(q[i])
-				// q[i] = path.join(dirPath, q[i]);
 				filePaths.push(path.join(dirPath, q[i]));
 			}
-			//process the q
-			// console.log(q)
-			// console.log(filePaths)
+
 			if (filePaths.indexOf(path.join(dirPath, fileName)) !== -1) {
-				that.p_wiLog("THE IS A NEED FOR A SPECIFIC FILE");
-				// let filePathCont = filePaths[filePaths.indexOf(filePath)]
-				// let file = filePathCont.substr(filePath.indexOf(fileName),filePathCont.length - 1)
-				// that.p_wiLog(filePathCont)
-				// that.p_wiLog(file)
 				let file = filePaths[filePaths.indexOf(path.join(dirPath, fileName))];
-				// console.log('THE FILE')
-				// console.log(file)
+
 				return resolve(file);
 			} else {
 				return resolve(null);
 			}
-			// for(let p =0; p < filePaths.length; p++){
-			//     if(filePaths.indexOf(filePath) !== -1){
-			//         that.p_wiLog('THE IS A NEED FOR A SPECIFIC FILE')
-			//         let filePathCont = filePaths[filePaths.indexOf(filePath)]
-			//         let file = filePathCont.substr(filePath.indexOf(fileName),filePathCont.length - 1)
-			//         that.p_wiLog(filePathCont)
-			//         that.p_wiLog(file)
-			//         resolve(file)
-			//     }else{
-			//         resolve(filePaths);
-			//     }
-			// }
-			//  var filePaths = [];
-			// async.whilst(
-			//     function() {
-			//         console.log('THE Q LENGTH')
-			//         console.log(q.length)
-			//         console.log(q.length)
-			//         return q.length > 0; }
-			//     function(callback) {
-			//         console.log('The second with ca')
-			//         console.log(callback)
-			//         var fullPath = q.shift();
-			//         fs.stat(fullPath, function(err, stat) {
-			//             if (util.types.isNativeError(err)) {
-			//                 console.log('THERE ERROR')
-			//                 return callback(err);
-			//             }
-			//             //apply filter
-			//             var meetsCriteria = true;
-			//             if (that.p_isFunction(options.filter)) {
-			//                 meetsCriteria = options.filter(fullPath, stat);
-			//             }
-			//             //examine result and add it when criteria is met
-			//             if (meetsCriteria) {
-			//                 filePaths.push(fullPath);
-			//             }
-			//             //when recursive queue up directory's for processing
-			//             if (!options.recursive || !stat.isDirectory()) {
-			//                 return callback(null);
-			//             }
-			//             //read the directory contents and append it to the queue
-			//             fs.readdir(fullPath, function(err, childFiles) {
-			//                 if (util.types.isNativeError(err)) {
-			//                     return callback(err);
-			//                 }
-			//                 childFiles.forEach(function(item) {
-			//                     q.push(path.join(fullPath, item));
-			//                 });
-			//                 callback(null);
-			//             });
-			//         });
-			//     }
-			//     function(err) {
-			//         console.log('THE FILES ARRAY')
-			//         console.log(err)
-			//         that.p_wiLog('THE FILES ARRay')
-			//         let filePath = dirPath+path.sep+fileName
-			//         that.p_wiLog(filePath)
-			//         if(filePaths.indexOf(filePath) !== -1){
-			//             that.p_wiLog('THE IS A NEED FOR A SPECIFIC FILE')
-			//             let filePathCont = filePaths[filePaths.indexOf(filePath)]
-			//             let file = filePathCont.substr(filePath.indexOf(fileName),filePathCont.length - 1)
-			//             that.p_wiLog(filePathCont)
-			//             that.p_wiLog(file)
-			//             resolve(file)
-			//         }else{
-			//             resolve(filePaths);
-			//         }
-			//     }
-			// );
 		});
 	});
 };
 export const p_getFile = function (filePath) {
 	return new Promise((resolve) => {
-		this.p_wiLog("The directory path");
-		this.p_wiLog(filePath);
-		//read files from dir
 		var s = fs.createReadStream(filePath);
 		if (s) {
 			resolve(s);
@@ -796,32 +684,27 @@ export const p_createFolderContent = function (
 	savePath,
 	ignore = null,
 ) {
-	// console.log("CREATE FOLDER CONTENT SOURCE", sourcePath)
 	const self = this;
 	const CURR_DIR = self.p_getWorkingFolder();
 	const filesToCreate = fs.readdirSync(sourcePath);
-	// console.log("CREATE FOLDER CONTENT CURR_DI",CURR_DIR)
-	// console.log("CREATE FOLDER CONTENT FILES TO CREATE", filesToCreate)
-	// console.log("CREATE FOLDER CONTENT FILES TO IGNORE", ignore)
+
 	filesToCreate.forEach((file) => {
 		const origFilePath = `${sourcePath}/${file}`;
-		// console.log("CREATE FOLDER CONTENT Original File pATH", origFilePath)
+
 		// Get file statitics
 		const stats = fs.statSync(origFilePath);
 		let skip = false;
 		if (stats.isFile()) {
 			// let fileBaseName = path.basename(origFilePath)
-			// console.log("CREATE FOLDER CONTENT writepath pATH", fileBaseName)
-			// console.log("CREATE FOLDER CONTENT file", file)
+
 			if (ignore && this.contains(ignore, file)) skip = true;
 			if (!skip) {
 				const contents = fs.readFileSync(origFilePath, "utf8");
 				const writePath = `${CURR_DIR}/${savePath}/${file}`;
-				// console.log("CREATE FOLDER CONTENT writepath pATH", origFilePath)
+
 				fs.writeFileSync(writePath, contents, "utf8");
 			}
 		} else if (stats.isDirectory()) {
-			// console.log("THE FOLDER", file)
 			if (ignore && this.contains(ignore, file)) skip = true;
 			if (!skip) {
 				fs.mkdirSync(`${CURR_DIR}/${savePath}/${file}`);
@@ -836,7 +719,6 @@ export const p_createFolderContent = function (
 };
 export const p_loadFile = function (filepath, all = false, checkExist = true) {
 	return new Promise((resolve, reject) => {
-		this.p_wiLog(`THE FILEPATH load`, filepath);
 		if (checkExist && !p_isExistingDir(filepath))
 			return reject({
 				code: "FILE_PATH_ERROR",
@@ -844,39 +726,18 @@ export const p_loadFile = function (filepath, all = false, checkExist = true) {
 				filePath: filepath,
 			});
 		const ext = path.extname(filepath);
-		this.p_wiLog(`FILE EXTENSION, ${ext}`);
 
 		if (ext === ".json") {
 			try {
 				const readJson = p_readFileSync(filepath);
-				this.p_wiLog(`THE READ JSON, ${readJson}`);
+
 				return resolve(readJson);
 			} catch (err) {
-				console.log("failed to findJSON", err.code);
 				return reject(err);
 			}
-			// import(`${filepath}`, {
-			//     with: { type: 'json' }
-			//   }).then((foundJson)=>{
-			//     console.log("JSON WAS FOUND")
-			//     return resolve(foundJson)
-			//   }).catch((err)=>{
-			//     try{
-			//         const readJson = p_readFileSync(filepath)
-			//         console.log("THE READ JSON",readJson)
-			//         return resolve(readJson)
-			//     }
-			//     catch(err){
-			//         console.log("failed to findJSON",err.code)
-			//         return reject(err)
-			//     }
-
-			//   });
 		}
 		import(filepath)
 			.then((moduleFound) => {
-				// console.log("THE FOUND MODULE", moduleFound);
-				// let foundFileContent = moduleFound?.default || moduleFound;
 				let foundFileContent = all
 					? moduleFound
 					: moduleFound?.default || moduleFound;
@@ -884,30 +745,21 @@ export const p_loadFile = function (filepath, all = false, checkExist = true) {
 				// resolve(foundFileContent);
 			})
 			.catch((importERR) => {
-				console.log("IMPORT ERROR", importERR);
 				try {
 					const readFile = p_loadFileSync(filepath);
-					this.p_wiLog(`THE READ FILE, ${JSON.stringify(readFile)}`);
+
 					return resolve({ default: readFile });
 				} catch (err) {
-					this.p_wiLog(`MODULE FETCH ERROR, ${err.code}`);
 					return reject(err);
 				}
-				// console.log("MODULE FETCH ERROR", err);
-				// reject(err);
 			});
 	});
 
-	// console.log('THE FILEPATH')
-	// console.log(filepath)
-	// console.log(__non_webpack_require__.main)
 	// eslint-disable-next-line no-undef
 };
 export const p_loadFileSync = function (filepath) {
-	//if(!p_isExistingDir(filepath) || filepath !== "@babel/register" || filepath !== "babel-register") return ({code:"FILE_PATH_ERROR",message:"File path does not exist",filePath:filepath})
-	// console.log("REQUIRE'S");
 	const foundFile = require(filepath);
-	// console.log("THE FILE FOUND FROM REQUIRE", foundFile);
+
 	return foundFile;
 };
 
@@ -974,9 +826,6 @@ export const clone = function (o) {
 			} else if (o[p] instanceof Object && typeof o[p] !== "function") {
 				n[p] = this.clone(o[p]);
 			} else {
-				if (p === "callback") {
-					this.p_wiLog("The current property is callback");
-				}
 				n[p] = o[p];
 			}
 		}
@@ -985,8 +834,6 @@ export const clone = function (o) {
 };
 /*********************************** OBJECT AND ARRAY CASTING ************************************************************/
 export const object_to_array = function (castObj, keys = false) {
-	// this.p_wiLog('THE CAST OBJECT')
-	// this.p_wiLog(castObj)
 	if (castObj instanceof Object) {
 		if (!(castObj instanceof Array)) {
 			var arr = [];
@@ -1002,8 +849,7 @@ export const object_to_array = function (castObj, keys = false) {
 					++count;
 				}
 			}
-			//    this.p_wiLog('THE RETURN OF CONVERTED OBJECT')
-			//    this.p_wiLog(arr)
+
 			return arr;
 		} else {
 			return castObj;
@@ -1025,46 +871,21 @@ export const array_to_object = function (castArr) {
 	}
 };
 export const string_to_array = function (string, sep) {
-	// this.p_wiLog('STRING TO ARRAY')
-	// this.p_wiLog(string)
-	// this.p_wiLog(sep)
 	if (this.is_string(string)) {
-		// this.p_wiLog('THE STRING IS AN INSTANCE OF STRING')
 		return string.split(sep);
 	}
 };
 export const set_deeply = function (path, deep, value = null, type = null) {
-	//  this.p_wiLog('TYPEOF AC')
-	//  this.p_wiLog(ac)
-	// if(!(ac)){
-	// 	this.p_wiLog('AC IS NULL')
-	// 	var a = deep
-	// }
-	// this.p_wiLog('THE VALUE OF A')
-	// this.p_wiLog(a)
 	if (path.length === 1) {
-		this.p_wiLog("ABOUT TO SET DEEPLY NESTED PROP");
-		this.p_wiLog("THE DEEP");
-		this.p_wiLog(deep);
 		if (!value) {
-			this.p_wiLog("THIS DEEP ARRAY");
-			this.p_wiLog(this.js_to_json(deep));
-			this.p_wiLog("THE DEEP I,i");
 			deep.splice(path[0], 1);
-			this.p_wiLog(deep);
 		} else {
 			deep[path[0]] = value;
 		}
-		this.p_wiLog(path);
-		this.p_wiLog(path[0]);
-		this.p_wiLog(deep[path]);
+
 		return true;
 	}
 	if (!deep[path[0]]) {
-		this.p_wiLog("THE PROPERTY BELOW DOES NOT EXIST");
-		this.p_wiLog(path);
-		this.p_wiLog(path[0]);
-		//  this.p_wiLog(deep[path[0]])
 		return false;
 	}
 	return this.set_deeply(path.slice(1), deep[path[0]], value, type);
@@ -1134,8 +955,6 @@ export const contains = function (o, v) {
 		return o.indexOf(v) > -1 ? true : false;
 	} else if (this.is_object(o)) {
 		if (this.is_array(v)) {
-			this.p_wiLog("THE SPECIFED VALUE TO CHECK IS AN ARRAY");
-			this.p_wiLog(v);
 			let outcome = "";
 			for (let i = 0; i < v.length; i++) {
 				if (!o.hasOwnProperty(v[i])) {
@@ -1145,8 +964,7 @@ export const contains = function (o, v) {
 					outcome = true;
 				}
 			}
-			this.p_wiLog("THE OUTCOME");
-			this.p_wiLog(outcome);
+
 			return outcome;
 		} else {
 			return o.hasOwnProperty(v) ? true : false;
@@ -1161,16 +979,12 @@ export const for_of = function (x, action, y = null) {
 		x.forEach(action);
 	} else if (this.is_object(x)) {
 		if (!y) {
-			// this.p_wiLog('THE FOROF Y IS NULL')
-			// this.p_wiLog(x)
-			// this.p_wiLog('THE Y IS DEFINED')
 			let newX = {};
 			for (let p in x) {
 				let prop = action(p, x[p]);
 				newX[prop.p] = prop.v;
 			}
-			// this.p_wiLog('THE NEWX')
-			// this.p_wiLog(newX)
+
 			return newX;
 		} else {
 			for (let p in x) {
@@ -1216,3 +1030,53 @@ export const find_in = function (x, id, f) {
 		}
 	}
 };
+function createLoggingIndicators() {
+	const isEnvDev =
+		process.env?.NODE_ENV && process.env.NODE_ENV === "development"
+			? true
+			: false;
+	const showAllLogsSet = process.env.ANZII_SHOW_ALL_LOGS || "true";
+	const cliLogsSet = process.env.ANZII_SHOW_CLI_LOGS || "false";
+	const debugLogsSet = process.env.ANZII_SHOW_DEBUG_LOGS || "false";
+	const warningLogsSet = process.env.ANZII_SHOW_WARNING_LOGS || "true";
+	const errorLogsSet = process.env.ANZII_SHOW_ERROR_LOGS || "true";
+	const showStandardLogsSet = process.env.ANZII_SHOW_LOGS || "true";
+	const shouldShowAllLogs = showAllLogsSet === "true" ? true : false;
+	const shouldShowCliLogs =
+		cliLogsSet === "true" && shouldShowAllLogs ? true : false;
+	const shouldShowDebugLogs =
+		debugLogsSet === "true" && shouldShowAllLogs ? true : false;
+	const shouldShowWarningLogs =
+		warningLogsSet === "true" && shouldShowAllLogs ? true : false;
+	const shouldShowErrorLogs =
+		errorLogsSet === "true" && shouldShowAllLogs ? true : false;
+	const shouldShowStandardLogs =
+		showStandardLogsSet && isEnvDev && shouldShowAllLogs ? true : false;
+
+	return {
+		shouldShowStandardLogs,
+		shouldShowStandardLogs,
+		shouldShowCliLogs: PROMPT.indexOf("cli") >= 0 && shouldShowCliLogs === true,
+		shouldShowDebugLogs,
+		shouldShowWarningLogs,
+		shouldShowErrorLogs,
+	};
+}
+function createLogger() {
+	const debugLogger = debug("anzii:pillar");
+	debugLogger.enabled = true;
+	debugLogger.useColors = true;
+	return {
+		info: function (...message) {
+			debugLogger(...message);
+		},
+		debug: function (...message) {
+			if (!LogIndicators.shouldShowDebugLogs) return;
+			debugLogger(...message);
+		},
+		log: function (...message) {
+			if (!LogIndicators.shouldShowStandardLogs) return;
+			debugLogger(...message);
+		},
+	};
+}

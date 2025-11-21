@@ -18,7 +18,7 @@ export const handleSetDomainDefaults = function (data) {
 	// self.debug(`THE DOMAINS PASSPORT, ${passport}`);
 	// self.debug(`THE PASSPORT, ${self.passportInitialize}`);
 	// self.debug(data)
-	self.debug(self.system);
+
 	// self.debug(data)
 	// self.debug(`OUTPUT PATH", ${data.custom.webpackConfig.output}`);
 	// self.debug(`PATH", ${data.custom.webpackConfig.output.path}`);
@@ -41,10 +41,10 @@ export const handleSetDomainDefaults = function (data) {
 				self.system?.DOCUMENT_ROOT,
 				dumain.set,
 			)}`;
-			// console.log("THE APP ROOT", appRoot);
-			// console.log("THE APP FULL STATIC", appStaticFull);
+			console.log("THE APP ROOT", appRoot);
+			console.log("THE APP FULL STATIC", appStaticFull);
 			let domainStatic = dumain?.absolute ? dumain.set : appStaticFull;
-			// console.log("THE STATIC DOMAIN", domainStatic);
+			console.log("THE STATIC DOMAIN", domainStatic);
 			return data.app.use(data.xpress.static(domainStatic));
 		}
 		if (dumain.name === "passport") return data.app.use(passport.initialize());
@@ -62,17 +62,15 @@ export const handleSetDomainDefaults = function (data) {
 };
 export const handleConfigDomain = function (data) {
 	const self = this;
-	self.debug("Configuring Domain");
-	self.debug(data);
+
 	self.domainCandidates = data;
 };
 export const handleTakeSystemBase = function (data) {
 	const self = this;
-	self.debug("THE SYSTEMBASE HANDLE");
-	self.debug(data);
 	self.system = data.systemBase;
 };
 export const hookIntoWebpackCompilation = async function (compiler) {
+	const self = this;
 	compiler.hooks.invalid.tap("invalid", () => {
 		self.debug("wEBPACK is compiling....");
 	});

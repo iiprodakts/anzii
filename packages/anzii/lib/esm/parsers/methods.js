@@ -10,9 +10,30 @@ export const handleShareMiddleware = function () {
 	self.emit({
 		type: "add-ext-middleware",
 		data: {
-			type: "all",
-			level: "top",
-			middleware: { funk: [{ body: self.dependiks.bodyParser, call: "json" }] },
+			payload: [
+				// {
+				// 	type: "all",
+				// 	level: "top",
+				// 	middleware: {
+				// 		call: "json",
+				// 		// options: [{ body: self.dependiks.bodyParser, call: "json" }],
+				// 	},
+				// },
+				{
+					type: "all",
+					level: "top",
+					middleware: {
+						funk: (req, res, next) => {
+							res.header("Access-Control-Allow-Origin", "*");
+							res.header(
+								"Access-Control-Allow-Headers",
+								"Origin, X-Requested-With, Content-Type, Accept",
+							);
+							next();
+						},
+					},
+				},
+			],
 		},
 	});
 };

@@ -63,9 +63,6 @@ export const configure = function () {
 	const isAnziiInitiateManually =
 		(anziiKickoffManually && anziiKickoffManually === "true") || null;
 
-	self.debug(`THE CONFIG IS APP CLI: ${isAppCli}`);
-	self.debug(`THE CONFIG initi ${initializeCliWithServer}`);
-
 	if (initializeCliWithServer || (isAnziiInitiateManually && !self.config)) {
 		self.configLogger();
 		return self.configReady();
@@ -134,7 +131,7 @@ export const enviroment = function () {
 				});
 			}
 		} else {
-			self.log("Enviroment config invalid, resorting to default", "warn");
+			self.warn("Enviroment config invalid, resorting to default");
 		}
 	}
 	// let db = self.envObserver.get('dev')
@@ -143,6 +140,7 @@ export const enviroment = function () {
 };
 export const handleManualConfig = function (data = null) {
 	const self = this;
+	self.callback = data?.callback || function () {};
 	self.debug(
 		`MANUAL SERVER TRIGGER ACTIVATED,
 		${data?.payload?.configs}`,
@@ -164,7 +162,7 @@ export const runAppConfig = function (manualConfig = null) {
 			? self.mergeConfigs(manualConfig?.payload?.configs)
 			: self.config;
 		let { payload } = manualConfig;
-		let { compiler, wepackMiddlewares, webpackConfig } = payload;
+		let { wepackMiddlewares } = payload;
 		const { webpackDevMiddleware, webpackHotMiddleware } = wepackMiddlewares;
 
 		// self.debug("THE CONFIG");
@@ -178,40 +176,17 @@ export const runAppConfig = function (manualConfig = null) {
     */
 
 		self.config["middleware"] = {
-			ppublic: {
-				addMiddleware: [
-					{
-						type: "function",
-						value: webpackDevMiddleware(compiler, {
-							publicPath: webpackConfig.output.path,
-							writeToDisk: true,
-							serverSideRender: true,
-						}),
-					},
-					// {
-					//     type:"function",
-					//     value: webpackHotMiddleware(compiler,{
-					//         log: true,
-					//         path: "/__kotii",
-					//         heartbeat: 2000
-					//     })
-
-					// }
-				],
-			},
-			all: {
-				addMiddleware: [
-					{
-						type: "function",
-						value: webpackHotMiddleware(compiler, {
-							log: console.log,
-							path: "/__kotii",
-							heartbeat: 2000,
-						}),
-						extra: "hotModule",
-					},
-				],
-			},
+			all: [
+				{
+					type: "function",
+					value: webpackDevMiddleware,
+				},
+				{
+					type: "function",
+					value: webpackHotMiddleware,
+					extra: "hotModule",
+				},
+			],
 		};
 	}
 
@@ -219,8 +194,16 @@ export const runAppConfig = function (manualConfig = null) {
 	 *
 	 *
 	 */
+
+	console.log("THE SELF.CONFIG", self.config, config);
 	if (!self.config) {
-		self.emit({ type: "config-system", data: { workers: 1, spawn: true } });
+		self.emit({
+			type: "config-system",
+			data: {
+				payload: { workers: 1, spawn: true },
+				callback: self.callback,
+			},
+		});
 		// if (manualConfig)
 		//     self.emit({ type: 'config-domain-resources', data: manualConfig });// To be re-organized
 		if (manualConfig)
@@ -236,13 +219,25 @@ export const runAppConfig = function (manualConfig = null) {
 		let serverConfig = null;
 		self.enviroment();
 		self.config?.cluster
-			? self.emit({ type: "config-system", data: self.config.cluster })
-			: self.emit({ type: "config-system", data: { workers: 1, spawn: true } });
+			? self.emit({
+					type: "config-system",
+					data: {
+						payload: { ...self.config.cluster },
+						callback: self.callback,
+					},
+			  })
+			: self.emit({
+					type: "config-system",
+					data: {
+						payload: { workers: 1, spawn: true },
+						callback: self.callback,
+					},
+			  });
 
 		for (let c in config) {
-			self.debug(`THE C IN CONFIG", ${c}`);
-			self.debug("The module in Config");
-			self.debug(c);
+			// self.debug(`THE C IN CONFIG", ${c}`);
+			// self.debug("The module in Config");
+			// self.debug(c);
 			/*
 			 This section of the code should be refactoured such so that server event should be the last to be
 			 sent out. This starts kicks off the server operations such as listening to server requests
@@ -291,7 +286,7 @@ export const runAppConfig = function (manualConfig = null) {
 		 * This section of the code along with the server section above should be refactored
 		 */
 		self.emit({ type: "config-domain-resources", data: null }); // to be re-organized
-		self.debug(`isServer Value", ${isServerConfig}`);
+
 		if (isServerConfig) {
 			self.emit({
 				type: `config-server`,

@@ -1,10 +1,12 @@
 function PAO(appPillar) {
 	this.core = appPillar;
 	this.PROMPT = appPillar.PROMPT;
+	this.LogIndicators = appPillar.LogIndicators;
 } // End of PAO
 PAO.prototype.create = function (moduleID, modInstId, className) {
 	const pa_core = this.core;
 	const PROMPT = this.PROMPT;
+	const LogIndicators = this.LogIndicators;
 	// const util = pa_core.util
 	// var events = pa_core.events()
 	// var ajax = pa_core.ajax()
@@ -40,42 +42,13 @@ PAO.prototype.create = function (moduleID, modInstId, className) {
 			className: className,
 		};
 	}
-	const isEnvDev =
-		process.env?.NODE_ENV && process.env.NODE_ENV === "development"
-			? true
-			: false;
-	const showAllLogsSet = process.env.ANZII_SHOW_ALL_LOGS || "true";
-	const cliLogsSet = process.env.ANZII_SHOW_CLI_LOGS || "false";
-	const debugLogsSet = process.env.ANZII_SHOW_DEBUG_LOGS || "false";
-	const warningLogsSet = process.env.ANZII_SHOW_WARNING_LOGS || "true";
-	const errorLogsSet = process.env.ANZII_SHOW_ERROR_LOGS || "true";
-	const showStandardLogsSet = process.env.ANZII_SHOW_LOGS || "true";
-	const shouldShowAllLogs = showAllLogsSet === "true" ? true : false;
-	const shouldShowCliLogs =
-		cliLogsSet === "true" && shouldShowAllLogs ? true : false;
-	const shouldShowDebugLogs =
-		debugLogsSet === "true" && shouldShowAllLogs ? true : false;
-	const shouldShowWarningLogs =
-		warningLogsSet === "true" && shouldShowAllLogs ? true : false;
-	const shouldShowErrorLogs =
-		errorLogsSet === "true" && shouldShowAllLogs ? true : false;
-	const shouldShowStandardLogs =
-		showStandardLogsSet && isEnvDev && shouldShowAllLogs ? true : false;
 
 	return {
 		// DOM manipulations
 		// view: CONTAINER,
 		moduleMeta: meta,
 		PROMPT: PROMPT,
-		LogIndicators: {
-			shouldShowStandardLogs,
-			shouldShowStandardLogs,
-			shouldShowCliLogs:
-				PROMPT.indexOf("cli") >= 0 && shouldShowCliLogs === true,
-			shouldShowDebugLogs,
-			shouldShowWarningLogs,
-			shouldShowErrorLogs,
-		},
+		LogIndicators,
 		...util,
 		...validators,
 		...converts,

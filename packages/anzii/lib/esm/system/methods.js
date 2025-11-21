@@ -1,3 +1,5 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
+/* eslint-disable no-empty */
 /* eslint-disable no-unused-vars */
 import fs from "node:fs";
 import https from "node:https";
@@ -13,15 +15,17 @@ export const init = function () {
 		"distribute-system-resources":
 			this.handleDistributeSystemResources.bind(this),
 		"attach-workers-to-server": this.handleServerAttachWorkers.bind(this),
+		"open-browser-signal": this.handleOpenBrowserSignal.bind(this),
 	});
 	// self.debug(this.env)
 };
 export const handleConfigureSystem = function (data) {
 	const self = this;
-	self.debug(`System ENVIROMENT IS: ${self.env}`, process.env);
-	self.debug(self.systemBase?.DOCUMENT_ROOT);
+
+	if (data.callback) self.ON_SERVER_START_LISTENERS.push(data.callback);
+
 	self.handleShutDowns();
-	self.clusterCustomConfig = data;
+	self.clusterCustomConfig = data.payload;
 
 	self.emit({
 		type: "take-premier-system-base",
@@ -65,38 +69,95 @@ export const handleDistributeSystemResources = async function (data) {
 	});
 	// self.masterWorker(data)
 };
-export const shutDown = function (type, code) {
+export const handleOpenBrowserSignal = function (data) {
 	const self = this;
-	self.infoSync(`SHUTDOWN TYPE: ${type},code: ${code}`);
-	self.error(code);
-	self.systemIsShuttingDown = true;
-	if (self.shutDownServices.length > 0) {
-		self.shutDownServices.forEach((sd, i) => {
-			if (typeof sd !== "function") {
-				self.logSync(
-					`Service: ${self.shutDownOrder[i]} must be a function,shutdown attempt failed`,
-					"warn",
-				);
-			} else {
-				self.logSync(
-					`Service: ${self.shutDownOrder[i]} is shutting down`,
-					"info",
-				);
-			}
-		});
-	}
-	self.logSync(
-		`System is shutting down through: ${type},with code: ${code.stack}`,
-	);
-	type === "uncaughtException" ? self.context.kill(1) : self.context[type]();
+
+	const {
+		availablePort,
+		protocol,
+		domainToUse,
+		pageToOpen,
+		runningServerMessage,
+	} = self.openBrowserTools;
+	self.info(runningServerMessage);
+	self.openBrowserApp(availablePort, protocol, domainToUse, pageToOpen);
+	// self.masterWorker(data)
 };
+export const shutDown = async function (type, code) {
+	const self = this;
+
+	self.systemIsShuttingDown = true;
+
+	const shutdownPromises = [];
+
+	for (let i = 0; i < self.shutDownServices.length; i++) {
+		const sd = self.shutDownServices[i];
+		if (typeof sd !== "function") {
+			self.warn(
+				`Service: ${self.shutDownOrder[i]} must be a function, shutdown attempt failed`,
+			);
+			continue;
+		}
+
+		self.info(`Service: ${self.shutDownOrder[i]} is shutting down`);
+		try {
+			const result = sd();
+			shutdownPromises.push(Promise.resolve(result));
+		} catch (err) {
+			self.warn("Error during shutdown:", err);
+		}
+		self.info(`Service: ${self.shutDownOrder[i]} shutdown triggered`);
+	}
+
+	Promise.all(shutdownPromises)
+		.then((settled) => {
+			self.infoSync(
+				`System is shutting down through: ${type}, with code: ${code?.stack}`,
+			);
+			const handles = process._getActiveHandles();
+
+			handles.forEach((h) => {
+				try {
+					if (h.close) h.close(); // e.g., servers, watchers
+					else if (h.destroy) h.destroy(); // e.g., sockets
+				} catch (e) {}
+			});
+
+			const requests = process._getActiveRequests();
+			requests.forEach((r) => {
+				try {
+					if (r.abort) r.abort();
+				} catch (e) {}
+			});
+
+			process.exit(0);
+
+			// setTimeout(() => {
+			// 	// process.removeAllListeners('SIGINT'); // remove other Ctrl+C handlers
+			//     self.logSync("ANZII JS SYSTEM IS SHUTTING DOWN")
+			// 	process.exit(0), 10
+			// });
+		})
+		.catch((err) => {
+			self.debug("SHUTDOWN PROMISES ERROR", err);
+			setTimeout(() => process.exit(0), 10); // allow event loop to flush
+		});
+};
+
 export const masterWorker = function (app, system) {
 	const self = this;
 
 	const serverTimeout = self.serverTimeout;
 	const portToUse = self?.context?.env?.PORT ? self?.context?.env?.PORT : 3000;
 	const shouldOpenBrowser = self?.context?.env?.ANZII_OPEN_BROWSER
-		? true
+		? typeof self.context.env.ANZII_OPEN_BROWSER === "string" &&
+		  self.context.env.ANZII_OPEN_BROWSER === "true"
+			? true
+			: false
+		: false;
+
+	const shouldWaitForSignal = system?.shouldWaitForSignal
+		? system.shouldWaitForSignal
 		: false;
 	const shouldStopServer = self?.context?.env?.ANZII_STOP_SERVER ? true : false;
 	const useHttps =
@@ -105,11 +166,20 @@ export const masterWorker = function (app, system) {
 		system?.useCustomDomain || self?.context?.evn?.ANZII_USE_CUSTOM_DOMAIN
 			? true
 			: false;
+	const useSockets =
+		system?.useSockets || self?.context?.evn?.ANZII_USE_SOCKETS
+			? system.useSockets
+			: false;
 	const appProtocol = useHttps ? "https" : "http";
-	const useAvailablePort = system.useAvailablePort
+	const useAvailablePort = system?.useAvailablePort
 		? system.useAvailablePort
 		: true;
 	const appDomain = useCustomDomain ? system?.domainName : "localhost";
+	const pageToOpen = system?.pageToOpen
+		? system.pageToOpen === "/"
+			? ""
+			: system.pageToOpen
+		: "";
 	let serverSettings = {
 		useHttps,
 		useCustomDomain,
@@ -120,17 +190,16 @@ export const masterWorker = function (app, system) {
 		serverTimeout,
 		appOpts: system?.appOpts,
 		shouldStopServer,
+		pageToOpen,
+		shouldWaitForSignal,
+		useSockets,
 	};
 
 	self
 		.getServerPort(portToUse, useAvailablePort)
 		.then((availablePort) => {
-			self.debug(`THE STATUS OF isMaster: ${self.cluster.isMaster}`);
-			self.debug(`THE cluster`, self.cluster);
-			self.debug(`THE CLUSTERS`, self.clusterCustomConfig);
 			serverSettings["availablePort"] = availablePort;
 			if (self.cluster.isMaster) {
-				self.debug(`Master ${self.context.pid} is running`);
 				if (self.clusterCustomConfig && self.clusterCustomConfig.spawn) {
 					let slaves = self.clusterCustomConfig.workers
 						? self.clusterCustomConfig.workers
@@ -153,26 +222,19 @@ export const masterWorker = function (app, system) {
 					});
 					let mainWorkerId = null;
 					self.cluster.on("listening", (worker, address) => {
-						self.debug("cluster listening new worker", worker.id);
 						if (null === mainWorkerId) {
-							self.debug("Making worker " + worker.id + " to main worker");
 							mainWorkerId = worker.id;
 							worker.send({ singleProcessTasks: "startSingleProcessTasks" });
 						}
 					});
 					self.cluster.on("exit", (worker, code, signal) => {
-						self.debug(`worker ${worker.process.pid} died`);
-						self.debug("FORKING ANOTHER WORK");
 						self.debug("Worker %d died :(", worker.id);
 						if (!shouldStopServer) {
 							if (worker.id === mainWorkerId) {
 								self.debug("Main Worker is dead...");
 								mainWorkerId = null;
 							}
-							self.debug("I am here");
-							self.debug(worker);
-							self.debug(code);
-							self.debug(signal);
+
 							self.cluster.fork();
 							// self.cluster.fork()
 						} else {
@@ -180,10 +242,17 @@ export const masterWorker = function (app, system) {
 						}
 					});
 				} else {
-					self.logSync("System is running on a single thread/core");
+					self.debug("System is running on a single thread/core");
 					self
 						.runServer(app, serverSettings)
 						.then((started) => {
+							if (self.ON_SERVER_START_LISTENERS) {
+								self.ON_SERVER_START_LISTENERS.forEach(
+									(serverStartListener) => {
+										serverStartListener({ data: "Server has been started" });
+									},
+								);
+							}
 							self.debug("The server has been started", started);
 						})
 						.catch((err) => {
@@ -196,6 +265,11 @@ export const masterWorker = function (app, system) {
 				self
 					.runServer(app, serverSettings)
 					.then((started) => {
+						if (self.ON_SERVER_START_LISTENERS) {
+							self.ON_SERVER_START_LISTENERS.forEach((serverStartListener) => {
+								serverStartListener({ data: "Server has been started" });
+							});
+						}
 						self.debug("The server has been started", started);
 					})
 					.catch((err) => {
@@ -221,15 +295,17 @@ export const masterWorker = function (app, system) {
 // }
 export const handleShutDowns = function () {
 	const self = this;
-	self.debug("Shutdowns are being handled");
-	self.context.on("INT", function (code) {
+
+	self.context.on("SIGINT", function (code) {
+		self.debug("ANZII JS: INT", code);
 		if (!self.systemIsShuttingDown) {
 			self.shutDown("kill", code);
 		} else {
 			self.infoSync("System is already ShuttingDown:: INT EXIT");
 		}
 	});
-	self.context.on("SIGTEM", function (code) {
+	self.context.on("SIGTERM", function (code) {
+		self.debug("ANZII JS: SIGTREM", code);
 		if (!self.systemIsShuttingDown) {
 			self.shutDown("exit", code);
 		} else {
@@ -237,6 +313,7 @@ export const handleShutDowns = function () {
 		}
 	});
 	self.context.on("uncaughtException", function (code) {
+		self.debug("ANZII JS: UNHANDLE EXCEPTION", code);
 		if (!self.systemIsShuttingDown) {
 			self.shutDown("uncaughtException", code);
 		} else {
@@ -254,20 +331,26 @@ export const handleShutDowns = function () {
 };
 export const handleServerAttachWorkers = function (data) {
 	const self = this;
+
 	self.masterWorker(data.app, data.system);
 };
 export const handleRegisterShutDownCandidate = function (data) {
 	const self = this;
 	const pao = self.pao;
+
+	const { payload } = data;
 	if (
-		data.hasOwnProperty("candidate") &&
-		pao.pa_isFunction(data.candidate) &&
-		data.hasOwnProperty("name") &&
-		pao.pa_isString(data.name)
+		payload.hasOwnProperty("candidate") &&
+		pao.pa_isFunction(payload.candidate) &&
+		payload.hasOwnProperty("name") &&
+		pao.pa_isString(payload.name)
 	) {
-		if (!(self.shutDownServices.indexOf(data.name) > -1)) {
-			self.shutDownServices.push(data.candidate);
-			self.shutDownOrder.push(data.name);
+		if (!(self.shutDownServices.indexOf(payload.name) > -1)) {
+			self.shutDownServices.push(payload.candidate);
+			self.shutDownOrder.push(payload.name);
+			data.callback({
+				message: "Service successfully registered for shutdown",
+			});
 		}
 	} else {
 		self.debug("Candidate could not be registered for shutdown", "warn");
@@ -277,10 +360,11 @@ export const openBrowserApp = async function (
 	portToOpenTo,
 	protocol = "http",
 	domain = "localhost",
+	pageToOpen,
 ) {
 	const self = this;
 	const open = self.open;
-	await open(`${protocol}://${domain}:${portToOpenTo}`);
+	await open(`${protocol}://${domain}:${portToOpenTo}/${pageToOpen}`);
 	// console.log("THE BROWSER OPENED");
 	// const openBrowser = () => import('open').then(({default: open}) => open("http://localhost:3000"));
 	// openBrowser()
@@ -325,7 +409,7 @@ export const getSslCerts = function (pathOrSets) {
 
 export const runServer = function (app, serverSettings) {
 	const self = this;
-	self.debug("THE SERVER OPTIONS", serverSettings);
+
 	return new Promise((resolve, reject) => {
 		const { shouldStopServer, serverTimeout, useHttps } = serverSettings;
 		if (useHttps) {
@@ -344,19 +428,33 @@ export const runServer = function (app, serverSettings) {
 
 export const runHttps = function (app, settings) {
 	const self = this;
-	const { appOpts, availablePort } = settings;
+	const { appOpts, availablePort, useSockets = false } = settings;
 	// const { sslOpts } = appOpts;
 
 	return new Promise((resolve, reject) => {
-		let serv = https.createServer(appOpts, app).listen(availablePort, () => {
+		let serv = https.createServer(appOpts, app);
+		if (useSockets && useSockets?.hookSocketToServer)
+			useSockets.hookSocketToServer(serv);
+		serv.listen(availablePort, () => {
 			self.appListener(settings);
 		});
 		resolve(serv);
 	});
+
+	// const self = this;
+	// const { appOpts, availablePort, useSocket = false } = settings;
+	// // const { sslOpts } = appOpts;
+
+	// return new Promise((resolve, reject) => {
+	// 	let serv = https.createServer(appOpts, app).listen(availablePort, () => {
+	// 		self.appListener(settings);
+	// 	});
+	// 	resolve(serv);
+	// });
 };
 export const runHttp = function (app, settings) {
 	const self = this;
-	const { availablePort } = settings;
+	const { availablePort, useSocket = false } = settings;
 
 	return new Promise((resolve, reject) => {
 		const serv = app.listen(availablePort, () => {
@@ -368,20 +466,37 @@ export const runHttp = function (app, settings) {
 
 export const appListener = function (settings) {
 	const self = this;
-	const { availablePort, shouldOpenBrowser, protocol, domainToUse } = settings;
+	const {
+		availablePort,
+		shouldOpenBrowser,
+		protocol,
+		domainToUse,
+		pageToOpen,
+		shouldWaitForSignal,
+	} = settings;
 	process.env[
 		"ANZII_APP_URL"
 	] = `${protocol}://${domainToUse}:${availablePort}`;
-	self.infoSync(
-		`The Application is running on PID:: ${process.pid} and listening on port: ${availablePort} with domain: ${domainToUse} and Protocol: ${protocol}`,
-	);
-	self.infoSync(
-		`The formed url is ${protocol}://${domainToUse}:${availablePort}`,
-	);
-	self.infoSync(`The app full url: ${process.env.ANZII_APP_URL}`);
+
+	// self.infoSync(
+	// 	`The formed url is ${protocol}://${domainToUse}:${availablePort}`,
+	// );
+	// self.infoSync(`The app full url: ${process.env.ANZII_APP_URL}`);
+	let runningServerMessage = `The Application is running on PID:: ${process.pid} and listening on port: ${availablePort} with domain: ${domainToUse} and Protocol: ${protocol}`;
 
 	if (shouldOpenBrowser) {
-		self.openBrowserApp(availablePort, protocol, domainToUse);
+		if (!shouldWaitForSignal) {
+			self.infoSync(runningServerMessage);
+			return self.openBrowserApp(
+				availablePort,
+				protocol,
+				domainToUse,
+				pageToOpen,
+			);
+		}
+		settings["runningServerMessage"] = runningServerMessage;
+
+		self.openBrowserTools = settings;
 	}
 };
 
@@ -394,7 +509,6 @@ export const setServerOptions = function (
 	serv.timeout = serverTimeout;
 	setTimeout(function () {
 		if (shouldStopServer) {
-			self.infoSync("ANZII is shutting down server");
 			process.exit(0);
 			//serv.close();
 		}
@@ -406,7 +520,6 @@ export const createCustomDomain = function () {
 	const pao = self.pao;
 	const loadFile = pao.pa_loadFile;
 
-	self.infoSync(`CreateCustomDomain: `);
 	// self.emit({
 	// 	type: `add-host-domain`,
 	// 	data: {

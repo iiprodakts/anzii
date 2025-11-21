@@ -11,8 +11,7 @@ export const handleConfigView = function (data) {
 	const self = this;
 	let routes = [];
 	let handlers = null;
-	self.debug("views data from config");
-	self.debug(data);
+
 	data instanceof Array
 		? (routes = data)
 		: ((routes = data.routes), (handlers = data.handlers));
@@ -23,11 +22,10 @@ export const handleConfigView = function (data) {
 				route.viewso.indexOf("/") >= 0
 					? (handlerView = route.viewso.split("/")[1])
 					: (handlerView = route.viewso);
-				self.debug("THE VIEW HANDLER");
-				self.debug(route.viewso.indexOf("/"));
+
 				// self.debug(route.viewso.indexOf('/'))
 				// self.debug(handlers[handlerView])
-				self.debug(handlerView);
+
 				if (route.viewty === "template") {
 					if (!self.views) {
 						handlers &&
@@ -97,6 +95,8 @@ export const handleConfigView = function (data) {
 									match: route.path,
 									vHandler: route.viewso,
 									title: route.title,
+									isRoutePrivate:
+										route?.type && route.type === "private" ? true : false,
 								},
 							],
 						};
@@ -106,6 +106,8 @@ export const handleConfigView = function (data) {
 								match: route.path,
 								vHandler: route.viewso,
 								title: route.title,
+								isRoutePrivate:
+									route?.type && route.type === "private" ? true : false,
 							});
 						} else {
 							self.views["modular"] = [
@@ -113,6 +115,8 @@ export const handleConfigView = function (data) {
 									match: route.path,
 									vHandler: route.viewso,
 									title: route.title,
+									isRoutePrivate:
+										route?.type && route.type === "private" ? true : false,
 								},
 							];
 						}
@@ -122,7 +126,13 @@ export const handleConfigView = function (data) {
 				if (!self.views) {
 					self.views = {
 						modular: [
-							{ match: route.path, vHandler: route.viewso, title: route.title },
+							{
+								match: route.path,
+								vHandler: route.viewso,
+								title: route.title,
+								isRoutePrivate:
+									route?.type && route.type === "private" ? true : false,
+							},
 						],
 					};
 				} else {
@@ -131,10 +141,18 @@ export const handleConfigView = function (data) {
 							match: route.path,
 							vHandler: route.viewso,
 							title: route.title,
+							isRoutePrivate:
+								route?.type && route.type === "private" ? true : false,
 						});
 					} else {
 						self.views["modular"] = [
-							{ match: route.path, vHandler: route.viewso, title: route.title },
+							{
+								match: route.path,
+								vHandler: route.viewso,
+								title: route.title,
+								isRoutePrivate:
+									route?.type && route.type === "private" ? true : false,
+							},
 						];
 					}
 				}
@@ -162,11 +180,9 @@ export const handleViewTask = async function (data) {
 				return self.callback(
 					null,
 					{
-						data: {
-							type: "template",
-							view: self.validView.tempPath,
-							viewData: viewData,
-						},
+						type: "template",
+						view: self.validView.tempPath,
+						viewData: viewData,
 					},
 					"renderView",
 				);
@@ -174,11 +190,9 @@ export const handleViewTask = async function (data) {
 				return self.callback(
 					null,
 					{
-						data: {
-							type: "template",
-							view: self.validView.tempPath,
-							title: self.validView.title,
-						},
+						type: "template",
+						view: self.validView.tempPath,
+						title: self.validView.title,
 					},
 					"renderView",
 				);
@@ -250,10 +264,7 @@ export const viewHandler = function (err = null, data = null) {
 			"renderView",
 		);
 	} else {
-		return self.callback(
-			null,
-			{ data: { type: "modular", view: data } },
-			"renderView",
-		);
+		if (data?.redirect) return self.callback(null, data);
+		return self.callback(null, { type: "modular", view: data }, "renderView");
 	}
 };

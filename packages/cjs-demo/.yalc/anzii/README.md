@@ -65,7 +65,7 @@ import * as middlewares from "./includes/globals";
 
 export default {
 	middleware: {
-		publik: { addMiddleware: middlewares.ppublic },
+		publik: { addMiddleware: middlewares.public },
 		privet: { addMiddleware: middlewares.pprivate },
 		all: { addMiddleware: middlewares.all },
 	}, // Your middlewares configurations
