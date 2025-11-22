@@ -11,7 +11,6 @@ export const handleAttachMiddleware = function (data) {
 };
 export const handleConfigMiddleware = function (data) {
 	const self = this;
-	self.debug("THE HANDLE CONFIG MIDDLEWARE", data);
 
 	let middlewares = data;
 	//  self.debug(middlewares)
@@ -39,16 +38,7 @@ export const handleAddExternalMiddleware = function (data) {
 	const contains = pao.pa_contains;
 	const { payload } = data;
 
-	self.info("ADD EXTERNAL MIDDLEWARE EVENT HAS OCCURED", data);
-	self.info("THE SELF.TYPES", self.MiddlewareTypes);
-
 	payload.forEach((middleware) => {
-		self.info("THE CURRENT ADD EXTERNAL MIDDLEWARE", middleware);
-		self.info("THE MIDDLEWARE TYPE", middleware.type);
-		self.info(
-			"THE CONTAINS",
-			contains(self.MiddlewareTypes, [`${middleware.type}`]),
-		);
 		// if (contains(self.MiddlewareTypes, [`${middleware.type}`]))
 		// 	throw new Error("Invalid middleware type");
 		self.setMiddleware(middleware.type, middleware);
@@ -107,14 +97,6 @@ export const handleAddExternalMiddleware = function (data) {
 export const attachMiddleware = function (data) {
 	const self = this;
 	if (data.app) {
-		// self.debug('SELF.MIDDLEWARES')
-		// self.debug(self.middlewares)
-		// if (self.all.length > 0) {
-		// 	self.debug("THE Allwares is greater than zero");
-		// 	if (data.xpress) {
-		// 		self.allWares(data.app, data.xpress);
-		// 	}
-		// }
 		if (self?.private && self?.public) {
 			self.emit({
 				type: "router-middleware",
@@ -138,11 +120,8 @@ export const attachMiddleware = function (data) {
 		}
 		if (self?.all) {
 			self.all.forEach((m) => {
-				self.info("MIDDLEWARE ALL", m);
-				self.debug("CURRENT M AND OTPIONS", m.type, m?.options);
 				if (m.type === "function") {
 					if (m?.options) {
-						self.debug("CURRENT ME HAS OPTIONS");
 						data.app.use(m.value(m.options));
 					} else {
 						data.app.use(m.value);
@@ -163,16 +142,12 @@ export const allWares = function (app, xpress) {
 	// eslint-disable-next-line no-unused-vars
 	self.all.forEach((w, i) => {
 		if (pao.pa_isObject(w)) {
-			self.debug("Executing allwares");
 			if (w.use) {
-				self.debug("The public:", w.call);
 				app.use(xpress[w.call]("public"));
 			} else {
-				self.debug("The none-public:", w.call);
 				app.use(xpress[w.call]());
 			}
 		} else {
-			self.debug("middleware is string");
 			app.use(xpress[w]());
 		}
 	});
@@ -180,7 +155,6 @@ export const allWares = function (app, xpress) {
 export const setMiddleware = function (type, middlewareInstance) {
 	const self = this;
 	const { middleware } = middlewareInstance;
-	self.info("SET MIDDLEWARE", type, middlewareInstance);
 
 	if (self[type]) {
 		if (middlewareInstance?.level) {
@@ -204,7 +178,7 @@ export const setMiddleware = function (type, middlewareInstance) {
 };
 export const formatMiddlewareStructure = function (middleware) {
 	const self = this;
-	self.info("The Middleware format ", middleware);
+
 	let formated = { type: "function", value: middleware.funk, ext: true };
 	if (middleware?.options) formated["options"] = middleware.options;
 
