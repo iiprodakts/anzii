@@ -1,3 +1,4 @@
+/* eslint-disable no-empty */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-irregular-whitespace */
 /* eslint-disable no-mixed-spaces-and-tabs */
@@ -14,18 +15,13 @@ export const handleMysqlDataRequest = function (data) {
 	if (
 		!pao.pa_contains(data, ["conn", "table", "opi", "query", "outComehandler"])
 	) {
-		
 		return data.outComehandler({ message: "Database operation failed" });
 	} else {
 		if (!pao.pa_isObject(data.conn)) {
-			
 		} else {
 			if (!pao.pa_isString(data.table)) {
-				
 			} else {
 				if (data.opi.trim() !== "deletemultiple" && !self[data.opi]) {
-					
-
 					return data.outComehandler({
 						message: "The specified operation is not supported",
 					});
@@ -96,7 +92,6 @@ export const insertOne = function (insert) {
 			conn.query(sql, function (e, r) {
 				if (e) return handler(e, null);
 				r.user = insert.values;
-				
 
 				self.infoSync(handler);
 				handler(null, r);
@@ -136,7 +131,7 @@ export const insertMany = function (insert) {
 					}
 				});
 			});
-			
+
 			// eslint-disable-next-line no-undef
 			handler(null, result);
 		} catch (e) {
@@ -150,11 +145,11 @@ export const find = async function (findiks) {
 	const pao = self.pao;
 	// self.infoSync('THE FINDIKS')
 	// self.infoSync(findiks)
-	// 
-	// 
+	//
+	//
 	// if(findiks.query.length > 0){ return findiks.outComehandler({message: 'ERROR IN MYSQL.FIND.METHOD'})}
-	// 
-	// 
+	//
+	//
 	if (!pao.pa_isObject(findiks)) {
 		throw new Error("Argument:: findiks, is required");
 	} else {
@@ -195,12 +190,12 @@ export const find = async function (findiks) {
 					let sql = "";
 					let attribs = null;
 					let sqliks = self.queryTemplate(self.queryOptions(find), "select");
-					//  
-					//  
+					//
+					//
 					attribs = [sqliks.attribs.from.table];
 					sql = sqliks.statement;
 					let queryAttributes = attribs;
-					// 
+					//
 					sql = connector.format(sql, queryAttributes);
 
 					let currentResult = await self.findIterateItemPromise(
@@ -248,15 +243,15 @@ export const find = async function (findiks) {
 					// self.infoSync('THE QUERYRESULT')
 					// self.infoSync(queryRes)
 					// conn.query(sql,function(e,r,f){
-					//       // 
-					//       // 
-					//       // 
-					//       // 
-					//       // 
-					//       // 
-					//       // 
-					//       // 
-					//       // 
+					//       //
+					//       //
+					//       //
+					//       //
+					//       //
+					//       //
+					//       //
+					//       //
+					//       //
 					//       // self.infoSync('THE rESULT HAS BEEN RETRIEVED')
 					//       // self.infoSync(r)
 					//       // self.infoSync(result)
@@ -292,8 +287,8 @@ export const find = async function (findiks) {
 					//           result = r
 					//         }
 					//       if(q === query.length - 1){
-					//         
-					//         
+					//
+					//
 					//         self.infoSync('THE CURRENT LAST RESULT')
 					//          self.infoSync(q)
 					//          self.infoSync(r)
@@ -312,8 +307,8 @@ export const find = async function (findiks) {
 					//     }
 					//   })
 				} catch (e) {
-					// 
-					// 
+					//
+					//
 					findiks.select ? handler(e, null, findiks.select) : handler(e, null);
 					return;
 				}
@@ -355,12 +350,12 @@ export const findOne = async function (findiks) {
 				let sql = "";
 				let attribs = null;
 				let sqliks = self.queryTemplate(self.queryOptions(find), "select");
-				//  
-				//  
+				//
+				//
 				attribs = [sqliks.attribs.from.table];
 				sql = sqliks.statement;
 				let queryAttributes = attribs;
-				// 
+				//
 				sql = connector.format(sql, queryAttributes);
 
 				let currentResult = await self.findIterateItemPromise(conn, sql);
@@ -403,8 +398,8 @@ export const findOne = async function (findiks) {
 					return;
 				}
 			} catch (e) {
-				// 
-				// 
+				//
+				//
 				// eslint-disable-next-line no-undef
 				connection.release();
 				findiks.select ? handler(e, null, findiks.select) : handler(e, null);
@@ -443,8 +438,7 @@ export const findIterateItemPromise = function (conn, sql) {
 };
 export const updateOne = function (updatiks) {
 	const self = this;
-	
-	
+
 	self.infoSync("THE UPDATIKS");
 	self.infoSync(updatiks.update);
 	const pao = self.pao;
@@ -460,17 +454,15 @@ export const updateOne = function (updatiks) {
 			let sql = "";
 			let attribs = null;
 			let sqliks = self.queryTemplate(self.queryOptions(update), "update");
-			
-			
+
 			attribs = [sqliks.attribs.from.table];
 			sql = sqliks.statement;
 			let queryAttributes = attribs;
-			
-			
+
 			// self.infoSync('THE CONNECTION METHODS')
 			// self.infoSync(conn)
 			sql = connector.format(sql, queryAttributes);
-			
+
 			self.infoSync("THE UPDATE SQL");
 			self.infoSync(sql);
 			conn.query(sql, function (e, r) {
@@ -510,7 +502,7 @@ export const updateMany = function (update) {
 					}
 				});
 			});
-			
+
 			// eslint-disable-next-line no-undef
 			handler(null, result);
 		} catch (e) {
@@ -521,8 +513,7 @@ export const updateMany = function (update) {
 };
 export const updateandtake = async function (updateAndTake) {
 	const self = this;
-	
-	
+
 	const pao = self.pao;
 	let conn = updateAndTake.conn;
 	let connector = updateAndTake.connector;
@@ -549,8 +540,7 @@ export const updateandtake = async function (updateAndTake) {
 							});
 					} else {
 						// handler({updated: false,taken: taken})
-						
-						
+
 						self
 							.take(options, conn, updateTake.conditions, connector)
 							.then((taken) => {
@@ -581,8 +571,7 @@ export const updateandtake = async function (updateAndTake) {
 };
 export const insertandtake = async function (insertAndTake) {
 	const self = this;
-	
-	
+
 	// self.infoSync('THe insertAnd Take')
 	// self.infoSync(insertAndTake)
 	const pao = self.pao;
@@ -597,14 +586,10 @@ export const insertandtake = async function (insertAndTake) {
 	} else {
 		try {
 			let insertTakeHandle = async function (error = null, inserted = null) {
-				await 
-				await 
-				await 
-				await 
 				!takeQuery.conditions
 					? (takeQuery.conditions = [`id ISEQUAL ${inserted.insertId}`])
 					: "";
-				await 
+
 				let take = {};
 				take.conn = conn;
 				take.query = takeQuery;
@@ -613,9 +598,7 @@ export const insertandtake = async function (insertAndTake) {
 				take.outComehandler = (e = null, taken) => {
 					handler(null, { inserted: inserted, taken: taken });
 				};
-				self.infoSync("INSERTANDTAKE TAKING");
-				self.infoSync(take);
-				self.search(take);
+
 				// throw new Error('MADE UP ERROR')
 				//  self.SEARCH(take)
 			};
@@ -634,8 +617,7 @@ export const insertandtake = async function (insertAndTake) {
 };
 export const deleteandtake = async function (deleteAndTake) {
 	const self = this;
-	
-	
+
 	const pao = self.pao;
 	let conn = deleteAndTake.conn;
 	let handler = deleteAndTake.outComehandler;
@@ -652,25 +634,19 @@ export const deleteandtake = async function (deleteAndTake) {
 	} else {
 		try {
 			let deleteTakeHandle = async function (error = null, deleted = null) {
-				await 
-				await 
-				await 
 				if (!takeQuery) {
 					handler(null, { deleted: deleted });
 				} else {
 					!takeQuery.conditions
 						? (takeQuery.conditions = remove.conditions)
 						: "";
-					await 
+
 					let take = {};
 					take.conn = conn;
 					take.connector = connector;
 					take.query = takeQuery;
 					// eslint-disable-next-line no-unused-vars
 					take.outComehandler = (e = null, taken) => {
-						
-						
-						
 						handler(null, { deleted: deleted, taken: taken });
 					};
 					self.search(take);
@@ -694,8 +670,7 @@ export const updateJoinTemplate = function (options) {
 	// WHERE ${options.from.condition}
 	// `
 	const self = this;
-	
-	
+
 	let sqlAttribs = {};
 	sqlAttribs.attribs = { from: options.from, tables: options.tables };
 	switch (options.length) {
@@ -746,23 +721,21 @@ export const multiTableUpdate = async function (options, conn, connector) {
 	const contains = pao.pa_contains;
 	return new Promise((resolve, reject) => {
 		try {
-			// 
-			// 
+			//
+			//
 			// attribs = [sqliks.attribs.from.table]
 			let sql = "";
 			let attribs = null;
 			let sqliks = self.updateJoinTemplate(options);
-			
-			
+
 			contains(sqliks.attribs, "tables") && sqliks.attribs.tables
 				? (attribs = [sqliks.attribs.from.table, ...sqliks.attribs.tables])
 				: (attribs = [sqliks.attribs.from.table]);
 			sql = sqliks.statement;
 			let queryAttributes = attribs;
-			
-			
+
 			sql = connector.format(sql, queryAttributes);
-			
+
 			conn.query(sql, function (e, r) {
 				if (e) return reject(e);
 				resolve(r);
@@ -774,15 +747,12 @@ export const multiTableUpdate = async function (options, conn, connector) {
 };
 export const take = async function (options, conn, conditions, connector) {
 	const self = this;
-	
-	
+
 	return new Promise((resolve, reject) => {
 		if (options.takeFrom) {
 			let takeFrom = options.takeFrom;
-			
-			
+
 			if (takeFrom.condition) {
-				
 				options.from.condition = takeFrom.condition;
 				takeFrom.tables.length > 1
 					? (options.length = takeFrom.tables.length)
@@ -801,8 +771,6 @@ export const take = async function (options, conn, conditions, connector) {
 						reject(e);
 					});
 			} else {
-				
-				
 				delete options.length;
 				options.from.condition = self.searchConditionsFormat([conditions[0]]);
 				// options.tables = options.tables[0]
@@ -816,7 +784,6 @@ export const take = async function (options, conn, conditions, connector) {
 					});
 			}
 		} else {
-			
 			self
 				.takeSql(options, conn, connector)
 				.then((resultset) => {
@@ -832,35 +799,27 @@ export const takeSql = function (takeOptions, conn, connector) {
 	const self = this;
 	const pao = self.pao;
 	const contains = pao.pa_contains;
-	
-	
+
 	return new Promise(function (resolve, reject) {
 		// do a thing, possibly async, then…
-		
+
 		let sql = "";
 		let attribs = null;
 		let sqliks = self.searchStatement(takeOptions);
-		
-		
+
 		contains(sqliks.attribs, "tables")
 			? (attribs = [sqliks.attribs.from.table, ...sqliks.attribs.tables])
 			: (attribs = [sqliks.attribs.from.table]);
 		sql = sqliks.statement;
 		let queryAttributes = attribs;
-		
-		
-		// 
+
+		//
 		sql = connector.format(sql, queryAttributes);
-		
+
 		conn.query(sql, function (e, r) {
 			if (e) {
-				
-				
 				reject(e);
 			} else {
-				
-				
-				
 				resolve(r);
 			}
 		});
@@ -881,17 +840,15 @@ export const removeJoin = function (removiks) {
 			let sql = "";
 			let attribs = null;
 			let sqliks = self.queryTemplate(self.searchOptions(removiks), "delete");
-			
-			
+
 			contains(sqliks.attribs, "tables")
 				? (attribs = [...sqliks.attribs.tables, sqliks.attribs.from.table])
 				: (attribs = [sqliks.attribs.from.table]);
 			sql = sqliks.statement;
 			let queryAttributes = attribs;
-			
-			
+
 			sql = connector.format(sql, queryAttributes);
-			
+
 			conn.query(sql, function (e, r) {
 				if (e) return handler(e, null);
 				handler(null, r);
@@ -915,15 +872,13 @@ export const remove = function (removiks) {
 			let sql = "";
 			let attribs = null;
 			let sqliks = self.queryTemplate(self.queryOptions(remove), "delete");
-			
-			
+
 			attribs = [sqliks.attribs.from.table];
 			sql = sqliks.statement;
 			let queryAttributes = attribs;
-			
-			
+
 			sql = connector.format(sql, queryAttributes);
-			
+
 			conn.query(sql, function (e, r) {
 				if (e) handler(e, null);
 				return removiks.delete
@@ -938,8 +893,7 @@ export const remove = function (removiks) {
 };
 export const queryOptions = function (i) {
 	const self = this;
-	
-	
+
 	let pao = self.pao;
 	let contains = pao.pa_contains;
 	// let rest = {
@@ -956,8 +910,7 @@ export const queryOptions = function (i) {
 				condition: self.searchConditionsFormat(i.conditions),
 		  })
 		: (options.from = { table: i.table });
-	
-	
+
 	contains(i, ["returnFields", "opiks"])
 		? (options.fields = self.searchFieldsFormat(i.opiks, i.returnFields))
 		: contains(i, "opiks")
@@ -979,16 +932,14 @@ export const queryOptions = function (i) {
 			  )))
 			: (options.takeFrom = i.takeFrom)
 		: "";
-	
-	
+
 	return options;
 };
 export const queryTemplate = function (options, type) {
 	const self = this;
 	const pao = self.pao;
 	const contains = pao.pa_contains;
-	
-	
+
 	if (type === "select") {
 		let sqlAttribs = {};
 		sqlAttribs.attribs = { from: options.from };
@@ -1028,10 +979,7 @@ export const queryTemplate = function (options, type) {
 			let sqlAttribs = {};
 			sqlAttribs.attribs = { from: options.from, tables: options.tables };
 			options.tables.unshift(options.from.table);
-			
-			
-			
-			
+
 			switch (options.length) {
 				case 3:
 					sqlAttribs.statement = `DELETE ??,??,??
@@ -1066,8 +1014,7 @@ export const queryTemplate = function (options, type) {
                                   
                                   `;
 			}
-			
-			
+
 			return sqlAttribs;
 		} else {
 			let sqlAttribs = {};
@@ -1097,37 +1044,34 @@ export const transaction = function (data) {
 };
 export const procedure = function (data) {
 	const self = this;
-	
+
 	if (typeof data.query === "function") {
 		data.query();
 	} else {
-		
-		//  
-		//  
+		//
+		//
 		self.PROCEDURE(data.query, data.conn, data.outComehandler, data.connector);
 	}
 };
 export const join = function (data) {
 	const self = this;
-	
+
 	if (typeof data.query === "function") {
 		data.query();
 	} else {
-		
-		//  
-		//  
+		//
+		//
 		self.JOIN(data.query, data.conn, data.outComehandler);
 	}
 };
 export const search = function (data) {
 	const self = this;
-	
+
 	if (typeof data.query === "function") {
 		data.query();
 	} else {
-		
-		//  
-		//  
+		//
+		//
 		self.SEARCH(data.query, data.conn, data.outComehandler, data.connector);
 	}
 };
@@ -1169,7 +1113,6 @@ export const TRANSACTION = function (
 			});
 		if (breakOut) break;
 		if (c === collections.length - 1) {
-			
 			handler("Transaction Operation sucessful");
 		}
 	}
@@ -1182,9 +1125,7 @@ export const PROCEDURE = async function (
 ) {
 	const self = this;
 	const pao = self.pao;
-	
-	
-	
+
 	//
 	let collectionsIds = [];
 	let breakOut = false;
@@ -1208,7 +1149,6 @@ export const PROCEDURE = async function (
 				break;
 			} else {
 				if (pao.pa_contains(i.fields, "tables")) {
-					
 					sources = i.fields.tables;
 					own = i.fields.own;
 				} else if (pao.pa_contains(i.fields, "own")) {
@@ -1297,12 +1237,8 @@ export const PROCEDURE = async function (
 			// })
 			if (breakOut) break;
 			if (c === collections.length - 1) {
-				
-				
 				connection.release();
 				if (collectionsIds.length > 0) {
-					
-					
 					let savedData = null;
 					self.infoSync("THE COLLECTIONS");
 					self.infoSync(collectionsIds);
@@ -1344,7 +1280,7 @@ export const insert = function (inset, conn, connector) {
 	let pao = pao;
 	return new Promise(function (resolve, reject) {
 		// do a thing, possibly async, then…
-		
+
 		self.infoSync("THE INSET");
 		self.infoSync(inset);
 		let sql = "";
@@ -1393,7 +1329,6 @@ export const insert = function (inset, conn, connector) {
 		self.infoSync(sql);
 		conn.query(sql, function (e, r) {
 			if (e) {
-				
 				reject(e);
 			} else {
 				//{table: 'jo_job_alert',opiks: ['fuxin.count.options[*].as[alertsCount]'],conditions:[`u_id EQUALS ${uid}`]}
@@ -1409,16 +1344,12 @@ export const insert = function (inset, conn, connector) {
 					outComehandler: (e = null, r = null, data = null) => {
 						let insert = {};
 						if (e) {
-							
-							
-							
 							insert.error = e;
 							insert.lastInsert = data.query.user.id;
 							insert.fields = null;
 							insert.collection = data.table;
 							insert.collectionAlt = inset.altName ? inset.altName : "";
-							
-							
+
 							resolve(insert);
 						} else {
 							self.infoSync("THE RESULT FROM FIND");
@@ -1431,8 +1362,7 @@ export const insert = function (inset, conn, connector) {
 							insert.collection = inset.name;
 							insert.collectionAlt = inset.altName ? inset.altName : "";
 							// throw new Error()
-							
-							
+
 							resolve(insert);
 						}
 					},
@@ -1466,17 +1396,13 @@ export const procedureUpdate = function (update, conn, connector) {
 				self.infoSync(data);
 				let update = {};
 				if (e) {
-					
-					
-					
 					self.infoSync("THE ERROR");
 					self.infoSync(e);
 					update.error = e;
 					update.fields = null;
 					update.collection = data.name;
 					update.collectionAlt = data.altName ? data.altName : "";
-					
-					
+
 					resolve(update);
 				} else {
 					self.infoSync("THE SUCCESS");
@@ -1510,8 +1436,7 @@ export const procedureUpdate = function (update, conn, connector) {
 						update.isUpdate = true;
 						update.isUpdated = false;
 					}
-					
-					
+
 					resolve(update);
 				}
 			},
@@ -1533,17 +1458,13 @@ export const procedureDelete = function (toDelete, conn, connector) {
 			outComehandler: (e = null, r = null, data = null) => {
 				let update = {};
 				if (e) {
-					
-					
-					
 					self.infoSync("THE ERROR");
 					self.infoSync(e);
 					update.error = e;
 					update.fields = null;
 					update.collection = data.name;
 					update.collectionAlt = data.altName ? data.altName : "";
-					
-					
+
 					resolve(update);
 				} else {
 					self.infoSync("THE DELETE SUCCESS");
@@ -1564,8 +1485,7 @@ export const procedureDelete = function (toDelete, conn, connector) {
 						update.isDelete = true;
 						update.isDeleted = false;
 					}
-					
-					
+
 					resolve(update);
 				}
 			},
@@ -1589,15 +1509,11 @@ export const procedureSelect = function (select, conn, connector) {
 			outComehandler: (e = null, r = null, data = null) => {
 				let select = {};
 				if (e) {
-					
-					
-					
 					select.error = e;
 					select.lastInsert = data.query.user.id;
 					select.fields = null;
 					select.collection = data.table;
-					
-					
+
 					resolve(insert);
 				} else {
 					self.infoSync("THE RESULT FROM FIND");
@@ -1609,8 +1525,7 @@ export const procedureSelect = function (select, conn, connector) {
 					select.fields = { ...foundUser };
 					select.collection = select.name;
 					// throw new Error()
-					
-					
+
 					resolve(select);
 				}
 			},
@@ -1622,32 +1537,24 @@ export const JOIN = async function (join, conn, handler = null) {
 	self
 		.joinExek(join, conn)
 		.then((result) => {
-			
-			
 			handler(null, result);
 		})
 		.catch((failedRequest) => {
-			
-			
 			handler(failedRequest, null);
 		});
 };
 export const SEARCH = async function (search, conn, handler = null, connector) {
 	const self = this;
 	const pao = self.pao;
-	
-	
+
 	if (!pao.pa_contains(search, "batch")) {
 		self
 			.searchExek(search, conn, connector)
 			.then((result) => {
-				
-				// 
+				//
 				handler(null, result);
 			})
 			.catch((failedRequest) => {
-				
-				
 				handler(failedRequest, null);
 			});
 	} else {
@@ -1657,19 +1564,15 @@ export const SEARCH = async function (search, conn, handler = null, connector) {
 			await self
 				.searchExek(batch[s], conn, connector)
 				.then((result) => {
-					
-					// 
+					//
 					resultSet.push(result);
 					if (s === batch.length - 1) {
-						
-						// 
+						//
 						handler(null, resultSet);
 					}
 					// handler(null,result)
 				})
 				.catch((failedRequest) => {
-					
-					
 					resultSet.push({
 						item: s,
 						errorMessage: `Item of ${s} position has failed`,
@@ -1683,7 +1586,7 @@ export const SEARCH = async function (search, conn, handler = null, connector) {
 export const combineFields = function (tables, own, ids) {
 	const self = this;
 	let fields = {};
-	
+
 	self.infoSync("THE TABLES");
 	self.infoSync(tables);
 	self.infoSync(ids);
@@ -1691,11 +1594,8 @@ export const combineFields = function (tables, own, ids) {
 		for (let co = 0; co < ids.length; co++) {
 			if (ids[co].collection === v.name) {
 				v.values.forEach((vv) => {
-					
-					
 					let fieldValuePair = vv.split(".");
-					
-					
+
 					fields[fieldValuePair[1]] = ids[co].fields[fieldValuePair[0]];
 				});
 				break;
@@ -1920,11 +1820,9 @@ export const searchExek = function (search, conn, connector) {
 		let queryAttributes = attribs;
 
 		sql = connector.format(sql, queryAttributes);
-		
 
 		conn.query(sql, function (e, r) {
 			if (e) {
-				
 				reject(e);
 			} else {
 				resolve(r);
@@ -2349,12 +2247,12 @@ export const fieldFormat = function (field, from = null) {
 		: "";
 	// nestedIntFuxin.trim() !== '' ? field =  : ''
 	// let splicedArray = conList.splice(2)
-	// 
-	// 
-	// 
+	//
+	//
+	//
 	// conList[2] = splicedArray.join(' ');
-	// 
-	// 
+	//
+	//
 	//  let fieldList = field.trim().split('.')
 	//  fieldList.length > 3 ? fieldList[3].indexOf('as[') < 0 ? fieldList[2] = fieldList.splice(2).join(' ') : '' : ''
 	let fieldList = field.trim().split(".");
@@ -2368,8 +2266,7 @@ export const fieldFormat = function (field, from = null) {
 				? `AS ${self.options(`${fieldList[3]}`, "as")}`
 				: " "
 			: " ";
-	
-	
+
 	switch (fieldList[0]) {
 		case "keyword":
 			fieldstatement = from
@@ -2745,7 +2642,6 @@ export const conditionsConnector = function (c) {
 	let connector = {};
 
 	if (c.trim().indexOf("GROUP::") > 0) {
-		
 		if (c.trim().indexOf("AND") === 0) {
 			connector.connector = ` AND`;
 			connector.condixion = c.replace("AND", "").trim();
@@ -2787,9 +2683,9 @@ export const set = function (set, multiSets = false) {
 		// let value = ''
 		// key = Object.keys(s)[0]
 		// value = s[Object.keys(s)[0]]
-		// 
-		// 
-		// 
+		//
+		//
+		//
 		// setString += i === set.length - 1 ? `${key} = "${value}"` : `${key} = "${value}", `
 	});
 

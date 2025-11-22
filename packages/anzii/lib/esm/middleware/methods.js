@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 export const init = function () {
 	this.adLog("Middleware has been initialised");
 	this.listens({
