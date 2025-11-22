@@ -6,7 +6,7 @@ export const init = function () {
 };
 export const handleRequestGlobalRequest = function (data) {
 	const self = this;
-	self.debug("The Modules: ", self.globals);
+
 	if (self.globals && self.globals.length > 0) {
 		if (self.globals.indexOf(data) > -1) {
 			self.emit({ type: "request-global-request-response", data: true });
