@@ -6,19 +6,11 @@ export const init = function () {
 };
 export const handleShareMiddleware = function () {
 	const self = this;
-	self.debug("HANLDE SHARE MIDDLEWARE EVENT HAS OCCURED");
+
 	self.emit({
 		type: "add-ext-middleware",
 		data: {
 			payload: [
-				// {
-				// 	type: "all",
-				// 	level: "top",
-				// 	middleware: {
-				// 		call: "json",
-				// 		// options: [{ body: self.dependiks.bodyParser, call: "json" }],
-				// 	},
-				// },
 				{
 					type: "all",
 					level: "top",

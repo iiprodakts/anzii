@@ -61,8 +61,7 @@ export const handleDistributeSystemResources = async function (data) {
 	// self.debug(files)
 	// self.debug(dirs)
 	// self.debug(file)
-	self.debug(ext);
-	self.debug(status);
+
 	self.emit({
 		type: "take-system-base",
 		data: { systemBase: self.systemBase },
@@ -297,7 +296,6 @@ export const handleShutDowns = function () {
 	const self = this;
 
 	self.context.on("SIGINT", function (code) {
-		self.debug("ANZII JS: INT", code);
 		if (!self.systemIsShuttingDown) {
 			self.shutDown("kill", code);
 		} else {
@@ -305,7 +303,6 @@ export const handleShutDowns = function () {
 		}
 	});
 	self.context.on("SIGTERM", function (code) {
-		self.debug("ANZII JS: SIGTREM", code);
 		if (!self.systemIsShuttingDown) {
 			self.shutDown("exit", code);
 		} else {
@@ -313,7 +310,6 @@ export const handleShutDowns = function () {
 		}
 	});
 	self.context.on("uncaughtException", function (code) {
-		self.debug("ANZII JS: UNHANDLE EXCEPTION", code);
 		if (!self.systemIsShuttingDown) {
 			self.shutDown("uncaughtException", code);
 		} else {
@@ -353,7 +349,7 @@ export const handleRegisterShutDownCandidate = function (data) {
 			});
 		}
 	} else {
-		self.debug("Candidate could not be registered for shutdown", "warn");
+		self.warn("Candidate could not be registered for shutdown");
 	}
 };
 export const openBrowserApp = async function (
@@ -365,9 +361,6 @@ export const openBrowserApp = async function (
 	const self = this;
 	const open = self.open;
 	await open(`${protocol}://${domain}:${portToOpenTo}/${pageToOpen}`);
-	// console.log("THE BROWSER OPENED");
-	// const openBrowser = () => import('open').then(({default: open}) => open("http://localhost:3000"));
-	// openBrowser()
 };
 
 export const getServerPort = function (port = 3000, useAvailablePort = true) {
@@ -440,17 +433,6 @@ export const runHttps = function (app, settings) {
 		});
 		resolve(serv);
 	});
-
-	// const self = this;
-	// const { appOpts, availablePort, useSocket = false } = settings;
-	// // const { sslOpts } = appOpts;
-
-	// return new Promise((resolve, reject) => {
-	// 	let serv = https.createServer(appOpts, app).listen(availablePort, () => {
-	// 		self.appListener(settings);
-	// 	});
-	// 	resolve(serv);
-	// });
 };
 export const runHttp = function (app, settings) {
 	const self = this;
@@ -520,15 +502,6 @@ export const createCustomDomain = function () {
 	const pao = self.pao;
 	const loadFile = pao.pa_loadFile;
 
-	// self.emit({
-	// 	type: `add-host-domain`,
-	// 	data: {
-	// 		payload: { domainName: "testr.co.za" },
-	// 		callback: (fromHosts) => {
-	// 			console.log("THE SSL ", fromHosts);
-	// 		},
-	// 	},
-	// });
 	loadFile(path.resolve(process.cwd(), "certsConfig.json")).then(
 		(sslConfig) => {
 			let config = JSON.parse(sslConfig);
@@ -543,17 +516,6 @@ export const createCustomDomain = function () {
 			});
 		},
 	);
-
-	// return new Promise((resolve, reject) => {
-
-	// 	// async.waterfall([self.readHostsFile.bind(self)], (err, result) => {
-	// 	// 	console.log("THE WATERALL RESULTS", result);
-	// 	// 	resolve(result);
-	// 	// });
-	// 	// openssl(
-	// 	// 	"openssl req -config csr.cnf -x509 -sha256 -nodes -days 365 -newkey rsa:2048 -keyout key.key -out certificate.crt",
-	// 	// );
-	// });
 };
 
 export const readHostsFile = function (next) {

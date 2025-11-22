@@ -57,7 +57,6 @@ export const handleWriteServerRequestResponse = async function (response) {
 	const self = this;
 
 	const { method, payload, res, code = 200 } = response;
-	self.debug("THE HANDLE TASK PAYLOAD", payload, code, payload?.redirect);
 
 	if (payload?.redirect) return res.redirect(code, payload.to);
 	if (method === "stream") {
