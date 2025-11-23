@@ -1,3 +1,16 @@
+<p align="center">
+	<a href="#" style="
+			 display: inline-flex;
+			 flex-direction: column;
+			 align-items: center;
+			 text-decoration: none;
+			 color: inherit;
+		 ">
+		<img src="https://raw.githubusercontent.com/iiprodakts/anzii/refs/heads/development/anzii_white.svg" width="150" alt="Example"> </a>
+		
+	
+</p>
+
 # Introduction
 
 **anzii** is a lightweight, modular, and event-driven Node.js framework for building extensible applications with ease. Perfect for creating APIs, plugins, middleware-based apps, or small web services.
