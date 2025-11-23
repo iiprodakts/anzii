@@ -4,6 +4,8 @@ This document describes breaking changes and how to upgrade. For a complete list
 
 ## 8.0.0
 
+**This release adds improved performance and optimisation. It also adds new features that are especially very much a convenience in development.**
+
 - Middleware config:
 
 ```js
