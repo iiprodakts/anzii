@@ -213,7 +213,7 @@ export const masterWorker = function (app, system) {
 						}
 					} else {
 						if (typeof slaves === "number") {
-							for (let s = 0; s < slaves; s++) {
+							for (let s = 0; s < slaves.length; s++) {
 								self.debug(`Forking slave number: ${s}`);
 								self.cluster.fork();
 							}
