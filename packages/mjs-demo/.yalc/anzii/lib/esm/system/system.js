@@ -23,6 +23,8 @@ class System {
 		this.open = open;
 		this.detectPort = detectPort;
 		this.portFinder = portFinder;
+		this.ON_SERVER_START_LISTENERS = [];
+
 		this.init = methods.init;
 		this.handleConfigureSystem = methods.handleConfigureSystem;
 		this.handleRegisterShutDownCandidate =
@@ -44,6 +46,7 @@ class System {
 		this.runHttp = methods.runHttp;
 		this.appListener = methods.appListener;
 		this.setServerOptions = methods.setServerOptions;
+		this.handleOpenBrowserSignal = methods.handleOpenBrowserSignal;
 	}
 }
 export default System;
