@@ -204,17 +204,21 @@ Docs coming soon!
 
 we are currently working on our documentation with the help from our first ever collaborater @ntsakosuprise
 
-# Questions
+# Questions & Support
 
-For questions and support please use the official twitter page. The issue list of this repo is exclusively for bug reports and feature requests.
+For questions and support please use anziijs's Suppport page on [Github repo](https://github.com/iiprodakts/anzii/development/SUPPORT.md).
 
 # Issues
 
-Please make sure to read the Issue Reporting Checklist before opening an issue. Issues not conforming to the guidelines may be closed immediately.
+Please make sure to read the [Issue](https://github.com/iiprodakts/anzii/development/ISSUES.md) Reporting Checklist before opening an issue. Issues not conforming to the guidelines may be closed immediately.
 
 # Changelog
 
-Detailed changes for each release are documented in the release notes.
+Detailed changes for each release are documented in our [Changelog](https://github.com/iiprodakts/anzii/development/CHANGELOG.md).
+
+# Release Notes
+
+A summary of release changes can be found in our [Release Notes](https://github.com/iiprodakts/anzii/development/RELEASE_NOTES.md).
 
 # Stay In Touch
 
@@ -222,11 +226,11 @@ Detailed changes for each release are documented in the release notes.
 
 # Contribution
 
-Please make sure to read the Contributing Guide before making a pull request. If you have a anzii-related plugins, add it with a pull request.
+Please make sure to read the [Contributing Guide](https://github.com/iiprodakts/anzii/development/CONTRIBUTING.md) before making a pull request. If you have an anzii plugin, add it with a pull request.
 
 # Licence
 
-[MIT](https://.github.com/).
+[MIT](https://.github.com/) - see the [LICENSE](https://github.com/iiprodakts/anzii/development/LICENSE.md) file for details.
 
 copyright (c) 2019-present, iiprodatks. Ntsako (Surprise) Mashele
 

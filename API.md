@@ -1,31 +1,3 @@
-# Introduction
-
-**anzii** is a lightweight, modular, and event-driven Node.js framework for building extensible applications with ease. Perfect for creating APIs, plugins, middleware-based apps, or small web services.
-
-It was designed to be simple, quick to learn and build with. It doesn't matter if you are a designer, developer,or anything in between. If you have a basic understanding of Javascript,you can have your application running in 2 minutes, all with a single line of code.
-
-_If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md)._
-
-# anzii
-
-[![npm version](https://img.shields.io/npm/v/anzii.svg)](https://www.npmjs.com/package/anzii)  
-[![License: MIT](https://img.shields.io/npm/l/anzii.svg)](https://github.com/iiprodakts/anzii/blob/master/LICENSE)  
-<a href="https://github.com/iiprodakts/anzii/blob/development/.github/workflows/checks.yaml">
-<img src="https://img.shields.io/github/actions/workflow/status/iiprodakts/anzii/checks.yaml?style=for-the-badge" alt="anzii license" />
-</a>&nbsp;
-
----
-
-# Features
-
-- **Event-driven architecture** – handle asynchronous workflows elegantly.
-- **Plugin-based design** – easily extend functionality with modular plugins.
-- **Routing & middleware** – define custom routes and middleware in a clean configuration.
-- **Clustering support** – scale your apps across multiple CPU cores.
-- **Flexible configuration** – `.config.json` controls routing, middleware, logging, and clustering.
-
----
-
 # Installation
 
 ```bash
@@ -197,41 +169,3 @@ Using the `Hello` example above, the `route` object with an `alias` will be writ
     }
 
 ```
-
-# Documentation
-
-Docs coming soon!
-
-we are currently working on our documentation with the help from our first ever collaborater @ntsakosuprise
-
-# Questions & Support
-
-For questions and support please use anziijs's Suppport page on [Github repo](https://github.com/iiprodakts/anzii/development/SUPPORT.md).
-
-# Issues
-
-Please make sure to read the [Issue](https://github.com/iiprodakts/anzii/development/ISSUES.md) Reporting Checklist before opening an issue. Issues not conforming to the guidelines may be closed immediately.
-
-# Changelog
-
-Detailed changes for each release are documented in our [Changelog](https://github.com/iiprodakts/anzii/development/CHANGELOG.md).
-
-# Release Notes
-
-A summary of release changes can be found in our [Release Notes](https://github.com/iiprodakts/anzii/development/RELEASE_NOTES.md).
-
-# Stay In Touch
-
-[Twitter @anziijs](https://twitter.com/anziijs).
-
-# Contribution
-
-Please make sure to read the [Contributing Guide](https://github.com/iiprodakts/anzii/development/CONTRIBUTING.md) before making a pull request. If you have an anzii plugin, add it with a pull request.
-
-# Licence
-
-[MIT](https://.github.com/) - see the [LICENSE](https://github.com/iiprodakts/anzii/development/LICENSE.md) file for details.
-
-copyright (c) 2019-present, iiprodatks. Ntsako (Surprise) Mashele
-
-A Special thanks to Nicholas C. Zakas for the box presentation that help inspire Akii which has inspired anzii.
