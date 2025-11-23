@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 class Hello {
 	constructor(pao) {
 		this.pao = pao;
@@ -9,8 +10,7 @@ class Hello {
 	}
 	handleHelloTask(data) {
 		const self = this;
-		self.logSync("THE DATA PASSED TO HELLO");
-		self.logSync(data);
+
 		self.callback = data.callback;
 		let { payload } = data;
 		let { user } = payload;
@@ -20,11 +20,9 @@ class Hello {
 		self
 			.getSavedHistory()
 			.then((saved) => {
-				console.log("the saved;;;", saved);
 				return self.callback(null, { message: message });
 			})
 			.catch((err) => {
-				console.log("savedError;;;", err);
 				return self.callback(null, { message: message });
 			});
 		//return self.callback(null,{message: message})
@@ -52,9 +50,6 @@ class Hello {
 		e = null,
 		result = null,
 	) {
-		const self = this;
-		self.pao.pa_wiLog("THE TYPE OF E IN DATAREQUEST HANDLER");
-		self.pao.pa_wiLog(e);
 		if (e) reject(new Error("An error has occured Inside MYSQL"));
 		resolve(result);
 	}

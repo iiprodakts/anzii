@@ -1,3 +1,5 @@
+/* eslint-disable no-async-promise-executor */
+/* eslint-disable no-unused-vars */
 import { execSync } from "child_process";
 import path from "path";
 import { fileURLToPath } from "url";
@@ -29,7 +31,7 @@ export const handleCreateSSLCert = function (data) {
 	if (config?.actions) {
 		let terminalPromises = config.actions.map(async (configItem, loop) => {
 			options = self.runOptions(configItem);
-			console.log("Actions options built string", options);
+
 			filesOutputPaths[options.output.type] = options.output.value;
 			return await runTerminal(
 				`openssl ${options.commandString}`,
@@ -40,7 +42,6 @@ export const handleCreateSSLCert = function (data) {
 
 		Promise.all(terminalPromises)
 			.then((opensslActionsResults) => {
-				console.log("The promises have finished", opensslActionsResults);
 				data.callback({
 					actionStatus: true,
 					message: "Self-signed certificated greated sucessfully",
@@ -48,7 +49,6 @@ export const handleCreateSSLCert = function (data) {
 				});
 			})
 			.catch((err) => {
-				console.log("SSL KEY CREATION FAILED", err);
 				data.callback({
 					actionStatus: false,
 					error: err,
@@ -94,13 +94,12 @@ export const runTerminal = function (
 	sslConfigPath = null,
 ) {
 	return new Promise(async (resolve, reject) => {
-		console.log("THE ACTION", action);
 		let commandToRunModified = `${
 			action === "create-certificate-signing-request"
 				? `${commandToRun} -config ${sslConfigPath}`
 				: commandToRun
 		}`;
-		console.log("THE COMMAND TO RUN MODIFIED", commandToRunModified);
+
 		execSync(commandToRunModified, {
 			cwd: process.cwd(),
 			stdio: "inherit",

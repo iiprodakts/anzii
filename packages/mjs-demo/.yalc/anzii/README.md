@@ -1,73 +1,72 @@
 # Introduction
 
-Anzii is a backend javascript modular and event-driven framework that is simple, quick to learn and build with.
+**anzii** is a lightweight, modular, and event-driven Node.js framework for building extensible applications with ease. Perfect for creating APIs, plugins, middleware-based apps, or small web services.
 
-It was designed with different kinds of users in mind,so it doesn't matter if you are a designer, developer,or anything in between. If you have a basic understanding of Javascript,you can have your application working in under 2 minutes, all with a single line of code.
+It was designed to be simple, quick to learn and build with. It doesn't matter if you are a designer, developer,or anything in between. If you have a basic understanding of Javascript,you can have your application running in 2 minutes, all with a single line of code.
 
 _If you are upgrading: please see [`UPGRADING.md`](UPGRADING.md)._
 
+# anzii
+
+[![npm version](https://img.shields.io/npm/v/anzii.svg)](https://www.npmjs.com/package/anzii)  
+[![License: MIT](https://img.shields.io/npm/l/anzii.svg)](https://github.com/iiprodakts/anzii/blob/master/LICENSE)  
+<a href="https://github.com/iiprodakts/anzii/blob/development/.github/workflows/checks.yaml">
+<img src="https://img.shields.io/github/actions/workflow/status/iiprodakts/anzii/checks.yaml?style=for-the-badge" alt="anzii license" />
+</a>&nbsp;
+
+---
+
+# Features
+
+- **Event-driven architecture** – handle asynchronous workflows elegantly.
+- **Plugin-based design** – easily extend functionality with modular plugins.
+- **Routing & middleware** – define custom routes and middleware in a clean configuration.
+- **Clustering support** – scale your apps across multiple CPU cores.
+- **Flexible configuration** – `.config.json` controls routing, middleware, logging, and clustering.
+
+---
+
 # Installation
 
+```bash
+npm install anzii
 ```
-npm install --save anzii
 
-```
-
-# Usage
-
-### Without plugins
-
-#### Single line
+# Quick Guide
 
 ```js
-require("anzii").anzii();
+import { anzii } from "anzii";
+anzii(); // Starts anzii server with default configuration
 ```
 
-#### Multilines
-
-```
-    const {anzii} = require('anzii')
-    anzii()
-
-```
-
-### With Plugins
-
-#### with a single plugin
-
-##### Single line
+## With Plugins
 
 ```js
-require("anzii").anzii({ Hello: require("./hello") }); // Hello plugin in the same directory
+import { anzii } from "anzii";
+import HelloPlugin from "./plugins/Hello.js";
+
+const plugins = {
+	Hello: HelloPlugin,
+};
+
+anzii(plugins);
 ```
-
-#### Multilines
-
-    ```js
-
-        const {anzii} = require('anzii')
-        const plugins = require('./plugins') // plugins.js containing plugins in an object
-        anzii(plugins) // anzii takes an object of plugins as an argument
-
-    ```
-
-#Quick Guide
 
 ## Configurations
 
 Anzii will look for a `.config.json` configuration in the root of your project. This configuration file is used to configure your preferences for things such _middlewares,routes,static and view directories_,etc
 
-Please note: You can use a directory of your choice to hold your configurtion files, but those files should be imported to this configuration file **.config.json** as a final step.
+Create a .config.json at your project root:
 
 ```js
 import routes from "./includes/routes";
 import * as middlewares from "./includes/globals";
 
 export default {
-	middleware: {
-		publik: { addMiddleware: middlewares.ppublic },
-		privet: { addMiddleware: middlewares.pprivate },
-		all: { addMiddleware: middlewares.all },
+	middleware:
+		publik: middlewares.public ,
+		privet:  middlewares.pprivate ,
+		all: middlewares.all ,
 	}, // Your middlewares configurations
 	view: true, // Enable rendering web pages
 	router: routes, // Your api routes
@@ -75,6 +74,14 @@ export default {
 	cluster: { workers: 3, spawn: true }, // Enabble cluster
 };
 ```
+
+### Notes
+
+- **middleware** – Load global, public, and private middleware functions.
+- **view** – Enable rendering HTML templates or static assets.
+- **router** – Define routes and map them to plugin handlers.
+- **logger** – Control logging levels (info, warn, error, etc.).
+- **cluster** – Scale the server using multiple worker processes.
 
 ## Routing Examples
 
@@ -195,7 +202,7 @@ Using the `Hello` example above, the `route` object with an `alias` will be writ
 
 Docs coming soon!
 
-we are currently working on our documentation with thw help from our first ever collaborater @ntsakosuprise
+we are currently working on our documentation with the help from our first ever collaborater @ntsakosuprise
 
 # Questions
 

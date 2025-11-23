@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 class Hello {
 	constructor(pao) {
 		this.pao = pao;
@@ -9,7 +10,7 @@ class Hello {
 	}
 	handleHelloTask(data) {
 		const self = this;
-		self.logSync("THE DATA PASSED TO HELLO", data);
+
 		self.callback = data.callback;
 		let { payload } = data;
 		let { user } = payload;
@@ -50,8 +51,7 @@ class Hello {
 		result = null,
 	) {
 		const self = this;
-		self.pao.pa_wiLog("THE TYPE OF E IN DATAREQUEST HANDLER");
-		self.pao.pa_wiLog(e);
+
 		if (e) reject(new Error("An error has occured Inside MYSQL"));
 		resolve(result);
 	}

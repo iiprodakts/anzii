@@ -2,7 +2,6 @@ import Anziiloger from "./anziiloger/index.js";
 import Config from "./config/index.js";
 import Dao from "./dao/index.js";
 import Dman from "./dman/index.js";
-//import DoBefores from "./dobefore/dobefores.js";
 import Domain from "./domain/index.js";
 import Global from "./global/index.js";
 import IO from "./io/index.js";

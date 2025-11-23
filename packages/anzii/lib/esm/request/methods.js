@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 export const init = function () {
 	this.adLog("Request has been initialised");
 	this.listens({
@@ -21,16 +22,11 @@ export const handleConfigRequest = function (data) {
 };
 export const handleRequestHandOver = function (data) {
 	const self = this;
-	self.infoSync("Handling Handed Request");
-	self.infoSync(data.req.originalUrl);
 
 	let aliasList = self.routesAliasList;
 	let aliatikHandlers = self.aliatikHandlers;
 	let parsed = self.parseRequest(data.req);
-	self.debug("THE ALIATIKS");
-	self.debug(parsed);
-	self.debug(aliasList);
-	self.debug(aliatikHandlers);
+
 	data.req.uploads
 		? parsed.user
 			? (parsed.user.uploads = data.req.uploads)
@@ -44,8 +40,6 @@ export const handleRequestHandOver = function (data) {
 		: "";
 	self.handler = handler;
 	if (handler && handler.trim() !== "") {
-		self.debug("THERES A VALID HANDLE");
-		self.debug(self.handler);
 		let uza = parsed.user || null;
 		self.requestData = {
 			parsed: parsed,
@@ -53,9 +47,7 @@ export const handleRequestHandOver = function (data) {
 			request: { req: data.req, res: data.res, next: data.next },
 		};
 		uza ? (self.requestData.user = uza) : "";
-		self.debug(self.views);
-		self.debug(!self.views || self.views.length === 0);
-		self.debug(self.isView(data.req.originalUrl, uza));
+
 		if (!self.views || self.views.length === 0)
 			return self.emit({ type: "request-global-request", data: handler });
 		if (self.isView(data.req.originalUrl, uza))
@@ -68,12 +60,9 @@ export const handleRequestHandOver = function (data) {
 					},
 				},
 			});
-		self.debug("none view should be rendered");
+
 		return self.emit({ type: "request-global-request", data: handler });
 	} else {
-		// console.log("THERE IS NOT HANDLER", self.views);
-		self.debug("THEre is no handler");
-		self.debug(self.handler);
 		if (!self.views || self.views.length === 0) return self.handlePathError();
 		let uza = parsed.user || null;
 		self.requestData = {
@@ -96,11 +85,6 @@ export const handleRequestHandOver = function (data) {
 	}
 };
 export const parseRequest = function (req) {
-	const self = this;
-	self.debug("The req");
-	self.debug(req.body);
-	self.debug(req.query);
-	self.debug(req.params);
 	// self.debug('THE REQUEST BODY')
 	// self.debug(req.body)
 	let requiredData = { url: req.originalUrl };
@@ -110,40 +94,28 @@ export const parseRequest = function (req) {
 			: requiredData.url;
 	let isPath = url.indexOf("/") > 0 ? true : false;
 	if (req.query && Object.keys(req.query).length > 0) {
-		self.debug("THE QUERY");
-		self.debug(req.query);
 		requiredData.user = req.query;
 		let urlFragments = url.split("?");
 		if (isPath) {
 			let pathFrags = urlFragments[0].split("/");
-			self.debug("THE PATH FRAGS");
-			self.debug(pathFrags);
+
 			requiredData.handler = pathFrags[0];
 		} else {
-			self.debug("THE REMAINING CONTENT AFTER SPLIT OF ?");
-			self.debug(urlFragments);
 			requiredData.handler = urlFragments[0];
 		}
 	} else if (req.params && Object.keys(req.params).length > 0) {
-		self.debug("THE PARAMS");
-		self.debug(req.params);
 		requiredData.user = req.params;
 		if (isPath) {
 			let pathFrags = url.split("/");
-			self.debug("THE PATH FRAGS");
-			self.debug(pathFrags);
+
 			requiredData.handler = pathFrags[0];
 		} else {
 			requiredData.handler = url;
 		}
 	} else if (req.body && Object.keys(req.body).length > 0) {
-		self.debug("THE REQUEST BODY");
-		self.debug(req.body);
 		requiredData.user = req.body;
 		if (isPath) {
 			let pathFrags = url.split("/");
-			self.debug("THE PATH FRAGS");
-			self.debug(pathFrags);
 			requiredData.handler = pathFrags[0];
 		} else {
 			requiredData.handler = url;
@@ -152,8 +124,7 @@ export const parseRequest = function (req) {
 		requiredData.user = {};
 		if (isPath) {
 			let pathFrags = url.split("/");
-			self.debug("THE PATH FRAGS");
-			self.debug(pathFrags);
+
 			requiredData.handler = pathFrags[0];
 			delete requiredData.user;
 		} else {
@@ -185,8 +156,7 @@ export const handlePathError = function () {
 };
 export const handleRouterAliasList = function (data) {
 	const self = this;
-	self.debug("Router ALIATIKHANDLERS WITH DATA:");
-	self.debug(data);
+
 	// self.writeResponse({error: true,type: 'ServerError',code: 502,message: 'The requested task[handler] could not be completed'})
 	self.routesAliasList = data.aliasList;
 	self.aliatikHandlers = data.handlers;
@@ -202,7 +172,6 @@ export const handleRequestGlobalResponse = function (data) {
 			data: {
 				payload: self.requestData,
 				callback: (fail = null, success = null, method = null) => {
-					console.log("THE REQUEST ID IN TASKER", res.R_ID);
 					self.taskerHandler({ fail, res, success, method });
 				},
 			},
@@ -212,18 +181,8 @@ export const handleRequestGlobalResponse = function (data) {
 export const isView = function (path, user = null) {
 	const self = this;
 	let views = self.views;
-	self.debug("THE VIEW PATH");
-	self.debug(path);
-	self.debug(user);
-	self.debug(views);
-	// self.debug('.extention check status')
-	//  self.debug(path.indexOf('.'))
-	// if(path.indexOf('.') >= 0) return false
+
 	if (!user && path.trim() === "/home") {
-		self.debug("THE PARSED USsER");
-		self.debug(self.requestData);
-		self.debug(path);
-		self.debug(views.indexOf(path) >= 0);
 		self.requestData.parsed.derivedUrl = "/home";
 		if (views.indexOf(path) >= 0) return true;
 		return false;
@@ -241,24 +200,17 @@ export const isView = function (path, user = null) {
 		}
 		let parasList = user ? Object.keys(user) : [];
 		let parasString = "";
-		self.debug("THE PARALIST");
-		self.debug(parasList);
+
 		parasList.forEach((para, i) => {
 			i === 0 ? (parasString = `:${para}`) : (parasString += `/:${para}`);
 		});
-		self.debug("thE PARARSTRING");
-		self.debug(parasString);
+
 		for (let v = 0; v < views.length; v++) {
 			if (views[v].indexOf(parasString) > 0) {
 				let viewPath = views[v].substr(0, views[v].indexOf(parasString));
 				let comparePath = viewPath + parasString;
-				self.debug("EXTRACTED VIEW PATH");
-				self.debug(viewPath);
-				self.debug(comparePath);
-				self.debug(path);
-				self.debug(path.indexOf(viewPath));
+
 				if (path.indexOf(viewPath) >= 0) {
-					self.debug("Theviewpath matched");
 					self.requestData.parsed.derivedUrl = comparePath;
 					return true;
 				} else {
@@ -305,37 +257,53 @@ export const writeResponse = function (response) {
 	const pao = self.pao;
 	// self.debug('THE DATA IN WRITERESPONSE')
 	// self.debug(data)
-	let { data, method = "regular" } = response;
+	// 	const { method, payload, res, code = 200 } = response;
+	// const { view = null, toCLientPayload = null } = payload;
+	let { data = "", method = "regular" } = response;
 	if (method === "regular") {
-		pao.pa_isString()
-			? (data = pao.pa_jsToJson({ text: data }))
-			: (data = pao.pa_jsToJson(data));
+		if (!data?.redirect) {
+			pao.pa_isString(data)
+				? (data = pao.pa_jsToJson({ text: data }))
+				: (data = pao.pa_jsToJson(data));
+		}
 	}
 	self.emit({
 		type: "write-server-request-response",
-		data: { data: data, res: response.res, method: method },
+		data: {
+			payload: data,
+			res: response.res,
+			method: method,
+			code: response.code,
+		},
 	});
 };
 export const taskerHandler = function (handlerFeedback) {
 	const self = this;
 	const { fail = null, success = null, method = null } = handlerFeedback;
-	self.debug("THE TASKER HANDLER");
-	self.debug(fail);
-	self.debug(method);
+	self.debug("THE HANDLER FEEDBACK", handlerFeedback);
+
 	if (fail) {
+		let code = fail?.code || 400;
 		self.failureHandle({
-			error: true,
-			message: fail,
+			data: fail,
 			res: handlerFeedback.res,
+			code,
 		});
 	} else if (success) {
+		let code = success?.code || 200;
 		method
 			? self.successfullHandle({
 					data: success,
 					method,
 					res: handlerFeedback.res,
+					code,
+					// eslint-disable-next-line no-mixed-spaces-and-tabs
 			  })
-			: self.successfullHandle({ data: success, res: handlerFeedback.res });
+			: self.successfullHandle({
+					data: success,
+					res: handlerFeedback.res,
+					code,
+			  });
 	}
 };
 export const successfullHandle = function (successResponseData) {
@@ -344,5 +312,6 @@ export const successfullHandle = function (successResponseData) {
 };
 export const failureHandle = function (errorResponseData) {
 	const self = this;
+
 	self.writeResponse(errorResponseData);
 };

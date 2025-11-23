@@ -8,8 +8,7 @@ export const init = function () {
 export const handleDataHiveRequest = function (data) {
 	const self = this;
 	const pao = self.pao;
-	self.adLog("DAO");
-	self.adLog(data);
+
 	if (!self.DBS) throw new Error("No database vendor configured");
 	if (!pao.pa_contains(self.DBS, data.model.vendor)) {
 		throw new Error("Specified database client is unknown");
@@ -30,7 +29,7 @@ export const handleDataHiveRequest = function (data) {
 };
 export const handleDaoTakeDbs = function (data) {
 	const self = this;
-	self.pao.pa_wiLog("Handling Hive Request");
+
 	if (self.DBS === null) {
 		self.DBS = {};
 		self.connectors = {};
@@ -40,6 +39,6 @@ export const handleDaoTakeDbs = function (data) {
 		self.DBS[data.vendor] = data.conn;
 		self.connectors[data.vendor] = data.connector;
 	}
-	// self.pao.pa_wiLog('The dbs inside self.DBS')
-	//self.pao.pa_wiLog(self.DBS)
+	// self.debug('The dbs inside self.DBS')
+	//self.debug(self.DBS)
 };
