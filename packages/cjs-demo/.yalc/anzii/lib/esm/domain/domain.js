@@ -15,7 +15,6 @@ class Domain {
 		this.handleSetDomainDefaults = methods.handleSetDomainDefaults;
 		this.handleConfigDomain = methods.handleConfigDomain;
 		this.handleTakeSystemBase = methods.handleTakeSystemBase;
-		this.hookIntoWebpackCompilation = methods.hookIntoWebpackCompilation;
 	}
 }
 export default Domain;

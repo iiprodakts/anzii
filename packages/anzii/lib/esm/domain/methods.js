@@ -36,29 +36,20 @@ export const handleSetDomainDefaults = function (data) {
 			// self.debug(
 			// 	`${path.join(self.system?.DOCUMENT_ROOT)}, ${dumain.set}`,
 			// );
-			let appRoot = self.system?.DOCUMENT_ROOT;
+			// let appRoot = self.system?.DOCUMENT_ROOT;
 			let appStaticFull = `${path.join(
 				self.system?.DOCUMENT_ROOT,
 				dumain.set,
 			)}`;
-			console.log("THE APP ROOT", appRoot);
-			console.log("THE APP FULL STATIC", appStaticFull);
+
 			let domainStatic = dumain?.absolute ? dumain.set : appStaticFull;
-			console.log("THE STATIC DOMAIN", domainStatic);
+
 			return data.app.use(data.xpress.static(domainStatic));
 		}
 		if (dumain.name === "passport") return data.app.use(passport.initialize());
-		// if (dumain.name === "webpackDevMiddleware")
-		//     return data.app.use(dumain.use(data.custom.compiler, {
-		//         publicPath: data.custom.webpackConfig.output.path,
-		//         writeToDisk: true
-		//     }));
-		// if (dumain.name === "webpackHotMiddleware")
-		//     return data.app.use(dumain.use(data.custom.compiler));
+
 		data.app.set(dumain.name, dumain.set);
 	});
-	//data.app.set(, dumain.set);
-	// data?.custom?.compiler ? self.hookIntoWebpackCompilation(data.custom.compiler) : null;
 };
 export const handleConfigDomain = function (data) {
 	const self = this;
@@ -68,15 +59,4 @@ export const handleConfigDomain = function (data) {
 export const handleTakeSystemBase = function (data) {
 	const self = this;
 	self.system = data.systemBase;
-};
-export const hookIntoWebpackCompilation = async function (compiler) {
-	const self = this;
-	compiler.hooks.invalid.tap("invalid", () => {
-		self.debug("wEBPACK is compiling....");
-	});
-	compiler.hooks.done.tap("done", (stats) => {
-		self.debug("WEBPACK IS DONE COMPILING");
-		self.debug(`${stats.toJson({ all: false, errors: true, warnings: true })}`);
-	});
-	return true;
 };

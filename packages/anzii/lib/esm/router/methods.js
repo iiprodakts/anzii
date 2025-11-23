@@ -21,7 +21,7 @@ export const handleAttachRoutes = function (data) {
 };
 export const attachRoutes = function (data) {
 	const self = this;
-	console.log("ATTACHING ROUTES", self.routes);
+
 	if (data.app) {
 		let aliasList = [];
 		let aliatikHandlers = [];

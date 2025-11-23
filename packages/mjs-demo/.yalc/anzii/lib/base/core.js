@@ -3,6 +3,7 @@ function CORE(lib) {
 	this.modules = {};
 	this.globalModules = [];
 	this.PROMPT = this.PILLAR.PROMPT;
+	this.LogIndicators = this.PILLAR.LogIndicators;
 
 	// this.parent = this
 } // End of the CORE class

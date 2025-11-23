@@ -1,3 +1,4 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 export const init = function () {
 	this.adLog("Request has been initialised");
 	this.listens({
@@ -84,9 +85,6 @@ export const handleRequestHandOver = function (data) {
 	}
 };
 export const parseRequest = function (req) {
-	const self = this;
-	self.debug("The req:body,query,params", req.body, req.query, req.params);
-
 	// self.debug('THE REQUEST BODY')
 	// self.debug(req.body)
 	let requiredData = { url: req.originalUrl };

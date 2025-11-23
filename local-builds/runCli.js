@@ -174,7 +174,7 @@ if (operationToRun === "tarball") {
 	});
 }
 
-// const nodeScriptPath = path.join(packagesPath, "kotii-cli");
+// const nodeScriptPath = path.join(packagesPath, "anzii-cli");
 // runNodeScript(
 // 	nodeScriptPath,
 // 	"app.js",

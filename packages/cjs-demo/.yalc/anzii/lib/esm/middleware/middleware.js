@@ -2,7 +2,6 @@ import * as methods from "./methods.js";
 class Middleware {
 	constructor(pao) {
 		this.pao = pao;
-		this.all = [{ call: "static", use: "public" }, "json"];
 		this.middlewares = {
 			all: [
 				{
@@ -17,9 +16,9 @@ class Middleware {
 						next();
 					},
 				},
-				// {type: 'module',value: 'test'}
 			],
 		};
+		this.MiddlewareTypes = ["all", "private", "public"];
 		// console.log('THE STORE')
 		// console.log(this.supubu
 		this.init = methods.init;
@@ -27,6 +26,8 @@ class Middleware {
 		this.attachMiddleware = methods.attachMiddleware;
 		this.handleConfigMiddleware = methods.handleConfigMiddleware;
 		this.handleAddExternalMiddleware = methods.handleAddExternalMiddleware;
+		this.setMiddleware = methods.setMiddleware;
+		this.formatMiddlewareStructure = methods.formatMiddlewareStructure;
 		this.allWares = methods.allWares;
 	}
 }

@@ -1055,7 +1055,7 @@ function createLoggingIndicators() {
 
 	return {
 		shouldShowStandardLogs,
-		shouldShowStandardLogs,
+
 		shouldShowCliLogs: PROMPT.indexOf("cli") >= 0 && shouldShowCliLogs === true,
 		shouldShowDebugLogs,
 		shouldShowWarningLogs,

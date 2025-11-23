@@ -8,7 +8,7 @@ export const router = [
 	},
 ];
 export const logger = { level: "info" };
-export const cluster = { workers: 1, spawn: true };
+export const cluster = { workers: 1, spawn: false };
 export const server = "server";
 export default {
 	domain,

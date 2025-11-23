@@ -36,12 +36,10 @@ export const handleConfigureDBMan = function (data) {
 								`Client: "${c.name} is not supported by the system"`,
 							);
 						} else {
-							self.debug("THE SYSTEM IS ABOUT TO CONNECT TO THE THE SERVER");
 							self.connectToClient(c);
 						}
 					});
 					if (self.DBS.length > 0) {
-						self.adLog(`Sending databases to the dao`);
 						self.emit({ type: "dao-take-dbs", data: { dbs: self.DBS } });
 					}
 					// eslint-disable-next-line no-empty
@@ -59,10 +57,7 @@ export const connectToClient = function (client) {
 };
 export const getClientDriver = function (client) {
 	const self = this;
-	self.debug(`System is getting a client driver`);
-	self.debug("THE OTHER DETAILS BELOW");
-	self.debug(client.name);
-	self.debug(client.name === "mysql");
+
 	try {
 		let name = client.name;
 		if (name === "mysql") {
@@ -91,19 +86,17 @@ export const getClientDriver = function (client) {
 		// 	break;
 		// }
 		if (!self.supportedClients[client.name].driver) {
-			self.debug("THE DRIVER REQUIREMENT FAILED");
 			self.throwError("Failed to get client driver module");
 		}
 		self.connect(client);
 	} catch (e) {
-		self.debug("THE DRIVER CONNECT ERROR");
-		self.debug(e.stack);
+		self.debug("THE DRIVER CONNECT ERROR", e.stack);
 	}
 };
 export const connect = function (client) {
 	const self = this;
 	self.infoSync(`System is connecting to client: ${client.name}`);
-	self.infoSync(client.connect);
+
 	try {
 		let sclient = self.supportedClients[client.name];
 		let opts = {
@@ -112,15 +105,10 @@ export const connect = function (client) {
 			password: client.connect.pass,
 			database: client.connect.name,
 		};
-		//  self.infoSync('THE CLIENT DRIVER')
-		//  self.infoSync(sclient)
-		//  self.infoSync(sclient.driver)
-		//  self.infoSync('THE CLIENT OPTIONS')
-		//  self.infoSync(opts)
+
 		let res = sclient.driver[sclient.connectMethod](opts, (err, res) => {
 			if (err) {
-				self.debug("THE ACTUAL CONNECTION ERROR");
-				self.debug(err.stack);
+				self.debug("Client connection error", err.stack);
 			} else {
 				self.DBS[client.name] = res;
 				self.infoSync("System has successfully connected to client");
@@ -135,13 +123,11 @@ export const connect = function (client) {
 			self.infoSync(
 				`System has successfully connected to ${client.name} database client`,
 			);
-			self.adLog("System is handing client connection");
+
 			self.emit({
 				type: "dao-take-dbs",
 				data: { vendor: client.name, conn: res, connector: sclient.driver },
 			});
-			self.adLog(`Client ready to serve queries`);
-			// console.log('The solution is: ', results[0].solution);
 		});
 		// res.query(function(e){
 		// 	if(e){
@@ -164,9 +150,6 @@ export const connect = function (client) {
 		//   });
 		//   res.query()
 	} catch (e) {
-		self.infoSync("THE CONNECTION ERROR");
-		self.infoSync(e.stack);
-		self.debug("THE CONNECTION EROR");
-		self.debug(e.stack);
+		self.infoSync("THE DB CONNECTION ERROR", e);
 	}
 };
