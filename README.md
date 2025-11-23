@@ -6,8 +6,8 @@
        text-decoration: none;
        color: inherit;
      ">
-    <img src="./anzii_white.svg" width="150" alt="Example">
-    <strong style="font-size:50px; font-weight: 800">AnziiJS</strong>
+    <img src="https://raw.githubusercontent.com/iiprodakts/anzii/refs/heads/development/anzii_white.svg" width="150" alt="anzii logo">
+    
   </a>
 </p>
 
