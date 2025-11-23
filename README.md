@@ -1,4 +1,17 @@
 <p align="center">
+  <a href="#" style="
+       display: inline-flex;
+       flex-direction: column;
+       align-items: center;
+       text-decoration: none;
+       color: inherit;
+     ">
+    <img src="./anzii_white.svg" width="150" alt="Example">
+   
+  </a>
+</p>
+
+<p align="center">
 
 <a href="https://github.com/iiprodakts/anzii/pulse">
     <img src="https://img.shields.io/github/issues/detail/age/iiprodakts/anzii/6?style=for-the-badge" alt="anzii age" />
