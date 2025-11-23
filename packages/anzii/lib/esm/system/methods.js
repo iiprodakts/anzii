@@ -197,6 +197,9 @@ export const masterWorker = function (app, system) {
 	self
 		.getServerPort(portToUse, useAvailablePort)
 		.then((availablePort) => {
+			self[
+				"runningServerMessage"
+			] = `The Application is running and listening on port: ${availablePort}`;
 			serverSettings["availablePort"] = availablePort;
 			if (self.cluster.isMaster) {
 				if (self.clusterCustomConfig && self.clusterCustomConfig.spawn) {
@@ -252,7 +255,7 @@ export const masterWorker = function (app, system) {
 									},
 								);
 							}
-							self.debug("The server has been started", started);
+							self.info(self?.runningServerMessage);
 						})
 						.catch((err) => {
 							self.error("The was an error running the server", err);
@@ -269,7 +272,7 @@ export const masterWorker = function (app, system) {
 								serverStartListener({ data: "Server has been started" });
 							});
 						}
-						self.debug("The server has been started", started);
+						self.info(self?.runningServerMessage);
 					})
 					.catch((err) => {
 						self.error("The was an error running the server", err);
@@ -476,9 +479,12 @@ export const appListener = function (settings) {
 				pageToOpen,
 			);
 		}
+		self["runningServerMessage"] = runningServerMessage;
 		settings["runningServerMessage"] = runningServerMessage;
-
 		self.openBrowserTools = settings;
+	} else {
+		runningServerMessage = `The Application is running and listening on port: ${availablePort}`;
+		self["runningServerMessage"] = runningServerMessage;
 	}
 };
 
