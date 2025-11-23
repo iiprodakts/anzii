@@ -5,49 +5,41 @@ All dates are approximate and subject to change.
 
 ---
 
-## **v1.0.0-beta.1.0 — Initial Release**
+## \*\*v8.1.0
 
-**Target:** Q4 2025
+**Target:** Q1 2026
 
 ### Goals
 
-- Establish core authentication and authorization system
-- Implement `useAuth` hook for React
-- Provide basic login and logout components
-- Set up testing and CI/CD pipeline
+- Add advanced security features
+- Add support for all common database vendors
+- Add caching
 
 ### Features
 
-- User registration and login
-- Logout and session handling
-- Context-based auth state management
-- Basic documentation
+- Caching
 
 ---
 
-<!-- ## **v1.1.0 — Enhancements** -->
+## **v8.2.0 — Advanced Features**
 
-<!-- **Target:** Q2 2025
+**Target:** Q2 2026
 
 ### Goals
 
-- Improve user experience for authentication flows
-- Expand documentation with examples
-- Introduce event hooks for login/logout actions
+- Expand project to include role-based access
+- Improve developer experience
 
 ### Features
 
-- `registerOnLoginActions` and `registerOnLogoutActions` hooks
-- Error handling improvements
-- Loading and error states for auth components
-- Initial changelog setup
+- Role-based authorization (`RBAC`)
+- CLI tool for project setup and scaffolding
 
 --- -->
 
-<!--
-## **v1.2.0 — Security & Stability**
+<!-- ## **v1.2.0 — Security & Stability**
 
-**Target:** Q3 2025
+**Target:** Q2 2026
 
 ### Goals
 
@@ -62,29 +54,10 @@ All dates are approximate and subject to change.
 - Improved session management
 - Unit and integration tests coverage > 80%
 
----
-
-## **v2.0.0 — Advanced Features**
-
-**Target:** Q4 2025
-
-### Goals
-
-- Expand project to include role-based access
-- Add enterprise-level features
-- Improve developer experience
-
-### Features
-
-- Role-based authorization (`RBAC`)
-- Admin dashboard components
-- Analytics hooks for user events
-- CLI tool for project setup and scaffolding
-
 --- -->
 
 ## Notes
 
 - All target dates are **approximate** and may shift based on development priorities.
-- Community contributions are welcome! Check the [Contributing Guide](https://github.com/ntsakosurpriseanzii/tree/develop/packages/anzii/CONTRIBUTING.md) for details.
-- For up-to-date progress, see the [GitHub Issues](https://github.com/ntsakosurpriseanzii/tree/develop/packages/anzii/issues).
+- Community contributions are welcome! Check the [Contributing Guide](https://github.com/ntsakosurpriseanzii/tree/develop/anzii/CONTRIBUTING.md) for details.
+- For up-to-date progress, see the [GitHub Issues](https://github.com/ntsakosurpriseanzii/tree/develop/anzii/issues).

@@ -22,7 +22,6 @@
 - support for custom domain on local server
 - ability to stop server on demand
 - ability to launch browser
--
 
 ### Removed
 
@@ -37,5 +36,4 @@
 
 ### Changed
 
-- **Breaking:** changed the way that anzii was initialized, this is due providingi support for the latest nodejs standards, and also making anzii backward-compatible
-- **Breaking:** changed loggin methods for framework logging
+- **Breaking:** changed logging methods for framework logging
