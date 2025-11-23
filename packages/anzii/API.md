@@ -1,145 +1,171 @@
-# Kotii-Auth API
+# Installation
 
-## AuthProvider
+```bash
+npm install anzii
+```
 
-AuthProvider is a wrapper component that mantains your login/logout state. It takes three optional props/arguments these are:
-
-| Prop       | Required | Description                                         |   Type   |
-| ---------- | -------- | --------------------------------------------------- | :------: |
-| `authUser` | No       | Sets initial user(useful in server renderd apps)    |  Object  |
-| `onLogin`  | No       | Sets a function that should run on successful login | Function |
-| `onLogout` | No       | Sets a function that should run on logout           | Function |
-
-### Example
+# Quick Guide
 
 ```js
-let myUser = null;
-let onLogin = (user) => {
-  console.log("My Logged In User");
+import { anzii } from "anzii";
+anzii(); // Starts anzii server with default configuration
+```
+
+## With Plugins
+
+```js
+import { anzii } from "anzii";
+import HelloPlugin from "./plugins/Hello.js";
+
+const plugins = {
+	Hello: HelloPlugin,
 };
-let onLogout = () => {
-  console.log("User is Logged out");
+
+anzii(plugins);
+```
+
+## Configurations
+
+Anzii will look for a `.config.json` configuration in the root of your project. This configuration file is used to configure your preferences for things such _middlewares,routes,static and view directories_,etc
+
+Create a .config.json at your project root:
+
+```js
+import routes from "./includes/routes";
+import * as middlewares from "./includes/globals";
+
+export default {
+	middleware:
+		publik: middlewares.public ,
+		privet:  middlewares.pprivate ,
+		all: middlewares.all ,
+	}, // Your middlewares configurations
+	view: true, // Enable rendering web pages
+	router: routes, // Your api routes
+	logger: { level: "info" }, // Enable info logging
+	cluster: { workers: 3, spawn: true }, // Enabble cluster
 };
-<AuthProvider authUser={initialUser} onLogin={onLogin onLogoug={onLogout}}>
-  <App />
-</AuthProvider>;
 ```
 
-## registerOnLoginActions
+### Notes
 
-registerOnLoginActions allows you to register
+- **middleware** – Load global, public, and private middleware functions.
+- **view** – Enable rendering HTML templates or static assets.
+- **router** – Define routes and map them to plugin handlers.
+- **logger** – Control logging levels (info, warn, error, etc.).
+- **cluster** – Scale the server using multiple worker processes.
 
-| argument    | Required | Description                       |   Type   |
-| ----------- | -------- | --------------------------------- | :------: |
-| `action(s)` | yes      | a list of actions to run on login | Function |
+## Routing Examples
 
-### Example
+In Anzii, every route is an object that contains a couple of properties that determine charateristics of that route:
 
 ```js
-import { registerOnLoginActions } from "kotii-auth";
-import { useNavigate } from "kotii-router";
-import { useEffect } from "react";
 
-export function RedirectAfterLogin() {
-  const navigate = useNavigate();
+   {
+        path: '/hello', // Route path with request handler(plugin) name(hello)
+        method: 'GET', // Use get method for this route
+        type: 'public', // Make this a publicly available path
 
-  useEffect(() => {
-    const unregister = registerOnLoginActions(() => {
-      navigate("/dashboard");
-    });
+    },
 
-    return unregister;
-  }, []);
-
-  return null;
-}
 ```
 
-## registerOnLogoutActions
+Every route object represents a handler(plugin) whose task is to handle a request in a request/response lifecycle, **more on this shortly**.
 
-registerOnLogoutActions allows you to register an action that will be run when a user logs out of an app.
+## Anzii plugins
 
-| argument    | Required | Description                        |   Type   |
-| ----------- | -------- | ---------------------------------- | :------: |
-| `action(s)` | yes      | a list of actions to run on logout | Function |
-
-### Example
+### Example Plugin Hello
 
 ```js
-import { registerOnLogoutActions } from "kotii-auth";
-import { useEffect } from "react";
-import { queryClient } from "react-query";
+class Hello {
+	constructor(pao) {
+		this.pao = pao; // Every plugin is passed this object
+	}
 
-export function ClearCacheOnLogout() {
-  useEffect(() => {
-    const unregister = registerOnLogoutActions(() => {
-      queryClient.clear(); // clear cached on logout
-    });
+	init() {
+		this.listens({
+			"handle-hello-task": this.handleHelloTask.bind(this), // Event and handling method
+		}); // Call listens() method (available to every anzii plugin) to set events that this module  listens to
+	} // Define the required init() method
 
-    return unregister;
-  }, []);
+	handleHelloTask(data) {
+		const self = this;
 
-  return null;
+		self.callback = data.callback;
+		const { payload } = data;
+		const { user } = payload;
+		const { name, surname } = user; // assume name to be "Ntsako" and surname to be "Mashele"
+		const message = `Hello ${name} ${surname}, I'm happy to meet you.'`;
+		return self.callback(null, { message: message });
+	}
 }
+
+export default Hello;
 ```
 
-## useAuthRegisterActions
+And that's it! The thing is done!
+Now when you navigate to **_http://localhost:3000/hello_**
+you should see the text **_Hello Ntsako Mashele, I'm happy to meet you_**.
+on your browser.
 
-useAuthRegisterActions allows you to register functions that will run when a user logs in or logs out of the app. It is basically just a convenience hook to add login and logout actions on one go.
+### The `data` object
 
-| argument   | Required | Description               |   Type   |
-| ---------- | -------- | ------------------------- | :------: |
-| `onLogout` | yes      | a action to run on login  | Function |
-| `onLogout` | yes      | a action to run on logout | Function |
+Every `event-handling` method of a plugin receives a `data` argument which contains `data` that the `event-handling` module expects to be able to perform and complete its task. The `data` argument is sent by an `event-emitting` module that is in need of a task that the `event-handling` performs.
 
-### Example
+In a request/response lifecycle, your `request` handling module/plugin is sent a `data` object that your plugin requires to complete its task. The emitted `data` object contains information needed in a request/response lifecycle. A picture is worth a thousand words, please refer to the `request` `data` object below:
 
 ```js
-import React from "react";
-import { analytics } from "../analytics";
-import { useRegisterAuthActions } from "kotii-auth";
 
-export function AuthAnalytics() {
-  useRegisterAuthActions({
-    onLogin: (user) => analytics.track("login", { userId: user.id }),
-    onLogout: () => analytics.track("logout"),
-  });
+    {
+        payload: {
 
-  return null;
-}
+                parsed: {
+                    url: '/greeting/Ntsako/Mashele',
+                    handler: 'greeting' //
+                }, // Request information directly extracted from the request object
+                user: { name: 'Ntsako', surname: 'Mashele' }, // Parameters or data extracted
+                handler: 'hello', // Request handling plugin name (sometimes refered to as alias)
+                request: {
+
+                    req: [IncomingMessage],
+                    res: [ServerResponse]
+                } // Request and Response objects for further manipulation (using express framework)
+
+        }, // Contains data about the request
+        callback: [Function: bound taskerHandler] // Method to be called when task is completed
+
+    }// Data object
+
 ```
 
-## useAuth
+## How does it work?
 
-useAuth is a hook central to kotii-auth's authentication functionality, it returns things such as the function to login with
+Every anzii plugin you create should include an `init()` method whose sole purpose is to call `this.listen()` method. The `this.listen()` method takes an object that contains a list of events that your plugin should listen to. As an An anzii plugin author, you define a list of events that you want to handle when emitters emit them.
 
-| Resource               | Type                             | Description                                                        | Example Usage                  |
-| ---------------------- | -------------------------------- | ------------------------------------------------------------------ | ------------------------------ |
-| `user`                 | `object \| null`                 | The authenticated user object, or `null` if logged out.            | `user?.name`                   |
-| `isAuthenticated`      | `boolean`                        | Indicates whether a user is logged in.                             | `if (isAuthenticated) …`       |
-| `login`                | `(credentials) => Promise<void>` | Function to authenticate a user. Sets `user`.                      | `login({ email, password })`   |
-| `logout`               | `() => Promise<void>`            | Function to log the user out. Clears `user`.                       | `logout()`                     |
-| `loading` _(optional)_ | `boolean`                        | Whether auth state is initializing or login/logout is in progress. | `if (loading) return spinner;` |
-| `error` _(optional)_   | `string \| null`                 | Authentication error message.                                      | `if (error) showError(error);` |
+Instead of listening to `events`, sometimes you create plugins that emit those events,in which case your listeners have to know about your events in order to listen to them to perform whatever task they exist to perform.
 
-### Example
+The anzii framework is its self made up of plugins building upon its base. These plugins also emit and listen to certain events.
+
+As authors of these plugins/modules, we have defined specific events that we expect interested consumers(listeners) to listen and handle. One of these events is used in the request/response lifecycle and it takes the form `handle-pluginname-task`. This event is emitted whenever a request is made to a server running anzii.
+
+Any plugin you implement to handle a request should listen to the event of the form `handle-pluginname-task` where `pluginname` refers to the name of your plugin.
+
+In the `Hello` example above,the request is handled by the `Hello` plugin,so the plugin listens to the `handle-hello-task` event.
+
+## Route Alias
+
+There are cases where you find the use of a `handler` as part of the route object's `path`property is undesired. In such a case, you can use a `route Alias` by adding an `alias` property in the `route` object with the name of the handler as the value of the property. **See an example below**.
+
+Using the `Hello` example above, the `route` object with an `alias` will be written this way:
 
 ```js
-import React from "react";
-import { useAuth } from "./useAuth";
 
-export function UserInfo() {
-  const { user = null } = useAuth();
+    {
 
-  if (!user) {
-    return <p>You are not logged in.</p>;
-  }
+        path: '/greeting',
+        type: 'public',
+        alias: 'hello'
 
-  return (
-    <div>
-      <h3>Name, {user.name}!</h3>
-      <p>Surname: {user.surname}</p>
-    </div>
-  );
-}
+    }
+
 ```
