@@ -1,6 +1,42 @@
 # Upgrade Guide
 
-This document describes breaking changes and how to upgrade. For a complete list of changes including minor and patch releases, please refer to the [changelog](CHANGELOG.md).
+This document describes breaking changes and how to upgrade. For a complete list of changes including minor and patch releases, please refer to the [changelog](https://github.com/ntsakosurpriseanzii/tree/develop/anzii/CHANGELOG.md).
+
+## 8.0.0
+
+- Middleware config:
+
+```js
+ middleware: {
+
+        ppublic:{
+
+            addMiddleware: middlewares.ppublic
+        },
+        pprivate: {
+
+            addMiddleware: middlewares.pprivate
+
+        },
+        all: {
+
+            addMiddleware: middlewares.all
+        }
+
+    },
+```
+
+### You must now do:
+
+```js
+ middleware: {
+
+        public:[...middlewares.public],
+        private:[...middlewares.private]
+        all:[...middlewares.all]
+
+    },
+```
 
 ## 7.0.0
 
@@ -8,82 +44,28 @@ This document describes breaking changes and how to upgrade. For a complete list
 
 Please refer to the instructions below for upgrading to this version of anzii.
 
-### Changes to initialization
+## Changes to initialization
+
+### require
 
 We have decided to export anzii as a named export. If you previously did:
-
-### Without plugins:
-
-#### Single line
 
 ```js
 require("anzii")();
 ```
 
-#### Multilines
-
-```
-    const anzii = require('anzii')
-    anzii()
-
-```
-
-## You must now do:
-
-### Without plugins
-
-#### Single line
+### You must now do:
 
 ```js
-require("anzii").anzii();
+const { anzii } = require("anzii");
+const hello = require("./hello");
+anzii({ Hello: hello });
 ```
 
-#### Multilines
-
-```
-    const {anzii} = require('anzii')
-    anzii()
-
-```
-
-### With Plugins
-
-#### with a single plugin
-
-##### Single line
+#### ESM(EcmaScript modules)
 
 ```js
-require("anzii")({ Hello: require("./hello") }); // Hello plugin in the same directory
+import { anzii } from "anzii";
+import hello from "./hello.js";
+anzii({ Hello: hello });
 ```
-
-#### Multilines
-
-    ```js
-
-        const anzii = require('anzii')
-        const plugins = require('./plugins') // plugins.js containing plugins in an object
-        anzii(plugins) // anzii takes an object of plugins as an argument
-
-    ```
-
-## You must now do:
-
-### With Plugins
-
-#### with a single plugin
-
-##### Single line
-
-```js
-require("anzii").anzii({ Hello: require("./hello") }); // Hello plugin in the same directory
-```
-
-#### Multilines
-
-    ```js
-
-        const {anzii} = require('anzii')
-        const plugins = require('./plugins') // plugins.js containing plugins in an object
-        anzii(plugins) // anzii takes an object of plugins as an argument
-
-    ```
