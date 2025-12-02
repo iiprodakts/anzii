@@ -1,6 +1,6 @@
 {
 	"name": "anzii",
-	"version": "8.0.0",
+	"version": "8.0.1",
 	"description": "Anzii is a backend javascript modular and event-driven framework that is simple, quick to learn and build with.",
 	"main": "./dist/index.cjs",
 	"type": "module",
@@ -73,6 +73,7 @@
 		"detect-port": "^1.5.1",
 		"express": "^4.16.3",
 		"glob": "^10.3.10",
+		"jsonfile": "^6.2.0",
 		"mysql": "^2.16.0",
 		"mysql2": "^2.3.3",
 		"open": "8.4.1",
