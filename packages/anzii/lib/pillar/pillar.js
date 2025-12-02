@@ -749,8 +749,12 @@ export const p_loadFile = function (filepath, all = false, checkExist = true) {
 					const readFile = p_loadFileSync(filepath);
 
 					return resolve({ default: readFile });
-				} catch (err) {
-					return reject(err);
+				} catch (fileERR) {
+					const combinedError =
+						`Failed to import AND read file.\n` +
+						`IMPORT-SYSTEM-ERROR: ${importERR.message}\n` +
+						`COMMON-SYSTE-ERROR: ${fileERR.message}`;
+					return reject(combinedError);
 				}
 			});
 	});
