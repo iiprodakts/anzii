@@ -1,0 +1,155 @@
+export const init = function () {
+	this.adLog("Dman has been initialised");
+	this.listens({
+		"config-dman": this.handleConfigureDBMan.bind(this),
+	});
+	//   self.query('mysql',sql,process)
+};
+export const handleConfigureDBMan = function (data) {
+	const self = this;
+	const pao = self.pao;
+	self.infoSync("The database credentials");
+	self.infoSync(data);
+	//   self.debug('THE DBMAN HANLDECONFIGURE')
+	//   self.debug('THE SUPPORTED CLIENTS')
+	//   self.debug(self.supportedClients)
+	if (!pao.pa_isObject(data)) {
+		self.logSync(
+			`No database client specified,System will use default`,
+			"warn",
+		);
+	} else {
+		if (!pao.pa_contains(data, "clients")) {
+			self.error(
+				"System requires clients property with valid config to interface with database clients",
+			);
+		} else {
+			// eslint-disable-next-line no-empty
+			if (!pao.pa_isArray(data.clients)) {
+			} else {
+				let supported = self.supportedClients;
+				try {
+					// eslint-disable-next-line no-unused-vars
+					data.clients.forEach((c, i) => {
+						if (!pao.pa_contains(supported, c.name)) {
+							self.throwError(
+								`Client: "${c.name} is not supported by the system"`,
+							);
+						} else {
+							self.connectToClient(c);
+						}
+					});
+					if (self.DBS.length > 0) {
+						self.emit({ type: "dao-take-dbs", data: { dbs: self.DBS } });
+					}
+					// eslint-disable-next-line no-empty
+				} catch (e) {}
+			}
+		}
+	}
+};
+export const connectToClient = function (client) {
+	const self = this;
+	self.infoSync(`System is about to connect to client: ${client.name}`);
+	// self.infoSync(client)
+	self.getClientDriver(client);
+	// self.supportedClients[client.name].connect(client)
+};
+export const getClientDriver = function (client) {
+	const self = this;
+
+	try {
+		let name = client.name;
+		if (name === "mysql") {
+			// self.supportedClients[client.name].driver = require("mysql2");
+			self.supportedClients[client.name].driver = self.mysql2;
+		}
+		// }else if(name === 'pg'){
+		// 	self.supportedClients[client.name].driver = require('pg')
+		// }else if(name === 'redis'){
+		// 	self.supportedClients[client.name].driver = require('redis')
+		// }else if(name === 'mongo'){
+		// 	self.supportedClients[client.name].driver = require('mongo')
+		// }else{
+		// 	self.supportedClients[client.name].driver = require('sqlite')
+		// }
+		// switch(client.name){
+		// 	case 'mysql': self.supportedClients[client.name].driver = require('mysql')
+		// 	break;
+		// 	case 'pg': self.supportedClients[client.name].driver = require('pg')
+		// 	break;
+		// 	case 'redis': self.supportedClients[client.name].driver = require('redis')
+		// 	break;
+		// 	case 'mongo': self.supportedClients[client.name].driver = require('mongo')
+		// 	break;
+		// 	default: self.supportedClients[client.name].driver = require('sqlite')
+		// 	break;
+		// }
+		if (!self.supportedClients[client.name].driver) {
+			self.throwError("Failed to get client driver module");
+		}
+		self.connect(client);
+	} catch (e) {
+		self.debug("THE DRIVER CONNECT ERROR", e.stack);
+	}
+};
+export const connect = function (client) {
+	const self = this;
+	self.infoSync(`System is connecting to client: ${client.name}`);
+
+	try {
+		let sclient = self.supportedClients[client.name];
+		let opts = {
+			host: client.connect.host,
+			user: client.connect.user,
+			password: client.connect.pass,
+			database: client.connect.name,
+		};
+
+		let res = sclient.driver[sclient.connectMethod](opts, (err, res) => {
+			if (err) {
+				self.debug("Client connection error", err.stack);
+			} else {
+				self.DBS[client.name] = res;
+				self.infoSync("System has successfully connected to client");
+				self.infoSync(`Client ready to serve queries`);
+			}
+		});
+		//   self.debug(res)
+		// eslint-disable-next-line no-unused-vars
+		res.query("SELECT 1 + 1 AS solution", function (error, results, fields) {
+			if (error) throw error;
+			self.DBS[client.name] = res;
+			self.infoSync(
+				`System has successfully connected to ${client.name} database client`,
+			);
+
+			self.emit({
+				type: "dao-take-dbs",
+				data: { vendor: client.name, conn: res, connector: sclient.driver },
+			});
+		});
+		// res.query(function(e){
+		// 	if(e){
+		// 		self.debug('THE SYSTEM HAS FAILED TO CONNECT TO THE DATABASE, please refer to the error below:')
+		// 		self.debug(e.message)
+		// 		throw new Error(e)
+		// 	}else{
+		// 		self.DBS[client.name] = res
+		// 		self.infoSync(`System has successfully connected to ${client.name} database client`)
+		// 		self.adLog("System is handing client connection")
+		// 		self.emit({type: 'dao-take-dbs',data:{vendor: client.name,conn: res}})
+		// 		self.adLog(`Client ready to serve queries`)
+		// 	}
+		// })
+		//   self.debug('THE RESULTS')
+		//   res.query('SELECT 1 + 1 AS solution', function (error, results, fields) {
+		// 	if (error) throw error;
+		// 	self.debug('THE CONNECTION TO THE DATABASE')
+		// 	self.debug('The solution is: ', results[0].solution);
+		//   });
+		//   res.query()
+	} catch (e) {
+		self.infoSync("THE DB CONNECTION ERROR", e);
+	}
+};

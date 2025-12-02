@@ -1,12 +1,15 @@
 public/imgs/test/
 node_modules/ 
-dist/
 public/
 .idea/
 .vscode/
 lib/index.js
+packages/cjs-demo/
+packages/mjs-demo/
+/.yalc
+yalc.lock
 
-
+    
 # See http://help.github.com/ignore-files/ for more about ignoring files.
 
 # dependencies
@@ -21,7 +24,5 @@ build
 # misc
 .DS_Store
 .env 
-app.js 
-hello.js
 npm-debug.log*
 **/*.log

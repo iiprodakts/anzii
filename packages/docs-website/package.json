@@ -1,0 +1,15 @@
+{
+	"name": "docs-website",
+	"version": "0.0.0",
+	"description": "> TODO: description",
+	"author": "ntsakosurprise <mashelesepru@gmail.com>",
+	"homepage": "https://github.com/iiprodakts/anzii/tree/main/packages/docs-website#readme",
+	"license": "ISC",
+	"main": "lib/docs-website.js",
+	"files": [
+		"lib"
+	],
+	"devDependencies": {
+		"cross-env": "^7.0.3"
+	}
+}
